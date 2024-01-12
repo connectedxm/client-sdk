@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.4
+
+### Patch Changes
+
+- fcc7f2e: Add interfaces, Provider, and API
+
 ## 0.0.3
 
 ### Patch Changes
