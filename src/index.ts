@@ -1,3 +1,3 @@
-export const hello = (): string => {
-  return "Hello World!";
-};
+export * as Interfaces from "./interfaces";
+export { ClientAPI } from "./ClientAPI";
+export { ConnectedXMClient, setToken } from "./Context";
