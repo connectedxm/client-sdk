@@ -1,6 +1,6 @@
 import { useConnectedXM } from "./useConnectedXM";
 
-export const useSetToken = () => {
+export const useSetAuthToken = () => {
   const { setAuthToken } = useConnectedXM();
   return setAuthToken;
 };

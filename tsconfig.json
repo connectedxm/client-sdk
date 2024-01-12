@@ -9,6 +9,11 @@
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@interfaces": ["./src/interfaces"]
+    }
   }
 }

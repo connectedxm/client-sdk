@@ -8,10 +8,10 @@ export interface ContextValue {
     | "https://staging-api.connectedxm.app"
     | "http://localhost:4001";
   queryClient: QueryClient;
-  authToken?: string;
+  token?: string;
   setAuthToken: (token?: string) => void;
   executeAs?: string;
-  locale?: string;
+  locale: string;
 }
 
 const Context = React.createContext<ContextValue>({} as ContextValue);

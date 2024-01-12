@@ -1,4 +1,5 @@
 import React from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
 import type { QueryClient } from "@tanstack/react-query";
 import Context from "./Context";
 
@@ -21,24 +22,26 @@ export const ConnectedXM = ({
   apiUrl = "https://api.connectedxm.app",
   token,
   executeAs,
-  locale,
+  locale = "en",
   children,
 }: ConnectedXMProps) => {
   const [authToken, setAuthToken] = React.useState<string | undefined>(token);
 
   return (
-    <Context.Provider
-      value={{
-        queryClient,
-        organizationId,
-        apiUrl,
-        authToken,
-        setAuthToken,
-        executeAs,
-        locale,
-      }}
-    >
-      {children}
-    </Context.Provider>
+    <QueryClientProvider client={queryClient}>
+      <Context.Provider
+        value={{
+          queryClient,
+          organizationId,
+          apiUrl,
+          token: authToken,
+          setAuthToken,
+          executeAs,
+          locale,
+        }}
+      >
+        {children}
+      </Context.Provider>
+    </QueryClientProvider>
   );
 };

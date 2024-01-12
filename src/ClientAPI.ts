@@ -1,17 +1,22 @@
 import axios from "axios";
 import { useConnectedXM } from "./hooks/useConnectedXM";
 
-export const ClientAPI = async () => {
-  const { apiUrl, authToken, organizationId, executeAs, locale } =
-    useConnectedXM();
+export const ClientAPI = async (locale?: string) => {
+  const {
+    apiUrl,
+    token,
+    organizationId,
+    executeAs,
+    locale: _locale,
+  } = useConnectedXM();
 
   const api = axios.create({
     baseURL: apiUrl,
     headers: {
-      authorization: authToken,
+      authorization: token,
       organization: organizationId,
       executeAs: executeAs,
-      locale: !!locale && locale !== "en" ? locale : undefined,
+      locale: locale || _locale,
     },
   });
 

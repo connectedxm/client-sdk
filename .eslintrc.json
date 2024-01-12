@@ -17,6 +17,7 @@
   },
   "plugins": ["@typescript-eslint", "react"],
   "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
     "prettier/prettier": "off",
     "eol-last": "off"
   },
