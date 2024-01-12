@@ -1,4 +1,4 @@
-name: CI
+name: Test & Build
 on:
   push:
     branches:
@@ -14,7 +14,4 @@ jobs:
           node-version: "18.x"
           cache: "yarn"
       - run: yarn install --frozen-lockfile
-      - run: yarn tsc
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn build
+      - run: yarn ci

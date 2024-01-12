@@ -4,14 +4,17 @@
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "license": "MIT",
+  "private": "false",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vitest",
+    "lint": "yarn tsc && eslint src/**/*.ts",
     "test": "vitest run",
     "build": "tsup src/index.ts --format cjs,esm --dts",
-    "lint": "eslint src/**/*.ts"
+    "ci": "yarn run lint && yarn run test && yarn run build",
+    "release": "yarn run lint && yarn run test && yarn run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",

@@ -1,4 +1,4 @@
-name: CI
+name: Publish
 on:
   push:
     branches:
@@ -20,4 +20,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: yarn build
+          publish: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
