@@ -1,24 +1,8 @@
 import React from "react";
 import type { QueryClient } from "@tanstack/react-query";
+import Context from "./Context";
 
-interface ConnectedXMContextValue {
-  organizationId: string;
-  apiUrl:
-    | "https://api.connectedxm.app"
-    | "https://staging-api.connectedxm.app"
-    | "http://localhost:4001";
-  queryClient: QueryClient;
-  authToken?: string;
-  setAuthToken: (token?: string) => void;
-  executeAs?: string;
-  locale?: string;
-}
-
-export const ConnectedXMContext = React.createContext<ConnectedXMContextValue>(
-  {} as ConnectedXMContextValue
-);
-
-interface ConnectedXMClientProps {
+interface ConnectedXMProps {
   children: React.ReactNode;
   organizationId: string;
   queryClient: QueryClient;
@@ -31,7 +15,7 @@ interface ConnectedXMClientProps {
   locale?: string;
 }
 
-export const ConnectedXMClient = ({
+const ConnectedXM = ({
   queryClient,
   organizationId,
   apiUrl = "https://api.connectedxm.app",
@@ -39,11 +23,11 @@ export const ConnectedXMClient = ({
   executeAs,
   locale,
   children,
-}: ConnectedXMClientProps) => {
+}: ConnectedXMProps) => {
   const [authToken, setAuthToken] = React.useState<string | undefined>(token);
 
   return (
-    <ConnectedXMContext.Provider
+    <Context.Provider
       value={{
         queryClient,
         organizationId,
@@ -55,6 +39,8 @@ export const ConnectedXMClient = ({
       }}
     >
       {children}
-    </ConnectedXMContext.Provider>
+    </Context.Provider>
   );
 };
+
+export default ConnectedXM;

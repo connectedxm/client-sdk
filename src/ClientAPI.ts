@@ -1,20 +1,9 @@
 import axios from "axios";
-import { useConnectedXMContext } from "./hooks/useConnectedXMContext";
+import { useConnectedXM } from "./hooks/useConnectedXM";
 
-export const DELEGATION_KEY = "EXECUTING_AS";
-export const LOCALE_KEY = "LOCALE";
-
-export interface ConnectedXMResponse<TData> {
-  status: "ok" | "error" | "redirect";
-  message: string;
-  data: TData;
-  count?: number;
-  url?: string;
-}
-
-export const ClientAPI = async () => {
+const ClientAPI = async () => {
   const { apiUrl, authToken, organizationId, executeAs, locale } =
-    useConnectedXMContext();
+    useConnectedXM();
 
   const api = axios.create({
     baseURL: apiUrl,
@@ -28,3 +17,5 @@ export const ClientAPI = async () => {
 
   return api;
 };
+
+export default ClientAPI;

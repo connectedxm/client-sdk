@@ -1,3 +1,11 @@
+export interface ConnectedXMResponse<TData> {
+  status: "ok" | "error" | "redirect";
+  message: string;
+  data: TData;
+  count?: number;
+  url?: string;
+}
+
 export enum RegistrationStatus {
   registered = "registered",
   checkedIn = "checkedIn",

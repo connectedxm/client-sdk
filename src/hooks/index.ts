@@ -1,2 +1,2 @@
-export * from "./useConnectedXMContext";
+export * from "./useConnectedXM";
 export * from "./useSetAuthToken";

@@ -1,5 +1,5 @@
 export * from "./interfaces";
 export * from "./hooks";
 
-export { ClientAPI } from "./ClientAPI";
-export { ConnectedXMClient } from "./ConnectedXMClient";
+export * as ClientAPI from "./ClientAPI";
+export * as ConnectedXM from "./ConnectedXM";
