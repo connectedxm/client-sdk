@@ -4,7 +4,7 @@
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "license": "MIT",
-  "private": "false",
+  "private": false,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
