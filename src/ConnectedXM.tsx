@@ -15,7 +15,7 @@ interface ConnectedXMProps {
   locale?: string;
 }
 
-const ConnectedXM = ({
+export const ConnectedXM = ({
   queryClient,
   organizationId,
   apiUrl = "https://api.connectedxm.app",
@@ -42,5 +42,3 @@ const ConnectedXM = ({
     </Context.Provider>
   );
 };
-
-export default ConnectedXM;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useConnectedXM } from "./hooks/useConnectedXM";
 
-const ClientAPI = async () => {
+export const ClientAPI = async () => {
   const { apiUrl, authToken, organizationId, executeAs, locale } =
     useConnectedXM();
 
@@ -17,5 +17,3 @@ const ClientAPI = async () => {
 
   return api;
 };
-
-export default ClientAPI;
