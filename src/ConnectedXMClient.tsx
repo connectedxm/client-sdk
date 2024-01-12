@@ -58,13 +58,3 @@ export const ConnectedXMClient = ({
     </ConnectedXMContext.Provider>
   );
 };
-
-export const useSetToken = () => {
-  const context = React.useContext(ConnectedXMContext);
-  if (!context) {
-    throw new Error(
-      "Context not found. Did you wrap your app in a ConnectedXMClient provider"
-    );
-  }
-  return context.setAuthToken;
-};

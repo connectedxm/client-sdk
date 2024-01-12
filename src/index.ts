@@ -1,3 +1,5 @@
-export * as Interfaces from "./interfaces";
+export * from "./interfaces";
+export * from "./hooks";
+
 export { ClientAPI } from "./ClientAPI";
-export { ConnectedXMClient, useSetToken } from "./Context";
+export { ConnectedXMClient } from "./ConnectedXMClient";
