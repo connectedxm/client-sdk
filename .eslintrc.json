@@ -8,7 +8,6 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "universe/native",
     "plugin:react-hooks/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -20,5 +19,10 @@
   "rules": {
     "prettier/prettier": "off",
     "eol-last": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

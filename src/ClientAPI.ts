@@ -17,7 +17,7 @@ export const ClientAPI = async (locale?: string) => {
   const { apiUrl, authToken, organizationId, executeAs } =
     React.useContext(ConnectedXMContext);
 
-  let api = axios.create({
+  const api = axios.create({
     baseURL: apiUrl,
     headers: {
       authorization: authToken,
