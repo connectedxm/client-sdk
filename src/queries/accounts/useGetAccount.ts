@@ -46,7 +46,7 @@ export const GetAccount = async ({
 const useGetAccount = (
   accountId: string,
   params: SingleQueryParams = {},
-  options: SingleQueryOptions = {}
+  options: SingleQueryOptions<ReturnType<typeof GetAccount>> = {}
 ) => {
   const { token } = useConnectedXM();
 

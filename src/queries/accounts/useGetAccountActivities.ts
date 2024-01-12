@@ -1,12 +1,13 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Activity, ConnectedXMResponse } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
@@ -43,6 +44,7 @@ export const GetAccountActivities = async ({
   search,
   accountId,
   locale,
+  queryClient,
 }: GetAccountActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/${accountId}/activities`, {
@@ -53,15 +55,25 @@ export const GetAccountActivities = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient) {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (activityId) => [activityId],
+      SET_ACTIVITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
 const useGetAccountActivities = (
   accountId: string,
-  params: InfiniteQueryParams
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetAccountActivities>> = {}
 ) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
   return useConnectedInfiniteQuery<ReturnType<typeof GetAccountActivities>>(
     ACCOUNT_ACTIVITIES_QUERY_KEY(accountId),
@@ -69,14 +81,8 @@ const useGetAccountActivities = (
       GetAccountActivities({ accountId, ...params }),
     params,
     {
+      ...options,
       enabled: !!token && !!accountId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (activityId) => [activityId],
-          SET_ACTIVITY_QUERY_DATA
-        ),
     }
   );
 };

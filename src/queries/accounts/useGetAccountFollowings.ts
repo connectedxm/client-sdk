@@ -1,12 +1,13 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY, SET_ACCOUNT_QUERY_DATA } from "./useGetAccount";
@@ -43,6 +44,7 @@ export const GetAccountFollowings = async ({
   search,
   accountId,
   locale,
+  queryClient,
 }: GetAccountFollowingsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/${accountId}/following`, {
@@ -53,26 +55,34 @@ export const GetAccountFollowings = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient) {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (accountId) => [accountId],
+      SET_ACCOUNT_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetAccountFollowings = (accountId: string) => {
+const useGetAccountFollowings = (
+  accountId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetAccountFollowings>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<ConnectedXMResponse<Account[]>>(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetAccountFollowings>>(
     ACCOUNT_FOLLOWINGS_QUERY_KEY(accountId),
     (params: InfiniteQueryParams) =>
       GetAccountFollowings({ accountId, ...params }),
+    params,
     {
-      enabled: !!token && !!accountId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (accountId) => [accountId],
-          SET_ACCOUNT_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!token && !!accountId && (options?.enabled ?? true),
     }
   );
 };

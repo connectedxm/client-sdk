@@ -1,12 +1,13 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Community } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
@@ -44,6 +45,7 @@ export const GetAccountCommunities = async ({
   search,
   accountId,
   locale,
+  queryClient,
 }: GetAccountCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/${accountId}/communities`, {
@@ -54,29 +56,34 @@ export const GetAccountCommunities = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient) {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (communityId) => [communityId],
+      SET_COMMUNITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetAccountCommunities = (accountId: string) => {
+const useGetAccountCommunities = (
+  accountId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetAccountCommunities>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetAccountCommunities>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetAccountCommunities>>(
     ACCOUNT_COMMUNITIES_QUERY_KEY(accountId),
     (params: InfiniteQueryParams) =>
       GetAccountCommunities({ accountId, ...params }),
+    params,
     {
-      enabled: !!token && !!accountId,
-      onSuccess: (data) => {
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (communityId) => [communityId],
-          SET_COMMUNITY_QUERY_DATA
-        );
-      },
+      ...options,
+      enabled: !!token && !!accountId && (options?.enabled ?? true),
     }
   );
 };

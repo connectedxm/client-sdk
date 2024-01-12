@@ -1,6 +1,7 @@
 import { ConnectedXMResponse } from "../interfaces";
 import {
   InfiniteData,
+  QueryClient,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
@@ -12,11 +13,18 @@ export interface InfiniteQueryParams {
   orderBy?: string;
   search?: string;
   locale?: string;
+  queryClient?: QueryClient;
 }
 
 export interface InfiniteQueryOptions<TQueryData>
   extends Omit<
-    UseInfiniteQueryOptions<TQueryData, unknown, unknown, TQueryData, string[]>,
+    UseInfiniteQueryOptions<
+      TQueryData,
+      unknown,
+      Awaited<TQueryData>,
+      TQueryData,
+      string[]
+    >,
     "queryKey" | "queryFn"
   > {}
 
@@ -36,13 +44,15 @@ export const setFirstPageData = <TData>(
   };
 };
 
-export const useConnectedInfiniteQuery = <TQueryData = unknown>(
+export const useConnectedInfiniteQuery = <
+  TQueryData = Promise<ConnectedXMResponse<unknown>>
+>(
   queryKeys: string[],
   queryFn: (params: InfiniteQueryParams) => TQueryData,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient">,
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const { locale } = useConnectedXM();
+  const { locale, queryClient } = useConnectedXM();
 
   const getNextPageParam = (lastPage: any, pages: any[]) => {
     if (lastPage.data?.length === params?.pageSize) {
@@ -50,12 +60,16 @@ export const useConnectedInfiniteQuery = <TQueryData = unknown>(
     }
   };
 
-  return useInfiniteQuery<TQueryData, unknown, unknown, string[]>(
+  return useInfiniteQuery<TQueryData, unknown, Awaited<TQueryData>, string[]>(
     [
       ...queryKeys,
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
-    () => queryFn(params),
+    () =>
+      queryFn({
+        ...params,
+        queryClient,
+      }),
     {
       staleTime: 60 * 1000, // 60 Seconds
       retry: options?.retry || 3,

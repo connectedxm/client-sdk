@@ -1,5 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -8,6 +9,7 @@ import { AccountShare } from "@interfaces";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { QueryClient } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { useConnectedXM } from "@src/hooks";
 
 export const ACCOUNT_BY_SHARE_CODE_QUERY_KEY = (shareCode: string) => [
   "ACCOUNT_BY_SHARE_CODE",
@@ -42,13 +44,21 @@ export const GetAccountByShareCode = async ({
   return data;
 };
 
-const useGetAccountByShareCode = (shareCode: string) => {
-  return useConnectedSingleQuery<ConnectedXMResponse<AccountShare>>(
+const useGetAccountByShareCode = (
+  shareCode: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetAccountByShareCode>> = {}
+) => {
+  const { token } = useConnectedXM();
+
+  return useConnectedSingleQuery<ReturnType<typeof GetAccountByShareCode>>(
     ACCOUNT_BY_SHARE_CODE_QUERY_KEY(shareCode),
     (params) =>
       GetAccountByShareCode({ shareCode: shareCode || "unknown", ...params }),
+    params,
     {
-      enabled: !!shareCode,
+      ...options,
+      enabled: !!token && !!shareCode && (options?.enabled ?? true),
       retry: false,
     }
   );

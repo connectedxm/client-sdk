@@ -5,28 +5,28 @@ export interface SingleQueryParams {
   locale?: string;
 }
 
-export interface SingleQueryOptions
+export interface SingleQueryOptions<TQueryData = unknown>
   extends Omit<
-    UseQueryOptions<unknown, unknown, unknown, string[]>,
+    UseQueryOptions<TQueryData, unknown, Awaited<TQueryData>, string[]>,
     "initialData" | "queryFn" | "queryKey"
-  > {}
-
-export const DEFAULT_PAGE_SIZE = 10;
+  > {
+  initialData?: (() => undefined) | undefined;
+}
 
 export const GetBaseSingleQueryKeys = (locale: string) => {
   return [locale];
 };
 
-export const useConnectedSingleQuery = <TQueryData>(
+export const useConnectedSingleQuery = <TQueryData = unknown>(
   queryKeys: string[],
   queryFn: (params: SingleQueryParams) => TQueryData,
   params: SingleQueryParams,
-  options?: SingleQueryOptions
+  options?: SingleQueryOptions<TQueryData>
 ) => {
   const { locale } = useConnectedXM();
 
   return {
-    ...useQuery(
+    ...useQuery<TQueryData, unknown, Awaited<TQueryData>, string[]>(
       [...queryKeys, ...GetBaseSingleQueryKeys(params?.locale || locale)],
       () => queryFn(params),
       {
