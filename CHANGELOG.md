@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.2
+
+### Patch Changes
+
+- 8b033b0: initialize with queries
+
 ## 0.0.5
 
 ### Patch Changes
