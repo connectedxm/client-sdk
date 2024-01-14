@@ -1,6 +1,6 @@
 {
-  "name": "@connectedxm/client-sdk",
-  "version": "0.0.5",
+  "name": "@connectedxm/client",
+  "version": "0.0.1",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "license": "MIT",
@@ -17,7 +17,6 @@
     "release": "yarn run lint && yarn run test && yarn run build && changeset publish"
   },
   "dependencies": {
-    "@types/react": "^18.2.47",
     "axios": "^1.6.5"
   },
   "peerDependencies": {
@@ -30,6 +29,7 @@
     "@tanstack/react-query": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.18.1",
+    "@types/react": "^18.2.47",
     "eslint": "^8.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

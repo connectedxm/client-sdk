@@ -1,7 +1,8 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Account } from "@interfaces";
+import type { Account, ConnectedXMResponse } from "@interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { SPONSORS_QUERY_KEY } from "./useGetSponsors";
@@ -40,12 +41,18 @@ export const GetSponsor = async ({
   return data;
 };
 
-const useGetSponsor = (accountId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetSponsor>>>(
+const useGetSponsor = (
+  accountId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSponsor>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetSponsor>>(
     SPONSOR_QUERY_KEY(accountId),
     (params) => GetSponsor({ accountId, ...params }),
+    params,
     {
-      enabled: !!accountId,
+      ...options,
+      enabled: !!accountId && (options?.enabled ?? true),
     }
   );
 };

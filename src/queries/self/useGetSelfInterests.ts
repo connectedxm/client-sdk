@@ -1,7 +1,8 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { Interest } from "@interfaces";
+import { useConnectedXM } from "@src/hooks/useConnectedXM";
+import type { ConnectedXMResponse, Interest } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
@@ -33,17 +34,19 @@ export const GetSelfInterests = async ({
   return data;
 };
 
-const useGetSelfInterests = () => {
+const useGetSelfInterests = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfInterests>> = {}
+) => {
   const { token } = useConnectedXM();
-  // const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfInterests>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfInterests>>(
     SELF_INTERESTS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfInterests({ ...params }),
+    params,
     {
-      enabled: !!token,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

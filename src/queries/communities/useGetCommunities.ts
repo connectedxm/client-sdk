@@ -2,13 +2,17 @@ import { ClientAPI } from "@src/ClientAPI";
 import type { Community } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_COMMUNITY_QUERY_DATA } from "./useGetCommunity";
+import { QueryClient } from "@tanstack/react-query";
+import {
+  COMMUNITY_QUERY_KEY,
+  SET_COMMUNITY_QUERY_DATA,
+} from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const COMMUNITIES_QUERY_KEY = () => ["COMMUNITIES"];
@@ -39,6 +43,7 @@ export const GetCommunities = async ({
   search,
   privateCommunities,
   locale,
+  queryClient,
 }: GetCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
   if (privateCommunities) {
     return {
@@ -58,24 +63,27 @@ export const GetCommunities = async ({
       privateCommunities: privateCommunities || undefined,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (communityId) => COMMUNITY_QUERY_KEY(communityId),
+      SET_COMMUNITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetCommunities = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetCommunities>>>(
+const useGetCommunities = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetCommunities>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunities>>(
     COMMUNITIES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetCommunities({ ...params }),
-    {
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (communityId) => [communityId],
-          SET_COMMUNITY_QUERY_DATA
-        ),
-    }
+    params,
+    options
   );
 };
 

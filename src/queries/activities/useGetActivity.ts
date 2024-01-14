@@ -1,5 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -43,15 +44,21 @@ export const GetActivity = async ({
   return data;
 };
 
-const useGetActivity = (activityId: string) => {
+const useGetActivity = (
+  activityId: string,
+  params: SingleQueryParams,
+  options: SingleQueryOptions<ReturnType<typeof GetActivity>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetActivity>>>(
+  return useConnectedSingleQuery<ReturnType<typeof GetActivity>>(
     ACTIVITY_QUERY_KEY(activityId),
-    (params: any) =>
+    (params: SingleQueryParams) =>
       GetActivity({ activityId: activityId || "unknown", ...params }),
+    params,
     {
-      enabled: !!token && !!activityId,
+      ...options,
+      enabled: !!token && !!activityId && (options?.enabled ?? true),
     }
   );
 };

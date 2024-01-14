@@ -1,18 +1,18 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
+import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { SELF_QUERY_KEY } from "./useGetSelf";
+import { ConnectedXMResponse } from "@src/interfaces";
 
-export const SELF_NOTIFICATIONS_QUERY_KEY = (filters?: string) => {
-  let keys = [...SELF_QUERY_KEY(), "NOTIFICATIONS"];
-  if (typeof filters !== "undefined") {
-    keys.push(filters);
-  }
-  return keys;
-};
+export const SELF_NOTIFICATIONS_QUERY_KEY = (filters: string) => [
+  ...SELF_QUERY_KEY(),
+  "NOTIFICATIONS",
+  filters,
+];
 
 interface GetSelfNotificationsProps extends InfiniteQueryParams {
   filters?: string;
@@ -39,17 +39,21 @@ export const GetSelfNotifications = async ({
   return data;
 };
 
-const useGetSelfNotifications = (filters?: string) => {
+const useGetSelfNotifications = (
+  filters: string = "",
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfNotifications>> = {}
+) => {
   const { token } = useConnectedXM();
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfNotifications>>
-  >(
-    SELF_NOTIFICATIONS_QUERY_KEY(),
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfNotifications>>(
+    SELF_NOTIFICATIONS_QUERY_KEY(filters),
     (params: InfiniteQueryParams) =>
       GetSelfNotifications({ ...params, filters }),
+    params,
     {
-      enabled: !!token,
       staleTime: 0,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

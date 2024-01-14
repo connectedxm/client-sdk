@@ -2,15 +2,19 @@ import { ClientAPI } from "@src/ClientAPI";
 import type { Activity } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { SET_ACTIVITY_QUERY_DATA } from "../activities/useGetActivity";
+import {
+  ACTIVITY_QUERY_KEY,
+  SET_ACTIVITY_QUERY_DATA,
+} from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_ACTIVITIES_QUERY_KEY = (eventId: string) => [
@@ -44,6 +48,7 @@ export const GetEventActivities = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetEventActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/activities`, {
@@ -54,27 +59,32 @@ export const GetEventActivities = async ({
       search: search || undefined,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (activityId) => ACTIVITY_QUERY_KEY(activityId),
+      SET_ACTIVITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetEventActivities = (eventId: string) => {
-  const queryClient = useQueryClient();
+const useGetEventActivities = (
+  eventId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEventActivities>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventActivities>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEventActivities>>(
     EVENT_ACTIVITIES_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventActivities({ eventId, ...params }),
+    params,
     {
+      ...options,
       enabled: !!token && !!eventId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (activityId) => [activityId],
-          SET_ACTIVITY_QUERY_DATA
-        ),
     }
   );
 };

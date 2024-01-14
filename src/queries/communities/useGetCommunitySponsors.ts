@@ -1,15 +1,19 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
-import { SET_SPONSOR_QUERY_DATA } from "../sponsors/useGetSponsor";
+import {
+  SET_SPONSOR_QUERY_DATA,
+  SPONSOR_QUERY_KEY,
+} from "../sponsors/useGetSponsor";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const COMMUNITY_SPONSORS_QUERY_KEY = (communityId: string) => [
@@ -43,6 +47,7 @@ export const GetCommunitySponsors = async ({
   search,
   communityId,
   locale,
+  queryClient,
 }: GetCommunitySponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/communities/${communityId}/sponsors`, {
@@ -53,27 +58,31 @@ export const GetCommunitySponsors = async ({
       search: search || undefined,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (eventId) => SPONSOR_QUERY_KEY(eventId),
+      SET_SPONSOR_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetCommunitySponsors = (communityId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetCommunitySponsors>>
-  >(
+const useGetCommunitySponsors = (
+  communityId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetCommunitySponsors>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunitySponsors>>(
     COMMUNITY_SPONSORS_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>
       GetCommunitySponsors({ communityId, ...params }),
+    params,
     {
-      enabled: !!communityId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (eventId) => [eventId],
-          SET_SPONSOR_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!communityId && (options?.enabled ?? true),
     }
   );
 };

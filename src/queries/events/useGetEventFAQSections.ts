@@ -2,14 +2,18 @@ import { ClientAPI } from "@src/ClientAPI";
 import type { FaqSection } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { SET_EVENT_FAQ_SECTION_QUERY_DATA } from "./useGetEventFAQSection";
+import {
+  EVENT_FAQ_SECTION_QUERY_KEY,
+  SET_EVENT_FAQ_SECTION_QUERY_DATA,
+} from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_FAQ_SECTIONS_QUERY_KEY = (eventId: string) => [
@@ -43,6 +47,7 @@ export const GetEventFaqSections = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetEventFaqSectionsProps): Promise<ConnectedXMResponse<FaqSection[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/faqs`, {
@@ -53,27 +58,32 @@ export const GetEventFaqSections = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (sectionId) => EVENT_FAQ_SECTION_QUERY_KEY(eventId, sectionId),
+      SET_EVENT_FAQ_SECTION_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetEventFaqSections = (eventId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventFaqSections>>
-  >(
+const useGetEventFaqSections = (
+  eventId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEventFaqSections>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEventFaqSections>>(
     EVENT_FAQ_SECTIONS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
       GetEventFaqSections({ eventId, ...params }),
+    params,
     {
-      enabled: !!eventId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (sectionId) => [eventId, sectionId],
-          SET_EVENT_FAQ_SECTION_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

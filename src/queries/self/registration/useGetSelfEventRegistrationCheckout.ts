@@ -1,9 +1,11 @@
 import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import useConnectedSingleQuery, {
+  SingleQueryOptions,
   SingleQueryParams,
 } from "../../useConnectedSingleQuery";
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+import { ConnectedXMResponse } from "@src/interfaces";
 
 export interface CheckoutResponse {
   type: "stripe" | "paypal";
@@ -42,21 +44,27 @@ export const GetSelfEventRegistrationCheckout = async ({
 
 const useGetSelfEventRegistrationCheckout = (
   eventId: string,
-  registrationId: string = ""
+  registrationId: string = "",
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<
+    ReturnType<typeof GetSelfEventRegistrationCheckout>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetSelfEventRegistrationCheckout>>
+    ReturnType<typeof GetSelfEventRegistrationCheckout>
   >(
     SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(eventId, registrationId),
     () => GetSelfEventRegistrationCheckout({ eventId, registrationId }),
+    params,
     {
-      enabled: !!token && !!eventId && !!registrationId,
       staleTime: Infinity,
       cacheTime: Infinity,
       retry: false,
       retryOnMount: false,
+      ...options,
+      enabled: !!token && !!eventId && !!registrationId,
     }
   );
 };

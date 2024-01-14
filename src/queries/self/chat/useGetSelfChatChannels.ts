@@ -1,19 +1,19 @@
-import { ConnectedXM, ConnectedXMResponse } from "@src/ClientAPI";
-import { ChatChannel, ChatChannelMember } from "@interfaces";
+import { ClientAPI } from "@src/ClientAPI";
+import { ChatChannelMember, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "@context/queries/useConnectedInfiniteQuery";
-import {
-  InfiniteData,
-  QueryClient,
-  useQueryClient,
-} from "@tanstack/react-query";
+} from "@src/queries/useConnectedInfiniteQuery";
+import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { SET_SELF_CHAT_CHANNEL_QUERY_DATA } from "./useGetSelfChatChannel";
+import {
+  SELF_CHAT_CHANNEL_QUERY_KEY,
+  SET_SELF_CHAT_CHANNEL_QUERY_DATA,
+} from "./useGetSelfChatChannel";
 
 export const SELF_CHAT_CHANNELS_QUERY_KEY = () => ["CHANNELS"];
 
@@ -40,6 +40,7 @@ export const GetSelfChannels = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetSelfChannelsProps): Promise<ConnectedXMResponse<ChatChannelMember[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/chat/channels`, {
@@ -50,32 +51,38 @@ export const GetSelfChannels = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data as any,
+      queryClient,
+      (channelId) => SELF_CHAT_CHANNEL_QUERY_KEY(channelId),
+      SET_SELF_CHAT_CHANNEL_QUERY_DATA as any,
+      (member: any) => {
+        return {
+          ...member,
+          id: member.channelId.toString(),
+        };
+      }
+    );
+  }
+
   return data;
 };
 
-const useGetChatChannels = () => {
-  const queryClient = useQueryClient();
+const useGetChatChannels = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfChannels>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfChannels>>>(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfChannels>>(
     SELF_CHAT_CHANNELS_QUERY_KEY(),
-    (params: any) => GetSelfChannels(params),
+    (params: InfiniteQueryParams) => GetSelfChannels(params),
+    params,
     {
-      enabled: !!token,
-      onSuccess: (data) => {
-        CacheIndividualQueries(
-          data as any,
-          queryClient,
-          (channelId) => [channelId],
-          SET_SELF_CHAT_CHANNEL_QUERY_DATA as any,
-          (member: any) => {
-            return {
-              ...member,
-              id: member.channelId.toString(),
-            };
-          }
-        );
-      },
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

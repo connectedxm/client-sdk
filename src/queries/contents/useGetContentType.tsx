@@ -1,6 +1,7 @@
 import { ClientAPI } from "@src/ClientAPI";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { ContentType } from "@interfaces";
@@ -42,13 +43,19 @@ export const GetContentType = async ({
   return data;
 };
 
-const useGetContentType = (contentTypeId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetContentType>>>(
+const useGetContentType = (
+  contentTypeId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetContentType>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetContentType>>(
     CONTENT_TYPE_QUERY_KEY(contentTypeId),
     (params) =>
       GetContentType({ contentTypeId: contentTypeId || "", ...params }),
+    params,
     {
-      enabled: !!contentTypeId,
+      ...options,
+      enabled: !!contentTypeId && (options.enabled ?? true),
     }
   );
 };

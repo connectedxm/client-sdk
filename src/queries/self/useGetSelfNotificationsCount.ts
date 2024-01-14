@@ -1,13 +1,16 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
+import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import useConnectedSingleQuery, {
+  SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { SELF_QUERY_KEY } from "./useGetSelf";
+import { ConnectedXMResponse } from "@src/interfaces";
 
-export const SELF_NOTIFICATION_COUNT_QUERY_KEY = () => [
+export const SELF_NOTIFICATION_COUNT_QUERY_KEY = (filters: string) => [
   ...SELF_QUERY_KEY(),
   "NOTIFICATION_COUNT",
+  filters,
 ];
 
 interface GetSelfNewNotificationsCountProps extends SingleQueryParams {
@@ -29,17 +32,23 @@ export const GetSelfNewNotificationsCount = async ({
   return data;
 };
 
-const useGetSelfNewNotificationsCount = (filters?: string) => {
+const useGetSelfNewNotificationsCount = (
+  filters: string = "",
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<
+    ReturnType<typeof GetSelfNewNotificationsCount>
+  > = {}
+) => {
   const { token } = useConnectedXM();
   return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetSelfNewNotificationsCount>>
+    ReturnType<typeof GetSelfNewNotificationsCount>
   >(
-    SELF_NOTIFICATION_COUNT_QUERY_KEY(),
+    SELF_NOTIFICATION_COUNT_QUERY_KEY(filters),
     () => GetSelfNewNotificationsCount({ filters }),
+    params,
     {
-      enabled: !!token,
-      refetchInterval: 1000 * 60, // refetch every 60 seconds
-      // refetchIntervalInBackground: true,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

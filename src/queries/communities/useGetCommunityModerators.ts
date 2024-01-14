@@ -1,6 +1,7 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
@@ -60,17 +61,21 @@ export const GetCommunityModerators = async ({
   return data;
 };
 
-const useGetCommunityModerators = (communityId: string) => {
+const useGetCommunityModerators = (
+  communityId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetCommunityModerators>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetCommunityModerators>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunityModerators>>(
     COMMUNITY_MODERATORS_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>
       GetCommunityModerators({ communityId, ...params }),
+    params,
     {
-      enabled: !!token && !!communityId,
+      ...options,
+      enabled: !!token && !!communityId && (options?.enabled ?? true),
     }
   );
 };

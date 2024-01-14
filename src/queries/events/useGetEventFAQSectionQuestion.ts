@@ -1,5 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -52,16 +53,21 @@ export const GetEventFAQSectionQuestion = async ({
 const useGetEventFAQSectionQuestion = (
   eventId: string,
   sectionId: string,
-  questionId: string
+  questionId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<
+    ReturnType<typeof GetEventFAQSectionQuestion>
+  > = {}
 ) => {
-  return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetEventFAQSectionQuestion>>
-  >(
+  return useConnectedSingleQuery<ReturnType<typeof GetEventFAQSectionQuestion>>(
     EVENT_FAQ_SECTION_QUESTION_QUERY_KEY(eventId, sectionId, questionId),
     (params) =>
       GetEventFAQSectionQuestion({ eventId, sectionId, questionId, ...params }),
+    params,
     {
-      enabled: !!eventId,
+      ...options,
+      enabled:
+        !!eventId && !!sectionId && !!questionId && (options?.enabled ?? true),
     }
   );
 };

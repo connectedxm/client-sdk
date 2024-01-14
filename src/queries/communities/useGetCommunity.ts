@@ -1,5 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -44,12 +45,18 @@ export const GetCommunity = async ({
   return data;
 };
 
-const useGetCommunity = (communityId: string) => {
-  return useConnectedSingleQuery<ConnectedXMResponse<Community>>(
+const useGetCommunity = (
+  communityId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetCommunity>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetCommunity>>(
     COMMUNITY_QUERY_KEY(communityId),
     (params) => GetCommunity({ communityId, ...params }),
+    params,
     {
-      enabled: !!communityId,
+      ...options,
+      enabled: !!communityId && (options?.enabled ?? true),
     }
   );
 };

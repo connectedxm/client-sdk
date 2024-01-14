@@ -11,7 +11,10 @@ import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { SET_COMMUNITY_QUERY_DATA } from "../communities/useGetCommunity";
+import {
+  COMMUNITY_QUERY_KEY,
+  SET_COMMUNITY_QUERY_DATA,
+} from "../communities/useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const ACCOUNT_COMMUNITIES_QUERY_KEY = (accountId: string) => [
@@ -56,12 +59,11 @@ export const GetAccountCommunities = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient) {
+  if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,
       queryClient,
-      (communityId) => [communityId],
+      (communityId) => COMMUNITY_QUERY_KEY(communityId),
       SET_COMMUNITY_QUERY_DATA
     );
   }

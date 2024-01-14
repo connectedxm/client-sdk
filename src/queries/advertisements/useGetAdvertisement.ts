@@ -1,5 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -38,13 +39,18 @@ export const GetAdvertisement = async ({
   return data;
 };
 
-const useGetAdvertisement = (position: string, enabled: boolean = true) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetAdvertisement>>>(
+const useGetAdvertisement = (
+  position: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetAdvertisement>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetAdvertisement>>(
     ADVERTISEMENT_QUERY_KEY(position),
     (params: any) => GetAdvertisement({ ...params }),
+    params,
     {
       staleTime: 30 * 1000,
-      enabled: enabled,
+      ...options,
     }
   );
 };

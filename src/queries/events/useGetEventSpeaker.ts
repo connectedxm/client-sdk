@@ -1,10 +1,11 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import type { Speaker } from "@interfaces";
+import type { ConnectedXMResponse, Speaker } from "@interfaces";
 import { EVENT_SPEAKERS_QUERY_KEY } from "./useGetEventSpeakers";
 import { QueryClient } from "@tanstack/react-query";
 
@@ -45,12 +46,19 @@ export const GetEventSpeaker = async ({
   return data;
 };
 
-const useGetEventSpeaker = (eventId: string, speakerId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetEventSpeaker>>>(
+const useGetEventSpeaker = (
+  eventId: string,
+  speakerId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetEventSpeaker>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetEventSpeaker>>(
     EVENT_SPEAKER_QUERY_KEY(eventId, speakerId),
     (params) => GetEventSpeaker({ eventId, speakerId, ...params }),
+    params,
     {
-      enabled: !!eventId && !!speakerId,
+      ...options,
+      enabled: !!eventId && !!speakerId && (options?.enabled ?? true),
     }
   );
 };

@@ -1,7 +1,8 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Ticket } from "@interfaces";
+import type { ConnectedXMResponse, Ticket } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
@@ -53,12 +54,18 @@ export const GetEventTickets = async ({
   return data;
 };
 
-const useGetEventTickets = (eventId: string) => {
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventTickets>>>(
+const useGetEventTickets = (
+  eventId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEventTickets>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEventTickets>>(
     EVENT_TICKETS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventTickets({ eventId, ...params }),
+    params,
     {
-      enabled: !!eventId,
+      ...options,
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

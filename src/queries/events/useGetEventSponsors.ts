@@ -1,16 +1,20 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Account } from "@interfaces";
+import type { Account, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { EVENT_TICKETS_QUERY_KEY } from "./useGetEventTickets";
-import { SET_SPONSOR_QUERY_DATA } from "../sponsors/useGetSponsor";
+import {
+  SET_SPONSOR_QUERY_DATA,
+  SPONSOR_QUERY_KEY,
+} from "../sponsors/useGetSponsor";
 
 export const EVENT_SPONSORS_QUERY_KEY = (eventId: string) => [
   ...EVENT_QUERY_KEY(eventId),
@@ -43,6 +47,7 @@ export const GetEventSponsors = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetEventSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/sponsors`, {
@@ -53,26 +58,31 @@ export const GetEventSponsors = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (sponsorId) => SPONSOR_QUERY_KEY(sponsorId),
+      SET_SPONSOR_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetEventSponsors = (eventId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventSponsors>>
-  >(
+const useGetEventSponsors = (
+  eventId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEventSponsors>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEventSponsors>>(
     EVENT_TICKETS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventSponsors({ eventId, ...params }),
+    params,
     {
-      enabled: !!eventId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (accountId) => [accountId],
-          SET_SPONSOR_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!eventId && (options.enabled ?? true),
     }
   );
 };

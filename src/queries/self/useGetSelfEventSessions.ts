@@ -1,17 +1,20 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { Session } from "@interfaces";
+import { useConnectedXM } from "@src/hooks/useConnectedXM";
+import type { ConnectedXMResponse, Session } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { useQueryClient } from "@tanstack/react-query";
-import { SET_EVENT_SESSION_QUERY_DATA } from "../events/useGetEventSession";
+import {
+  EVENT_SESSION_QUERY_KEY,
+  SET_EVENT_SESSION_QUERY_DATA,
+} from "../events/useGetEventSession";
 import { SELF_EVENTS_QUERY_KEY } from "./useGetSelfEvents";
 
 export const SELF_EVENT_SESSIONS_QUERY_KEY = (eventId: string) => [
-  ...SELF_EVENTS_QUERY_KEY(),
+  ...SELF_EVENTS_QUERY_KEY(false),
   eventId,
   "SESSIONS",
 ];
@@ -27,6 +30,7 @@ export const GetSelfEventSessions = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetSelfEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/events/${eventId}/sessions`, {
@@ -38,28 +42,34 @@ export const GetSelfEventSessions = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (sessionId) => EVENT_SESSION_QUERY_KEY(eventId, sessionId),
+      SET_EVENT_SESSION_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetSelfEventSessions = (eventId: string) => {
+const useGetSelfEventSessions = (
+  eventId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfEventSessions>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventSessions>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfEventSessions>>(
     SELF_EVENT_SESSIONS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
       GetSelfEventSessions({ eventId, ...params }),
+    params,
     {
-      enabled: !!token && !!eventId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (sessionId) => [eventId, sessionId],
-          SET_EVENT_SESSION_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!token && !!eventId && (options.enabled ?? true),
     }
   );
 };

@@ -55,12 +55,11 @@ export const GetAccountFollowings = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient) {
+  if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,
       queryClient,
-      (accountId) => [accountId],
+      (accountId) => ACCOUNT_QUERY_KEY(accountId),
       SET_ACCOUNT_QUERY_DATA
     );
   }

@@ -1,11 +1,12 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { CommunityMembership } from "@interfaces";
+import type { CommunityMembership, ConnectedXMResponse } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { SELF_QUERY_KEY } from "./useGetSelf";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY = () => [
   ...SELF_QUERY_KEY(),
@@ -35,16 +36,23 @@ export const GetSelfCommunityMemberships = async ({
   return data;
 };
 
-const useGetSelfCommunityMemberships = () => {
+const useGetSelfCommunityMemberships = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<
+    ReturnType<typeof GetSelfCommunityMemberships>
+  > = {}
+) => {
   const { token } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfCommunityMemberships>>
+    ReturnType<typeof GetSelfCommunityMemberships>
   >(
     SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfCommunityMemberships({ ...params }),
+    params,
     {
-      enabled: !!token,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

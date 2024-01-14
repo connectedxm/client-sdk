@@ -1,7 +1,8 @@
-import { ConnectedXM, ConnectedXMResponse } from "@src/ClientAPI";
+import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
-import { Announcement } from "@interfaces";
+import { Announcement, ConnectedXMResponse } from "@interfaces";
 import {
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -26,15 +27,19 @@ export const GetSelfAnnouncement = async ({
   return data;
 };
 
-const useGetSelfAnnouncement = (announcementId: string) => {
+const useGetSelfAnnouncement = (
+  announcementId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSelfAnnouncement>> = {}
+) => {
   const { token } = useConnectedXM();
-  return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetSelfAnnouncement>>
-  >(
+  return useConnectedSingleQuery<ReturnType<typeof GetSelfAnnouncement>>(
     SELF_ANNOUNCEMENT_QUERY_KEY(announcementId),
     (params) => GetSelfAnnouncement({ announcementId, ...params }),
+    params,
     {
-      enabled: !!announcementId && !!token,
+      ...options,
+      enabled: !!token && !!announcementId && (options?.enabled ?? true),
     }
   );
 };

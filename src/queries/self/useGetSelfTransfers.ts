@@ -1,7 +1,8 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { Transfer } from "@interfaces";
+import { useConnectedXM } from "@src/hooks/useConnectedXM";
+import type { ConnectedXMResponse, Transfer } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
@@ -33,15 +34,18 @@ export const GetSelfTransfers = async ({
   return data;
 };
 
-const useGetSelfTransfers = () => {
+const useGetSelfTransfers = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfTransfers>> = {}
+) => {
   const { token } = useConnectedXM();
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfTransfers>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfTransfers>>(
     SELF_TRANSFERS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfTransfers({ ...params }),
+    params,
     {
-      enabled: !!token,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

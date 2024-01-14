@@ -1,10 +1,11 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import type { Session } from "@interfaces";
+import type { ConnectedXMResponse, Session } from "@interfaces";
 import { EVENT_SESSIONS_QUERY_KEY } from "./useGetEventSessions";
 import { QueryClient } from "@tanstack/react-query";
 
@@ -45,12 +46,19 @@ export const GetEventSession = async ({
   return data;
 };
 
-const useGetEventSession = (eventId: string, sessionId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetEventSession>>>(
+const useGetEventSession = (
+  eventId: string,
+  sessionId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetEventSession>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetEventSession>>(
     EVENT_SESSION_QUERY_KEY(eventId, sessionId),
     (params) => GetEventSession({ eventId, sessionId, ...params }),
+    params,
     {
-      enabled: !!eventId && !!sessionId,
+      ...options,
+      enabled: !!eventId && !!sessionId && (options?.enabled ?? true),
     }
   );
 };

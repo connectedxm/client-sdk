@@ -1,15 +1,16 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { Registration } from "@interfaces";
+import type { ConnectedXMResponse, Registration } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
-  checkedIn?: boolean
+  checkedIn: boolean
 ) => [
   ...SELF_EVENT_LISTING_QUERY_KEY(eventId),
   "REGISTRATIONS",
@@ -50,16 +51,24 @@ export const GetSelfEventListingRegistrations = async ({
 
 const useGetSelfEventListingsRegistrations = (
   eventId: string,
-  checkedIn?: boolean
+  checkedIn: boolean = false,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<
+    ReturnType<typeof GetSelfEventListingRegistrations>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ConnectedXMResponse<Registration[]>>(
+  return useConnectedInfiniteQuery<
+    ReturnType<typeof GetSelfEventListingRegistrations>
+  >(
     SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, checkedIn),
     (params: InfiniteQueryParams) =>
       GetSelfEventListingRegistrations({ eventId, checkedIn, ...params }),
+    params,
     {
-      enabled: !!token && !!eventId,
+      ...options,
+      enabled: !!token && !!eventId && (options?.enabled ?? true),
     }
   );
 };

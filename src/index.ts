@@ -1,5 +1,3 @@
 export * from "./interfaces";
-export * from "./hooks";
-
-export { ClientAPI } from "./ClientAPI";
+export { useSetAuthToken } from "./hooks";
 export { ConnectedXM } from "./ConnectedXM";

@@ -1,12 +1,13 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { SET_ACTIVITY_QUERY_DATA } from "./useGetActivity";
@@ -37,6 +38,7 @@ export const GetActivities = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await ClientAPI(locale);
 
@@ -48,26 +50,30 @@ export const GetActivities = async ({
       search: search || undefined,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (activityId) => [activityId],
+      SET_ACTIVITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetActivities = () => {
-  const queryClient = useQueryClient();
+const useGetActivities = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetActivities>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetActivities>>>(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetActivities>>(
     ACTIVITIES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetActivities(params),
+    params,
     {
-      enabled: !!token,
-      onSuccess: (data) => {
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (activityId) => [activityId],
-          SET_ACTIVITY_QUERY_DATA
-        );
-      },
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

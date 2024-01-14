@@ -1,13 +1,12 @@
 import { ClientAPI } from "@src/ClientAPI";
-import {
-  GetBaseInfiniteQueryKeys,
-  InfiniteQueryParams,
-  useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
-import { SponsorshipLevel } from "@interfaces";
+import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
 import { LEVELS_QUERY_KEY } from "./useGetLevels";
-import { GetBaseSingleQueryKeys } from "../useConnectedSingleQuery";
+import useConnectedSingleQuery, {
+  GetBaseSingleQueryKeys,
+  SingleQueryOptions,
+  SingleQueryParams,
+} from "../useConnectedSingleQuery";
 
 export const LEVEL_QUERY_KEY = (levelId: string) => [
   ...LEVELS_QUERY_KEY(),
@@ -26,25 +25,31 @@ export const SET_LEVEL_QUERY_DATA = (
   );
 };
 
-interface GetLevelProps extends InfiniteQueryParams {
+interface GetLevelProps extends SingleQueryParams {
   levelId: string;
 }
 
 export const GetLevel = async ({
   levelId,
   locale,
-}: GetLevelProps): Promise<ConnectedXMResponse<SponsorshipLevel[]>> => {
+}: GetLevelProps): Promise<ConnectedXMResponse<SponsorshipLevel>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/levels/${levelId}`, {});
   return data;
 };
 
-const useGetLevel = (levelId: string) => {
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetLevel>>>(
+const useGetLevel = (
+  levelId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetLevel>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetLevel>>(
     LEVEL_QUERY_KEY(levelId),
-    (params: any) => GetLevel(params),
+    (params: SingleQueryParams) => GetLevel({ levelId, ...params }),
+    params,
     {
-      enabled: !!levelId,
+      ...options,
+      enabled: !!levelId && (options?.enabled ?? true),
     }
   );
 };

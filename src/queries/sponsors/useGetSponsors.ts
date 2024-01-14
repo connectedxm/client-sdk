@@ -1,14 +1,13 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Account } from "@interfaces";
+import type { Account, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_SPONSOR_QUERY_DATA } from "./useGetSponsor";
+import { QueryClient } from "@tanstack/react-query";
 
 export const SPONSORS_QUERY_KEY = () => ["SPONSORS"];
 
@@ -48,21 +47,15 @@ export const GetSponsors = async ({
   return data;
 };
 
-const useGetSponsors = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSponsors>>>(
+const useGetSponsors = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSponsors>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSponsors>>(
     SPONSORS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSponsors({ ...params }),
-    {
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (accountId) => [accountId],
-          SET_SPONSOR_QUERY_DATA
-        ),
-    }
+    params,
+    options
   );
 };
 

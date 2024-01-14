@@ -1,14 +1,17 @@
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { Activity } from "@interfaces";
+import type { Activity, ConnectedXMResponse } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { useQueryClient } from "@tanstack/react-query";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import { SET_ACTIVITY_QUERY_DATA } from "../activities/useGetActivity";
+import {
+  ACTIVITY_QUERY_KEY,
+  SET_ACTIVITY_QUERY_DATA,
+} from "../activities/useGetActivity";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_ACTIVITIES_QUERY_KEY = () => [
   ...SELF_QUERY_KEY(),
@@ -23,6 +26,7 @@ export const GetSelfActivities = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetSelfActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/activities`, {
@@ -33,28 +37,32 @@ export const GetSelfActivities = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (activityId) => ACTIVITY_QUERY_KEY(activityId),
+      SET_ACTIVITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetSelfActivities = () => {
+const useGetSelfActivities = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfActivities>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfActivities>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfActivities>>(
     SELF_ACTIVITIES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfActivities({ ...params }),
+    params,
     {
-      enabled: !!token,
-      onSuccess: (data) => {
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (activityId) => [activityId],
-          SET_ACTIVITY_QUERY_DATA
-        );
-      },
+      ...options,
+      enabled: !!token && (options.enabled ?? true),
     }
   );
 };

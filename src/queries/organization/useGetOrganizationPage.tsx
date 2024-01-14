@@ -1,10 +1,11 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import type { Page } from "@interfaces";
+import type { ConnectedXMResponse, Page } from "@interfaces";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
 import { QueryClient } from "@tanstack/react-query";
 
@@ -44,12 +45,18 @@ export const GetOrganizationPage = async ({
   return data;
 };
 
-const useGetOrganizationPage = (type: PageType) => {
-  return useConnectedSingleQuery<ConnectedXMResponse<Page>>(
+const useGetOrganizationPage = (
+  type: PageType,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetOrganizationPage>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetOrganizationPage>>(
     ORGANIZATION_PAGE_QUERY_KEY(type),
     (params) => GetOrganizationPage({ type, ...params }),
+    params,
     {
-      enabled: !!type,
+      ...options,
+      enabled: !!type && (options.enabled ?? true),
     }
   );
 };

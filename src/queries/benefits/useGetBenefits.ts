@@ -3,6 +3,7 @@ import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { Benefit } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
@@ -48,13 +49,18 @@ export const GetBenefits = async ({
   return data;
 };
 
-const useGetBenefits = () => {
+const useGetBenefits = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetBenefits>> = {}
+) => {
   const { token } = useConnectedXM();
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetBenefits>>>(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetBenefits>>(
     BENEFITS_QUERY_KEY(),
-    (params: any) => GetBenefits(params),
+    (params: InfiniteQueryParams) => GetBenefits(params),
+    params,
     {
-      enabled: !!token,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

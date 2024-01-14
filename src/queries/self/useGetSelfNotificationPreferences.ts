@@ -1,10 +1,11 @@
 import {
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { NotificationPreferences } from "@interfaces";
+import { useConnectedXM } from "@src/hooks/useConnectedXM";
+import type { ConnectedXMResponse, NotificationPreferences } from "@interfaces";
 import { SELF_QUERY_KEY } from "./useGetSelf";
 
 export const SELF_PREFERENCES_QUERY_KEY = () => [
@@ -24,16 +25,23 @@ export const GetSelfNotificationPreferences = async ({
   return data;
 };
 
-const useGetSelfNotificationPreferences = () => {
+const useGetSelfNotificationPreferences = (
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<
+    ReturnType<typeof GetSelfNotificationPreferences>
+  > = {}
+) => {
   const { token } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetSelfNotificationPreferences>>
+    ReturnType<typeof GetSelfNotificationPreferences>
   >(
     SELF_PREFERENCES_QUERY_KEY(),
     (params: any) => GetSelfNotificationPreferences({ ...params }),
+    params,
     {
-      enabled: !!token,
+      ...options,
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

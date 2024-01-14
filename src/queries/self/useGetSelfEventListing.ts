@@ -1,15 +1,17 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import type { EventListing } from "@interfaces";
+import type { ConnectedXMResponse, EventListing } from "@interfaces";
 import { SELF_EVENT_LISTINGS_QUERY_KEY } from "./useGetSelfEventListings";
 import { QueryClient } from "@tanstack/react-query";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_LISTING_QUERY_KEY = (eventId: string) => [
-  ...SELF_EVENT_LISTINGS_QUERY_KEY(),
+  ...SELF_EVENT_LISTINGS_QUERY_KEY(false),
   eventId,
 ];
 
@@ -41,14 +43,20 @@ export const GetSelfEventListing = async ({
   return data;
 };
 
-const useGetSelfEventListing = (eventId: string) => {
-  return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetSelfEventListing>>
-  >(
+const useGetSelfEventListing = (
+  eventId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
+) => {
+  const { token } = useConnectedXM();
+
+  return useConnectedSingleQuery<ReturnType<typeof GetSelfEventListing>>(
     SELF_EVENT_LISTING_QUERY_KEY(eventId),
     (params) => GetSelfEventListing({ eventId, ...params }),
+    params,
     {
-      enabled: !!eventId,
+      ...options,
+      enabled: !!token && !!eventId && (options?.enabled ?? true),
     }
   );
 };

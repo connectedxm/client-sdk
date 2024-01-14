@@ -1,12 +1,13 @@
-import { ConnectedXM, ConnectedXMResponse } from "@src/ClientAPI";
-import { ChatChannelMessage } from "@interfaces";
+import { ClientAPI } from "@src/ClientAPI";
+import { ChatChannelMessage, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "@context/queries/useConnectedInfiniteQuery";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+} from "@src/queries/useConnectedInfiniteQuery";
+import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import {
   SELF_CHAT_CHANNEL_QUERY_KEY,
@@ -44,6 +45,7 @@ export const GetSelfChatChannelMessages = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetSelfChatChannelMessagesProps): Promise<
   ConnectedXMResponse<ChatChannelMessage[]>
 > => {
@@ -53,36 +55,45 @@ export const GetSelfChatChannelMessages = async ({
     {
       params: {
         page: pageParam || undefined,
-        pageSize: 25,
+        pageSize: pageSize || undefined,
         orderBy: orderBy || undefined,
         search: search || undefined,
       },
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], (old) => ({
+      ...old,
+      data: {
+        ...old.data,
+        read: true,
+      },
+    }));
+  }
+
   return data;
 };
 
-const useGetSelfChatChannelMessages = (channelId: string) => {
-  const queryClient = useQueryClient();
+const useGetSelfChatChannelMessages = (
+  channelId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<
+    ReturnType<typeof GetSelfChatChannelMessages>
+  > = {}
+) => {
   const { token } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfChatChannelMessages>>
+    ReturnType<typeof GetSelfChatChannelMessages>
   >(
     SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY(channelId),
     (params: Omit<GetSelfChatChannelMessagesProps, "channelId">) =>
       GetSelfChatChannelMessages({ ...params, channelId }),
+    params,
     {
-      enabled: !!token,
-      onSuccess: (data) => {
-        SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], (old) => ({
-          ...old,
-          data: {
-            ...old.data,
-            read: true,
-          },
-        }));
-      },
+      ...options,
+      enabled: !!token && !!channelId && (options?.enabled ?? true),
     }
   );
 };

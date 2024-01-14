@@ -2,16 +2,20 @@ import { ClientAPI } from "@src/ClientAPI";
 import type { Account } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetEventSessions } from "./useGetEventSessions";
-import { SET_ACCOUNT_QUERY_DATA } from "../accounts/useGetAccount";
+import {
+  ACCOUNT_QUERY_KEY,
+  SET_ACCOUNT_QUERY_DATA,
+} from "../accounts/useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string) => [
@@ -45,6 +49,7 @@ export const GetEventRegistrants = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetEventRegistrantsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/registrants`, {
@@ -55,28 +60,34 @@ export const GetEventRegistrants = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (accountId) => ACCOUNT_QUERY_KEY(accountId),
+      SET_ACCOUNT_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetEventRegistrants = (eventId: string) => {
-  const queryClient = useQueryClient();
+const useGetEventRegistrants = (
+  eventId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEventRegistrants>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventRegistrants>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEventRegistrants>>(
     EVENT_REGISTRANTS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
       GetEventRegistrants({ eventId, ...params }),
+    params,
     {
-      enabled: !!token && !!eventId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (accountId) => [accountId],
-          SET_ACCOUNT_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!token && !!eventId && (options?.enabled ?? true),
     }
   );
 };

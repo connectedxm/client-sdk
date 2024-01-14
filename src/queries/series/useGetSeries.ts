@@ -1,10 +1,11 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import type { Series } from "@interfaces";
+import type { ConnectedXMResponse, Series } from "@interfaces";
 import { SERIES_LIST_QUERY_KEY } from "./useGetSeriesList";
 import { QueryClient } from "@tanstack/react-query";
 
@@ -38,12 +39,18 @@ export const GetSeries = async ({
   return data;
 };
 
-const useGetSeries = (seriesId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetSeries>>>(
+const useGetSeries = (
+  seriesId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSeries>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetSeries>>(
     SERIES_QUERY_KEY(seriesId),
     (params) => GetSeries({ seriesId, ...params }),
+    params,
     {
-      enabled: !!seriesId,
+      ...options,
+      enabled: !!seriesId && (options?.enabled ?? true),
     }
   );
 };

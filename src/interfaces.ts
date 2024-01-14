@@ -529,7 +529,7 @@ export interface BasePurchase {
     email: string;
     createdAt: string;
   };
-  ticket: BaseTicket;
+  ticket: Ticket;
 }
 
 export interface Purchase extends BasePurchase {
@@ -564,10 +564,10 @@ export interface Order {
 export interface BaseTransfer {
   id: string;
   email: string;
-  purchase: BasePurchase;
 }
 
 export interface Transfer extends BaseTransfer {
+  purchase: BasePurchase;
   createdAt: string;
   updatedAt: string;
 }

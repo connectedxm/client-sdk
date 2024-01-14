@@ -2,12 +2,15 @@ import { ClientAPI } from "@src/ClientAPI";
 import type { Event } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "./useGetEvent";
 
 export const EVENTS_QUERY_KEY = (past?: boolean) => {
   const keys = ["EVENTS"];
@@ -43,6 +46,7 @@ export const GetEvents = async ({
   search,
   past,
   locale,
+  queryClient,
 }: GetEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events`, {
@@ -54,19 +58,29 @@ export const GetEvents = async ({
       past: past !== undefined ? past : undefined,
     },
   });
+
+  if (queryClient) {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (eventId) => EVENT_QUERY_KEY(eventId),
+      SET_EVENT_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
 const useGetEvents = (
-  past?: boolean,
-  options?: InfiniteOptions,
-  params?: InfiniteQueryParams
+  past: boolean = false,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEvents>> = {}
 ) => {
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEvents>>>(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEvents>>(
     EVENTS_QUERY_KEY(past),
     (params: InfiniteQueryParams) => GetEvents({ past, ...params }),
-    {},
-    params
+    params,
+    options
   );
 };
 

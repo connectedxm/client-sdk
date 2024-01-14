@@ -1,14 +1,15 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Event } from "@interfaces";
+import type { ConnectedXMResponse, Event } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { SET_EVENT_QUERY_DATA } from "./useGetEvent";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "./useGetEvent";
+import { QueryClient } from "@tanstack/react-query";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
 
 export const EVENTS_FEATURED_QUERY_KEY = () => [
@@ -38,6 +39,7 @@ export const GetFeaturedEvents = async ({
   pageSize,
   orderBy,
   locale,
+  queryClient,
 }: GetFeaturedEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/featured`, {
@@ -47,26 +49,28 @@ export const GetFeaturedEvents = async ({
       orderBy: orderBy || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (eventId) => EVENT_QUERY_KEY(eventId),
+      SET_EVENT_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetFeaturedEvents = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetFeaturedEvents>>
-  >(
+const useGetFeaturedEvents = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetFeaturedEvents>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetFeaturedEvents>>(
     EVENTS_FEATURED_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetFeaturedEvents({ ...params }),
-    {
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (eventId) => [eventId],
-          SET_EVENT_QUERY_DATA
-        ),
-    }
+    params,
+    options
   );
 };
 

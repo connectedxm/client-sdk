@@ -1,13 +1,14 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ConnectedXM, ConnectedXMResponse } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
-import type { PushDevice } from "@interfaces";
+import type { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_PUSH_DEVICES_QUERY_KEY } from "./useGetSelfPushDevices";
 import { QueryClient } from "@tanstack/react-query";
+import { ClientAPI } from "@src/ClientAPI";
 
 export const SELF_PUSH_DEVICE_QUERY_KEY = (pushDeviceId: string) => [
   ...SELF_PUSH_DEVICES_QUERY_KEY(),
@@ -42,14 +43,20 @@ export const GetSelfPushDevice = async ({
   return data;
 };
 
-const useGetSelfPushDevice = (pushDeviceId: string = "") => {
+const useGetSelfPushDevice = (
+  pushDeviceId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSelfPushDevice>> = {}
+) => {
   const { token } = useConnectedXM();
 
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetSelfPushDevice>>>(
+  return useConnectedSingleQuery<ReturnType<typeof GetSelfPushDevice>>(
     SELF_PUSH_DEVICE_QUERY_KEY(pushDeviceId),
     (params) => GetSelfPushDevice({ pushDeviceId, ...params }),
+    params,
     {
-      enabled: !!token && !!pushDeviceId,
+      ...options,
+      enabled: !!token && !!pushDeviceId && (options?.enabled ?? true),
     }
   );
 };

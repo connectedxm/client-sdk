@@ -1,14 +1,17 @@
-import { ConnectedXM, ConnectedXMResponse } from "@src/ClientAPI";
+import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { PushDevice } from "@interfaces";
-import { useQueryClient } from "@tanstack/react-query";
-import { SET_PUSH_DEVICE_QUERY_DATA } from "@context/queries/self/useGetSelfPushDevice";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_QUERY_KEY } from "./useGetSelf";
+import {
+  SELF_PUSH_DEVICE_QUERY_KEY,
+  SET_PUSH_DEVICE_QUERY_DATA,
+} from "./useGetSelfPushDevice";
+import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 
 export const SELF_PUSH_DEVICES_QUERY_KEY = () => [
   ...SELF_QUERY_KEY(),
@@ -23,6 +26,7 @@ export const GetSelfPushDevices = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetSelfPushDevicesProps): Promise<ConnectedXMResponse<PushDevice[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/push-devices`, {
@@ -33,27 +37,32 @@ export const GetSelfPushDevices = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (pushDeviceId) => SELF_PUSH_DEVICE_QUERY_KEY(pushDeviceId),
+      SET_PUSH_DEVICE_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetSelfPushDevices = () => {
+const useGetSelfPushDevices = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSelfPushDevices>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfPushDevices>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfPushDevices>>(
     SELF_PUSH_DEVICES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfPushDevices({ ...params }),
+    params,
     {
+      ...options,
       enabled: !!token,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (pushDeviceId) => [pushDeviceId],
-          SET_PUSH_DEVICE_QUERY_DATA
-        ),
     }
   );
 };

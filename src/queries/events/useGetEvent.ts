@@ -1,5 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -39,11 +40,17 @@ export const GetEvent = async ({
   return data;
 };
 
-const useGetEvent = (eventId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetEvent>>>(
+const useGetEvent = (
+  eventId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetEvent>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetEvent>>(
     EVENT_QUERY_KEY(eventId),
     (params) => GetEvent({ eventId, ...params }),
+    params,
     {
+      ...options,
       enabled: !!eventId,
     }
   );

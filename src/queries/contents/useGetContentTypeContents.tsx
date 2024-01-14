@@ -5,10 +5,11 @@ import {
   InfiniteQueryParams,
   GetBaseInfiniteQueryKeys,
   setFirstPageData,
+  InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_CONTENT_QUERY_DATA } from "./useGetContent";
+import { QueryClient } from "@tanstack/react-query";
+import { CONTENT_QUERY_KEY, SET_CONTENT_QUERY_DATA } from "./useGetContent";
 import { CONTENT_TYPE_QUERY_KEY } from "./useGetContentType";
 import { ConnectedXMResponse } from "@interfaces";
 
@@ -43,6 +44,7 @@ export const GetContentTypeContents = async ({
   search,
   contentTypeId,
   locale,
+  queryClient,
 }: GetContentParams): Promise<ConnectedXMResponse<Content[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
@@ -56,28 +58,31 @@ export const GetContentTypeContents = async ({
       },
     }
   );
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (contentId) => CONTENT_QUERY_KEY(contentId),
+      SET_CONTENT_QUERY_DATA
+    );
+  }
 
   return data;
 };
 
-const useGetContentTypeContents = (contentTypeId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetContentTypeContents>>
-  >(
+const useGetContentTypeContents = (
+  contentTypeId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetContentTypeContents>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetContentTypeContents>>(
     CONTENT_TYPE_CONTENTS_QUERY_KEY(contentTypeId),
     (params: InfiniteQueryParams) =>
       GetContentTypeContents({ ...params, contentTypeId: contentTypeId || "" }),
+    params,
     {
-      enabled: !!contentTypeId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (contentId) => [contentId],
-          SET_CONTENT_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!contentTypeId && (options.enabled ?? true),
     }
   );
 };

@@ -4,6 +4,7 @@ import {
   QueryClient,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { useConnectedXM } from "../hooks";
 
@@ -52,7 +53,8 @@ export const useConnectedInfiniteQuery = <
   params: Omit<InfiniteQueryParams, "queryClient">,
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const { locale, queryClient } = useConnectedXM();
+  const queryClient = useQueryClient();
+  const { locale } = useConnectedXM();
 
   const getNextPageParam = (lastPage: any, pages: any[]) => {
     if (lastPage.data?.length === params?.pageSize) {

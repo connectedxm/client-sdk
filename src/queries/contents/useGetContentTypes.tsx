@@ -5,10 +5,14 @@ import {
   InfiniteQueryParams,
   GetBaseInfiniteQueryKeys,
   setFirstPageData,
+  InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_CONTENT_TYPE_QUERY_DATA } from "./useGetContentType";
+import { QueryClient } from "@tanstack/react-query";
+import {
+  CONTENT_TYPE_QUERY_KEY,
+  SET_CONTENT_TYPE_QUERY_DATA,
+} from "./useGetContentType";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const CONTENT_TYPES_QUERY_KEY = () => ["CONTENT_TYPES"];
@@ -36,6 +40,7 @@ export const GetContentTypes = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetContentParams): Promise<ConnectedXMResponse<ContentType[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/contentTypes`, {
@@ -46,25 +51,27 @@ export const GetContentTypes = async ({
       search: search || undefined,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (contentTypeId) => CONTENT_TYPE_QUERY_KEY(contentTypeId),
+      SET_CONTENT_TYPE_QUERY_DATA
+    );
+  }
 
   return data;
 };
 
-const useGetContentTypes = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetContentTypes>>>(
+const useGetContentTypes = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetContentTypes>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetContentTypes>>(
     CONTENT_TYPES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetContentTypes({ ...params }),
-    {
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (contentTypeId) => [contentTypeId],
-          SET_CONTENT_TYPE_QUERY_DATA
-        ),
-    }
+    params,
+    options
   );
 };
 

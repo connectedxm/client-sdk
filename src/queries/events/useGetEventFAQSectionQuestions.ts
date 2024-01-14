@@ -2,13 +2,17 @@ import { ClientAPI } from "@src/ClientAPI";
 import type { Faq } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA } from "./useGetEventFAQSectionQuestion";
+import { QueryClient } from "@tanstack/react-query";
+import {
+  EVENT_FAQ_SECTION_QUESTION_QUERY_KEY,
+  SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA,
+} from "./useGetEventFAQSectionQuestion";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
 
@@ -48,6 +52,7 @@ export const GetEventFaqs = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetEventFaqsProps): Promise<ConnectedXMResponse<Faq[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
@@ -61,25 +66,34 @@ export const GetEventFaqs = async ({
       },
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (faqId) =>
+        EVENT_FAQ_SECTION_QUESTION_QUERY_KEY(eventId, sectionId, faqId),
+      SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetEventFaqs = (eventId: string, sectionId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventFaqs>>>(
+const useGetEventFaqs = (
+  eventId: string,
+  sectionId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetEventFaqs>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetEventFaqs>>(
     EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY(eventId, sectionId),
     (params: InfiniteQueryParams) =>
       GetEventFaqs({ eventId, sectionId, ...params }),
+    params,
     {
-      enabled: !!eventId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (faqId) => [eventId, faqId],
-          SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!eventId && !!sectionId && (options.enabled ?? true),
     }
   );
 };

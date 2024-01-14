@@ -1,16 +1,13 @@
-import {
+import { ConnectedXMResponse, Registration } from "@src/interfaces";
+import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
-  useConnectedSingleQuery,
 } from "../../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
-import type { Registration } from "@interfaces";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
-import { getQueryParamSync } from "@context/hooks/useQueryParam";
-import { NextRouter, useRouter } from "next/router";
-import RemoveQueryParam from "@utilities/RemoveQueryParam";
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryClient } from "@tanstack/react-query";
+import { ClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_QUERY_KEY = (eventId: string) => [
   ...SELF_QUERY_KEY(),
@@ -35,26 +32,20 @@ export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
 
 interface GetSelfEventRegistrationProps extends SingleQueryParams {
   eventId: string;
-  router: NextRouter;
+  ticket?: string;
+  quantity?: number;
+  coupon?: string;
 }
 
 export const GetSelfEventRegistration = async ({
   eventId,
-  router,
+  ticket,
+  quantity,
+  coupon,
   locale,
 }: GetSelfEventRegistrationProps): Promise<
   ConnectedXMResponse<Registration>
 > => {
-  let ticket = "";
-  let quantity = "";
-  let coupon = "";
-
-  if (typeof window !== "undefined") {
-    ticket = getQueryParamSync("productId");
-    quantity = getQueryParamSync("quantity");
-    coupon = getQueryParamSync("coupon");
-  }
-
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/events/${eventId}/registration`, {
     params: {
@@ -64,32 +55,36 @@ export const GetSelfEventRegistration = async ({
     },
   });
 
-  if (ticket) RemoveQueryParam(router, "productId");
-  if (quantity) RemoveQueryParam(router, "quantity");
-  if (coupon) RemoveQueryParam(router, "coupon");
-
   return data;
 };
 
-const useGetSelfEventRegistration = (eventId: string) => {
+const useGetSelfEventRegistration = (
+  eventId: string,
+  ticket?: string,
+  quantity?: number,
+  coupon?: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSelfEventRegistration>> = {}
+) => {
   const { token } = useConnectedXM();
-  const router = useRouter();
 
-  return useConnectedSingleQuery<
-    Awaited<ReturnType<typeof GetSelfEventRegistration>>
-  >(
+  return useConnectedSingleQuery<ReturnType<typeof GetSelfEventRegistration>>(
     SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
-    () =>
+    (params: SingleQueryParams) =>
       GetSelfEventRegistration({
         eventId,
-        router,
+        ticket,
+        quantity,
+        coupon,
+        ...params,
       }),
+    params,
     {
-      enabled: !!token && !!eventId && !!router,
       retry: false,
       staleTime: Infinity,
       refetchOnMount: false,
-      onSuccess: () => {},
+      ...options,
+      enabled: !!token && !!eventId && (options?.enabled ?? true),
     }
   );
 };

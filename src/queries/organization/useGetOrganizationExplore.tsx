@@ -1,13 +1,13 @@
-import { ConnectedXM, ConnectedXMResponse } from "@src/ClientAPI";
+import { ClientAPI } from "@src/ClientAPI";
 import type {
   BaseAccount,
   BaseCommunity,
   BaseEvent,
+  ConnectedXMResponse,
   Content,
 } from "@interfaces";
-import { useQueryClient } from "@tanstack/react-query";
-
 import {
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -35,14 +35,15 @@ export const GetOrganizationExplore = async ({
   return data;
 };
 
-export const QUERY_KEY = "ORGANIZATION_EXPLORE";
-
-const useGetOrganizationExplore = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedSingleQuery<ConnectedXMResponse<Explore>>(
-    [QUERY_KEY],
-    (params: any) => GetOrganizationExplore({ ...params })
+const useGetOrganizationExplore = (
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetOrganizationExplore>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetOrganizationExplore>>(
+    ORGANIZATION_EXPLORE_QUERY_KEY(),
+    (params: SingleQueryParams) => GetOrganizationExplore({ ...params }),
+    params,
+    options
   );
 };
 

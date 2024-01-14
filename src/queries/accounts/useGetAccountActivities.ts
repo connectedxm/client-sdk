@@ -11,7 +11,10 @@ import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
-import { SET_ACTIVITY_QUERY_DATA } from "../activities/useGetActivity";
+import {
+  ACTIVITY_QUERY_KEY,
+  SET_ACTIVITY_QUERY_DATA,
+} from "../activities/useGetActivity";
 
 export const ACCOUNT_ACTIVITIES_QUERY_KEY = (accountId: string) => [
   "ACTIVITIES",
@@ -55,12 +58,11 @@ export const GetAccountActivities = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient) {
+  if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,
       queryClient,
-      (activityId) => [activityId],
+      (activityId) => ACTIVITY_QUERY_KEY(activityId),
       SET_ACTIVITY_QUERY_DATA
     );
   }

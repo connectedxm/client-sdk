@@ -1,6 +1,7 @@
 import { ClientAPI } from "@src/ClientAPI";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { Content } from "@interfaces";
@@ -42,12 +43,19 @@ export const GetContent = async ({
   return data;
 };
 
-const useGetContent = (contentId: string) => {
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetContent>>>(
+const useGetContent = (
+  contentId: string,
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetContent>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetContent>>(
     CONTENT_QUERY_KEY(contentId),
-    (params) => GetContent({ contentId: contentId || "", ...params }),
+    (params: SingleQueryParams) =>
+      GetContent({ contentId: contentId || "", ...params }),
+    params,
     {
-      enabled: !!contentId,
+      ...options,
+      enabled: !!contentId && options.enabled,
     }
   );
 };

@@ -1,12 +1,15 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
-import { SponsorshipLevel } from "@interfaces";
+import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
+import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { LEVEL_QUERY_KEY, SET_LEVEL_QUERY_DATA } from "./useGetLevel";
 
 export const LEVELS_QUERY_KEY = () => ["LEVELS"];
 
@@ -33,6 +36,7 @@ export const GetLevels = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetLevelsProps): Promise<ConnectedXMResponse<SponsorshipLevel[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/levels`, {
@@ -43,13 +47,28 @@ export const GetLevels = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (levelId) => LEVEL_QUERY_KEY(levelId),
+      SET_LEVEL_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetLevels = () => {
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetLevels>>>(
+const useGetLevels = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetLevels>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetLevels>>(
     LEVELS_QUERY_KEY(),
-    (params: any) => GetLevels(params)
+    (params: InfiniteQueryParams) => GetLevels(params),
+    params,
+    options
   );
 };
 

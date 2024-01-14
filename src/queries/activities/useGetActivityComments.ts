@@ -1,13 +1,14 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITY_QUERY_KEY, SET_ACTIVITY_QUERY_DATA } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
@@ -43,6 +44,7 @@ export const GetActivityComments = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetActivityCommentsProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await ClientAPI(locale);
 
@@ -54,29 +56,32 @@ export const GetActivityComments = async ({
       search: search || undefined,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (activityId) => ACTIVITY_QUERY_KEY(activityId),
+      SET_ACTIVITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetActivityComments = (activityId: string) => {
+const useGetActivityComments = (
+  activityId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetActivityComments>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetActivityComments>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetActivityComments>>(
     ACTIVITY_COMMENTS_QUERY_KEY(activityId),
     (params: InfiniteQueryParams) =>
       GetActivityComments({ activityId, ...params }),
+    params,
     {
-      enabled: !!token && !!activityId,
-      onSuccess: (data) => {
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (activityId) => [activityId],
-          SET_ACTIVITY_QUERY_DATA
-        );
-      },
+      enabled: !!token && !!activityId && (options?.enabled ?? true),
     }
   );
 };

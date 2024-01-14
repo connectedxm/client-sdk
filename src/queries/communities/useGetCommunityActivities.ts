@@ -1,16 +1,20 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
-import { SET_ACTIVITY_QUERY_DATA } from "../activities/useGetActivity";
+import {
+  ACTIVITY_QUERY_KEY,
+  SET_ACTIVITY_QUERY_DATA,
+} from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const COMMUNITY_ACTIVITIES_QUERY_KEY = (communityId: string) => [
@@ -44,6 +48,7 @@ export const GetCommunityActivities = async ({
   search,
   communityId,
   locale,
+  queryClient,
 }: GetCommunityActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
@@ -57,28 +62,33 @@ export const GetCommunityActivities = async ({
       },
     }
   );
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (activityId) => ACTIVITY_QUERY_KEY(activityId),
+      SET_ACTIVITY_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetCommunityActivities = (communityId: string) => {
+const useGetCommunityActivities = (
+  communityId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetCommunityActivities>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetCommunityActivities>>
-  >(
+  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunityActivities>>(
     COMMUNITY_ACTIVITIES_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>
       GetCommunityActivities({ communityId, ...params }),
+    params,
     {
-      enabled: !!token && !!communityId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (activityId) => [activityId],
-          SET_ACTIVITY_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!token && !!communityId && (options?.enabled ?? true),
     }
   );
 };

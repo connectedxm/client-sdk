@@ -1,13 +1,14 @@
 import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Event } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
+import { QueryClient } from "@tanstack/react-query";
+import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
@@ -49,6 +50,7 @@ export const GetCommunityEvents = async ({
   communityId,
   past,
   locale,
+  queryClient,
 }: GetCommunityEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/communities/${communityId}/events`, {
@@ -60,27 +62,32 @@ export const GetCommunityEvents = async ({
       past: past || false,
     },
   });
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (eventId) => EVENT_QUERY_KEY(eventId),
+      SET_EVENT_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetCommunityEvents = (communityId: string, past?: boolean) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetCommunityEvents>>
-  >(
+const useGetCommunityEvents = (
+  communityId: string,
+  past: boolean = false,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetCommunityEvents>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunityEvents>>(
     COMMUNITY_EVENTS_QUERY_KEY(communityId, past),
     (params: InfiniteQueryParams) =>
       GetCommunityEvents({ communityId, past, ...params }),
+    params,
     {
-      enabled: !!communityId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (eventId) => [eventId],
-          SET_EVENT_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!communityId && (options?.enabled ?? true),
     }
   );
 };

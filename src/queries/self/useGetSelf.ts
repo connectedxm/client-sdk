@@ -1,13 +1,13 @@
 import {
   GetBaseSingleQueryKeys,
+  SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@hooks/useConnectedXM";
-import type { Self } from "@interfaces";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { SET_ACCOUNT_QUERY_DATA } from "@queries/accounts/useGetAccount";
+import type { ConnectedXMResponse, Self } from "@interfaces";
+import { QueryClient } from "@tanstack/react-query";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_QUERY_KEY = () => ["SELF"];
 
@@ -33,19 +33,18 @@ export const GetSelf = async ({
   return data;
 };
 
-const useGetSelf = () => {
+const useGetSelf = (
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetSelf>> = {}
+) => {
   const { token } = useConnectedXM();
-  const queryClient = useQueryClient();
 
-  return useConnectedSingleQuery<Awaited<ReturnType<typeof GetSelf>>>(
+  return useConnectedSingleQuery<ReturnType<typeof GetSelf>>(
     SELF_QUERY_KEY(),
-    (params: any) => GetSelf({ ...params }),
+    (params: SingleQueryParams) => GetSelf({ ...params }),
+    params,
     {
-      enabled: !!token,
-      onSuccess: (response) => {
-        SET_ACCOUNT_QUERY_DATA(queryClient, [response.data.id], response);
-        SET_ACCOUNT_QUERY_DATA(queryClient, [response.data.username], response);
-      },
+      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

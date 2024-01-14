@@ -1,7 +1,8 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Account } from "@interfaces";
+import type { Account, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
@@ -9,8 +10,7 @@ import {
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
 import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { useQueryClient } from "wagmi";
-import { SET_SPONSOR_QUERY_DATA } from "./useGetSponsor";
+import { SET_SPONSOR_QUERY_DATA, SPONSOR_QUERY_KEY } from "./useGetSponsor";
 
 export const LEVEL_SPONSORS_QUERY_KEY = (levelId: string) => [
   ...LEVEL_QUERY_KEY(levelId),
@@ -43,6 +43,7 @@ export const GetLevelSponsors = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetLevelSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/levels/${levelId}/accounts`, {
@@ -53,24 +54,31 @@ export const GetLevelSponsors = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (sponsorId) => SPONSOR_QUERY_KEY(sponsorId),
+      SET_SPONSOR_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetLevelSponsors = (levelId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<ConnectedXMResponse<Account[]>>(
+const useGetLevelSponsors = (
+  levelId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetLevelSponsors>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetLevelSponsors>>(
     LEVEL_SPONSORS_QUERY_KEY(levelId),
     (params: InfiniteQueryParams) => GetLevelSponsors({ levelId, ...params }),
+    params,
     {
-      enabled: !!levelId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (levelId) => [levelId],
-          SET_SPONSOR_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!levelId && (options?.enabled ?? true),
     }
   );
 };

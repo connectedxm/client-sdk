@@ -1,22 +1,17 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Series } from "@interfaces";
+import type { ConnectedXMResponse, Series } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { SET_SERIES_QUERY_DATA } from "./useGetSeries";
+import { SERIES_QUERY_KEY, SET_SERIES_QUERY_DATA } from "./useGetSeries";
 
-export const SERIES_LIST_QUERY_KEY = (past?: boolean) => {
-  let keys = ["SERIES"];
-  if (typeof past !== "undefined") {
-    keys.push(past ? "PAST" : "UPCOMING");
-  }
-  return keys;
-};
+export const SERIES_LIST_QUERY_KEY = () => ["SERIES"];
 
 export const SET_SERIES_LIST_QUERY_DATA = (
   client: QueryClient,
@@ -42,8 +37,8 @@ export const GetSeriesList = async ({
   pageSize,
   orderBy,
   search,
-  past,
   locale,
+  queryClient,
 }: GetSeriesListProps): Promise<ConnectedXMResponse<Series[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/series`, {
@@ -52,27 +47,30 @@ export const GetSeriesList = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      past: past !== undefined ? past : undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (seriesId) => SERIES_QUERY_KEY(seriesId),
+      SET_SERIES_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetSeriesList = (past?: boolean) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesList>>>(
-    SERIES_LIST_QUERY_KEY(past),
-    (params: InfiniteQueryParams) => GetSeriesList({ past, ...params }),
-    {
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (seriesId) => [seriesId],
-          SET_SERIES_QUERY_DATA
-        ),
-    }
+const useGetSeriesList = (
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSeriesList>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSeriesList>>(
+    SERIES_LIST_QUERY_KEY(),
+    (params: InfiniteQueryParams) => GetSeriesList({ ...params }),
+    params,
+    options
   );
 };
 

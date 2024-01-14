@@ -1,6 +1,7 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Organization } from "@interfaces";
+import type { ConnectedXMResponse, Organization } from "@interfaces";
 import useConnectedSingleQuery, {
+  SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 
@@ -16,10 +17,15 @@ export const GetOrganization = async ({
   return data;
 };
 
-const useGetOrganization = () => {
-  return useConnectedSingleQuery<ConnectedXMResponse<Organization>>(
+const useGetOrganization = (
+  params: SingleQueryParams = {},
+  options: SingleQueryOptions<ReturnType<typeof GetOrganization>> = {}
+) => {
+  return useConnectedSingleQuery<ReturnType<typeof GetOrganization>>(
     ORGANIZATION_QUERY_KEY(),
-    (params: any) => GetOrganization({ ...params })
+    (params: SingleQueryParams) => GetOrganization({ ...params }),
+    params,
+    options
   );
 };
 

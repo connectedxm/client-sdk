@@ -2,6 +2,7 @@ import { ClientAPI } from "@src/ClientAPI";
 import { Announcement } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
@@ -60,16 +61,24 @@ export const GetCommunityAnnouncements = async ({
   return data;
 };
 
-const useGetCommunityAnnouncements = (communityId: string) => {
+const useGetCommunityAnnouncements = (
+  communityId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<
+    ReturnType<typeof GetCommunityAnnouncements>
+  > = {}
+) => {
   const { token } = useConnectedXM();
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetCommunityAnnouncements>>
+    ReturnType<typeof GetCommunityAnnouncements>
   >(
     COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>
       GetCommunityAnnouncements({ communityId, ...params }),
+    params,
     {
-      enabled: !!token && !!communityId,
+      ...options,
+      enabled: !!token && !!communityId && (options?.enabled ?? true),
     }
   );
 };

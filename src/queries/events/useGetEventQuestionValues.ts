@@ -1,6 +1,7 @@
 import { ClientAPI } from "@src/ClientAPI";
 import type { RegistrationQuestionSearchValue } from "@interfaces";
 import {
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
@@ -46,10 +47,13 @@ export const GetEventQuestionSearchValues = async ({
 const useGetEventQuestionSearchValues = (
   eventId: string,
   questionId: string,
-  search?: string
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<
+    ReturnType<typeof GetEventQuestionSearchValues>
+  > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventQuestionSearchValues>>
+    ReturnType<typeof GetEventQuestionSearchValues>
   >(
     EVENT_QUESTION_VALUES_QUERY_KEY(eventId, questionId),
     (params: InfiniteQueryParams) =>
@@ -58,11 +62,10 @@ const useGetEventQuestionSearchValues = (
         questionId,
         ...params,
       }),
+    params,
     {
-      enabled: !!eventId,
-    },
-    {
-      search,
+      ...options,
+      enabled: !!eventId && !!questionId && (options?.enabled ?? true),
     }
   );
 };

@@ -1,14 +1,15 @@
 import { ClientAPI } from "@src/ClientAPI";
-import type { Event } from "@interfaces";
+import type { ConnectedXMResponse, Event } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
+  InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
-import { SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
+import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 
 export const SERIES_EVENTS_QUERY_KEY = (seriesId: string) => [
@@ -42,6 +43,7 @@ export const GetSeriesEvents = async ({
   orderBy,
   search,
   locale,
+  queryClient,
 }: GetSeriesEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/series/${seriesId}/events`, {
@@ -52,24 +54,31 @@ export const GetSeriesEvents = async ({
       search: search || undefined,
     },
   });
+
+  if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (eventId) => EVENT_QUERY_KEY(eventId),
+      SET_EVENT_QUERY_DATA
+    );
+  }
+
   return data;
 };
 
-const useGetSeriesEvents = (seriesId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesEvents>>>(
+const useGetSeriesEvents = (
+  seriesId: string,
+  params: InfiniteQueryParams,
+  options: InfiniteQueryOptions<ReturnType<typeof GetSeriesEvents>> = {}
+) => {
+  return useConnectedInfiniteQuery<ReturnType<typeof GetSeriesEvents>>(
     SERIES_EVENTS_QUERY_KEY(seriesId),
     (params: InfiniteQueryParams) => GetSeriesEvents({ seriesId, ...params }),
+    params,
     {
-      enabled: !!seriesId,
-      onSuccess: (data) =>
-        CacheIndividualQueries(
-          data,
-          queryClient,
-          (eventId) => [eventId],
-          SET_EVENT_QUERY_DATA
-        ),
+      ...options,
+      enabled: !!seriesId && (options?.enabled ?? true),
     }
   );
 };
