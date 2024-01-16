@@ -8,7 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import {
   SET_SPONSOR_QUERY_DATA,

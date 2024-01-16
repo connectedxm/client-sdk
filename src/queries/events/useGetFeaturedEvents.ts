@@ -7,7 +7,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "./useGetEvent";
 import { QueryClient } from "@tanstack/react-query";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";

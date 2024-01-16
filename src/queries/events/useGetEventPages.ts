@@ -10,7 +10,7 @@ import {
 import { QueryClient } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import {
   EVENT_PAGE_QUERY_KEY,
   SET_EVENT_PAGE_QUERY_DATA,

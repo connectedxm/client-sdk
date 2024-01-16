@@ -1,7 +1,7 @@
 import { ConnectedXMResponse } from "@interfaces";
 import { InfiniteData } from "@tanstack/react-query";
 
-function MergeInfinitePages<TData>(
+export function MergeInfinitePages<TData>(
   data: InfiniteData<ConnectedXMResponse<TData[]>>
 ) {
   return data.pages.reduce(
@@ -11,5 +11,3 @@ function MergeInfinitePages<TData>(
     []
   );
 }
-
-export default MergeInfinitePages;

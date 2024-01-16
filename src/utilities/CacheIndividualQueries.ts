@@ -10,7 +10,7 @@ interface ItemWithId {
   code?: string;
 }
 
-const CacheIndividualQueries = <TData extends ItemWithId>(
+export const CacheIndividualQueries = <TData extends ItemWithId>(
   response: InfiniteData<ConnectedXMResponse<TData[]>>,
   queryClient: QueryClient,
   queryKeyFn: (id: string) => any,
@@ -58,5 +58,3 @@ const CacheIndividualQueries = <TData extends ItemWithId>(
     });
   });
 };
-
-export default CacheIndividualQueries;

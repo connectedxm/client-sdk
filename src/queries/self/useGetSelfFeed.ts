@@ -11,7 +11,7 @@ import {
   ACTIVITY_QUERY_KEY,
   SET_ACTIVITY_QUERY_DATA,
 } from "../activities/useGetActivity";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 
 export const SELF_FEED_QUERY_KEY = () => [...SELF_QUERY_KEY(), "FEED"];
 

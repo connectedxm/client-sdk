@@ -8,7 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { SET_ACTIVITY_QUERY_DATA } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";

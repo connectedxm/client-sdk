@@ -8,7 +8,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SERIES_QUERY_KEY, SET_SERIES_QUERY_DATA } from "./useGetSeries";
 
 export const SERIES_LIST_QUERY_KEY = () => ["SERIES"];

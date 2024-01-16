@@ -9,7 +9,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
 import { QueryClient } from "@tanstack/react-query";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SET_SPONSOR_QUERY_DATA, SPONSOR_QUERY_KEY } from "./useGetSponsor";
 
 export const LEVEL_SPONSORS_QUERY_KEY = (levelId: string) => [

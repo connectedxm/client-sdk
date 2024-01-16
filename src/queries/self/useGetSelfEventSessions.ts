@@ -6,7 +6,7 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import {
   EVENT_SESSION_QUERY_KEY,
   SET_EVENT_SESSION_QUERY_DATA,

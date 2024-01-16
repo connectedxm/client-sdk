@@ -9,7 +9,7 @@ import {
 import { Event } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 

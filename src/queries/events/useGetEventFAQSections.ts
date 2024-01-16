@@ -8,7 +8,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import {
   EVENT_FAQ_SECTION_QUERY_KEY,

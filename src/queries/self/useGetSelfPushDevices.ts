@@ -11,7 +11,7 @@ import {
   SELF_PUSH_DEVICE_QUERY_KEY,
   SET_PUSH_DEVICE_QUERY_DATA,
 } from "./useGetSelfPushDevice";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 
 export const SELF_PUSH_DEVICES_QUERY_KEY = () => [
   ...SELF_QUERY_KEY(),

@@ -10,7 +10,7 @@ import { Community } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import {
   COMMUNITY_QUERY_KEY,
   SET_COMMUNITY_QUERY_DATA,

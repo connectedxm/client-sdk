@@ -9,7 +9,7 @@ import {
 } from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import {
   SELF_CHAT_CHANNEL_QUERY_KEY,
   SET_SELF_CHAT_CHANNEL_QUERY_DATA,

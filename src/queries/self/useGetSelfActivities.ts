@@ -5,7 +5,7 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_QUERY_KEY } from "./useGetSelf";
 import {
   ACTIVITY_QUERY_KEY,

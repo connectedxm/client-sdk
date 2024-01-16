@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 
-const AppendInfiniteQuery = (
+export const AppendInfiniteQuery = (
   queryClient: QueryClient,
   key: Array<string>,
   newData: any
@@ -20,5 +20,3 @@ const AppendInfiniteQuery = (
     return data;
   });
 };
-
-export default AppendInfiniteQuery;

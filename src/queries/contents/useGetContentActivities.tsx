@@ -7,7 +7,7 @@ import {
   setFirstPageData,
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { CONTENT_QUERY_KEY } from "./useGetContent";

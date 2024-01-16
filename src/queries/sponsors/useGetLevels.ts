@@ -8,7 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
 import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { LEVEL_QUERY_KEY, SET_LEVEL_QUERY_DATA } from "./useGetLevel";
 
 export const LEVELS_QUERY_KEY = () => ["LEVELS"];

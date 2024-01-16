@@ -1,4 +1,4 @@
-export * as AppendInfiniteQuery from "./AppendInfiniteQuery";
-export * as CacheIndividualQueries from "./CacheIndividualQueries";
-export * as GetErrorMessage from "./GetErrorMessage";
-export * as MergeInfinitePages from "./MergeInfinitePages";
+export * from "./AppendInfiniteQuery";
+export * from "./GetErrorMessage";
+export * from "./MergeInfinitePages";
+export * from "./CacheIndividualQueries";

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ConnectedXMResponse } from "../interfaces";
 
-const GetErrorMessage = (
+export const GetErrorMessage = (
   error: any,
   fallback: string = "Something went wrong"
 ) => {
@@ -15,5 +15,3 @@ const GetErrorMessage = (
 
   return message;
 };
-
-export default GetErrorMessage;

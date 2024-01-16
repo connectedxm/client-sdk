@@ -1,7 +1,7 @@
 import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { Account, ConnectedXMResponse } from "@interfaces";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,

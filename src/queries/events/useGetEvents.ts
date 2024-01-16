@@ -9,7 +9,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
-import CacheIndividualQueries from "@src/utilities/CacheIndividualQueries";
+import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "./useGetEvent";
 
 export const EVENTS_QUERY_KEY = (past?: boolean) => {
