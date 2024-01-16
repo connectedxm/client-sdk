@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.3
+
+### Patch Changes
+
+- 3b7f67d: add getErrorMessage utility
+
 ## 0.0.2
 
 ### Patch Changes
