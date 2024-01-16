@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.4
+
+### Patch Changes
+
+- d8c1212: add additional utilities
+
 ## 0.0.3
 
 ### Patch Changes
