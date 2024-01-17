@@ -398,6 +398,8 @@ export interface BaseRegistrationQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  primary: boolean;
+  guest: boolean;
 }
 
 export interface RegistrationQuestion extends BaseRegistrationQuestion {
