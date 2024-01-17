@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.5
+
+### Patch Changes
+
+- 8ec09a2: fix utilities export
+
 ## 0.0.4
 
 ### Patch Changes
