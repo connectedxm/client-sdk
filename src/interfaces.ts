@@ -216,6 +216,8 @@ export interface BaseActivity {
 }
 
 export interface Activity extends BaseActivity {
+  html: string;
+  text: string;
   community: BaseCommunity | null;
   event: BaseEvent | null;
   content: BaseContent | null;
