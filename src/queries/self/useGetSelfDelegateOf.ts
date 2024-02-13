@@ -46,12 +46,16 @@ export const GetSelfDelegateOf = async ({
 };
 
 const useGetSelfDelegateOf = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfDelegateOf>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfDelegateOf>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfDelegateOf>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfDelegateOf>>
+  >(
     SELF_DELEGATE_OF_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfDelegateOf({ ...params }),
     params,

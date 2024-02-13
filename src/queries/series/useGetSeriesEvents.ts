@@ -67,10 +67,12 @@ export const GetSeriesEvents = async ({
 
 const useGetSeriesEvents = (
   seriesId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSeriesEvents>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSeriesEvents>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSeriesEvents>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesEvents>>>(
     SERIES_EVENTS_QUERY_KEY(seriesId),
     (params: InfiniteQueryParams) => GetSeriesEvents({ seriesId, ...params }),
     params,

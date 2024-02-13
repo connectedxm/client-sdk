@@ -61,14 +61,14 @@ export const GetCommunityAnnouncements = async ({
 
 export const useGetCommunityAnnouncements = (
   communityId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
-    ReturnType<typeof GetCommunityAnnouncements>
+    Awaited<ReturnType<typeof GetCommunityAnnouncements>>
   > = {}
 ) => {
   const { token } = useConnectedXM();
   return useConnectedInfiniteQuery<
-    ReturnType<typeof GetCommunityAnnouncements>
+    Awaited<ReturnType<typeof GetCommunityAnnouncements>>
   >(
     COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>

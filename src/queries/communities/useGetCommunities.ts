@@ -74,10 +74,10 @@ export const GetCommunities = async ({
 };
 
 export const useGetCommunities = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetCommunities>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetCommunities>>> = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunities>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetCommunities>>>(
     COMMUNITIES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetCommunities({ ...params }),
     params,

@@ -46,12 +46,12 @@ export const GetSelfFeed = async ({
 };
 
 const useGetSelfFeed = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfFeed>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSelfFeed>>> = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfFeed>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfFeed>>>(
     SELF_FEED_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfFeed(params),
     params,

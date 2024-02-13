@@ -10,10 +10,8 @@ export interface SingleQueryParams {
 export interface SingleQueryOptions<TQueryData = unknown>
   extends Omit<
     UseQueryOptions<TQueryData, unknown, Awaited<TQueryData>, string[]>,
-    "initialData" | "queryFn" | "queryKey"
-  > {
-  initialData?: (() => undefined) | undefined;
-}
+    "queryFn" | "queryKey"
+  > {}
 
 export const GetBaseSingleQueryKeys = (locale: string) => {
   return [locale];
@@ -29,16 +27,15 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
   const clientApi = useClientAPI(locale);
 
   return useQuery<TQueryData, unknown, Awaited<TQueryData>, string[]>({
+    staleTime: 60 * 1000, // 60 Seconds
+    retry: options?.retry || 3,
+    ...options,
     queryKey: [...queryKeys, ...GetBaseSingleQueryKeys(locale)],
     queryFn: () =>
       queryFn({
         ...params,
         clientApi,
       }),
-    staleTime: 60 * 1000, // 60 Seconds
-    retry: options?.retry || 3,
-    keepPreviousData: true,
-    ...options,
   });
 };
 

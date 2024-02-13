@@ -70,10 +70,14 @@ export const GetContentTypeContents = async ({
 
 export const useGetContentTypeContents = (
   contentTypeId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetContentTypeContents>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetContentTypeContents>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetContentTypeContents>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetContentTypeContents>>
+  >(
     CONTENT_TYPE_CONTENTS_QUERY_KEY(contentTypeId),
     (params: InfiniteQueryParams) =>
       GetContentTypeContents({ ...params, contentTypeId: contentTypeId || "" }),

@@ -71,12 +71,16 @@ export const GetContentActivities = async ({
 
 export const useGetContentActivities = (
   contentId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetContentActivities>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetContentActivities>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetContentActivities>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetContentActivities>>
+  >(
     CONTENT_ACTIVITIES_QUERY_KEY(contentId),
     (params: InfiniteQueryParams) =>
       GetContentActivities({ contentId, ...params }),

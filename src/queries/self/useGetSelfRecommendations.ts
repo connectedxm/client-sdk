@@ -64,12 +64,16 @@ export const GetSelfRecommendations = async ({
 const useGetSelfRecommendations = (
   type: RecomendationType,
   eventId: string = "",
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfRecommendations>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfRecommendations>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfRecommendations>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfRecommendations>>
+  >(
     SELF_RECOMMENDATIONS_QUERY_KEY(type, eventId),
     (params: InfiniteQueryParams) =>
       GetSelfRecommendations({ ...params, eventId, type }),

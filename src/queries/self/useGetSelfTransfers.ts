@@ -33,11 +33,15 @@ export const GetSelfTransfers = async ({
 };
 
 const useGetSelfTransfers = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfTransfers>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfTransfers>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfTransfers>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfTransfers>>
+  >(
     SELF_TRANSFERS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfTransfers({ ...params }),
     params,

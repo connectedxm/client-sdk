@@ -1,8 +1,8 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryFilters } from "@tanstack/react-query";
 
 export const AppendInfiniteQuery = (
   queryClient: QueryClient,
-  key: Array<string>,
+  key: QueryFilters,
   newData: any
 ) => {
   queryClient.setQueriesData(key, (data: any) => {

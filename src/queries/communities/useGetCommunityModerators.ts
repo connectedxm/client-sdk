@@ -61,12 +61,16 @@ export const GetCommunityModerators = async ({
 
 export const useGetCommunityModerators = (
   communityId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetCommunityModerators>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetCommunityModerators>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunityModerators>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetCommunityModerators>>
+  >(
     COMMUNITY_MODERATORS_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>
       GetCommunityModerators({ communityId, ...params }),

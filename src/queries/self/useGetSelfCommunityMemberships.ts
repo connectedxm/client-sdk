@@ -35,15 +35,15 @@ export const GetSelfCommunityMemberships = async ({
 };
 
 const useGetSelfCommunityMemberships = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
-    ReturnType<typeof GetSelfCommunityMemberships>
+    Awaited<ReturnType<typeof GetSelfCommunityMemberships>>
   > = {}
 ) => {
   const { token } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    ReturnType<typeof GetSelfCommunityMemberships>
+    Awaited<ReturnType<typeof GetSelfCommunityMemberships>>
   >(
     SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfCommunityMemberships({ ...params }),

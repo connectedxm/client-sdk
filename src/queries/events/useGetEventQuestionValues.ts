@@ -45,13 +45,13 @@ export const GetEventQuestionSearchValues = async ({
 const useGetEventQuestionSearchValues = (
   eventId: string,
   questionId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
-    ReturnType<typeof GetEventQuestionSearchValues>
+    Awaited<ReturnType<typeof GetEventQuestionSearchValues>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    ReturnType<typeof GetEventQuestionSearchValues>
+    Awaited<ReturnType<typeof GetEventQuestionSearchValues>>
   >(
     EVENT_QUESTION_VALUES_QUERY_KEY(eventId, questionId),
     (params: InfiniteQueryParams) =>

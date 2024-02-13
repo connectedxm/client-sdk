@@ -67,12 +67,16 @@ export const GetActivityComments = async ({
 
 export const useGetActivityComments = (
   activityId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetActivityComments>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetActivityComments>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetActivityComments>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetActivityComments>>
+  >(
     ACTIVITY_COMMENTS_QUERY_KEY(activityId),
     (params: InfiniteQueryParams) =>
       GetActivityComments({ activityId, ...params }),

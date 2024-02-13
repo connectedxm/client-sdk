@@ -75,10 +75,14 @@ export const GetCommunityEvents = async ({
 export const useGetCommunityEvents = (
   communityId: string,
   past: boolean = false,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetCommunityEvents>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetCommunityEvents>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetCommunityEvents>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetCommunityEvents>>
+  >(
     COMMUNITY_EVENTS_QUERY_KEY(communityId, past),
     (params: InfiniteQueryParams) =>
       GetCommunityEvents({ communityId, past, ...params }),

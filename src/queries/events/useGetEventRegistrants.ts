@@ -73,12 +73,16 @@ export const GetEventRegistrants = async ({
 
 const useGetEventRegistrants = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetEventRegistrants>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetEventRegistrants>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetEventRegistrants>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetEventRegistrants>>
+  >(
     EVENT_REGISTRANTS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
       GetEventRegistrants({ eventId, ...params }),

@@ -71,10 +71,10 @@ export const GetEvents = async ({
 
 const useGetEvents = (
   past: boolean = false,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetEvents>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEvents>>> = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetEvents>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEvents>>>(
     EVENTS_QUERY_KEY(past),
     (params: InfiniteQueryParams) => GetEvents({ past, ...params }),
     params,

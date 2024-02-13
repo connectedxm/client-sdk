@@ -52,12 +52,12 @@ export const GetSelfEvents = async ({
 
 const useGetSelfEvents = (
   past: boolean = false,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfEvents>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSelfEvents>>> = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfEvents>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfEvents>>>(
     SELF_EVENTS_QUERY_KEY(past),
     (params: InfiniteQueryParams) => GetSelfEvents({ ...params, past }),
     params,

@@ -49,12 +49,16 @@ export const GetSelfPushDevices = async ({
 };
 
 const useGetSelfPushDevices = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfPushDevices>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfPushDevices>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfPushDevices>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfPushDevices>>
+  >(
     SELF_PUSH_DEVICES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfPushDevices({ ...params }),
     params,

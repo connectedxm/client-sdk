@@ -71,10 +71,14 @@ export const GetEventSponsors = async ({
 
 const useGetEventSponsors = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetEventSponsors>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetEventSponsors>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetEventSponsors>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetEventSponsors>>
+  >(
     EVENT_TICKETS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventSponsors({ eventId, ...params }),
     params,

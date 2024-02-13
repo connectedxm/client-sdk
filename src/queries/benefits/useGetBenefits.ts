@@ -48,11 +48,11 @@ export const GetBenefits = async ({
 };
 
 export const useGetBenefits = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetBenefits>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetBenefits>>> = {}
 ) => {
   const { token } = useConnectedXM();
-  return useConnectedInfiniteQuery<ReturnType<typeof GetBenefits>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetBenefits>>>(
     BENEFITS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetBenefits(params),
     params,

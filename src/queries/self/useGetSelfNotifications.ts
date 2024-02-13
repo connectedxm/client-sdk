@@ -39,11 +39,15 @@ export const GetSelfNotifications = async ({
 
 const useGetSelfNotifications = (
   filters: string = "",
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfNotifications>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfNotifications>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfNotifications>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfNotifications>>
+  >(
     SELF_NOTIFICATIONS_QUERY_KEY(filters),
     (params: InfiniteQueryParams) =>
       GetSelfNotifications({ ...params, filters }),

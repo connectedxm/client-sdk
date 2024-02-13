@@ -32,7 +32,7 @@ export const GetSelfEventRegistrationCheckout = async ({
   registrationId,
   clientApi,
 }: GetSelfEventRegistrationCheckoutProps): Promise<
-  ConnectedXMResponse<CheckoutResponse>
+  Awaited<ConnectedXMResponse<CheckoutResponse>>
 > => {
   const { data } = await clientApi.get(
     `/self/events/${eventId}/registration/${registrationId}/draft/checkout`
@@ -59,7 +59,6 @@ const useGetSelfEventRegistrationCheckout = (
     params,
     {
       staleTime: Infinity,
-      cacheTime: Infinity,
       retry: false,
       retryOnMount: false,
       ...options,

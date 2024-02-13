@@ -67,10 +67,14 @@ export const GetLevelSponsors = async ({
 
 const useGetLevelSponsors = (
   levelId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetLevelSponsors>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetLevelSponsors>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetLevelSponsors>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetLevelSponsors>>
+  >(
     LEVEL_SPONSORS_QUERY_KEY(levelId),
     (params: InfiniteQueryParams) => GetLevelSponsors({ levelId, ...params }),
     params,

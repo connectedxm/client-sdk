@@ -61,10 +61,14 @@ export const GetFeaturedEvents = async ({
 };
 
 const useGetFeaturedEvents = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetFeaturedEvents>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetFeaturedEvents>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetFeaturedEvents>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetFeaturedEvents>>
+  >(
     EVENTS_FEATURED_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetFeaturedEvents({ ...params }),
     params,

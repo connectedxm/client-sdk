@@ -70,12 +70,16 @@ export const GetAccountActivities = async ({
 
 export const useGetAccountActivities = (
   accountId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetAccountActivities>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetAccountActivities>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetAccountActivities>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetAccountActivities>>
+  >(
     ACCOUNT_ACTIVITIES_QUERY_KEY(accountId),
     (params: InfiniteQueryParams) =>
       GetAccountActivities({ accountId, ...params }),

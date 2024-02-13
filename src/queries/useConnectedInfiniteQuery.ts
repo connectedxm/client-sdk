@@ -1,5 +1,6 @@
 import { ConnectedXMResponse } from "../interfaces";
 import {
+  DefaultError,
   InfiniteData,
   QueryClient,
   useInfiniteQuery,
@@ -11,25 +12,27 @@ import { useClientAPI } from "@src/hooks/useClientAPI";
 import { AxiosInstance } from "axios";
 
 export interface InfiniteQueryParams {
-  pageParam: number;
-  pageSize: number;
+  pageSize?: number;
   orderBy?: string;
   search?: string;
   locale?: string;
+  pageParam: number;
   queryClient: QueryClient;
   clientApi: AxiosInstance;
 }
 
-export interface InfiniteQueryOptions<TQueryData>
-  extends Omit<
+export interface InfiniteQueryOptions<
+  TQueryData extends ConnectedXMResponse<any> = ConnectedXMResponse<unknown>
+> extends Omit<
     UseInfiniteQueryOptions<
       TQueryData,
-      unknown,
-      Awaited<TQueryData>,
+      DefaultError,
+      InfiniteData<TQueryData, number>,
       TQueryData,
-      string[]
+      string[],
+      number
     >,
-    "queryKey" | "queryFn"
+    "queryKey" | "queryFn" | "getNextPageParam" | "initialPageParam"
   > {}
 
 export const GetBaseInfiniteQueryKeys = (
@@ -49,37 +52,41 @@ export const setFirstPageData = <TData>(
 };
 
 export const useConnectedInfiniteQuery = <
-  TQueryData = Promise<ConnectedXMResponse<unknown>>
+  TQueryData extends ConnectedXMResponse<any> = ConnectedXMResponse<unknown>
 >(
   queryKeys: string[],
-  queryFn: (params: InfiniteQueryParams) => TQueryData,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
+  queryFn: (params: InfiniteQueryParams) => Promise<TQueryData>,
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
   const { locale } = useConnectedXM();
   const queryClient = useQueryClient();
   const clientApi = useClientAPI(locale);
 
-  const getNextPageParam = (lastPage: any, pages: any[]) => {
-    if (lastPage.data?.length === params?.pageSize) {
-      return pages.length + 1;
+  const getNextPageParam = (
+    lastPage: TQueryData, // Use the PageData interface
+    allPages: TQueryData[] // Array of PageData
+  ) => {
+    // Assuming lastPage.data is an array and you're checking its length
+    if (lastPage.data.length === params.pageSize) {
+      return allPages.length + 1;
     }
+
+    return undefined; // Ensure to return undefined if there's no next page
   };
 
-  return useInfiniteQuery<TQueryData, unknown, Awaited<TQueryData>, string[]>({
+  // prettier-ignore
+  return useInfiniteQuery<TQueryData,DefaultError,InfiniteData<TQueryData, number>,string[],number>({
+    staleTime: 60 * 1000, // 60 Seconds
+    retry: options?.retry || 3,
+    ...options,
     queryKey: [
       ...queryKeys,
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
-    queryFn: () =>
-      queryFn({
-        ...params,
-        queryClient,
-        clientApi,
-      }),
-    staleTime: 60 * 1000, // 60 Seconds
-    retry: options?.retry || 3,
+    queryFn: ({ pageParam }) =>
+      queryFn({ ...params, pageParam, queryClient, clientApi }),
+    initialPageParam: 1,
     getNextPageParam,
-    ...options,
   });
 };

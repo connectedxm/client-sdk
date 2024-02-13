@@ -70,10 +70,14 @@ export const GetEventSpeakers = async ({
 
 const useGetEventSpeakers = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetEventSpeakers>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetEventSpeakers>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetEventSpeakers>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetEventSpeakers>>
+  >(
     EVENT_SPEAKERS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventSpeakers({ eventId, ...params }),
     params,

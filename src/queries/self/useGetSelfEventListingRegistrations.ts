@@ -50,15 +50,15 @@ export const GetSelfEventListingRegistrations = async ({
 const useGetSelfEventListingsRegistrations = (
   eventId: string,
   checkedIn: boolean = false,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
-    ReturnType<typeof GetSelfEventListingRegistrations>
+    Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   > = {}
 ) => {
   const { token } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    ReturnType<typeof GetSelfEventListingRegistrations>
+    Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   >(
     SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, checkedIn),
     (params: InfiniteQueryParams) =>

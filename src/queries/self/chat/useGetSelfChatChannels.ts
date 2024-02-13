@@ -69,12 +69,14 @@ export const GetSelfChannels = async ({
 };
 
 const useGetChatChannels = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfChannels>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfChannels>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfChannels>>(
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfChannels>>>(
     SELF_CHAT_CHANNELS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfChannels(params),
     params,

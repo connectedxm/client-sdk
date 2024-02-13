@@ -71,12 +71,16 @@ export const GetEventActivities = async ({
 
 const useGetEventActivities = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetEventActivities>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetEventActivities>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetEventActivities>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetEventActivities>>
+  >(
     EVENT_ACTIVITIES_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventActivities({ eventId, ...params }),
     params,

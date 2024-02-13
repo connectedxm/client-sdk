@@ -49,12 +49,16 @@ export const GetSelfActivities = async ({
 };
 
 const useGetSelfActivities = (
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetSelfActivities>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetSelfActivities>>
+  > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<ReturnType<typeof GetSelfActivities>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfActivities>>
+  >(
     SELF_ACTIVITIES_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfActivities({ ...params }),
     params,

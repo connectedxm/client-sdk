@@ -70,10 +70,14 @@ export const GetEventSessions = async ({
 
 const useGetEventSessions = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
-  options: InfiniteQueryOptions<ReturnType<typeof GetEventSessions>> = {}
+  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetEventSessions>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<ReturnType<typeof GetEventSessions>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetEventSessions>>
+  >(
     EVENT_SESSIONS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventSessions({ eventId, ...params }),
     params,
