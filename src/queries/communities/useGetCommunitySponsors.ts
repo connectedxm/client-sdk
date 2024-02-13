@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -46,10 +45,9 @@ export const GetCommunitySponsors = async ({
   orderBy,
   search,
   communityId,
-  locale,
   queryClient,
+  clientApi,
 }: GetCommunitySponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/communities/${communityId}/sponsors`, {
     params: {
       page: pageParam || undefined,
@@ -70,9 +68,9 @@ export const GetCommunitySponsors = async ({
   return data;
 };
 
-const useGetCommunitySponsors = (
+export const useGetCommunitySponsors = (
   communityId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetCommunitySponsors>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetCommunitySponsors>>(
@@ -86,5 +84,3 @@ const useGetCommunitySponsors = (
     }
   );
 };
-
-export default useGetCommunitySponsors;

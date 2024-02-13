@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -22,11 +21,9 @@ export const GetSelfFeed = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfFeedProps): Promise<ConnectedXMResponse<Activity[]>> => {
-  const clientApi = await ClientAPI(locale);
-
   const { data } = await clientApi.get(`/self/activities/feed`, {
     params: {
       page: pageParam || undefined,
@@ -49,7 +46,7 @@ export const GetSelfFeed = async ({
 };
 
 const useGetSelfFeed = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfFeed>> = {}
 ) => {
   const { token } = useConnectedXM();

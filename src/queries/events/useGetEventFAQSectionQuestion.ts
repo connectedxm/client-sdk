@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { Faq } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
 import { EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY } from "./useGetEventFAQSectionQuestions";
@@ -41,9 +41,8 @@ export const GetEventFAQSectionQuestion = async ({
   eventId,
   sectionId,
   questionId,
-  locale,
+  clientApi,
 }: GetEventFAQSectionQuestionProps): Promise<ConnectedXMResponse<Faq>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/events/${eventId}/faqs/${sectionId}/questions/${questionId}`
   );
@@ -54,7 +53,7 @@ const useGetEventFAQSectionQuestion = (
   eventId: string,
   sectionId: string,
   questionId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetEventFAQSectionQuestion>
   > = {}

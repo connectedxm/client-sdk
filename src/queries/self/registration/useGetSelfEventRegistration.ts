@@ -6,7 +6,7 @@ import useConnectedSingleQuery, {
 } from "../../useConnectedSingleQuery";
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryClient } from "@tanstack/react-query";
-import { ClientAPI } from "@src/ClientAPI";
+
 import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_QUERY_KEY = (eventId: string) => [
@@ -42,11 +42,10 @@ export const GetSelfEventRegistration = async ({
   ticket,
   quantity,
   coupon,
-  locale,
+  clientApi,
 }: GetSelfEventRegistrationProps): Promise<
   ConnectedXMResponse<Registration>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/events/${eventId}/registration`, {
     params: {
       ticket: ticket || undefined,
@@ -63,7 +62,7 @@ const useGetSelfEventRegistration = (
   ticket?: string,
   quantity?: number,
   coupon?: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventRegistration>> = {}
 ) => {
   const { token } = useConnectedXM();

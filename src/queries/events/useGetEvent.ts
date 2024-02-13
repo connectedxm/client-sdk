@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { Event } from "@interfaces";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
 import { QueryClient } from "@tanstack/react-query";
@@ -33,16 +33,15 @@ interface GetEventProps extends SingleQueryParams {
 
 export const GetEvent = async ({
   eventId,
-  locale,
+  clientApi,
 }: GetEventProps): Promise<ConnectedXMResponse<Event>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}`);
   return data;
 };
 
 const useGetEvent = (
   eventId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetEvent>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEvent>>(

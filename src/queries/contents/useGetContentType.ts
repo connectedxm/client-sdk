@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -35,17 +34,16 @@ interface GetContentTypeParams extends SingleQueryParams {
 
 export const GetContentType = async ({
   contentTypeId,
-  locale,
+  clientApi,
 }: GetContentTypeParams): Promise<ConnectedXMResponse<ContentType>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/contentTypes/${contentTypeId}`);
 
   return data;
 };
 
-const useGetContentType = (
+export const useGetContentType = (
   contentTypeId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetContentType>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetContentType>>(
@@ -59,5 +57,3 @@ const useGetContentType = (
     }
   );
 };
-
-export default useGetContentType;

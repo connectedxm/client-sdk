@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { Activity } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -47,10 +46,9 @@ export const GetEventActivities = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetEventActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/activities`, {
     params: {
       page: pageParam || undefined,
@@ -73,7 +71,7 @@ export const GetEventActivities = async ({
 
 const useGetEventActivities = (
   eventId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetEventActivities>> = {}
 ) => {
   const { token } = useConnectedXM();

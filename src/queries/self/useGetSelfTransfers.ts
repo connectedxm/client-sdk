@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, Transfer } from "@interfaces";
 import {
@@ -20,9 +19,8 @@ export const GetSelfTransfers = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetSelfTransfersProps): Promise<ConnectedXMResponse<Transfer[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/transfers`, {
     params: {
       page: pageParam || undefined,
@@ -35,7 +33,7 @@ export const GetSelfTransfers = async ({
 };
 
 const useGetSelfTransfers = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfTransfers>> = {}
 ) => {
   const { token } = useConnectedXM();

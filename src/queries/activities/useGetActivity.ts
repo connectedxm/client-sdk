@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { Activity } from "@interfaces";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
@@ -37,14 +37,13 @@ interface GetActivityProps extends SingleQueryParams {
 
 export const GetActivity = async ({
   activityId,
-  locale,
+  clientApi,
 }: GetActivityProps): Promise<ConnectedXMResponse<Activity>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/activities/${activityId}`);
   return data;
 };
 
-const useGetActivity = (
+export const useGetActivity = (
   activityId: string,
   params: SingleQueryParams,
   options: SingleQueryOptions<ReturnType<typeof GetActivity>> = {}
@@ -62,5 +61,3 @@ const useGetActivity = (
     }
   );
 };
-
-export default useGetActivity;

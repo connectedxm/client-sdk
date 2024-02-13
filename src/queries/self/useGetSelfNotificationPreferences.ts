@@ -3,7 +3,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, NotificationPreferences } from "@interfaces";
 import { SELF_QUERY_KEY } from "./useGetSelf";
@@ -16,17 +16,16 @@ export const SELF_PREFERENCES_QUERY_KEY = () => [
 interface GetSelfNotificationPreferencesProps extends SingleQueryParams {}
 
 export const GetSelfNotificationPreferences = async ({
-  locale,
+  clientApi,
 }: GetSelfNotificationPreferencesProps): Promise<
   ConnectedXMResponse<NotificationPreferences>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/notificationPreferences`);
   return data;
 };
 
 const useGetSelfNotificationPreferences = (
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfNotificationPreferences>
   > = {}

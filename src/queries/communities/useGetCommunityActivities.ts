@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -47,10 +46,9 @@ export const GetCommunityActivities = async ({
   orderBy,
   search,
   communityId,
-  locale,
   queryClient,
+  clientApi,
 }: GetCommunityActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/communities/${communityId}/activities`,
     {
@@ -74,9 +72,9 @@ export const GetCommunityActivities = async ({
   return data;
 };
 
-const useGetCommunityActivities = (
+export const useGetCommunityActivities = (
   communityId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetCommunityActivities>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -92,5 +90,3 @@ const useGetCommunityActivities = (
     }
   );
 };
-
-export default useGetCommunityActivities;

@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { Benefit } from "@interfaces";
 import {
@@ -35,9 +34,8 @@ export const GetBenefits = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetBenefitsProps): Promise<ConnectedXMResponse<Benefit[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/benefits`, {
     params: {
       page: pageParam || undefined,
@@ -49,8 +47,8 @@ export const GetBenefits = async ({
   return data;
 };
 
-const useGetBenefits = (
-  params: InfiniteQueryParams,
+export const useGetBenefits = (
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetBenefits>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -64,5 +62,3 @@ const useGetBenefits = (
     }
   );
 };
-
-export default useGetBenefits;

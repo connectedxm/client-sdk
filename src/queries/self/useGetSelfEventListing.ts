@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { ConnectedXMResponse, EventListing } from "@interfaces";
 import { SELF_EVENT_LISTINGS_QUERY_KEY } from "./useGetSelfEventListings";
 import { QueryClient } from "@tanstack/react-query";
@@ -36,16 +36,15 @@ interface GetSelfEventListingProps extends SingleQueryParams {
 
 export const GetSelfEventListing = async ({
   eventId,
-  locale,
+  clientApi,
 }: GetSelfEventListingProps): Promise<ConnectedXMResponse<EventListing>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`self/events/listings/${eventId}`);
   return data;
 };
 
 const useGetSelfEventListing = (
   eventId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
 ) => {
   const { token } = useConnectedXM();

@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { ConnectedXMResponse, Speaker } from "@interfaces";
 import { EVENT_SPEAKERS_QUERY_KEY } from "./useGetEventSpeakers";
 import { QueryClient } from "@tanstack/react-query";
@@ -37,9 +37,8 @@ interface GetEventSpeakerProps extends SingleQueryParams {
 export const GetEventSpeaker = async ({
   eventId,
   speakerId,
-  locale,
+  clientApi,
 }: GetEventSpeakerProps): Promise<ConnectedXMResponse<Speaker>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/events/${eventId}/speakers/${speakerId}`
   );
@@ -49,7 +48,7 @@ export const GetEventSpeaker = async ({
 const useGetEventSpeaker = (
   eventId: string,
   speakerId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetEventSpeaker>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSpeaker>>(

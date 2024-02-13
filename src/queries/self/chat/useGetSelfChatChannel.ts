@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "@src/queries/useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { ChatChannelMember, ConnectedXMResponse } from "@interfaces";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { QueryClient, Updater } from "@tanstack/react-query";
@@ -36,18 +36,17 @@ interface GetSelfChatChannelProps extends SingleQueryParams {
 
 export const GetSelfChatChannel = async ({
   channelId,
-  locale,
+  clientApi,
 }: GetSelfChatChannelProps): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/chat/channels/${channelId}`);
   return data;
 };
 
 const useGetSelfChatChannel = (
   channelId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfChatChannel>> = {}
 ) => {
   const { token } = useConnectedXM();

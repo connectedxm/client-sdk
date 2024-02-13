@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useConnectedXM } from "./hooks/useConnectedXM";
+import axios, { AxiosInstance } from "axios";
+import { useConnectedXM } from "./useConnectedXM";
 
-export const ClientAPI = async (locale?: string) => {
+export const useClientAPI = (locale?: string): AxiosInstance => {
   const {
     apiUrl,
     token,

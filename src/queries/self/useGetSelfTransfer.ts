@@ -6,7 +6,6 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { SELF_TRANSFERS_QUERY_KEY } from "./useGetSelfTransfers";
-import { ClientAPI } from "@src/ClientAPI";
 
 export const SELF_PENDING_TRANSFER_QUERY_KEY = (transferId: string) => [
   ...SELF_TRANSFERS_QUERY_KEY(),
@@ -19,16 +18,15 @@ interface GetSelfTransferProps extends SingleQueryParams {
 
 export const GetSelfTransfer = async ({
   transferId,
-  locale,
+  clientApi,
 }: GetSelfTransferProps): Promise<ConnectedXMResponse<Transfer>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/transfers/${transferId}`);
   return data;
 };
 
 const useGetSelfTransfer = (
   transferId: string = "",
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfTransfer>> = {}
 ) => {
   const { token } = useConnectedXM();

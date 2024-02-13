@@ -1,5 +1,6 @@
+export * from "./hooks";
 export * from "./interfaces";
 export * from "./utilities";
+export * from "./queries";
 
-export { useSetAuthToken } from "./hooks";
-export { ConnectedXM } from "./ConnectedXM";
+export { ConnectedXMProvider } from "./ConnectedXMProvider";

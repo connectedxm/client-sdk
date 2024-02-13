@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { CommunityMembership, ConnectedXMResponse } from "@interfaces";
 import {
   InfiniteQueryOptions,
@@ -20,11 +19,10 @@ export const GetSelfCommunityMemberships = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetSelfCommunityMembershipsProps): Promise<
   ConnectedXMResponse<CommunityMembership[]>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/communities`, {
     params: {
       page: pageParam || undefined,
@@ -37,7 +35,7 @@ export const GetSelfCommunityMemberships = async ({
 };
 
 const useGetSelfCommunityMemberships = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
     ReturnType<typeof GetSelfCommunityMemberships>
   > = {}

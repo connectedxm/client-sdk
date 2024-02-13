@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import useConnectedSingleQuery, {
   SingleQueryOptions,
@@ -31,11 +30,10 @@ interface GetSelfEventRegistrationCheckoutProps extends SingleQueryParams {
 export const GetSelfEventRegistrationCheckout = async ({
   eventId,
   registrationId,
-  locale,
+  clientApi,
 }: GetSelfEventRegistrationCheckoutProps): Promise<
   ConnectedXMResponse<CheckoutResponse>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/self/events/${eventId}/registration/${registrationId}/draft/checkout`
   );
@@ -45,7 +43,7 @@ export const GetSelfEventRegistrationCheckout = async ({
 const useGetSelfEventRegistrationCheckout = (
   eventId: string,
   registrationId: string = "",
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventRegistrationCheckout>
   > = {}
@@ -56,7 +54,8 @@ const useGetSelfEventRegistrationCheckout = (
     ReturnType<typeof GetSelfEventRegistrationCheckout>
   >(
     SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(eventId, registrationId),
-    () => GetSelfEventRegistrationCheckout({ eventId, registrationId }),
+    (params) =>
+      GetSelfEventRegistrationCheckout({ eventId, registrationId, ...params }),
     params,
     {
       staleTime: Infinity,

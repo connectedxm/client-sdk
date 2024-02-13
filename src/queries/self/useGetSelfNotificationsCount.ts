@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import useConnectedSingleQuery, {
   SingleQueryOptions,
@@ -19,11 +18,10 @@ interface GetSelfNewNotificationsCountProps extends SingleQueryParams {
 
 export const GetSelfNewNotificationsCount = async ({
   filters,
-  locale,
+  clientApi,
 }: GetSelfNewNotificationsCountProps): Promise<
   ConnectedXMResponse<Notification[]>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/notifications/count`, {
     params: {
       filters,
@@ -34,7 +32,7 @@ export const GetSelfNewNotificationsCount = async ({
 
 const useGetSelfNewNotificationsCount = (
   filters: string = "",
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfNewNotificationsCount>
   > = {}
@@ -44,7 +42,7 @@ const useGetSelfNewNotificationsCount = (
     ReturnType<typeof GetSelfNewNotificationsCount>
   >(
     SELF_NOTIFICATION_COUNT_QUERY_KEY(filters),
-    () => GetSelfNewNotificationsCount({ filters }),
+    (params) => GetSelfNewNotificationsCount({ filters, ...params }),
     params,
     {
       ...options,

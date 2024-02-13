@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, Interest } from "@interfaces";
 import {
@@ -20,9 +19,8 @@ export const GetSelfInterests = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetSelfInterestsProps): Promise<ConnectedXMResponse<Interest[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/interests`, {
     params: {
       page: pageParam || undefined,
@@ -35,7 +33,7 @@ export const GetSelfInterests = async ({
 };
 
 const useGetSelfInterests = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfInterests>> = {}
 ) => {
   const { token } = useConnectedXM();

@@ -1,8 +1,13 @@
+import {
+  ConnectedXMClientContext,
+  ConnectedXMClientContextState,
+} from "@src/ConnectedXMProvider";
 import React from "react";
-import Context, { ContextValue } from "../Context";
 
 export const useConnectedXM = () => {
-  const context = React.useContext<ContextValue>(Context);
+  const context = React.useContext<ConnectedXMClientContextState>(
+    ConnectedXMClientContext
+  );
   if (!context) {
     throw new Error("useConnectedXM must be used within a ConnectedXMProvider");
   }

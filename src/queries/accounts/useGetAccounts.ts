@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { Account } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -36,10 +35,9 @@ export const GetAccounts = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetAccountsProps): Promise<ConnectedXMResponse<Account[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts`, {
     params: {
       pageSize: pageSize || undefined,
@@ -59,8 +57,8 @@ export const GetAccounts = async ({
   return data;
 };
 
-const useGetAccounts = (
-  params: InfiniteQueryParams,
+export const useGetAccounts = (
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetAccounts>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -75,5 +73,3 @@ const useGetAccounts = (
     }
   );
 };
-
-export default useGetAccounts;

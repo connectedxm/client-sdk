@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { Announcement } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -42,11 +41,10 @@ export const GetCommunityAnnouncements = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetCommunityAnnouncementsProps): Promise<
   ConnectedXMResponse<Announcement[]>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/communities/${communityId}/announcements`,
     {
@@ -61,9 +59,9 @@ export const GetCommunityAnnouncements = async ({
   return data;
 };
 
-const useGetCommunityAnnouncements = (
+export const useGetCommunityAnnouncements = (
   communityId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
     ReturnType<typeof GetCommunityAnnouncements>
   > = {}
@@ -82,5 +80,3 @@ const useGetCommunityAnnouncements = (
     }
   );
 };
-
-export default useGetCommunityAnnouncements;

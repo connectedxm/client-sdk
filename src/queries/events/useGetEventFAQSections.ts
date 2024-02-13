@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { FaqSection } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -46,10 +45,9 @@ export const GetEventFaqSections = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetEventFaqSectionsProps): Promise<ConnectedXMResponse<FaqSection[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/faqs`, {
     params: {
       page: pageParam || undefined,
@@ -73,7 +71,7 @@ export const GetEventFaqSections = async ({
 
 const useGetEventFaqSections = (
   eventId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetEventFaqSections>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetEventFaqSections>>(

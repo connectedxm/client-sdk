@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
@@ -34,16 +33,15 @@ interface GetSponsorProps extends SingleQueryParams {
 
 export const GetSponsor = async ({
   accountId,
-  locale,
+  clientApi,
 }: GetSponsorProps): Promise<ConnectedXMResponse<Account>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/sponsors/${accountId}`);
   return data;
 };
 
 const useGetSponsor = (
   accountId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSponsor>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSponsor>>(

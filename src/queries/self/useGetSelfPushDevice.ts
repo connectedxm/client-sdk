@@ -8,7 +8,6 @@ import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_PUSH_DEVICES_QUERY_KEY } from "./useGetSelfPushDevices";
 import { QueryClient } from "@tanstack/react-query";
-import { ClientAPI } from "@src/ClientAPI";
 
 export const SELF_PUSH_DEVICE_QUERY_KEY = (pushDeviceId: string) => [
   ...SELF_PUSH_DEVICES_QUERY_KEY(),
@@ -36,16 +35,15 @@ interface GetSelfPushDeviceProps extends SingleQueryParams {
 
 export const GetSelfPushDevice = async ({
   pushDeviceId,
-  locale,
+  clientApi,
 }: GetSelfPushDeviceProps): Promise<ConnectedXMResponse<PushDevice>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/push-devices/${pushDeviceId}`);
   return data;
 };
 
 const useGetSelfPushDevice = (
   pushDeviceId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfPushDevice>> = {}
 ) => {
   const { token } = useConnectedXM();

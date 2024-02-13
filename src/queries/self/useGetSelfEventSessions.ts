@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, Session } from "@interfaces";
 import {
@@ -29,10 +28,9 @@ export const GetSelfEventSessions = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/events/${eventId}/sessions`, {
     params: {
       eventId: eventId || undefined,
@@ -57,7 +55,7 @@ export const GetSelfEventSessions = async ({
 
 const useGetSelfEventSessions = (
   eventId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfEventSessions>> = {}
 ) => {
   const { token } = useConnectedXM();

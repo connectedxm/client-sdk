@@ -7,6 +7,8 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useConnectedXM } from "../hooks";
+import { useClientAPI } from "@src/hooks/useClientAPI";
+import { AxiosInstance } from "axios";
 
 export interface InfiniteQueryParams {
   pageParam: number;
@@ -14,7 +16,8 @@ export interface InfiniteQueryParams {
   orderBy?: string;
   search?: string;
   locale?: string;
-  queryClient?: QueryClient;
+  queryClient: QueryClient;
+  clientApi: AxiosInstance;
 }
 
 export interface InfiniteQueryOptions<TQueryData>
@@ -50,11 +53,12 @@ export const useConnectedInfiniteQuery = <
 >(
   queryKeys: string[],
   queryFn: (params: InfiniteQueryParams) => TQueryData,
-  params: Omit<InfiniteQueryParams, "queryClient">,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const queryClient = useQueryClient();
   const { locale } = useConnectedXM();
+  const queryClient = useQueryClient();
+  const clientApi = useClientAPI(locale);
 
   const getNextPageParam = (lastPage: any, pages: any[]) => {
     if (lastPage.data?.length === params?.pageSize) {
@@ -62,21 +66,20 @@ export const useConnectedInfiniteQuery = <
     }
   };
 
-  return useInfiniteQuery<TQueryData, unknown, Awaited<TQueryData>, string[]>(
-    [
+  return useInfiniteQuery<TQueryData, unknown, Awaited<TQueryData>, string[]>({
+    queryKey: [
       ...queryKeys,
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
-    () =>
+    queryFn: () =>
       queryFn({
         ...params,
         queryClient,
+        clientApi,
       }),
-    {
-      staleTime: 60 * 1000, // 60 Seconds
-      retry: options?.retry || 3,
-      getNextPageParam,
-      ...options,
-    }
-  );
+    staleTime: 60 * 1000, // 60 Seconds
+    retry: options?.retry || 3,
+    getNextPageParam,
+    ...options,
+  });
 };

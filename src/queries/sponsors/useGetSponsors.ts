@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -33,9 +32,8 @@ export const GetSponsors = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/sponsors`, {
     params: {
       page: pageParam || undefined,
@@ -48,7 +46,7 @@ export const GetSponsors = async ({
 };
 
 const useGetSponsors = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSponsors>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetSponsors>>(

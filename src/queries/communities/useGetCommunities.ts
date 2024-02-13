@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { Community } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -42,8 +41,8 @@ export const GetCommunities = async ({
   orderBy,
   search,
   privateCommunities,
-  locale,
   queryClient,
+  clientApi,
 }: GetCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
   if (privateCommunities) {
     return {
@@ -53,7 +52,6 @@ export const GetCommunities = async ({
     };
   }
 
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/communities`, {
     params: {
       page: pageParam || undefined,
@@ -75,8 +73,8 @@ export const GetCommunities = async ({
   return data;
 };
 
-const useGetCommunities = (
-  params: InfiniteQueryParams,
+export const useGetCommunities = (
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetCommunities>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetCommunities>>(
@@ -86,5 +84,3 @@ const useGetCommunities = (
     options
   );
 };
-
-export default useGetCommunities;

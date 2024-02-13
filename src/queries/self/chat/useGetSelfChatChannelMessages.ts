@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { ChatChannelMessage, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -44,12 +43,11 @@ export const GetSelfChatChannelMessages = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfChatChannelMessagesProps): Promise<
   ConnectedXMResponse<ChatChannelMessage[]>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/self/chat/channels/${channelId}/messages`,
     {
@@ -77,7 +75,7 @@ export const GetSelfChatChannelMessages = async ({
 
 const useGetSelfChatChannelMessages = (
   channelId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
     ReturnType<typeof GetSelfChatChannelMessages>
   > = {}

@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { ConnectedXMResponse, Series } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -37,10 +36,9 @@ export const GetSeriesList = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSeriesListProps): Promise<ConnectedXMResponse<Series[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/series`, {
     params: {
       page: pageParam || undefined,
@@ -63,7 +61,7 @@ export const GetSeriesList = async ({
 };
 
 const useGetSeriesList = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSeriesList>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetSeriesList>>(

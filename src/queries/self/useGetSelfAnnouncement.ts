@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { Announcement, ConnectedXMResponse } from "@interfaces";
 import {
@@ -20,16 +19,15 @@ interface GetSelfAnnouncementProps extends SingleQueryParams {
 
 export const GetSelfAnnouncement = async ({
   announcementId,
-  locale,
+  clientApi,
 }: GetSelfAnnouncementProps): Promise<ConnectedXMResponse<Announcement>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/announcements/${announcementId}`);
   return data;
 };
 
 const useGetSelfAnnouncement = (
   announcementId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfAnnouncement>> = {}
 ) => {
   const { token } = useConnectedXM();

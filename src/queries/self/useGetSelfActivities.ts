@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { Activity, ConnectedXMResponse } from "@interfaces";
 import {
   InfiniteQueryOptions,
@@ -25,10 +24,9 @@ export const GetSelfActivities = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/activities`, {
     params: {
       page: pageParam || undefined,
@@ -51,7 +49,7 @@ export const GetSelfActivities = async ({
 };
 
 const useGetSelfActivities = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfActivities>> = {}
 ) => {
   const { token } = useConnectedXM();

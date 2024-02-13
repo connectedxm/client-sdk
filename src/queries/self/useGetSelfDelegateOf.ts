@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { Account, ConnectedXMResponse } from "@interfaces";
 import {
   InfiniteQueryOptions,
@@ -22,10 +21,9 @@ export const GetSelfDelegateOf = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfDelegateOfProps): Promise<ConnectedXMResponse<Account[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/delegateof`, {
     params: {
       page: pageParam || undefined,
@@ -48,7 +46,7 @@ export const GetSelfDelegateOf = async ({
 };
 
 const useGetSelfDelegateOf = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfDelegateOf>> = {}
 ) => {
   const { token } = useConnectedXM();

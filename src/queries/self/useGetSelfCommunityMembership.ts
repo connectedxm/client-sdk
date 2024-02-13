@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import { CommunityMembership, ConnectedXMResponse } from "@interfaces";
 import { SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY } from "./useGetSelfCommunityMemberships";
 import { QueryClient } from "@tanstack/react-query";
@@ -36,11 +36,10 @@ interface GetSelfCommunityMembershipProps extends SingleQueryParams {
 
 export const GetSelfCommunityMembership = async ({
   communityId,
-  locale,
+  clientApi,
 }: GetSelfCommunityMembershipProps): Promise<
   ConnectedXMResponse<CommunityMembership>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/self/communities/${communityId}/membership`
   );
@@ -49,7 +48,7 @@ export const GetSelfCommunityMembership = async ({
 
 const useGetSelfCommunityMembership = (
   communityId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfCommunityMembership>
   > = {}

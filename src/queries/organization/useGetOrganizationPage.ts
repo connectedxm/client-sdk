@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { ConnectedXMResponse, Page } from "@interfaces";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
 import { QueryClient } from "@tanstack/react-query";
@@ -38,16 +38,15 @@ interface GetOrganizationPageProps extends SingleQueryParams {
 
 export const GetOrganizationPage = async ({
   type,
-  locale,
+  clientApi,
 }: GetOrganizationPageProps): Promise<ConnectedXMResponse<Page>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/organization/pages/${type}`);
   return data;
 };
 
 const useGetOrganizationPage = (
   type: PageType,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetOrganizationPage>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganizationPage>>(

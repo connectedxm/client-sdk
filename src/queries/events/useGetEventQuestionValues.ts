@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { RegistrationQuestionSearchValue } from "@interfaces";
 import {
   InfiniteQueryOptions,
@@ -25,11 +24,10 @@ export const GetEventQuestionSearchValues = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetEventQuestionSearchValuesProps): Promise<
   ConnectedXMResponse<RegistrationQuestionSearchValue[]>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/events/${eventId}/questions/${questionId}/values`,
     {
@@ -47,7 +45,7 @@ export const GetEventQuestionSearchValues = async ({
 const useGetEventQuestionSearchValues = (
   eventId: string,
   questionId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
     ReturnType<typeof GetEventQuestionSearchValues>
   > = {}

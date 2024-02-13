@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { Community } from "@interfaces";
 import { COMMUNITIES_QUERY_KEY } from "./useGetCommunities";
 import { QueryClient, SetDataOptions } from "@tanstack/react-query";
@@ -38,16 +38,15 @@ interface GetCommunityProps extends SingleQueryParams {
 
 export const GetCommunity = async ({
   communityId,
-  locale,
+  clientApi,
 }: GetCommunityProps): Promise<ConnectedXMResponse<Community>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/communities/${communityId}`);
   return data;
 };
 
-const useGetCommunity = (
+export const useGetCommunity = (
   communityId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetCommunity>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetCommunity>>(
@@ -60,5 +59,3 @@ const useGetCommunity = (
     }
   );
 };
-
-export default useGetCommunity;

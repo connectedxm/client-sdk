@@ -9,7 +9,6 @@ import {
 import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { SELF_CHAT_CHANNEL_QUERY_KEY } from "./useGetSelfChatChannel";
-import { ClientAPI } from "@src/ClientAPI";
 
 export const SELF_CHAT_CHANNEL_MEMBERS_QUERY_KEY = (channelId: string) => [
   ...SELF_CHAT_CHANNEL_QUERY_KEY(channelId),
@@ -41,11 +40,10 @@ export const GetSelfChatChannelMembers = async ({
   pageSize,
   orderBy,
   search,
-  locale,
+  clientApi,
 }: GetSelfChatChannelMembersProps): Promise<
   ConnectedXMResponse<ChatChannelMember[]>
 > => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/self/chat/channels/${channelId}/members`,
     {
@@ -62,7 +60,7 @@ export const GetSelfChatChannelMembers = async ({
 
 const useGetSelfChatChannelMembers = (
   channelId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<
     ReturnType<typeof GetSelfChatChannelMembers>
   > = {}

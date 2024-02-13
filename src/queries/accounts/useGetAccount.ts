@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";
 import { QueryClient } from "@tanstack/react-query";
@@ -36,16 +36,15 @@ interface GetAccountProps extends SingleQueryParams {
 
 export const GetAccount = async ({
   accountId,
-  locale,
+  clientApi,
 }: GetAccountProps): Promise<ConnectedXMResponse<Account>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/${accountId}`);
   return data;
 };
 
-const useGetAccount = (
+export const useGetAccount = (
   accountId: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetAccount>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -60,5 +59,3 @@ const useGetAccount = (
     }
   );
 };
-
-export default useGetAccount;

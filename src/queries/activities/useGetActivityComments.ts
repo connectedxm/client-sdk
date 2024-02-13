@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -43,11 +42,9 @@ export const GetActivityComments = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetActivityCommentsProps): Promise<ConnectedXMResponse<Activity[]>> => {
-  const clientApi = await ClientAPI(locale);
-
   const { data } = await clientApi.get(`/activities/${activityId}/comments`, {
     params: {
       page: pageParam || undefined,
@@ -68,9 +65,9 @@ export const GetActivityComments = async ({
   return data;
 };
 
-const useGetActivityComments = (
+export const useGetActivityComments = (
   activityId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetActivityComments>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -85,5 +82,3 @@ const useGetActivityComments = (
     }
   );
 };
-
-export default useGetActivityComments;

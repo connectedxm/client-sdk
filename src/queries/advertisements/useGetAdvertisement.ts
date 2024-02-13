@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import type { Advertisement } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
@@ -32,16 +32,15 @@ export const SET_ADVERTISEMENT_QUERY_DATA = (
 interface GetAdvertisementProps extends SingleQueryParams {}
 
 export const GetAdvertisement = async ({
-  locale,
+  clientApi,
 }: GetAdvertisementProps): Promise<ConnectedXMResponse<Advertisement>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/advertisement`);
   return data;
 };
 
-const useGetAdvertisement = (
+export const useGetAdvertisement = (
   position: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetAdvertisement>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetAdvertisement>>(

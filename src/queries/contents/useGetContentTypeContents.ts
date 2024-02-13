@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { Content } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
@@ -43,10 +42,9 @@ export const GetContentTypeContents = async ({
   orderBy,
   search,
   contentTypeId,
-  locale,
   queryClient,
+  clientApi,
 }: GetContentParams): Promise<ConnectedXMResponse<Content[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(
     `/contentTypes/${contentTypeId}/contents`,
     {
@@ -70,9 +68,9 @@ export const GetContentTypeContents = async ({
   return data;
 };
 
-const useGetContentTypeContents = (
+export const useGetContentTypeContents = (
   contentTypeId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetContentTypeContents>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetContentTypeContents>>(
@@ -86,5 +84,3 @@ const useGetContentTypeContents = (
     }
   );
 };
-
-export default useGetContentTypeContents;

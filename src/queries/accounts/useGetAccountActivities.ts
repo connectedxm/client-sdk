@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -46,10 +45,9 @@ export const GetAccountActivities = async ({
   orderBy,
   search,
   accountId,
-  locale,
   queryClient,
+  clientApi,
 }: GetAccountActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/${accountId}/activities`, {
     params: {
       page: pageParam || undefined,
@@ -70,9 +68,9 @@ export const GetAccountActivities = async ({
   return data;
 };
 
-const useGetAccountActivities = (
+export const useGetAccountActivities = (
   accountId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetAccountActivities>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -88,5 +86,3 @@ const useGetAccountActivities = (
     }
   );
 };
-
-export default useGetAccountActivities;

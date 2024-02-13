@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -43,10 +42,9 @@ export const GetAccountFollowers = async ({
   orderBy,
   search,
   accountId,
-  locale,
   queryClient,
+  clientApi,
 }: GetAccountFollowersProps): Promise<ConnectedXMResponse<Account[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/${accountId}/followers`, {
     params: {
       page: pageParam || undefined,
@@ -67,9 +65,9 @@ export const GetAccountFollowers = async ({
   return data;
 };
 
-const useGetAccountFollowers = (
+export const useGetAccountFollowers = (
   accountId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetAccountFollowers>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -85,5 +83,3 @@ const useGetAccountFollowers = (
     }
   );
 };
-
-export default useGetAccountFollowers;

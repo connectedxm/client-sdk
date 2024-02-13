@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import {
   InfiniteQueryOptions,
@@ -26,10 +25,9 @@ export const GetSelfEvents = async ({
   orderBy,
   search,
   past,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/events`, {
     params: {
       page: pageParam || undefined,
@@ -54,7 +52,7 @@ export const GetSelfEvents = async ({
 
 const useGetSelfEvents = (
   past: boolean = false,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfEvents>> = {}
 ) => {
   const { token } = useConnectedXM();

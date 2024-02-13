@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import {
   InfiniteQueryOptions,
@@ -25,10 +24,9 @@ export const GetSelfPushDevices = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfPushDevicesProps): Promise<ConnectedXMResponse<PushDevice[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/push-devices`, {
     params: {
       page: pageParam || undefined,
@@ -51,7 +49,7 @@ export const GetSelfPushDevices = async ({
 };
 
 const useGetSelfPushDevices = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfPushDevices>> = {}
 ) => {
   const { token } = useConnectedXM();

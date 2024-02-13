@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type {
   BaseAccount,
   BaseCommunity,
@@ -27,16 +26,15 @@ interface Explore {
 interface GetOrganizationExploreProps extends SingleQueryParams {}
 
 export const GetOrganizationExplore = async ({
-  locale,
+  clientApi,
 }: GetOrganizationExploreProps): Promise<ConnectedXMResponse<Explore>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/organization/explore`);
 
   return data;
 };
 
 const useGetOrganizationExplore = (
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetOrganizationExplore>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganizationExplore>>(

@@ -4,7 +4,7 @@ import {
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
-import { ClientAPI } from "@src/ClientAPI";
+
 import { AccountShare } from "@interfaces";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { QueryClient } from "@tanstack/react-query";
@@ -37,16 +37,15 @@ interface GetAccountByShareCodeProps extends SingleQueryParams {
 
 export const GetAccountByShareCode = async ({
   shareCode,
-  locale,
+  clientApi,
 }: GetAccountByShareCodeProps): Promise<ConnectedXMResponse<AccountShare>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/accounts/shareCode/${shareCode}`);
   return data;
 };
 
-const useGetAccountByShareCode = (
+export const useGetAccountByShareCode = (
   shareCode: string,
-  params: SingleQueryParams = {},
+  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetAccountByShareCode>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -63,5 +62,3 @@ const useGetAccountByShareCode = (
     }
   );
 };
-
-export default useGetAccountByShareCode;

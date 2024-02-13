@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { Account, ConnectedXMResponse } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
@@ -36,10 +35,9 @@ export const GetSelfRecommendations = async ({
   search,
   eventId,
   type,
-  locale,
   queryClient,
+  clientApi,
 }: GetSelfRecommendationsProps): Promise<ConnectedXMResponse<Account[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/self/recommendations`, {
     params: {
       page: pageParam || undefined,
@@ -66,7 +64,7 @@ export const GetSelfRecommendations = async ({
 const useGetSelfRecommendations = (
   type: RecomendationType,
   eventId: string = "",
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetSelfRecommendations>> = {}
 ) => {
   const { token } = useConnectedXM();

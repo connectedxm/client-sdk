@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -35,10 +34,9 @@ export const GetLevels = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetLevelsProps): Promise<ConnectedXMResponse<SponsorshipLevel[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/levels`, {
     params: {
       page: pageParam || undefined,
@@ -61,7 +59,7 @@ export const GetLevels = async ({
 };
 
 const useGetLevels = (
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetLevels>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetLevels>>(

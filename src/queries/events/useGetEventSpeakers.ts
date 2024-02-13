@@ -1,4 +1,3 @@
-import { ClientAPI } from "@src/ClientAPI";
 import type { ConnectedXMResponse, Speaker } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -45,10 +44,9 @@ export const GetEventSpeakers = async ({
   pageSize,
   orderBy,
   search,
-  locale,
   queryClient,
+  clientApi,
 }: GetEventSpeakersProps): Promise<ConnectedXMResponse<Speaker[]>> => {
-  const clientApi = await ClientAPI(locale);
   const { data } = await clientApi.get(`/events/${eventId}/speakers`, {
     params: {
       page: pageParam || undefined,
@@ -72,7 +70,7 @@ export const GetEventSpeakers = async ({
 
 const useGetEventSpeakers = (
   eventId: string,
-  params: InfiniteQueryParams,
+  params: Omit<InfiniteQueryParams, "queryClient" | "clientApi">,
   options: InfiniteQueryOptions<ReturnType<typeof GetEventSpeakers>> = {}
 ) => {
   return useConnectedInfiniteQuery<ReturnType<typeof GetEventSpeakers>>(
