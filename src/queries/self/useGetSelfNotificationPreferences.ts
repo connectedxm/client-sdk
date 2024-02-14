@@ -25,7 +25,6 @@ export const GetSelfNotificationPreferences = async ({
 };
 
 const useGetSelfNotificationPreferences = (
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfNotificationPreferences>
   > = {}
@@ -37,7 +36,6 @@ const useGetSelfNotificationPreferences = (
   >(
     SELF_PREFERENCES_QUERY_KEY(),
     (params: any) => GetSelfNotificationPreferences({ ...params }),
-    params,
     {
       ...options,
       enabled: !!token && (options?.enabled ?? true),

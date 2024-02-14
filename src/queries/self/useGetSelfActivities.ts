@@ -6,10 +6,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import {
-  ACTIVITY_QUERY_KEY,
-  SET_ACTIVITY_QUERY_DATA,
-} from "../activities/useGetActivity";
+import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { useConnectedXM } from "@src/hooks";
 
 export const SELF_ACTIVITIES_QUERY_KEY = () => [
@@ -26,6 +23,7 @@ export const GetSelfActivities = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const { data } = await clientApi.get(`/self/activities`, {
     params: {
@@ -41,7 +39,7 @@ export const GetSelfActivities = async ({
       data,
       queryClient,
       (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      SET_ACTIVITY_QUERY_DATA
+      locale
     );
   }
 

@@ -46,13 +46,11 @@ export const GetCommunity = async ({
 
 export const useGetCommunity = (
   communityId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetCommunity>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetCommunity>>(
     COMMUNITY_QUERY_KEY(communityId),
     (params) => GetCommunity({ communityId, ...params }),
-    params,
     {
       ...options,
       enabled: !!communityId && (options?.enabled ?? true),

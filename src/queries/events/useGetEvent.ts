@@ -41,13 +41,11 @@ export const GetEvent = async ({
 
 const useGetEvent = (
   eventId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetEvent>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEvent>>(
     EVENT_QUERY_KEY(eventId),
     (params) => GetEvent({ eventId, ...params }),
-    params,
     {
       ...options,
       enabled: !!eventId,

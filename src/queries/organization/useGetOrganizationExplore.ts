@@ -34,13 +34,11 @@ export const GetOrganizationExplore = async ({
 };
 
 const useGetOrganizationExplore = (
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetOrganizationExplore>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganizationExplore>>(
     ORGANIZATION_EXPLORE_QUERY_KEY(),
     (params: SingleQueryParams) => GetOrganizationExplore({ ...params }),
-    params,
     options
   );
 };

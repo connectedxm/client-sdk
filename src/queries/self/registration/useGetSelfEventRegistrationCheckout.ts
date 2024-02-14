@@ -43,7 +43,6 @@ export const GetSelfEventRegistrationCheckout = async ({
 const useGetSelfEventRegistrationCheckout = (
   eventId: string,
   registrationId: string = "",
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventRegistrationCheckout>
   > = {}
@@ -56,7 +55,6 @@ const useGetSelfEventRegistrationCheckout = (
     SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(eventId, registrationId),
     (params) =>
       GetSelfEventRegistrationCheckout({ eventId, registrationId, ...params }),
-    params,
     {
       staleTime: Infinity,
       retry: false,

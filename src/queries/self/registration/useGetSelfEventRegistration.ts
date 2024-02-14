@@ -62,7 +62,6 @@ const useGetSelfEventRegistration = (
   ticket?: string,
   quantity?: number,
   coupon?: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventRegistration>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -77,7 +76,6 @@ const useGetSelfEventRegistration = (
         coupon,
         ...params,
       }),
-    params,
     {
       retry: false,
       staleTime: Infinity,

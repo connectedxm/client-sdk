@@ -44,7 +44,6 @@ export const GetAccount = async ({
 
 export const useGetAccount = (
   accountId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetAccount>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -52,7 +51,6 @@ export const useGetAccount = (
   return useConnectedSingleQuery<ReturnType<typeof GetAccount>>(
     ACCOUNT_QUERY_KEY(accountId),
     (_params) => GetAccount({ accountId, ..._params }),
-    params,
     {
       ...options,
       enabled: !!token && !!accountId && (options?.enabled ?? true),

@@ -6,10 +6,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import {
-  SELF_EVENT_LISTING_QUERY_KEY,
-  SET_SELF_EVENT_LISTING_QUERY_DATA,
-} from "./useGetSelfEventListing";
+import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
 import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_LISTINGS_QUERY_KEY = (past: boolean) => [
@@ -30,6 +27,7 @@ export const GetSelfEventListings = async ({
   past,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfEventListingsProps): Promise<ConnectedXMResponse<EventListing[]>> => {
   const { data } = await clientApi.get(`/self/events/listings`, {
     params: {
@@ -46,7 +44,7 @@ export const GetSelfEventListings = async ({
       data,
       queryClient,
       (eventId) => SELF_EVENT_LISTING_QUERY_KEY(eventId),
-      SET_SELF_EVENT_LISTING_QUERY_DATA
+      locale
     );
   }
 

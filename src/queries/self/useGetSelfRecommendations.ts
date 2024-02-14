@@ -7,10 +7,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import {
-  ACCOUNT_QUERY_KEY,
-  SET_ACCOUNT_QUERY_DATA,
-} from "../accounts/useGetAccount";
+import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 
 export const SELF_RECOMMENDATIONS_QUERY_KEY = (
   type: string,
@@ -37,6 +34,7 @@ export const GetSelfRecommendations = async ({
   type,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfRecommendationsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/self/recommendations`, {
     params: {
@@ -54,7 +52,7 @@ export const GetSelfRecommendations = async ({
       data,
       queryClient,
       (accountId: string) => ACCOUNT_QUERY_KEY(accountId),
-      SET_ACCOUNT_QUERY_DATA
+      locale
     );
   }
 

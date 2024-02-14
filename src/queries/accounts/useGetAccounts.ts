@@ -9,7 +9,7 @@ import {
 import { QueryClient } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
-import { ACCOUNT_QUERY_KEY, SET_ACCOUNT_QUERY_DATA } from "./useGetAccount";
+import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const ACCOUNTS_QUERY_KEY = () => ["ACCOUNTS"];
@@ -37,6 +37,7 @@ export const GetAccounts = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetAccountsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/accounts`, {
     params: {
@@ -50,7 +51,7 @@ export const GetAccounts = async ({
       data,
       queryClient,
       (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      SET_ACCOUNT_QUERY_DATA
+      locale
     );
   }
 

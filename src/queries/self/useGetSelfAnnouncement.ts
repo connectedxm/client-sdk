@@ -27,14 +27,12 @@ export const GetSelfAnnouncement = async ({
 
 const useGetSelfAnnouncement = (
   announcementId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfAnnouncement>> = {}
 ) => {
   const { token } = useConnectedXM();
   return useConnectedSingleQuery<ReturnType<typeof GetSelfAnnouncement>>(
     SELF_ANNOUNCEMENT_QUERY_KEY(announcementId),
     (params) => GetSelfAnnouncement({ announcementId, ...params }),
-    params,
     {
       ...options,
       enabled: !!token && !!announcementId && (options?.enabled ?? true),

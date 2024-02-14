@@ -26,7 +26,6 @@ export const GetSelfTransfer = async ({
 
 const useGetSelfTransfer = (
   transferId: string = "",
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfTransfer>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -34,7 +33,6 @@ const useGetSelfTransfer = (
   return useConnectedSingleQuery<ReturnType<typeof GetSelfTransfer>>(
     SELF_PENDING_TRANSFER_QUERY_KEY(transferId),
     (params) => GetSelfTransfer({ ...params, transferId }),
-    params,
     {
       ...options,
       enabled: !!token && !!transferId && (options?.enabled ?? true),

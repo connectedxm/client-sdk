@@ -8,10 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient } from "@tanstack/react-query";
-import {
-  CONTENT_TYPE_QUERY_KEY,
-  SET_CONTENT_TYPE_QUERY_DATA,
-} from "./useGetContentType";
+import { CONTENT_TYPE_QUERY_KEY } from "./useGetContentType";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const CONTENT_TYPES_QUERY_KEY = () => ["CONTENT_TYPES"];
@@ -40,6 +37,7 @@ export const GetContentTypes = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetContentParams): Promise<ConnectedXMResponse<ContentType[]>> => {
   const { data } = await clientApi.get(`/contentTypes`, {
     params: {
@@ -54,7 +52,7 @@ export const GetContentTypes = async ({
       data,
       queryClient,
       (contentTypeId) => CONTENT_TYPE_QUERY_KEY(contentTypeId),
-      SET_CONTENT_TYPE_QUERY_DATA
+      locale
     );
   }
 

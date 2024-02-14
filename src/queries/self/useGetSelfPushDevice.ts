@@ -43,7 +43,6 @@ export const GetSelfPushDevice = async ({
 
 const useGetSelfPushDevice = (
   pushDeviceId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfPushDevice>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -51,7 +50,6 @@ const useGetSelfPushDevice = (
   return useConnectedSingleQuery<ReturnType<typeof GetSelfPushDevice>>(
     SELF_PUSH_DEVICE_QUERY_KEY(pushDeviceId),
     (params) => GetSelfPushDevice({ pushDeviceId, ...params }),
-    params,
     {
       ...options,
       enabled: !!token && !!pushDeviceId && (options?.enabled ?? true),

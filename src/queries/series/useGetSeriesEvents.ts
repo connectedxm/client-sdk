@@ -8,7 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
+import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 
 export const SERIES_EVENTS_QUERY_KEY = (seriesId: string) => [
@@ -43,6 +43,7 @@ export const GetSeriesEvents = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetSeriesEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const { data } = await clientApi.get(`/series/${seriesId}/events`, {
     params: {
@@ -58,7 +59,7 @@ export const GetSeriesEvents = async ({
       data,
       queryClient,
       (eventId) => EVENT_QUERY_KEY(eventId),
-      SET_EVENT_QUERY_DATA
+      locale
     );
   }
 

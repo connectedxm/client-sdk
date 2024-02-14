@@ -48,7 +48,6 @@ export const GetSelfCommunityMembership = async ({
 
 const useGetSelfCommunityMembership = (
   communityId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfCommunityMembership>
   > = {}
@@ -59,7 +58,6 @@ const useGetSelfCommunityMembership = (
     SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
     (params: SingleQueryParams) =>
       GetSelfCommunityMembership({ communityId, ...params }),
-    params,
     {
       ...options,
       enabled: !!token && !!communityId && (options?.enabled ?? true),

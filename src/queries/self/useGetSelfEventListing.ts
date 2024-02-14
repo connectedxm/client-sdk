@@ -44,7 +44,6 @@ export const GetSelfEventListing = async ({
 
 const useGetSelfEventListing = (
   eventId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -52,7 +51,6 @@ const useGetSelfEventListing = (
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventListing>>(
     SELF_EVENT_LISTING_QUERY_KEY(eventId),
     (params) => GetSelfEventListing({ eventId, ...params }),
-    params,
     {
       ...options,
       enabled: !!token && !!eventId && (options?.enabled ?? true),

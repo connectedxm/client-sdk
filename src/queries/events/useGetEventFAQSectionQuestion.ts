@@ -53,7 +53,7 @@ const useGetEventFAQSectionQuestion = (
   eventId: string,
   sectionId: string,
   questionId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
+
   options: SingleQueryOptions<
     ReturnType<typeof GetEventFAQSectionQuestion>
   > = {}
@@ -62,7 +62,6 @@ const useGetEventFAQSectionQuestion = (
     EVENT_FAQ_SECTION_QUESTION_QUERY_KEY(eventId, sectionId, questionId),
     (params) =>
       GetEventFAQSectionQuestion({ eventId, sectionId, questionId, ...params }),
-    params,
     {
       ...options,
       enabled:

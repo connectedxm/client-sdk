@@ -6,10 +6,7 @@ import {
 import { Activity, ConnectedXMResponse } from "@interfaces";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import {
-  ACTIVITY_QUERY_KEY,
-  SET_ACTIVITY_QUERY_DATA,
-} from "../activities/useGetActivity";
+import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 
 export const SELF_FEED_QUERY_KEY = () => [...SELF_QUERY_KEY(), "FEED"];
@@ -23,6 +20,7 @@ export const GetSelfFeed = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfFeedProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const { data } = await clientApi.get(`/self/activities/feed`, {
     params: {
@@ -38,7 +36,7 @@ export const GetSelfFeed = async ({
       data,
       queryClient,
       (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      SET_ACTIVITY_QUERY_DATA
+      locale
     );
   }
 

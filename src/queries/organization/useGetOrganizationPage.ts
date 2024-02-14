@@ -46,13 +46,11 @@ export const GetOrganizationPage = async ({
 
 const useGetOrganizationPage = (
   type: PageType,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetOrganizationPage>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganizationPage>>(
     ORGANIZATION_PAGE_QUERY_KEY(type),
     (params) => GetOrganizationPage({ type, ...params }),
-    params,
     {
       ...options,
       enabled: !!type && (options.enabled ?? true),

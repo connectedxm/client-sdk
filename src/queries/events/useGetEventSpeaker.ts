@@ -48,13 +48,12 @@ export const GetEventSpeaker = async ({
 const useGetEventSpeaker = (
   eventId: string,
   speakerId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
+
   options: SingleQueryOptions<ReturnType<typeof GetEventSpeaker>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSpeaker>>(
     EVENT_SPEAKER_QUERY_KEY(eventId, speakerId),
     (params) => GetEventSpeaker({ eventId, speakerId, ...params }),
-    params,
     {
       ...options,
       enabled: !!eventId && !!speakerId && (options?.enabled ?? true),

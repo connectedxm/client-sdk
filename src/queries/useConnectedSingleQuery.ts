@@ -20,7 +20,6 @@ export const GetBaseSingleQueryKeys = (locale: string) => {
 export const useConnectedSingleQuery = <TQueryData = unknown>(
   queryKeys: string[],
   queryFn: (params: SingleQueryParams) => TQueryData,
-  params: Omit<SingleQueryParams, "clientApi">,
   options?: SingleQueryOptions<TQueryData>
 ) => {
   const { locale } = useConnectedXM();
@@ -33,7 +32,6 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     queryKey: [...queryKeys, ...GetBaseSingleQueryKeys(locale)],
     queryFn: () =>
       queryFn({
-        ...params,
         clientApi,
       }),
   });

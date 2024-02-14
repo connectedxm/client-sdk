@@ -11,10 +11,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetEventSessions } from "./useGetEventSessions";
-import {
-  ACCOUNT_QUERY_KEY,
-  SET_ACCOUNT_QUERY_DATA,
-} from "../accounts/useGetAccount";
+import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string) => [
@@ -49,6 +46,7 @@ export const GetEventRegistrants = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetEventRegistrantsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/registrants`, {
     params: {
@@ -64,7 +62,7 @@ export const GetEventRegistrants = async ({
       data,
       queryClient,
       (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      SET_ACCOUNT_QUERY_DATA
+      locale
     );
   }
 

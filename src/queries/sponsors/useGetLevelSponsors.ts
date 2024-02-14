@@ -9,7 +9,7 @@ import {
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
 import { QueryClient } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { SET_SPONSOR_QUERY_DATA, SPONSOR_QUERY_KEY } from "./useGetSponsor";
+import { SPONSOR_QUERY_KEY } from "./useGetSponsor";
 
 export const LEVEL_SPONSORS_QUERY_KEY = (levelId: string) => [
   ...LEVEL_QUERY_KEY(levelId),
@@ -43,6 +43,7 @@ export const GetLevelSponsors = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetLevelSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/levels/${levelId}/accounts`, {
     params: {
@@ -58,7 +59,7 @@ export const GetLevelSponsors = async ({
       data,
       queryClient,
       (sponsorId) => SPONSOR_QUERY_KEY(sponsorId),
-      SET_SPONSOR_QUERY_DATA
+      locale
     );
   }
 

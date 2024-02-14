@@ -6,7 +6,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { ConnectedXMResponse, Event } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
+import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { SELF_QUERY_KEY } from "./useGetSelf";
 
 export const SELF_EVENTS_QUERY_KEY = (past: boolean) => [
@@ -27,6 +27,7 @@ export const GetSelfEvents = async ({
   past,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const { data } = await clientApi.get(`/self/events`, {
     params: {
@@ -43,7 +44,7 @@ export const GetSelfEvents = async ({
       data,
       queryClient,
       (eventId) => EVENT_QUERY_KEY(eventId),
-      SET_EVENT_QUERY_DATA
+      locale
     );
   }
 

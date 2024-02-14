@@ -8,10 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient } from "@tanstack/react-query";
-import {
-  COMMUNITY_QUERY_KEY,
-  SET_COMMUNITY_QUERY_DATA,
-} from "./useGetCommunity";
+import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const COMMUNITIES_QUERY_KEY = () => ["COMMUNITIES"];
@@ -43,6 +40,7 @@ export const GetCommunities = async ({
   privateCommunities,
   queryClient,
   clientApi,
+  locale,
 }: GetCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
   if (privateCommunities) {
     return {
@@ -66,7 +64,7 @@ export const GetCommunities = async ({
       data,
       queryClient,
       (communityId) => COMMUNITY_QUERY_KEY(communityId),
-      SET_COMMUNITY_QUERY_DATA
+      locale
     );
   }
 

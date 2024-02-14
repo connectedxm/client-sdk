@@ -6,10 +6,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import {
-  EVENT_SESSION_QUERY_KEY,
-  SET_EVENT_SESSION_QUERY_DATA,
-} from "../events/useGetEventSession";
+import { EVENT_SESSION_QUERY_KEY } from "../events/useGetEventSession";
 import { SELF_EVENTS_QUERY_KEY } from "./useGetSelfEvents";
 
 export const SELF_EVENT_SESSIONS_QUERY_KEY = (eventId: string) => [
@@ -30,6 +27,7 @@ export const GetSelfEventSessions = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
   const { data } = await clientApi.get(`/self/events/${eventId}/sessions`, {
     params: {
@@ -46,7 +44,7 @@ export const GetSelfEventSessions = async ({
       data,
       queryClient,
       (sessionId) => EVENT_SESSION_QUERY_KEY(eventId, sessionId),
-      SET_EVENT_SESSION_QUERY_DATA
+      locale
     );
   }
 

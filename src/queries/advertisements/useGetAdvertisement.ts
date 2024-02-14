@@ -40,18 +40,14 @@ export const GetAdvertisement = async ({
 
 export const useGetAdvertisement = (
   position: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetAdvertisement>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetAdvertisement>>(
     ADVERTISEMENT_QUERY_KEY(position),
     (params: any) => GetAdvertisement({ ...params }),
-    params,
     {
       staleTime: 30 * 1000,
       ...options,
     }
   );
 };
-
-export default useGetAdvertisement;

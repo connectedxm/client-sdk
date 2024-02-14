@@ -1,5 +1,6 @@
 import { ConnectedXMResponse } from "@interfaces";
-import { QueryClient, InfiniteData } from "@tanstack/react-query";
+import { GetBaseSingleQueryKeys } from "@src/queries/useConnectedSingleQuery";
+import { QueryClient } from "@tanstack/react-query";
 
 interface ItemWithId {
   id: string;
@@ -11,50 +12,61 @@ interface ItemWithId {
 }
 
 export const CacheIndividualQueries = <TData extends ItemWithId>(
-  response: InfiniteData<ConnectedXMResponse<TData[]>>,
+  page: ConnectedXMResponse<TData[]>,
   queryClient: QueryClient,
-  queryKeyFn: (id: string) => any,
-  SET_FUNCTION: (
-    client: QueryClient,
-    keyParams: any,
-    response: ConnectedXMResponse<TData>
-  ) => void,
+  queryKeyFn: (id: string) => string[],
+  locale: string = "en",
   itemMap?: (item: TData) => TData
 ) => {
-  response.pages.forEach((page) => {
-    page.data.forEach((item) => {
-      item = itemMap ? itemMap(item) : item;
+  page.data.forEach((item) => {
+    item = itemMap ? itemMap(item) : item;
 
-      if (item.id) {
-        const SudoResponse: ConnectedXMResponse<TData> = {
-          status: page.status,
-          message: `Cached From: ${page.message}`,
-          data: item,
-        };
+    if (item.id) {
+      const SudoResponse: ConnectedXMResponse<TData> = {
+        status: page.status,
+        message: `Cached From: ${page.message}`,
+        data: item,
+      };
 
-        // Query Client, keyparams, response
-        SET_FUNCTION(queryClient, queryKeyFn(item.id), SudoResponse);
+      // Query Client, keyparams, response
+      queryClient.setQueryData(
+        [...queryKeyFn(item.id), ...GetBaseSingleQueryKeys(locale)],
+        SudoResponse
+      );
 
-        if (item.slug) {
-          SET_FUNCTION(queryClient, queryKeyFn(item.slug), SudoResponse);
-        }
-        if (item.username) {
-          SET_FUNCTION(queryClient, queryKeyFn(item.username), SudoResponse);
-        }
-        if (item.code) {
-          SET_FUNCTION(queryClient, queryKeyFn(item.code), SudoResponse);
-        }
-        if (item.name) {
-          SET_FUNCTION(queryClient, queryKeyFn(item.name), SudoResponse);
-        }
-        if (item.alternateId) {
-          SET_FUNCTION(
-            queryClient,
-            queryKeyFn(item.alternateId.toString()),
-            SudoResponse
-          );
-        }
+      if (item.slug) {
+        queryClient.setQueryData(
+          [...queryKeyFn(item.slug), ...GetBaseSingleQueryKeys(locale)],
+          SudoResponse
+        );
       }
-    });
+      if (item.username) {
+        queryClient.setQueryData(
+          [...queryKeyFn(item.username), ...GetBaseSingleQueryKeys(locale)],
+          SudoResponse
+        );
+      }
+      if (item.code) {
+        queryClient.setQueryData(
+          [...queryKeyFn(item.code), ...GetBaseSingleQueryKeys(locale)],
+          SudoResponse
+        );
+      }
+      if (item.name) {
+        queryClient.setQueryData(
+          [...queryKeyFn(item.name), ...GetBaseSingleQueryKeys(locale)],
+          SudoResponse
+        );
+      }
+      if (item.alternateId) {
+        queryClient.setQueryData(
+          [
+            ...queryKeyFn(item.alternateId.toString()),
+            ...GetBaseSingleQueryKeys(locale),
+          ],
+          SudoResponse
+        );
+      }
+    }
   });
 };

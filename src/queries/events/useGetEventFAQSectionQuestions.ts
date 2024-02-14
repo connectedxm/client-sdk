@@ -8,10 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient } from "@tanstack/react-query";
-import {
-  EVENT_FAQ_SECTION_QUESTION_QUERY_KEY,
-  SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA,
-} from "./useGetEventFAQSectionQuestion";
+import { EVENT_FAQ_SECTION_QUESTION_QUERY_KEY } from "./useGetEventFAQSectionQuestion";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
 
@@ -52,6 +49,7 @@ export const GetEventFaqs = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetEventFaqsProps): Promise<ConnectedXMResponse<Faq[]>> => {
   const { data } = await clientApi.get(
     `/events/${eventId}/faqs/${sectionId}/questions`,
@@ -71,7 +69,7 @@ export const GetEventFaqs = async ({
       queryClient,
       (faqId) =>
         EVENT_FAQ_SECTION_QUESTION_QUERY_KEY(eventId, sectionId, faqId),
-      SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA
+      locale
     );
   }
 

@@ -45,7 +45,6 @@ export const GetAccountByShareCode = async ({
 
 export const useGetAccountByShareCode = (
   shareCode: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetAccountByShareCode>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -54,7 +53,6 @@ export const useGetAccountByShareCode = (
     ACCOUNT_BY_SHARE_CODE_QUERY_KEY(shareCode),
     (params) =>
       GetAccountByShareCode({ shareCode: shareCode || "unknown", ...params }),
-    params,
     {
       ...options,
       enabled: !!token && !!shareCode && (options?.enabled ?? true),

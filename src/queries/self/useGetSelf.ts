@@ -33,7 +33,6 @@ export const GetSelf = async ({
 };
 
 const useGetSelf = (
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelf>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -41,7 +40,6 @@ const useGetSelf = (
   return useConnectedSingleQuery<ReturnType<typeof GetSelf>>(
     SELF_QUERY_KEY(),
     (params: SingleQueryParams) => GetSelf({ ...params }),
-    params,
     {
       enabled: !!token && (options?.enabled ?? true),
     }

@@ -8,7 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { SERIES_QUERY_KEY, SET_SERIES_QUERY_DATA } from "./useGetSeries";
+import { SERIES_QUERY_KEY } from "./useGetSeries";
 
 export const SERIES_LIST_QUERY_KEY = () => ["SERIES"];
 
@@ -38,6 +38,7 @@ export const GetSeriesList = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetSeriesListProps): Promise<ConnectedXMResponse<Series[]>> => {
   const { data } = await clientApi.get(`/series`, {
     params: {
@@ -53,7 +54,7 @@ export const GetSeriesList = async ({
       data,
       queryClient,
       (seriesId) => SERIES_QUERY_KEY(seriesId),
-      SET_SERIES_QUERY_DATA
+      locale
     );
   }
 

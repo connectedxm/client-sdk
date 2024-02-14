@@ -10,10 +10,7 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { EVENT_TICKETS_QUERY_KEY } from "./useGetEventTickets";
-import {
-  SET_SPONSOR_QUERY_DATA,
-  SPONSOR_QUERY_KEY,
-} from "../sponsors/useGetSponsor";
+import { SPONSOR_QUERY_KEY } from "../sponsors/useGetSponsor";
 
 export const EVENT_SPONSORS_QUERY_KEY = (eventId: string) => [
   ...EVENT_QUERY_KEY(eventId),
@@ -47,6 +44,7 @@ export const GetEventSponsors = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetEventSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/sponsors`, {
     params: {
@@ -62,7 +60,7 @@ export const GetEventSponsors = async ({
       data,
       queryClient,
       (sponsorId) => SPONSOR_QUERY_KEY(sponsorId),
-      SET_SPONSOR_QUERY_DATA
+      locale
     );
   }
 

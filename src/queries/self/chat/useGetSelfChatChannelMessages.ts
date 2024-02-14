@@ -45,6 +45,7 @@ export const GetSelfChatChannelMessages = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetSelfChatChannelMessagesProps): Promise<
   ConnectedXMResponse<ChatChannelMessage[]>
 > => {

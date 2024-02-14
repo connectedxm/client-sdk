@@ -45,7 +45,6 @@ export const GetActivity = async ({
 
 export const useGetActivity = (
   activityId: string,
-  params: SingleQueryParams,
   options: SingleQueryOptions<ReturnType<typeof GetActivity>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -54,7 +53,6 @@ export const useGetActivity = (
     ACTIVITY_QUERY_KEY(activityId),
     (params: SingleQueryParams) =>
       GetActivity({ activityId: activityId || "unknown", ...params }),
-    params,
     {
       ...options,
       enabled: !!token && !!activityId && (options?.enabled ?? true),

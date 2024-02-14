@@ -7,7 +7,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Event } from "@interfaces";
 import { QueryClient } from "@tanstack/react-query";
-import { EVENT_QUERY_KEY, SET_EVENT_QUERY_DATA } from "../events/useGetEvent";
+import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
@@ -50,6 +50,7 @@ export const GetCommunityEvents = async ({
   past,
   queryClient,
   clientApi,
+  locale,
 }: GetCommunityEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const { data } = await clientApi.get(`/communities/${communityId}/events`, {
     params: {
@@ -65,7 +66,7 @@ export const GetCommunityEvents = async ({
       data,
       queryClient,
       (eventId) => EVENT_QUERY_KEY(eventId),
-      SET_EVENT_QUERY_DATA
+      locale
     );
   }
 

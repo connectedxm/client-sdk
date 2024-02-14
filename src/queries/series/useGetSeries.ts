@@ -40,13 +40,11 @@ export const GetSeries = async ({
 
 const useGetSeries = (
   seriesId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSeries>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSeries>>(
     SERIES_QUERY_KEY(seriesId),
     (params) => GetSeries({ seriesId, ...params }),
-    params,
     {
       ...options,
       enabled: !!seriesId && (options?.enabled ?? true),

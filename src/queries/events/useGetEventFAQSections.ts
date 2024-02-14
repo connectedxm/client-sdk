@@ -9,10 +9,7 @@ import {
 import { QueryClient } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import {
-  EVENT_FAQ_SECTION_QUERY_KEY,
-  SET_EVENT_FAQ_SECTION_QUERY_DATA,
-} from "./useGetEventFAQSection";
+import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_FAQ_SECTIONS_QUERY_KEY = (eventId: string) => [
@@ -47,6 +44,7 @@ export const GetEventFaqSections = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetEventFaqSectionsProps): Promise<ConnectedXMResponse<FaqSection[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/faqs`, {
     params: {
@@ -62,7 +60,7 @@ export const GetEventFaqSections = async ({
       data,
       queryClient,
       (sectionId) => EVENT_FAQ_SECTION_QUERY_KEY(eventId, sectionId),
-      SET_EVENT_FAQ_SECTION_QUERY_DATA
+      locale
     );
   }
 

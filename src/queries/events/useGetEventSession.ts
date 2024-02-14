@@ -48,13 +48,12 @@ export const GetEventSession = async ({
 const useGetEventSession = (
   eventId: string,
   sessionId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
+
   options: SingleQueryOptions<ReturnType<typeof GetEventSession>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSession>>(
     EVENT_SESSION_QUERY_KEY(eventId, sessionId),
     (params) => GetEventSession({ eventId, sessionId, ...params }),
-    params,
     {
       ...options,
       enabled: !!eventId && !!sessionId && (options?.enabled ?? true),

@@ -43,14 +43,12 @@ export const GetContent = async ({
 
 export const useGetContent = (
   contentId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetContent>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetContent>>(
     CONTENT_QUERY_KEY(contentId),
     (params: SingleQueryParams) =>
       GetContent({ contentId: contentId || "", ...params }),
-    params,
     {
       ...options,
       enabled: !!contentId && options.enabled,

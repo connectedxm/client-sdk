@@ -47,13 +47,11 @@ export const GetEventFAQSection = async ({
 const useGetEventFAQSection = (
   eventId: string,
   sectionId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetEventFAQSection>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventFAQSection>>(
     EVENT_FAQ_SECTION_QUERY_KEY(eventId, sectionId),
     (params) => GetEventFAQSection({ eventId, sectionId, ...params }),
-    params,
     {
       ...options,
       enabled: !!eventId && !!sectionId && (options?.enabled ?? true),

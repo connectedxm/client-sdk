@@ -16,13 +16,11 @@ export const GetOrganization = async ({
 };
 
 const useGetOrganization = (
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetOrganization>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganization>>(
     ORGANIZATION_QUERY_KEY(),
     (params: SingleQueryParams) => GetOrganization({ ...params }),
-    params,
     options
   );
 };

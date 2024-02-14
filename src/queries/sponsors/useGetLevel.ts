@@ -38,13 +38,11 @@ export const GetLevel = async ({
 
 const useGetLevel = (
   levelId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetLevel>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetLevel>>(
     LEVEL_QUERY_KEY(levelId),
     (params: SingleQueryParams) => GetLevel({ levelId, ...params }),
-    params,
     {
       ...options,
       enabled: !!levelId && (options?.enabled ?? true),

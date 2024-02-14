@@ -9,10 +9,7 @@ import {
 import { QueryClient } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import {
-  EVENT_SESSION_QUERY_KEY,
-  SET_EVENT_SESSION_QUERY_DATA,
-} from "./useGetEventSession";
+import { EVENT_SESSION_QUERY_KEY } from "./useGetEventSession";
 
 export const EVENT_SESSIONS_QUERY_KEY = (eventId: string) => [
   ...EVENT_QUERY_KEY(eventId),
@@ -46,6 +43,7 @@ export const GetEventSessions = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/sessions`, {
     params: {
@@ -61,7 +59,7 @@ export const GetEventSessions = async ({
       data,
       queryClient,
       (sessionId) => EVENT_SESSION_QUERY_KEY(eventId, sessionId),
-      SET_EVENT_SESSION_QUERY_DATA
+      locale
     );
   }
 

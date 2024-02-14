@@ -46,7 +46,6 @@ export const GetSelfChatChannel = async ({
 
 const useGetSelfChatChannel = (
   channelId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<ReturnType<typeof GetSelfChatChannel>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -58,7 +57,6 @@ const useGetSelfChatChannel = (
         channelId: channelId || "unknown",
         ...params,
       }),
-    params,
     {
       staleTime: Infinity,
       ...options,

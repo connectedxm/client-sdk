@@ -10,10 +10,7 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import {
-  ACTIVITY_QUERY_KEY,
-  SET_ACTIVITY_QUERY_DATA,
-} from "../activities/useGetActivity";
+import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_ACTIVITIES_QUERY_KEY = (eventId: string) => [
@@ -48,6 +45,7 @@ export const GetEventActivities = async ({
   search,
   queryClient,
   clientApi,
+  locale,
 }: GetEventActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/activities`, {
     params: {
@@ -62,7 +60,7 @@ export const GetEventActivities = async ({
       data,
       queryClient,
       (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      SET_ACTIVITY_QUERY_DATA
+      locale
     );
   }
 

@@ -41,13 +41,12 @@ export const GetSponsor = async ({
 
 const useGetSponsor = (
   accountId: string,
-  params: Omit<SingleQueryParams, "clientApi"> = {},
+
   options: SingleQueryOptions<ReturnType<typeof GetSponsor>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSponsor>>(
     SPONSOR_QUERY_KEY(accountId),
     (params) => GetSponsor({ accountId, ...params }),
-    params,
     {
       ...options,
       enabled: !!accountId && (options?.enabled ?? true),

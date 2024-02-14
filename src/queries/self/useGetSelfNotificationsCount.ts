@@ -32,7 +32,6 @@ export const GetSelfNewNotificationsCount = async ({
 
 const useGetSelfNewNotificationsCount = (
   filters: string = "",
-  params: Omit<SingleQueryParams, "clientApi"> = {},
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfNewNotificationsCount>
   > = {}
@@ -43,7 +42,6 @@ const useGetSelfNewNotificationsCount = (
   >(
     SELF_NOTIFICATION_COUNT_QUERY_KEY(filters),
     (params) => GetSelfNewNotificationsCount({ filters, ...params }),
-    params,
     {
       ...options,
       enabled: !!token && (options?.enabled ?? true),
