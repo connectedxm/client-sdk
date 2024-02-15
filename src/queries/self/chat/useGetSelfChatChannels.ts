@@ -16,7 +16,7 @@ export const SELF_CHAT_CHANNELS_QUERY_KEY = () => ["CHANNELS"];
 export const SET_SELF_CHAT_CHANNELS_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof SELF_CHAT_CHANNELS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfChannels>>,
+  response: Awaited<ReturnType<typeof GetSelfChatChannels>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
@@ -28,9 +28,9 @@ export const SET_SELF_CHAT_CHANNELS_QUERY_DATA = (
   );
 };
 
-interface GetSelfChannelsProps extends InfiniteQueryParams {}
+interface GetSelfChatChannelsProps extends InfiniteQueryParams {}
 
-export const GetSelfChannels = async ({
+export const GetSelfChatChannels = async ({
   pageParam,
   pageSize,
   orderBy,
@@ -38,7 +38,9 @@ export const GetSelfChannels = async ({
   queryClient,
   clientApi,
   locale,
-}: GetSelfChannelsProps): Promise<ConnectedXMResponse<ChatChannelMember[]>> => {
+}: GetSelfChatChannelsProps): Promise<
+  ConnectedXMResponse<ChatChannelMember[]>
+> => {
   const { data } = await clientApi.get(`/self/chat/channels`, {
     params: {
       page: pageParam || undefined,
@@ -66,17 +68,22 @@ export const GetSelfChannels = async ({
   return data;
 };
 
-const useGetChatChannels = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfChatChannels = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfChannels>>
+    Awaited<ReturnType<typeof GetSelfChatChannels>>
   > = {}
 ) => {
   const { token } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfChannels>>>(
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetSelfChatChannels>>
+  >(
     SELF_CHAT_CHANNELS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetSelfChannels(params),
+    (params: InfiniteQueryParams) => GetSelfChatChannels(params),
     params,
     {
       ...options,
@@ -84,5 +91,3 @@ const useGetChatChannels = (
     }
   );
 };
-
-export default useGetChatChannels;

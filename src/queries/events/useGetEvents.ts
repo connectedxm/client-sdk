@@ -70,9 +70,12 @@ export const GetEvents = async ({
   return data;
 };
 
-const useGetEvents = (
+export const useGetEvents = (
   past: boolean = false,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEvents>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEvents>>>(
@@ -82,5 +85,3 @@ const useGetEvents = (
     options
   );
 };
-
-export default useGetEvents;

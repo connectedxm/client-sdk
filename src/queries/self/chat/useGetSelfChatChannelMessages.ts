@@ -45,7 +45,6 @@ export const GetSelfChatChannelMessages = async ({
   search,
   queryClient,
   clientApi,
-  locale,
 }: GetSelfChatChannelMessagesProps): Promise<
   ConnectedXMResponse<ChatChannelMessage[]>
 > => {
@@ -74,9 +73,12 @@ export const GetSelfChatChannelMessages = async ({
   return data;
 };
 
-const useGetSelfChatChannelMessages = (
+export const useGetSelfChatChannelMessages = (
   channelId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfChatChannelMessages>>
   > = {}
@@ -96,5 +98,3 @@ const useGetSelfChatChannelMessages = (
     }
   );
 };
-
-export default useGetSelfChatChannelMessages;

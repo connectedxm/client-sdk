@@ -37,9 +37,12 @@ export const GetSelfNotifications = async ({
   return data;
 };
 
-const useGetSelfNotifications = (
+export const useGetSelfNotifications = (
   filters: string = "",
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfNotifications>>
   > = {}
@@ -59,5 +62,3 @@ const useGetSelfNotifications = (
     }
   );
 };
-
-export default useGetSelfNotifications;

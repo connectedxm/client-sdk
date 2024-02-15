@@ -76,7 +76,10 @@ export const GetCommunityEvents = async ({
 export const useGetCommunityEvents = (
   communityId: string,
   past: boolean = false,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityEvents>>
   > = {}

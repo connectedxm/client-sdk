@@ -44,7 +44,7 @@ export const GetOrganizationPage = async ({
   return data;
 };
 
-const useGetOrganizationPage = (
+export const useGetOrganizationPage = (
   type: PageType,
   options: SingleQueryOptions<ReturnType<typeof GetOrganizationPage>> = {}
 ) => {
@@ -57,5 +57,3 @@ const useGetOrganizationPage = (
     }
   );
 };
-
-export default useGetOrganizationPage;

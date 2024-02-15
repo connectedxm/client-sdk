@@ -69,9 +69,12 @@ export const GetEventRegistrants = async ({
   return data;
 };
 
-const useGetEventRegistrants = (
+export const useGetEventRegistrants = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventRegistrants>>
   > = {}
@@ -91,5 +94,3 @@ const useGetEventRegistrants = (
     }
   );
 };
-
-export default useGetEventRegistrants;

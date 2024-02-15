@@ -32,8 +32,11 @@ export const GetSelfTransfers = async ({
   return data;
 };
 
-const useGetSelfTransfers = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfTransfers = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfTransfers>>
   > = {}
@@ -51,5 +54,3 @@ const useGetSelfTransfers = (
     }
   );
 };
-
-export default useGetSelfTransfers;

@@ -69,7 +69,10 @@ export const GetAccountCommunities = async ({
 
 export const useGetAccountCommunities = (
   accountId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetAccountCommunities>>
   > = {}

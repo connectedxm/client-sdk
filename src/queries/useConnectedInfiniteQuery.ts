@@ -56,7 +56,10 @@ export const useConnectedInfiniteQuery = <
 >(
   queryKeys: string[],
   queryFn: (params: InfiniteQueryParams) => Promise<TQueryData>,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
   const { locale } = useConnectedXM();
@@ -85,7 +88,7 @@ export const useConnectedInfiniteQuery = <
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
     queryFn: ({ pageParam }) =>
-      queryFn({ ...params, locale: params.locale || locale, pageParam, queryClient, clientApi }),
+      queryFn({ ...params, pageSize: params.pageSize || 10, locale: params.locale || locale, pageParam, queryClient, clientApi }),
     initialPageParam: 1,
     getNextPageParam,
   });

@@ -44,7 +44,7 @@ export const GetEventPage = async ({
   return data;
 };
 
-const useGetEventPage = (
+export const useGetEventPage = (
   eventId: string,
   pageId: string,
   options: SingleQueryOptions<ReturnType<typeof GetEventPage>> = {}
@@ -58,5 +58,3 @@ const useGetEventPage = (
     }
   );
 };
-
-export default useGetEventPage;

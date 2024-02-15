@@ -66,9 +66,12 @@ export const GetSeriesEvents = async ({
   return data;
 };
 
-const useGetSeriesEvents = (
+export const useGetSeriesEvents = (
   seriesId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSeriesEvents>>
   > = {}
@@ -83,5 +86,3 @@ const useGetSeriesEvents = (
     }
   );
 };
-
-export default useGetSeriesEvents;

@@ -67,9 +67,12 @@ export const GetEventSponsors = async ({
   return data;
 };
 
-const useGetEventSponsors = (
+export const useGetEventSponsors = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventSponsors>>
   > = {}
@@ -86,5 +89,3 @@ const useGetEventSponsors = (
     }
   );
 };
-
-export default useGetEventSponsors;

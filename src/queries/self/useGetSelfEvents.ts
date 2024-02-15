@@ -51,9 +51,12 @@ export const GetSelfEvents = async ({
   return data;
 };
 
-const useGetSelfEvents = (
+export const useGetSelfEvents = (
   past: boolean = false,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSelfEvents>>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -68,5 +71,3 @@ const useGetSelfEvents = (
     }
   );
 };
-
-export default useGetSelfEvents;

@@ -69,7 +69,10 @@ export const GetContentActivities = async ({
 
 export const useGetContentActivities = (
   contentId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetContentActivities>>
   > = {}

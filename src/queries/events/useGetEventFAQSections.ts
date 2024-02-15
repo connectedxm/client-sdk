@@ -67,9 +67,12 @@ export const GetEventFaqSections = async ({
   return data;
 };
 
-const useGetEventFaqSections = (
+export const useGetEventFaqSections = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventFaqSections>>
   > = {}
@@ -87,5 +90,3 @@ const useGetEventFaqSections = (
     }
   );
 };
-
-export default useGetEventFaqSections;

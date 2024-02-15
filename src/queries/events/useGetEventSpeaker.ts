@@ -45,7 +45,7 @@ export const GetEventSpeaker = async ({
   return data;
 };
 
-const useGetEventSpeaker = (
+export const useGetEventSpeaker = (
   eventId: string,
   speakerId: string,
 
@@ -60,5 +60,3 @@ const useGetEventSpeaker = (
     }
   );
 };
-
-export default useGetEventSpeaker;

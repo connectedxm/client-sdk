@@ -45,7 +45,7 @@ export const GetEventSession = async ({
   return data;
 };
 
-const useGetEventSession = (
+export const useGetEventSession = (
   eventId: string,
   sessionId: string,
 
@@ -60,5 +60,3 @@ const useGetEventSession = (
     }
   );
 };
-
-export default useGetEventSession;

@@ -44,7 +44,7 @@ export const GetSelfChatChannel = async ({
   return data;
 };
 
-const useGetSelfChatChannel = (
+export const useGetSelfChatChannel = (
   channelId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfChatChannel>> = {}
 ) => {
@@ -64,5 +64,3 @@ const useGetSelfChatChannel = (
     }
   );
 };
-
-export default useGetSelfChatChannel;

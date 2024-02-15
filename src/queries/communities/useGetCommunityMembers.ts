@@ -58,7 +58,10 @@ export const GetCommunityMembers = async ({
 
 export const useGetCommunityMembers = (
   communityId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityMembers>>
   > = {}
@@ -78,5 +81,3 @@ export const useGetCommunityMembers = (
     }
   );
 };
-
-export default useGetCommunityMembers;

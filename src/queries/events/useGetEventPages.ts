@@ -67,9 +67,12 @@ export const GetEventPages = async ({
   return data;
 };
 
-const useGetEventPages = (
+export const useGetEventPages = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventPages>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventPages>>>(
@@ -82,5 +85,3 @@ const useGetEventPages = (
     }
   );
 };
-
-export default useGetEventPages;

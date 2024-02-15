@@ -24,7 +24,7 @@ export const GetSelfNotificationPreferences = async ({
   return data;
 };
 
-const useGetSelfNotificationPreferences = (
+export const useGetSelfNotificationPreferences = (
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfNotificationPreferences>
   > = {}
@@ -42,5 +42,3 @@ const useGetSelfNotificationPreferences = (
     }
   );
 };
-
-export default useGetSelfNotificationPreferences;

@@ -34,8 +34,11 @@ export const GetSelfCommunityMemberships = async ({
   return data;
 };
 
-const useGetSelfCommunityMemberships = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfCommunityMemberships = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfCommunityMemberships>>
   > = {}
@@ -54,5 +57,3 @@ const useGetSelfCommunityMemberships = (
     }
   );
 };
-
-export default useGetSelfCommunityMemberships;

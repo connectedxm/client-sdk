@@ -60,7 +60,10 @@ export const GetContents = async ({
 };
 
 export const useGetContents = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetContents>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetContents>>>(

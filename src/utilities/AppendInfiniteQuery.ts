@@ -2,10 +2,10 @@ import { QueryClient, QueryFilters } from "@tanstack/react-query";
 
 export const AppendInfiniteQuery = (
   queryClient: QueryClient,
-  key: QueryFilters,
+  key: string[],
   newData: any
 ) => {
-  queryClient.setQueriesData(key, (data: any) => {
+  queryClient.setQueriesData(key as QueryFilters, (data: any) => {
     if (data?.pages?.[0]?.data) {
       if (
         data?.pages?.[0]?.data &&

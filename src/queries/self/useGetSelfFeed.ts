@@ -43,8 +43,11 @@ export const GetSelfFeed = async ({
   return data;
 };
 
-const useGetSelfFeed = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfFeed = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSelfFeed>>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -59,5 +62,3 @@ const useGetSelfFeed = (
     }
   );
 };
-
-export default useGetSelfFeed;

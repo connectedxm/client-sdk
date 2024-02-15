@@ -32,7 +32,7 @@ export const GetSelf = async ({
   return data;
 };
 
-const useGetSelf = (
+export const useGetSelf = (
   options: SingleQueryOptions<ReturnType<typeof GetSelf>> = {}
 ) => {
   const { token } = useConnectedXM();
@@ -45,5 +45,3 @@ const useGetSelf = (
     }
   );
 };
-
-export default useGetSelf;

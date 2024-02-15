@@ -59,10 +59,13 @@ export const GetSelfRecommendations = async ({
   return data;
 };
 
-const useGetSelfRecommendations = (
+export const useGetSelfRecommendations = (
   type: RecomendationType,
   eventId: string = "",
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfRecommendations>>
   > = {}
@@ -82,5 +85,3 @@ const useGetSelfRecommendations = (
     }
   );
 };
-
-export default useGetSelfRecommendations;

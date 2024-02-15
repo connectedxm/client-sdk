@@ -38,7 +38,7 @@ export const GetSeries = async ({
   return data;
 };
 
-const useGetSeries = (
+export const useGetSeries = (
   seriesId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSeries>> = {}
 ) => {
@@ -51,5 +51,3 @@ const useGetSeries = (
     }
   );
 };
-
-export default useGetSeries;

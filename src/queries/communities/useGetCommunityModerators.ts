@@ -61,7 +61,10 @@ export const GetCommunityModerators = async ({
 
 export const useGetCommunityModerators = (
   communityId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityModerators>>
   > = {}

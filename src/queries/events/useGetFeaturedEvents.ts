@@ -61,8 +61,11 @@ export const GetFeaturedEvents = async ({
   return data;
 };
 
-const useGetFeaturedEvents = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetFeaturedEvents = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetFeaturedEvents>>
   > = {}
@@ -76,5 +79,3 @@ const useGetFeaturedEvents = (
     options
   );
 };
-
-export default useGetFeaturedEvents;

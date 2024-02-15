@@ -46,8 +46,11 @@ export const GetSelfDelegateOf = async ({
   return data;
 };
 
-const useGetSelfDelegateOf = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfDelegateOf = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfDelegateOf>>
   > = {}
@@ -66,5 +69,3 @@ const useGetSelfDelegateOf = (
     }
   );
 };
-
-export default useGetSelfDelegateOf;

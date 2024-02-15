@@ -67,9 +67,12 @@ export const GetEventActivities = async ({
   return data;
 };
 
-const useGetEventActivities = (
+export const useGetEventActivities = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventActivities>>
   > = {}
@@ -88,5 +91,3 @@ const useGetEventActivities = (
     }
   );
 };
-
-export default useGetEventActivities;

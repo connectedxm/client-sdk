@@ -46,8 +46,11 @@ export const GetSelfPushDevices = async ({
   return data;
 };
 
-const useGetSelfPushDevices = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfPushDevices = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfPushDevices>>
   > = {}
@@ -66,5 +69,3 @@ const useGetSelfPushDevices = (
     }
   );
 };
-
-export default useGetSelfPushDevices;

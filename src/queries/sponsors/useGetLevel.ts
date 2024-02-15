@@ -36,7 +36,7 @@ export const GetLevel = async ({
   return data;
 };
 
-const useGetLevel = (
+export const useGetLevel = (
   levelId: string,
   options: SingleQueryOptions<ReturnType<typeof GetLevel>> = {}
 ) => {
@@ -49,5 +49,3 @@ const useGetLevel = (
     }
   );
 };
-
-export default useGetLevel;

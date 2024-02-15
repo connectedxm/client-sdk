@@ -25,7 +25,7 @@ export const GetSelfAnnouncement = async ({
   return data;
 };
 
-const useGetSelfAnnouncement = (
+export const useGetSelfAnnouncement = (
   announcementId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfAnnouncement>> = {}
 ) => {
@@ -39,5 +39,3 @@ const useGetSelfAnnouncement = (
     }
   );
 };
-
-export default useGetSelfAnnouncement;

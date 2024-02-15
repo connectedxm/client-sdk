@@ -59,8 +59,11 @@ export const GetLevels = async ({
   return data;
 };
 
-const useGetLevels = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetLevels = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetLevels>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetLevels>>>(
@@ -70,5 +73,3 @@ const useGetLevels = (
     options
   );
 };
-
-export default useGetLevels;

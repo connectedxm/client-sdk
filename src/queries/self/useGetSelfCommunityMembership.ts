@@ -46,7 +46,7 @@ export const GetSelfCommunityMembership = async ({
   return data;
 };
 
-const useGetSelfCommunityMembership = (
+export const useGetSelfCommunityMembership = (
   communityId: string,
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfCommunityMembership>
@@ -64,5 +64,3 @@ const useGetSelfCommunityMembership = (
     }
   );
 };
-
-export default useGetSelfCommunityMembership;

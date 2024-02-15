@@ -40,7 +40,7 @@ export const GetSelfEventRegistrationCheckout = async ({
   return data;
 };
 
-const useGetSelfEventRegistrationCheckout = (
+export const useGetSelfEventRegistrationCheckout = (
   eventId: string,
   registrationId: string = "",
   options: SingleQueryOptions<
@@ -64,5 +64,3 @@ const useGetSelfEventRegistrationCheckout = (
     }
   );
 };
-
-export default useGetSelfEventRegistrationCheckout;

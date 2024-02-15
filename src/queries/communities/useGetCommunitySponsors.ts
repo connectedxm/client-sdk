@@ -68,7 +68,10 @@ export const GetCommunitySponsors = async ({
 
 export const useGetCommunitySponsors = (
   communityId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunitySponsors>>
   > = {}

@@ -32,8 +32,11 @@ export const GetSelfInterests = async ({
   return data;
 };
 
-const useGetSelfInterests = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfInterests = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfInterests>>
   > = {}
@@ -52,5 +55,3 @@ const useGetSelfInterests = (
     }
   );
 };
-
-export default useGetSelfInterests;

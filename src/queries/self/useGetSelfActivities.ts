@@ -46,8 +46,11 @@ export const GetSelfActivities = async ({
   return data;
 };
 
-const useGetSelfActivities = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSelfActivities = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfActivities>>
   > = {}
@@ -66,5 +69,3 @@ const useGetSelfActivities = (
     }
   );
 };
-
-export default useGetSelfActivities;

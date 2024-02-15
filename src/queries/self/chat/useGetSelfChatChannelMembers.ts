@@ -58,9 +58,12 @@ export const GetSelfChatChannelMembers = async ({
   return data;
 };
 
-const useGetSelfChatChannelMembers = (
+export const useGetSelfChatChannelMembers = (
   channelId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfChatChannelMembers>>
   > = {}
@@ -79,5 +82,3 @@ const useGetSelfChatChannelMembers = (
     }
   );
 };
-
-export default useGetSelfChatChannelMembers;

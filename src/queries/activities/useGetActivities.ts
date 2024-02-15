@@ -62,7 +62,10 @@ export const GetActivities = async ({
 };
 
 export const useGetActivities = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetActivities>>> = {}
 ) => {
   const { token } = useConnectedXM();

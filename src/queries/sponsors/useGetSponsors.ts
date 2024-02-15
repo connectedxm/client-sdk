@@ -45,8 +45,11 @@ export const GetSponsors = async ({
   return data;
 };
 
-const useGetSponsors = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSponsors = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSponsors>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSponsors>>>(
@@ -56,5 +59,3 @@ const useGetSponsors = (
     options
   );
 };
-
-export default useGetSponsors;

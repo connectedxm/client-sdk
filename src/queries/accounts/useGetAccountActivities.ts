@@ -68,7 +68,10 @@ export const GetAccountActivities = async ({
 
 export const useGetAccountActivities = (
   accountId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetAccountActivities>>
   > = {}

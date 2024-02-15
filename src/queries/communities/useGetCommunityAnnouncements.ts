@@ -61,7 +61,10 @@ export const GetCommunityAnnouncements = async ({
 
 export const useGetCommunityAnnouncements = (
   communityId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityAnnouncements>>
   > = {}

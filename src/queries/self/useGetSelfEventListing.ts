@@ -42,7 +42,7 @@ export const GetSelfEventListing = async ({
   return data;
 };
 
-const useGetSelfEventListing = (
+export const useGetSelfEventListing = (
   eventId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
 ) => {
@@ -57,5 +57,3 @@ const useGetSelfEventListing = (
     }
   );
 };
-
-export default useGetSelfEventListing;

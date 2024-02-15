@@ -47,10 +47,13 @@ export const GetSelfEventListingRegistrations = async ({
   return data;
 };
 
-const useGetSelfEventListingsRegistrations = (
+export const useGetSelfEventListingsRegistrations = (
   eventId: string,
   checkedIn: boolean = false,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   > = {}
@@ -70,5 +73,3 @@ const useGetSelfEventListingsRegistrations = (
     }
   );
 };
-
-export default useGetSelfEventListingsRegistrations;

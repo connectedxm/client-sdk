@@ -52,9 +52,12 @@ export const GetEventTickets = async ({
   return data;
 };
 
-const useGetEventTickets = (
+export const useGetEventTickets = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventTickets>>
   > = {}
@@ -69,5 +72,3 @@ const useGetEventTickets = (
     }
   );
 };
-
-export default useGetEventTickets;

@@ -66,9 +66,12 @@ export const GetEventSessions = async ({
   return data;
 };
 
-const useGetEventSessions = (
+export const useGetEventSessions = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventSessions>>
   > = {}
@@ -85,5 +88,3 @@ const useGetEventSessions = (
     }
   );
 };
-
-export default useGetEventSessions;

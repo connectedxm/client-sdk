@@ -66,9 +66,12 @@ export const GetEventSpeakers = async ({
   return data;
 };
 
-const useGetEventSpeakers = (
+export const useGetEventSpeakers = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventSpeakers>>
   > = {}
@@ -85,5 +88,3 @@ const useGetEventSpeakers = (
     }
   );
 };
-
-export default useGetEventSpeakers;

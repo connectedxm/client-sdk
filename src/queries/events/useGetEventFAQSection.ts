@@ -44,7 +44,7 @@ export const GetEventFAQSection = async ({
   return data;
 };
 
-const useGetEventFAQSection = (
+export const useGetEventFAQSection = (
   eventId: string,
   sectionId: string,
   options: SingleQueryOptions<ReturnType<typeof GetEventFAQSection>> = {}
@@ -58,5 +58,3 @@ const useGetEventFAQSection = (
     }
   );
 };
-
-export default useGetEventFAQSection;

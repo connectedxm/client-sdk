@@ -66,9 +66,12 @@ export const GetLevelSponsors = async ({
   return data;
 };
 
-const useGetLevelSponsors = (
+export const useGetLevelSponsors = (
   levelId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetLevelSponsors>>
   > = {}
@@ -85,5 +88,3 @@ const useGetLevelSponsors = (
     }
   );
 };
-
-export default useGetLevelSponsors;

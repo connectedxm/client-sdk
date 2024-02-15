@@ -42,10 +42,13 @@ export const GetEventQuestionSearchValues = async ({
   return data;
 };
 
-const useGetEventQuestionSearchValues = (
+export const useGetEventQuestionSearchValues = (
   eventId: string,
   questionId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventQuestionSearchValues>>
   > = {}
@@ -67,5 +70,3 @@ const useGetEventQuestionSearchValues = (
     }
   );
 };
-
-export default useGetEventQuestionSearchValues;

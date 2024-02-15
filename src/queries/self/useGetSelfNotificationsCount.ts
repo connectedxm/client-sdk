@@ -30,7 +30,7 @@ export const GetSelfNewNotificationsCount = async ({
   return data;
 };
 
-const useGetSelfNewNotificationsCount = (
+export const useGetSelfNewNotificationsCount = (
   filters: string = "",
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfNewNotificationsCount>
@@ -48,5 +48,3 @@ const useGetSelfNewNotificationsCount = (
     }
   );
 };
-
-export default useGetSelfNewNotificationsCount;

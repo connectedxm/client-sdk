@@ -57,7 +57,7 @@ export const GetSelfEventRegistration = async ({
   return data;
 };
 
-const useGetSelfEventRegistration = (
+export const useGetSelfEventRegistration = (
   eventId: string,
   ticket?: string,
   quantity?: number,
@@ -85,5 +85,3 @@ const useGetSelfEventRegistration = (
     }
   );
 };
-
-export default useGetSelfEventRegistration;

@@ -39,7 +39,7 @@ export const GetSponsor = async ({
   return data;
 };
 
-const useGetSponsor = (
+export const useGetSponsor = (
   accountId: string,
 
   options: SingleQueryOptions<ReturnType<typeof GetSponsor>> = {}
@@ -53,5 +53,3 @@ const useGetSponsor = (
     }
   );
 };
-
-export default useGetSponsor;

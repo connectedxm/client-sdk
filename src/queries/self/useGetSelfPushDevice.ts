@@ -41,7 +41,7 @@ export const GetSelfPushDevice = async ({
   return data;
 };
 
-const useGetSelfPushDevice = (
+export const useGetSelfPushDevice = (
   pushDeviceId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfPushDevice>> = {}
 ) => {
@@ -56,5 +56,3 @@ const useGetSelfPushDevice = (
     }
   );
 };
-
-export default useGetSelfPushDevice;

@@ -51,9 +51,12 @@ export const GetSelfEventSessions = async ({
   return data;
 };
 
-const useGetSelfEventSessions = (
+export const useGetSelfEventSessions = (
   eventId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfEventSessions>>
   > = {}
@@ -73,5 +76,3 @@ const useGetSelfEventSessions = (
     }
   );
 };
-
-export default useGetSelfEventSessions;

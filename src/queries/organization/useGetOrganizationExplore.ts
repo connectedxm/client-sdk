@@ -33,7 +33,7 @@ export const GetOrganizationExplore = async ({
   return data;
 };
 
-const useGetOrganizationExplore = (
+export const useGetOrganizationExplore = (
   options: SingleQueryOptions<ReturnType<typeof GetOrganizationExplore>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganizationExplore>>(
@@ -42,5 +42,3 @@ const useGetOrganizationExplore = (
     options
   );
 };
-
-export default useGetOrganizationExplore;

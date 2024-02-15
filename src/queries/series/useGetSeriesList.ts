@@ -61,8 +61,11 @@ export const GetSeriesList = async ({
   return data;
 };
 
-const useGetSeriesList = (
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+export const useGetSeriesList = (
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSeriesList>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesList>>>(
@@ -72,5 +75,3 @@ const useGetSeriesList = (
     options
   );
 };
-
-export default useGetSeriesList;

@@ -76,10 +76,13 @@ export const GetEventFaqs = async ({
   return data;
 };
 
-const useGetEventFaqs = (
+export const useGetEventFaqs = (
   eventId: string,
   sectionId: string,
-  params: Omit<InfiniteQueryParams, "pageParam" | "queryClient" | "clientApi">,
+  params: Omit<
+    InfiniteQueryParams,
+    "pageParam" | "queryClient" | "clientApi"
+  > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventFaqs>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventFaqs>>>(
@@ -93,5 +96,3 @@ const useGetEventFaqs = (
     }
   );
 };
-
-export default useGetEventFaqs;

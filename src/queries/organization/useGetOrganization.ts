@@ -15,7 +15,7 @@ export const GetOrganization = async ({
   return data;
 };
 
-const useGetOrganization = (
+export const useGetOrganization = (
   options: SingleQueryOptions<ReturnType<typeof GetOrganization>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetOrganization>>(
@@ -24,5 +24,3 @@ const useGetOrganization = (
     options
   );
 };
-
-export default useGetOrganization;

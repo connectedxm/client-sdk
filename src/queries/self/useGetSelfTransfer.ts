@@ -24,7 +24,7 @@ export const GetSelfTransfer = async ({
   return data;
 };
 
-const useGetSelfTransfer = (
+export const useGetSelfTransfer = (
   transferId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfTransfer>> = {}
 ) => {
@@ -39,5 +39,3 @@ const useGetSelfTransfer = (
     }
   );
 };
-
-export default useGetSelfTransfer;
