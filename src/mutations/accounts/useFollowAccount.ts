@@ -8,7 +8,7 @@ import {
 } from "@src/queries";
 import { Account, ConnectedXMResponse } from "@src/interfaces";
 
-interface FollowAccountParams extends MutationParams {
+export interface FollowAccountParams extends MutationParams {
   accountId: string;
 }
 
