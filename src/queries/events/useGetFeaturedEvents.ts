@@ -8,10 +8,10 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
 
-export const EVENTS_FEATURED_QUERY_KEY = () => [
+export const EVENTS_FEATURED_QUERY_KEY = (): QueryKey => [
   ...EVENTS_QUERY_KEY(),
   "FEATURED",
 ];

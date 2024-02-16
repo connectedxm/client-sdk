@@ -6,13 +6,13 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const ACCOUNT_FOLLOWERS_QUERY_KEY = (accountId: string) => [
+export const ACCOUNT_FOLLOWERS_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNT_QUERY_KEY(accountId),
   "FOLLOWERS",
 ];

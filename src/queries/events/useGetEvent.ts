@@ -7,10 +7,10 @@ import {
 
 import type { Event } from "@interfaces";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const EVENT_QUERY_KEY = (eventId: string) => [
+export const EVENT_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENTS_QUERY_KEY(),
   eventId,
 ];

@@ -6,11 +6,11 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 
-export const SERIES_LIST_QUERY_KEY = () => ["SERIES"];
+export const SERIES_LIST_QUERY_KEY = (): QueryKey => ["SERIES"];
 
 export const SET_SERIES_LIST_QUERY_DATA = (
   client: QueryClient,

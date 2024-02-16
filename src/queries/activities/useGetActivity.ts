@@ -8,10 +8,10 @@ import {
 import type { Activity } from "@interfaces";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const ACTIVITY_QUERY_KEY = (activityId: string) => [
+export const ACTIVITY_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITIES_QUERY_KEY(),
   activityId,
 ];

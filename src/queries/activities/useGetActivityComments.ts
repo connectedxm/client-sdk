@@ -7,12 +7,12 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITY_QUERY_KEY } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const ACTIVITY_COMMENTS_QUERY_KEY = (activityId: string) => [
+export const ACTIVITY_COMMENTS_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITY_QUERY_KEY(activityId),
   "ACTIVITY_COMMENTS",
 ];

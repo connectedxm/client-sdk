@@ -11,8 +11,9 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
+import { QueryKey } from "@tanstack/react-query";
 
-export const ORGANIZATION_EXPLORE_QUERY_KEY = () => [
+export const ORGANIZATION_EXPLORE_QUERY_KEY = (): QueryKey => [
   ...ORGANIZATION_QUERY_KEY(),
   "ORGANIZATION",
 ];

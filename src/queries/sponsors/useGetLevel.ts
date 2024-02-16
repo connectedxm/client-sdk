@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
 import { LEVELS_QUERY_KEY } from "./useGetLevels";
 import useConnectedSingleQuery, {
@@ -7,7 +7,7 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 
-export const LEVEL_QUERY_KEY = (levelId: string) => [
+export const LEVEL_QUERY_KEY = (levelId: string): QueryKey => [
   ...LEVELS_QUERY_KEY(),
   levelId,
 ];

@@ -7,11 +7,11 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const COMMUNITIES_QUERY_KEY = () => ["COMMUNITIES"];
+export const COMMUNITIES_QUERY_KEY = (): QueryKey => ["COMMUNITIES"];
 
 export const SET_COMMUNITIES_QUERY_DATA = (
   client: QueryClient,

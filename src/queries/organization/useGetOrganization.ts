@@ -3,8 +3,9 @@ import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
+import { QueryKey } from "@tanstack/react-query";
 
-export const ORGANIZATION_QUERY_KEY = () => ["ORGANIZATION"];
+export const ORGANIZATION_QUERY_KEY = (): QueryKey => ["ORGANIZATION"];
 
 interface GetOrganizationParams extends SingleQueryParams {}
 

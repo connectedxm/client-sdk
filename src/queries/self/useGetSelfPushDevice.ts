@@ -7,9 +7,9 @@ import {
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_PUSH_DEVICES_QUERY_KEY } from "./useGetSelfPushDevices";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const SELF_PUSH_DEVICE_QUERY_KEY = (pushDeviceId: string) => [
+export const SELF_PUSH_DEVICE_QUERY_KEY = (pushDeviceId: string): QueryKey => [
   ...SELF_PUSH_DEVICES_QUERY_KEY(),
   pushDeviceId,
 ];

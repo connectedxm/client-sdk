@@ -7,15 +7,14 @@ import {
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CONTENT_QUERY_KEY } from "./useGetContent";
 import { CONTENT_TYPE_QUERY_KEY } from "./useGetContentType";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const CONTENT_TYPE_CONTENTS_QUERY_KEY = (contentTypeId: string) => [
-  ...CONTENT_TYPE_QUERY_KEY(contentTypeId),
-  "CONTENTS",
-];
+export const CONTENT_TYPE_CONTENTS_QUERY_KEY = (
+  contentTypeId: string
+): QueryKey => [...CONTENT_TYPE_QUERY_KEY(contentTypeId), "CONTENTS"];
 
 export const SET_CONTENT_TYPE_CONTENTS_QUERY_DATA = (
   client: QueryClient,

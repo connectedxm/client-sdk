@@ -6,7 +6,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Event } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
@@ -15,7 +15,7 @@ import { ConnectedXMResponse } from "@interfaces";
 export const COMMUNITY_EVENTS_QUERY_KEY = (
   communityId: string,
   past?: boolean
-) => [
+): QueryKey => [
   ...COMMUNITY_QUERY_KEY(communityId),
   "EVENTS",
   past ? "PAST" : "UPCOMING",

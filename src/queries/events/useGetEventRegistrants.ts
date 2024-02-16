@@ -7,14 +7,14 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetEventSessions } from "./useGetEventSessions";
 import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string) => [
+export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
   "REGISTRANTS",
 ];

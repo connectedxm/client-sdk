@@ -6,12 +6,12 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { CommunityMembership } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const COMMUNITY_MEMBERS_QUERY_KEY = (communityId: string) => [
+export const COMMUNITY_MEMBERS_QUERY_KEY = (communityId: string): QueryKey => [
   ...COMMUNITY_QUERY_KEY(communityId),
   "MEMBERS",
 ];

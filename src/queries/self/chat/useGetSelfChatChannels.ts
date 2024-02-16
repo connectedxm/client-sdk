@@ -6,12 +6,12 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "@src/queries/useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_CHAT_CHANNEL_QUERY_KEY } from "./useGetSelfChatChannel";
 
-export const SELF_CHAT_CHANNELS_QUERY_KEY = () => ["CHANNELS"];
+export const SELF_CHAT_CHANNELS_QUERY_KEY = (): QueryKey => ["CHANNELS"];
 
 export const SET_SELF_CHAT_CHANNELS_QUERY_DATA = (
   client: QueryClient,

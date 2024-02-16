@@ -6,13 +6,13 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_PAGE_QUERY_KEY } from "./useGetEventPage";
 
-export const EVENT_PAGES_QUERY_KEY = (eventId: string) => [
+export const EVENT_PAGES_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
   "PAGES",
 ];

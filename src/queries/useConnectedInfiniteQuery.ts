@@ -3,6 +3,7 @@ import {
   DefaultError,
   InfiniteData,
   QueryClient,
+  QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
   useQueryClient,
@@ -29,7 +30,7 @@ export interface InfiniteQueryOptions<
       DefaultError,
       InfiniteData<TQueryData, number>,
       TQueryData,
-      string[],
+      QueryKey,
       number
     >,
     "queryKey" | "queryFn" | "getNextPageParam" | "initialPageParam"
@@ -54,7 +55,7 @@ export const setFirstPageData = <TData>(
 export const useConnectedInfiniteQuery = <
   TQueryData extends ConnectedXMResponse<any> = ConnectedXMResponse<unknown>
 >(
-  queryKeys: string[],
+  queryKeys: QueryKey,
   queryFn: (params: InfiniteQueryParams) => Promise<TQueryData>,
   params: Omit<
     InfiniteQueryParams,
@@ -79,7 +80,7 @@ export const useConnectedInfiniteQuery = <
   };
 
   // prettier-ignore
-  return useInfiniteQuery<TQueryData,DefaultError,InfiniteData<TQueryData, number>,string[],number>({
+  return useInfiniteQuery<TQueryData,DefaultError,InfiniteData<TQueryData, number>,QueryKey,number>({
     staleTime: 60 * 1000, // 60 Seconds
     retry: options?.retry || 3,
     ...options,

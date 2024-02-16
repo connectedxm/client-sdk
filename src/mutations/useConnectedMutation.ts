@@ -1,55 +1,42 @@
-import { ConnectedXMResponse } from "@context/api/ConnectedXM";
 import {
   MutationFunction,
+  QueryClient,
   useMutation,
   UseMutationOptions,
+  useQueryClient,
 } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { Alert } from "react-native";
+import { AxiosError, AxiosInstance } from "axios";
+import { ConnectedXMResponse, useClientAPI } from "..";
 
-export interface MutationParams {}
+export interface MutationParams {
+  queryClient: QueryClient;
+  clientApi: AxiosInstance;
+}
 
-export const useConnectedMutation = <TVariables = unknown>(
-  mutation: MutationFunction<ConnectedXMResponse<any>, TVariables>,
-  options?: UseMutationOptions<
-    ConnectedXMResponse<any>,
-    Error | AxiosError<ConnectedXMResponse<any>>,
-    TVariables
-  >,
-  _loadingText?: string,
-  noToast: boolean = false
+export interface MutationOptions<TResponseData, TMutationParams>
+  extends UseMutationOptions<
+    TResponseData,
+    AxiosError<TResponseData> | Error,
+    TMutationParams
+  > {}
+
+export const useConnectedMutation = <
+  TMutationParams extends Omit<MutationParams, "queryClient" | "clientApi">,
+  TResponseData extends ConnectedXMResponse<any>
+>(
+  mutation: MutationFunction<TResponseData, TMutationParams>,
+  options?: MutationOptions<TResponseData, TMutationParams>
 ) => {
+  const queryClient = useQueryClient();
+  const clientApi = useClientAPI();
+
   return useMutation<
-    ConnectedXMResponse<any>,
-    AxiosError<ConnectedXMResponse<any>> | Error,
-    TVariables
-  >(mutation, {
+    TResponseData,
+    AxiosError<TResponseData> | Error,
+    TMutationParams
+  >({
+    mutationFn: (params) => mutation({ queryClient, clientApi, ...params }),
     ...options,
-    onMutate: (variables): void => {
-      options?.onMutate && options.onMutate(variables);
-    },
-    onSuccess: (data, variables, context) => {
-      options?.onSuccess && options.onSuccess(data, variables, context);
-    },
-    onError: (error: any, variables, context) => {
-      const message: string = error?.response?.data?.message || error?.message;
-      if (!noToast) Alert.alert(message);
-      options?.onError && options?.onError(error, variables, context);
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.request?.responseURL);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error", error.message);
-      }
-    },
   });
 };
 

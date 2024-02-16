@@ -7,13 +7,13 @@ import {
 
 import type { EventPage } from "@interfaces";
 import { EVENT_PAGES_QUERY_KEY } from "./useGetEventPages";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const EVENT_PAGE_QUERY_KEY = (eventId: string, pageId: string) => [
-  ...EVENT_PAGES_QUERY_KEY(eventId),
-  pageId,
-];
+export const EVENT_PAGE_QUERY_KEY = (
+  eventId: string,
+  pageId: string
+): QueryKey => [...EVENT_PAGES_QUERY_KEY(eventId), pageId];
 
 export const SET_EVENT_PAGE_QUERY_DATA = (
   client: QueryClient,

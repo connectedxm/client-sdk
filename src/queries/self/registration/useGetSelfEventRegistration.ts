@@ -5,15 +5,13 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../../useConnectedSingleQuery";
 import { SELF_QUERY_KEY } from "../useGetSelf";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_EVENT_REGISTRATION_QUERY_KEY = (eventId: string) => [
-  ...SELF_QUERY_KEY(),
-  "EVENT_REGISTRATION",
-  eventId,
-];
+export const SELF_EVENT_REGISTRATION_QUERY_KEY = (
+  eventId: string
+): QueryKey => [...SELF_QUERY_KEY(), "EVENT_REGISTRATION", eventId];
 
 export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
   client: QueryClient,

@@ -7,13 +7,13 @@ import {
 
 import type { FaqSection } from "@interfaces";
 import { EVENT_FAQ_SECTIONS_QUERY_KEY } from "./useGetEventFAQSections";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
 export const EVENT_FAQ_SECTION_QUERY_KEY = (
   eventId: string,
   sectionId: string
-) => [...EVENT_FAQ_SECTIONS_QUERY_KEY(eventId), sectionId];
+): QueryKey => [...EVENT_FAQ_SECTIONS_QUERY_KEY(eventId), sectionId];
 
 export const SET_EVENT_FAQ_SECTION_QUERY_DATA = (
   client: QueryClient,

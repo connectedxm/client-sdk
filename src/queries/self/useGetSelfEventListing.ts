@@ -7,10 +7,10 @@ import {
 
 import type { ConnectedXMResponse, EventListing } from "@interfaces";
 import { SELF_EVENT_LISTINGS_QUERY_KEY } from "./useGetSelfEventListings";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_EVENT_LISTING_QUERY_KEY = (eventId: string) => [
+export const SELF_EVENT_LISTING_QUERY_KEY = (eventId: string): QueryKey => [
   ...SELF_EVENT_LISTINGS_QUERY_KEY(false),
   eventId,
 ];

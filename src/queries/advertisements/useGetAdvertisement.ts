@@ -6,10 +6,10 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { Advertisement } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const ADVERTISEMENT_QUERY_KEY = (position: string) => [
+export const ADVERTISEMENT_QUERY_KEY = (position: string): QueryKey => [
   "ADVERTISEMENT",
   position,
 ];

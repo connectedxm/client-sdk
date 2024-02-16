@@ -5,9 +5,9 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { SPONSORS_QUERY_KEY } from "./useGetSponsors";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const SPONSOR_QUERY_KEY = (sponsorId: string) => [
+export const SPONSOR_QUERY_KEY = (sponsorId: string): QueryKey => [
   ...SPONSORS_QUERY_KEY(),
   sponsorId,
 ];

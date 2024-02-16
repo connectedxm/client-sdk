@@ -7,9 +7,9 @@ import {
 
 import type { ConnectedXMResponse, Series } from "@interfaces";
 import { SERIES_LIST_QUERY_KEY } from "./useGetSeriesList";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const SERIES_QUERY_KEY = (seriesId: string) => [
+export const SERIES_QUERY_KEY = (seriesId: string): QueryKey => [
   ...SERIES_LIST_QUERY_KEY(),
   seriesId,
 ];

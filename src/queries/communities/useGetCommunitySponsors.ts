@@ -6,13 +6,13 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { SPONSOR_QUERY_KEY } from "../sponsors/useGetSponsor";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const COMMUNITY_SPONSORS_QUERY_KEY = (communityId: string) => [
+export const COMMUNITY_SPONSORS_QUERY_KEY = (communityId: string): QueryKey => [
   ...COMMUNITY_QUERY_KEY(communityId),
   "SPONSORS",
 ];

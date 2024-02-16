@@ -7,12 +7,12 @@ import {
 
 import type { ConnectedXMResponse, Speaker } from "@interfaces";
 import { EVENT_SPEAKERS_QUERY_KEY } from "./useGetEventSpeakers";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const EVENT_SPEAKER_QUERY_KEY = (eventId: string, speakerId: string) => [
-  ...EVENT_SPEAKERS_QUERY_KEY(eventId),
-  speakerId,
-];
+export const EVENT_SPEAKER_QUERY_KEY = (
+  eventId: string,
+  speakerId: string
+): QueryKey => [...EVENT_SPEAKERS_QUERY_KEY(eventId), speakerId];
 
 export const SET_EVENT_SPEAKER_QUERY_DATA = (
   client: QueryClient,

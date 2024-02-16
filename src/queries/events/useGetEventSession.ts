@@ -7,12 +7,12 @@ import {
 
 import type { ConnectedXMResponse, Session } from "@interfaces";
 import { EVENT_SESSIONS_QUERY_KEY } from "./useGetEventSessions";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const EVENT_SESSION_QUERY_KEY = (eventId: string, sessionId: string) => [
-  ...EVENT_SESSIONS_QUERY_KEY(eventId),
-  sessionId,
-];
+export const EVENT_SESSION_QUERY_KEY = (
+  eventId: string,
+  sessionId: string
+): QueryKey => [...EVENT_SESSIONS_QUERY_KEY(eventId), sessionId];
 
 export const SET_EVENT_SESSION_QUERY_DATA = (
   client: QueryClient,

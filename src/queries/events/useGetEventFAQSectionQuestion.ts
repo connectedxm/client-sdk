@@ -6,7 +6,7 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { Faq } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY } from "./useGetEventFAQSectionQuestions";
 import { ConnectedXMResponse } from "@interfaces";
 
@@ -14,7 +14,10 @@ export const EVENT_FAQ_SECTION_QUESTION_QUERY_KEY = (
   eventId: string,
   sectionId: string,
   questionId: string
-) => [...EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY(eventId, sectionId), questionId];
+): QueryKey => [
+  ...EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY(eventId, sectionId),
+  questionId,
+];
 
 export const SET_EVENT_FAQ_SECTION_QUESTION_QUERY_DATA = (
   client: QueryClient,

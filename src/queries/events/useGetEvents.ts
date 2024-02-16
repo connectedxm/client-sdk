@@ -6,12 +6,12 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 
-export const EVENTS_QUERY_KEY = (past?: boolean) => {
+export const EVENTS_QUERY_KEY = (past?: boolean): QueryKey => {
   const keys = ["EVENTS"];
   if (typeof past !== "undefined") {
     keys.push(past ? "PAST" : "UPCOMING");

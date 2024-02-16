@@ -6,12 +6,11 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import { SELF_QUERY_KEY } from "./useGetSelf";
+import { QueryKey } from "@tanstack/react-query";
 
-export const SELF_ANNOUNCEMENT_QUERY_KEY = (announcementId: string) => [
-  ...SELF_QUERY_KEY(),
-  "ANNOUNCEMENT",
-  announcementId,
-];
+export const SELF_ANNOUNCEMENT_QUERY_KEY = (
+  announcementId: string
+): QueryKey => [...SELF_QUERY_KEY(), "ANNOUNCEMENT", announcementId];
 
 interface GetSelfAnnouncementProps extends SingleQueryParams {
   announcementId: string;

@@ -1,6 +1,6 @@
 import { ConnectedXMResponse } from "@interfaces";
 import { GetBaseSingleQueryKeys } from "@src/queries/useConnectedSingleQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
 interface ItemWithId {
   id: string;
@@ -14,7 +14,7 @@ interface ItemWithId {
 export const CacheIndividualQueries = <TData extends ItemWithId>(
   page: ConnectedXMResponse<TData[]>,
   queryClient: QueryClient,
-  queryKeyFn: (id: string) => string[],
+  queryKeyFn: (id: string) => QueryKey,
   locale: string = "en",
   itemMap?: (item: TData) => TData
 ) => {

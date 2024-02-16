@@ -7,13 +7,13 @@ import {
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { CONTENT_QUERY_KEY } from "./useGetContent";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const CONTENT_ACTIVITIES_QUERY_KEY = (contentId: string) => [
+export const CONTENT_ACTIVITIES_QUERY_KEY = (contentId: string): QueryKey => [
   "ACTIVITIES",
   ...CONTENT_QUERY_KEY(contentId),
 ];

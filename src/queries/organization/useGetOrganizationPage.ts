@@ -7,9 +7,9 @@ import {
 
 import type { ConnectedXMResponse, Page } from "@interfaces";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const ORGANIZATION_PAGE_QUERY_KEY = (type: PageType) => [
+export const ORGANIZATION_PAGE_QUERY_KEY = (type: PageType): QueryKey => [
   ...ORGANIZATION_QUERY_KEY(),
   "PAGE",
   type,

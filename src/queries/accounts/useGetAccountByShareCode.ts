@@ -7,14 +7,13 @@ import {
 
 import { AccountShare } from "@interfaces";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { useConnectedXM } from "@src/hooks";
 
-export const ACCOUNT_BY_SHARE_CODE_QUERY_KEY = (shareCode: string) => [
-  "ACCOUNT_BY_SHARE_CODE",
-  shareCode,
-];
+export const ACCOUNT_BY_SHARE_CODE_QUERY_KEY = (
+  shareCode: string
+): QueryKey => ["ACCOUNT_BY_SHARE_CODE", shareCode];
 
 export const SET_ACCOUNT_BY_SHARE_CODE_QUERY_DATA = (
   client: QueryClient,

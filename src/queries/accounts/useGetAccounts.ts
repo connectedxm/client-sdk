@@ -6,13 +6,13 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const ACCOUNTS_QUERY_KEY = () => ["ACCOUNTS"];
+export const ACCOUNTS_QUERY_KEY = (): QueryKey => ["ACCOUNTS"];
 
 export const SET_ACCOUNTS_QUERY_DATA = (
   client: QueryClient,

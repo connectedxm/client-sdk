@@ -5,10 +5,10 @@ import useConnectedSingleQuery, {
 } from "../useConnectedSingleQuery";
 import { ContentType } from "@interfaces";
 import { CONTENT_TYPES_QUERY_KEY } from "./useGetContentTypes";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const CONTENT_TYPE_QUERY_KEY = (contentTypeId: string) => [
+export const CONTENT_TYPE_QUERY_KEY = (contentTypeId: string): QueryKey => [
   ...CONTENT_TYPES_QUERY_KEY(),
   contentTypeId,
 ];

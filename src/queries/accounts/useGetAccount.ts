@@ -7,10 +7,10 @@ import {
 
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks";
 
-export const ACCOUNT_QUERY_KEY = (accountId: string) => [
+export const ACCOUNT_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNTS_QUERY_KEY(),
   accountId,
 ];

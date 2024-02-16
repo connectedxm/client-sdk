@@ -5,12 +5,12 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
 
-export const LEVELS_QUERY_KEY = () => ["LEVELS"];
+export const LEVELS_QUERY_KEY = (): QueryKey => ["LEVELS"];
 
 export const SET_LEVELS_QUERY_DATA = (
   client: QueryClient,

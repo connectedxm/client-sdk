@@ -6,10 +6,10 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { ConnectedXMResponse, Self } from "@interfaces";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_QUERY_KEY = () => ["SELF"];
+export const SELF_QUERY_KEY = (): QueryKey => ["SELF"];
 
 export const SET_SELF_QUERY_DATA = (
   client: QueryClient,

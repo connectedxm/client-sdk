@@ -7,10 +7,10 @@ import {
 
 import type { Community } from "@interfaces";
 import { COMMUNITIES_QUERY_KEY } from "./useGetCommunities";
-import { QueryClient, SetDataOptions } from "@tanstack/react-query";
+import { QueryClient, SetDataOptions, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const COMMUNITY_QUERY_KEY = (communityId: string) => [
+export const COMMUNITY_QUERY_KEY = (communityId: string): QueryKey => [
   ...COMMUNITIES_QUERY_KEY(),
   communityId,
 ];

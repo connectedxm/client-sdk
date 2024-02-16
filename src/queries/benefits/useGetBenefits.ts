@@ -7,10 +7,10 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const BENEFITS_QUERY_KEY = () => ["BENEFITS"];
+export const BENEFITS_QUERY_KEY = (): QueryKey => ["BENEFITS"];
 
 export const SET_BENEFITS_QUERY_DATA = (
   client: QueryClient,

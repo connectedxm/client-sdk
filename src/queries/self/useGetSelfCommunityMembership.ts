@@ -7,13 +7,12 @@ import {
 
 import { CommunityMembership, ConnectedXMResponse } from "@interfaces";
 import { SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY } from "./useGetSelfCommunityMemberships";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY = (communityId: string) => [
-  ...SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
-  communityId,
-];
+export const SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY = (
+  communityId: string
+): QueryKey => [...SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(), communityId];
 
 export const SET_SELF_COMMUNITY_MEMBERSHIP_QUERY_DATA = (
   client: QueryClient,

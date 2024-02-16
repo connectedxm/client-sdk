@@ -8,13 +8,12 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const COMMUNITY_ANNOUNCEMENTS_QUERY_KEY = (communityId: string) => [
-  ...COMMUNITY_QUERY_KEY(communityId),
-  "ANNOUNCEMENTS",
-];
+export const COMMUNITY_ANNOUNCEMENTS_QUERY_KEY = (
+  communityId: string
+): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "ANNOUNCEMENTS"];
 
 export const SET_COMMUNITY_ANNOUNCEMENTS_QUERY_DATA = (
   client: QueryClient,

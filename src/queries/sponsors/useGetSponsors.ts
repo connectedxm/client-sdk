@@ -6,9 +6,9 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
-export const SPONSORS_QUERY_KEY = () => ["SPONSORS"];
+export const SPONSORS_QUERY_KEY = (): QueryKey => ["SPONSORS"];
 
 export const SET_SPONSORS_QUERY_DATA = (
   client: QueryClient,

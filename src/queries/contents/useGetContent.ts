@@ -5,10 +5,10 @@ import useConnectedSingleQuery, {
 } from "../useConnectedSingleQuery";
 import { Content } from "@interfaces";
 import { CONTENTS_QUERY_KEY } from "./useGetContents";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const CONTENT_QUERY_KEY = (contentId: string) => [
+export const CONTENT_QUERY_KEY = (contentId: string): QueryKey => [
   ...CONTENTS_QUERY_KEY(),
   contentId,
 ];

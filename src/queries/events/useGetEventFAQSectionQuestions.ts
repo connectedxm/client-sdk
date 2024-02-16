@@ -7,7 +7,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_FAQ_SECTION_QUESTION_QUERY_KEY } from "./useGetEventFAQSectionQuestion";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
@@ -15,7 +15,7 @@ import { ConnectedXMResponse } from "@interfaces";
 export const EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY = (
   eventId: string,
   sectionId: string
-) => [
+): QueryKey => [
   ...EVENT_FAQ_SECTION_QUERY_KEY(eventId, sectionId),
   "FAQ_SECTION_QUESTIONS",
 ];

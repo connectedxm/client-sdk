@@ -9,8 +9,9 @@ import type { ChatChannelMember, ConnectedXMResponse } from "@interfaces";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { QueryClient, Updater } from "@tanstack/react-query";
 import { SELF_CHAT_CHANNELS_QUERY_KEY } from "./useGetSelfChatChannels";
+import { QueryKey } from "@tanstack/react-query";
 
-export const SELF_CHAT_CHANNEL_QUERY_KEY = (channelId: string) => [
+export const SELF_CHAT_CHANNEL_QUERY_KEY = (channelId: string): QueryKey => [
   ...SELF_CHAT_CHANNELS_QUERY_KEY(),
   channelId,
 ];

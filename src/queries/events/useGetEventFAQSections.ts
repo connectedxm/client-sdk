@@ -6,13 +6,13 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
 
-export const EVENT_FAQ_SECTIONS_QUERY_KEY = (eventId: string) => [
+export const EVENT_FAQ_SECTIONS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
   "FAQ_SECTIONS",
 ];
