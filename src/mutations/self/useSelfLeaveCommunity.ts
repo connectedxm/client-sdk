@@ -11,8 +11,6 @@ import {
   SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
 } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
 export interface SelfLeaveCommunityParams extends MutationParams {
   communityId: string;
 }
@@ -45,6 +43,7 @@ export const SelfLeaveCommunity = async ({
 };
 
 export const useSelfLeaveCommunity = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof SelfLeaveCommunity>>,
     SelfLeaveCommunityParams
@@ -53,5 +52,5 @@ export const useSelfLeaveCommunity = (
   return useConnectedMutation<
     SelfLeaveCommunityParams,
     Awaited<ReturnType<typeof SelfLeaveCommunity>>
-  >((params) => SelfLeaveCommunity({ ...params }), options);
+  >(SelfLeaveCommunity, params, options);
 };
