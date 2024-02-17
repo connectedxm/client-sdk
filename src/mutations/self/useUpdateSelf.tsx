@@ -49,10 +49,13 @@ export const UpdateSelf = async ({
 };
 
 export const useUpdateSelf = (
-  options: MutationOptions<Awaited<ConnectedXMResponse<Self>>, UpdateSelfParams>
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateSelf>>,
+    UpdateSelfParams
+  >
 ) => {
   return useConnectedMutation<
     UpdateSelfParams,
-    Awaited<ConnectedXMResponse<Self>>
+    Awaited<ReturnType<typeof UpdateSelf>>
   >((params) => UpdateSelf({ ...params }), options);
 };

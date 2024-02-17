@@ -1,56 +1,73 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { CommunityMembership } from "@context/interfaces";
-import {
-  QUERY_KEY as COMMUNITIES,
-  QUERY_KEY as COMMUNITY,
-} from "@context/queries/communities/useGetCommunity";
-import { QUERY_KEY as COMMUNITY_MEMBERS } from "@context/queries/communities/useGetCommunityMembers";
-import {
-  QUERY_KEY as COMMUNITY_MEMBERSHIP,
-  QUERY_KEY as SELF_COMMUNITY,
-} from "@context/queries/self/useGetSelfCommunityMembership";
-import { QUERY_KEY as SELF_COMMUNITIES } from "@context/queries/self/useGetSelfCommunityMemberships";
-import { useQueryClient } from "@tanstack/react-query";
+import { CommunityMembership, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import {
+  COMMUNITY_MEMBERS_QUERY_KEY,
+  COMMUNITY_QUERY_KEY,
+  SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY,
+  SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
+  SET_SELF_COMMUNITY_MEMBERSHIP_QUERY_DATA,
+} from "@src/queries";
 
-interface SelfJoinCommunityParams extends MutationParams {
+export interface SelfJoinCommunityParams extends MutationParams {
   communityId: string;
 }
 
 export const SelfJoinCommunity = async ({
   communityId,
-}: SelfJoinCommunityParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(`/self/communities/${communityId}`);
+  clientApi,
+  queryClient,
+}: SelfJoinCommunityParams): Promise<
+  ConnectedXMResponse<CommunityMembership>
+> => {
+  const { data } = await clientApi.post<
+    ConnectedXMResponse<CommunityMembership>
+  >(`/self/communities/${communityId}`);
+
+  if (queryClient && data.status === "ok") {
+    SET_SELF_COMMUNITY_MEMBERSHIP_QUERY_DATA(queryClient, [communityId], data);
+    queryClient.setQueryData(
+      COMMUNITY_QUERY_KEY(communityId),
+
+      (response: any) => {
+        if (!response.data) return response;
+        return {
+          ...response,
+          data: {
+            ...response.data,
+            members: [{}],
+          },
+        };
+      }
+    );
+    queryClient.invalidateQueries({
+      queryKey: COMMUNITY_MEMBERS_QUERY_KEY(communityId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: COMMUNITY_QUERY_KEY(communityId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
+    });
+  }
+
   return data;
 };
 
-export const useSelfJoinCommunity = (communityId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<any>(
-    (params: any) => SelfJoinCommunity({ communityId, ...params }),
-    {
-      onSuccess: (response: ConnectedXMResponse<CommunityMembership>) => {
-        queryClient.setQueryData([COMMUNITY_MEMBERSHIP, communityId], response);
-        queryClient.setQueryData([COMMUNITY, communityId], (response: any) => {
-          if (!response.data) return response;
-          return {
-            ...response,
-            data: {
-              ...response.data,
-              members: [{}],
-            },
-          };
-        });
-        queryClient.invalidateQueries([COMMUNITY_MEMBERS, communityId]);
-        queryClient.invalidateQueries([COMMUNITIES]);
-        queryClient.invalidateQueries([SELF_COMMUNITIES]);
-        queryClient.invalidateQueries([SELF_COMMUNITY, communityId]);
-      },
-    },
-  );
+export const useSelfJoinCommunity = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof SelfJoinCommunity>>,
+    SelfJoinCommunityParams
+  >
+) => {
+  return useConnectedMutation<
+    SelfJoinCommunityParams,
+    Awaited<ReturnType<typeof SelfJoinCommunity>>
+  >((params: any) => SelfJoinCommunity({ ...params }), options);
 };
-
-export default useSelfJoinCommunity;

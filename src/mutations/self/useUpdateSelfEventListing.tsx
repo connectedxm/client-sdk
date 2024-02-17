@@ -78,12 +78,12 @@ export const UpdateSelfEventListing = async ({
 
 export const useUpdateSelfEventListing = (
   options: MutationOptions<
-    Awaited<ConnectedXMResponse<EventListing>>,
+    Awaited<ReturnType<typeof UpdateSelfEventListing>>,
     UpdateSelfEventListingParams
   >
 ) => {
   return useConnectedMutation<
     UpdateSelfEventListingParams,
-    Awaited<ConnectedXMResponse<EventListing>>
+    Awaited<ReturnType<typeof UpdateSelfEventListing>>
   >((params) => UpdateSelfEventListing({ ...params }), options);
 };

@@ -30,12 +30,12 @@ export const UpdateSelfImage = async ({
 
 export const useUpdateSelfImage = (
   options: MutationOptions<
-    Awaited<ConnectedXMResponse<Self>>,
+    Awaited<ReturnType<typeof UpdateSelfImage>>,
     UpdateSelfImageParams
   > = {}
 ) => {
   return useConnectedMutation<
     UpdateSelfImageParams,
-    Awaited<ConnectedXMResponse<Self>>
+    Awaited<ReturnType<typeof UpdateSelfImage>>
   >((params) => UpdateSelfImage({ ...params }), options);
 };

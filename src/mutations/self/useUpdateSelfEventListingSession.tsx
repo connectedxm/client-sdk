@@ -61,13 +61,13 @@ export const UpdateSelfEventListingSession = async ({
 
 export const useUpdateSelfEventListingSession = (
   options: MutationOptions<
-    Awaited<ConnectedXMResponse<EventListing>>,
+    Awaited<ReturnType<typeof UpdateSelfEventListingSession>>,
     UpdateSelfEventListingSessionParams
   >
 ) => {
   return useConnectedMutation<
     UpdateSelfEventListingSessionParams,
-    Awaited<ConnectedXMResponse<EventListing>>
+    Awaited<ReturnType<typeof UpdateSelfEventListingSession>>
   >(
     (params: UpdateSelfEventListingSessionParams) =>
       UpdateSelfEventListingSession({ ...params }),

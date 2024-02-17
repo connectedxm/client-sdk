@@ -65,13 +65,13 @@ export const UpdateSelfEventListingSpeaker = async ({
 
 export const useUpdateSelfEventListingSpeaker = (
   options: MutationOptions<
-    Awaited<ConnectedXMResponse<EventListing>>,
+    Awaited<ReturnType<typeof UpdateSelfEventListingSpeaker>>,
     UpdateSelfEventListingSpeakerParams
   >
 ) => {
   return useConnectedMutation<
     UpdateSelfEventListingSpeakerParams,
-    Awaited<ConnectedXMResponse<EventListing>>
+    Awaited<ReturnType<typeof UpdateSelfEventListingSpeaker>>
   >(
     (params: UpdateSelfEventListingSpeakerParams) =>
       UpdateSelfEventListingSpeaker({ ...params }),

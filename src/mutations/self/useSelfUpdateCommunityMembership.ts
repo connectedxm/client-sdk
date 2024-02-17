@@ -42,12 +42,12 @@ export const SelfUpdateCommunityMembership = async ({
 
 export const useSelfUpdateCommunityMembership = (
   options: MutationOptions<
-    Awaited<ConnectedXMResponse<CommunityMembership>>,
+    Awaited<ReturnType<typeof SelfUpdateCommunityMembership>>,
     SelfUpdateCommunityMembershipParams
   >
 ) => {
   return useConnectedMutation<
     SelfUpdateCommunityMembershipParams,
-    Awaited<ConnectedXMResponse<CommunityMembership>>
+    Awaited<ReturnType<typeof SelfUpdateCommunityMembership>>
   >((params) => SelfUpdateCommunityMembership({ ...params }), options);
 };
