@@ -1,11 +1,11 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { CommunityMembership } from "@context/interfaces";
-import { QUERY_KEY as COMMUNITY_MEMBERSHIP } from "@context/queries/self/useGetSelfCommunityMembership";
-import { useQueryClient } from "@tanstack/react-query";
+import { CommunityMembership, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
-interface SelfUpdateCommunityMembershipParams extends MutationParams {
+export interface SelfUpdateCommunityMembershipParams extends MutationParams {
   communityId: string;
   membership: CommunityMembership;
 }
@@ -13,38 +13,41 @@ interface SelfUpdateCommunityMembershipParams extends MutationParams {
 export const SelfUpdateCommunityMembership = async ({
   communityId,
   membership,
-}: SelfUpdateCommunityMembershipParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(
-    `/self/communities/${communityId}`,
-    membership
-  );
+  clientApi,
+  queryClient,
+}: SelfUpdateCommunityMembershipParams): Promise<
+  ConnectedXMResponse<CommunityMembership>
+> => {
+  if (queryClient) {
+    queryClient.setQueryData(
+      SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
+      (data: any) => {
+        return {
+          ...data,
+          data: {
+            ...data.data,
+            ...membership,
+          },
+        };
+      }
+    );
+  }
+
+  const { data } = await clientApi.put<
+    ConnectedXMResponse<CommunityMembership>
+  >(`/self/communities/${communityId}`, membership);
+
   return data;
 };
 
-export const useSelfUpdateCommunityMembership = (communityId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<any>(
-    (params: Omit<SelfUpdateCommunityMembershipParams, "communityId">) =>
-      SelfUpdateCommunityMembership({ communityId, ...params }),
-    {
-      onMutate: ({ membership }) => {
-        queryClient.setQueryData(
-          [COMMUNITY_MEMBERSHIP, communityId],
-          (data: any) => {
-            return {
-              ...data,
-              data: {
-                ...data.data,
-                ...membership,
-              },
-            };
-          }
-        );
-      },
-    }
-  );
+export const useSelfUpdateCommunityMembership = (
+  options: MutationOptions<
+    Awaited<ConnectedXMResponse<CommunityMembership>>,
+    SelfUpdateCommunityMembershipParams
+  >
+) => {
+  return useConnectedMutation<
+    SelfUpdateCommunityMembershipParams,
+    Awaited<ConnectedXMResponse<CommunityMembership>>
+  >((params) => SelfUpdateCommunityMembership({ ...params }), options);
 };
-
-export default useSelfUpdateCommunityMembership;

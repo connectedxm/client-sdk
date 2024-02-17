@@ -3,7 +3,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_QUERY_KEY } from "@src/queries";
+import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
 
 export interface UpdateSelfEventListingSessionParams extends MutationParams {
   eventId: string;
@@ -27,31 +27,28 @@ export const UpdateSelfEventListingSession = async ({
     }
   );
 
+  // Possibly broken - looks like this was built assuming the response was a session (it's actually returning an EventListing)
   if (queryClient && data.status === "ok") {
-    queryClient.setQueryData(
-      EVENT_QUERY_KEY(eventId),
-      // [EVENT, response.data?.event?.slug],
-      (event: any) => {
-        if (event && event.data) {
-          const index = event?.data?.sessions?.findIndex(
-            (session: any) => session.id === response.data.id
-          );
-          if (index !== -1 && event.data.sessions) {
-            event.data.sessions[index] = response.data;
-          }
+    queryClient.setQueryData(EVENT_QUERY_KEY(eventId), (event: any) => {
+      if (event && event.data) {
+        const index = event?.data?.sessions?.findIndex(
+          (session: any) => session.id === data.data.id
+        );
+        if (index !== -1 && event.data.sessions) {
+          event.data.sessions[index] = data.data;
         }
-        return event;
       }
-    );
+      return event;
+    });
     queryClient.setQueryData(
-      [EVENT_LISTING, response.data?.event?.slug],
+      SELF_EVENT_LISTING_QUERY_KEY(eventId),
       (event: any) => {
         if (event && event.data) {
           const index = event?.data?.sessions?.findIndex(
-            (session: any) => session.id === response.data.id
+            (session: any) => session.id === data.data.id
           );
           if (index !== -1 && event.data.sessions) {
-            event.data.sessions[index] = response.data;
+            event.data.sessions[index] = data.data;
           }
         }
         return event;
