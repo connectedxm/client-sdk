@@ -1,9 +1,9 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Purchase } from "@context/interfaces";
-import { QUERY_KEY as SELF_EVENT_SESSIONS } from "@context/queries/self/useGetSelfEventSessions";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { SELF_EVENT_SESSIONS_QUERY_KEY } from "@src/queries";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { Account, ConnectedXMResponse } from "@src/interfaces";
 
 export interface AddSelfEventSessionParams extends MutationParams {
   eventId: string;
@@ -13,25 +13,31 @@ export interface AddSelfEventSessionParams extends MutationParams {
 export const AddSelfEventSession = async ({
   eventId,
   sessionId,
-}: AddSelfEventSessionParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  clientApi,
+  queryClient,
+}: AddSelfEventSessionParams): Promise<ConnectedXMResponse<Account>> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/self/events/${eventId}/sessions/${sessionId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_SESSIONS_QUERY_KEY(eventId),
+    });
+  }
   return data;
 };
 
-export const useAddSelfEventSession = (eventId: string, sessionId: string) => {
-  const queryClient = useQueryClient();
+export const useAddSelfEventSession = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
 
-  return useConnectedMutation<any>(
-    () => AddSelfEventSession({ eventId, sessionId }),
-    {
-      onSuccess: (_response: ConnectedXMResponse<Purchase>) => {
-        queryClient.invalidateQueries([SELF_EVENT_SESSIONS]);
-      },
-    }
-  );
+  options: MutationOptions<
+    Awaited<ReturnType<typeof AddSelfEventSession>>,
+    AddSelfEventSessionParams
+  >
+) => {
+  return useConnectedMutation<
+    AddSelfEventSessionParams,
+    Awaited<ReturnType<typeof AddSelfEventSession>>
+  >(AddSelfEventSession, params, options);
 };
-
-export default useAddSelfEventSession;

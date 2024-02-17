@@ -1,10 +1,9 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTING } from "@context/queries/self/useGetSelfEventListing";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { Account, ConnectedXMResponse, EventListing } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
 
 export interface AddSelfEventListingSponsorParams extends MutationParams {
   eventId: string;
@@ -14,10 +13,44 @@ export interface AddSelfEventListingSponsorParams extends MutationParams {
 export const AddSelfEventListingSponsor = async ({
   eventId,
   sponsor,
-}: AddSelfEventListingSponsorParams) => {
-  const connectedXM = await ConnectedXM();
+  clientApi,
+  queryClient,
+  locale = "en",
+}: AddSelfEventListingSponsorParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  if (queryClient) {
+    queryClient.setQueryData(
+      [...EVENT_QUERY_KEY(eventId), locale],
+      (oldData: any) => {
+        const event = oldData ? JSON.parse(JSON.stringify(oldData)) : undefined;
+        if (event && event.data) {
+          if (event.data?.sponsors) {
+            event.data.sponsors.push(sponsor);
+          } else {
+            event.data.sponsors = [sponsor];
+          }
+        }
+        return event;
+      }
+    );
+    queryClient.setQueryData(
+      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+      (oldData: any) => {
+        const event = oldData ? JSON.parse(JSON.stringify(oldData)) : undefined;
+        if (event && event.data) {
+          if (event.data?.sponsors) {
+            event.data.sponsors.push(sponsor);
+          } else {
+            event.data.sponsors = [sponsor];
+          }
+        }
+        return event;
+      }
+    );
+  }
 
-  const { data } = await connectedXM.post(
+  const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sponsors`,
     {
       sponsorId: sponsor.id,
@@ -27,45 +60,15 @@ export const AddSelfEventListingSponsor = async ({
   return data;
 };
 
-export const useAddSelfEventListingSponsor = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<AddSelfEventListingSponsorParams>(
-    (params: AddSelfEventListingSponsorParams) =>
-      AddSelfEventListingSponsor({ ...params }),
-    {
-      onMutate: ({ eventId, sponsor }) => {
-        queryClient.setQueryData([EVENT, eventId], (oldData: any) => {
-          const event = oldData
-            ? JSON.parse(JSON.stringify(oldData))
-            : undefined;
-          if (event && event.data) {
-            if (event.data?.sponsors) {
-              event.data.sponsors.push(sponsor);
-            } else {
-              event.data.sponsors = [sponsor];
-            }
-          }
-          return event;
-        });
-        queryClient.setQueryData([EVENT_LISTING, eventId], (oldData: any) => {
-          const event = oldData
-            ? JSON.parse(JSON.stringify(oldData))
-            : undefined;
-          if (event && event.data) {
-            if (event.data?.sponsors) {
-              event.data.sponsors.push(sponsor);
-            } else {
-              event.data.sponsors = [sponsor];
-            }
-          }
-          return event;
-        });
-      },
-    },
-    undefined,
-    true
-  );
+export const useAddSelfEventListingSponsor = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options?: MutationOptions<
+    Awaited<ReturnType<typeof AddSelfEventListingSponsor>>,
+    AddSelfEventListingSponsorParams
+  >
+) => {
+  return useConnectedMutation<
+    AddSelfEventListingSponsorParams,
+    Awaited<ReturnType<typeof AddSelfEventListingSponsor>>
+  >(AddSelfEventListingSponsor, params, options);
 };
-
-export default useAddSelfEventListingSponsor;

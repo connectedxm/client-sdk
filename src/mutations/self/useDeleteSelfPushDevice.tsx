@@ -1,9 +1,9 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Purchase } from "@context/interfaces";
-import { QUERY_KEY as SELF_PUSH_DEVICES } from "@context/queries/self/useGetSelfPushDevices";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { ConnectedXMResponse, PushDevice } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_PUSH_DEVICES_QUERY_KEY } from "@src/queries";
 
 export interface DeleteSelfPushDeviceParams extends MutationParams {
   pushDeviceId: string;
@@ -11,25 +11,29 @@ export interface DeleteSelfPushDeviceParams extends MutationParams {
 
 export const DeleteSelfPushDevice = async ({
   pushDeviceId,
-}: DeleteSelfPushDeviceParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(
+  clientApi,
+  queryClient,
+}: DeleteSelfPushDeviceParams): Promise<ConnectedXMResponse<PushDevice>> => {
+  const { data } = await clientApi.delete<ConnectedXMResponse<PushDevice>>(
     `/self/push-devices/${pushDeviceId}`
   );
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_PUSH_DEVICES_QUERY_KEY(),
+    });
+  }
   return data;
 };
 
-export const useDeleteSelfPushDevice = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<DeleteSelfPushDeviceParams>(
-    (params: DeleteSelfPushDeviceParams) => DeleteSelfPushDevice({ ...params }),
-    {
-      onSuccess: (_response: ConnectedXMResponse<Purchase>) => {
-        queryClient.invalidateQueries([SELF_PUSH_DEVICES]);
-      },
-    }
-  );
+export const useDeleteSelfPushDevice = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof DeleteSelfPushDevice>>,
+    DeleteSelfPushDeviceParams
+  >
+) => {
+  return useConnectedMutation<
+    DeleteSelfPushDeviceParams,
+    Awaited<ReturnType<typeof DeleteSelfPushDevice>>
+  >(DeleteSelfPushDevice, params, options);
 };
-
-export default useDeleteSelfPushDevice;

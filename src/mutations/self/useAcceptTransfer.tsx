@@ -1,26 +1,39 @@
-import { QUERY_KEY as TRANSFERS_KEY } from "@context/queries/self/useGetSelfTransfers";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM } from "src/context/api/ConnectedXM";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { ConnectedXMResponse, Transfer } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_TRANSFERS_QUERY_KEY } from "@src/queries";
 
 export interface AcceptTransferParams extends MutationParams {
   transferId: string;
 }
 
-export const AcceptTransfer = async ({ transferId }: AcceptTransferParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(`/self/transfers/${transferId}`);
+export const AcceptTransfer = async ({
+  transferId,
+  clientApi,
+  queryClient,
+}: AcceptTransferParams): Promise<ConnectedXMResponse<Transfer>> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
+    `/self/transfers/${transferId}`
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_TRANSFERS_QUERY_KEY() });
+  }
+
   return data;
 };
 
-export const useAcceptTransfer = () => {
-  const queryClient = useQueryClient();
-  return useConnectedMutation<AcceptTransferParams>(AcceptTransfer, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([TRANSFERS_KEY]);
-    },
-  });
+export const useAcceptTransfer = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof AcceptTransfer>>,
+    AcceptTransferParams
+  >
+) => {
+  return useConnectedMutation<
+    AcceptTransferParams,
+    Awaited<ReturnType<typeof AcceptTransfer>>
+  >(AcceptTransfer, params, options);
 };
-
-export default useAcceptTransfer;

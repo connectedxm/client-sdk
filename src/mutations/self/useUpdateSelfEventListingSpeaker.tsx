@@ -19,6 +19,7 @@ export const UpdateSelfEventListingSpeaker = async ({
   buffer,
   clientApi,
   queryClient,
+  locale = "en",
 }: UpdateSelfEventListingSpeakerParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -31,20 +32,23 @@ export const UpdateSelfEventListingSpeaker = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.setQueryData(EVENT_QUERY_KEY(eventId), (event: any) => {
-      if (event && event.data) {
-        const index = event?.data?.speakers?.findIndex(
-          (speaker: any) => speaker.id === data.data.id
-        );
-        if (index !== -1 && event.data.speakers) {
-          event.data.speakers[index] = data.data;
-        }
-      }
-
-      return event;
-    });
     queryClient.setQueryData(
-      SELF_EVENT_LISTING_QUERY_KEY(eventId),
+      [...EVENT_QUERY_KEY(eventId), locale],
+      (event: any) => {
+        if (event && event.data) {
+          const index = event?.data?.speakers?.findIndex(
+            (speaker: any) => speaker.id === data.data.id
+          );
+          if (index !== -1 && event.data.speakers) {
+            event.data.speakers[index] = data.data;
+          }
+        }
+
+        return event;
+      }
+    );
+    queryClient.setQueryData(
+      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
       (event: any) => {
         if (event && event.data) {
           const index = event?.data?.speakers?.findIndex(

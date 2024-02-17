@@ -23,19 +23,23 @@ export interface UpdateSelfNotificationPreferencesParams
 export const UpdateSelfNotificationPreferences = async ({
   clientApi,
   queryClient,
+  locale = "en",
   ...params
 }: UpdateSelfNotificationPreferencesParams): Promise<
   ConnectedXMResponse<NotificationPreferences>
 > => {
   if (queryClient) {
-    queryClient.setQueryData(SELF_PREFERENCES_QUERY_KEY(), (oldData: any) => {
-      if (oldData?.data) {
-        oldData.data = { ...oldData.data, ...params };
-        return oldData;
-      } else {
-        return oldData;
+    queryClient.setQueryData(
+      [...SELF_PREFERENCES_QUERY_KEY(), locale],
+      (oldData: any) => {
+        if (oldData?.data) {
+          oldData.data = { ...oldData.data, ...params };
+          return oldData;
+        } else {
+          return oldData;
+        }
       }
-    });
+    );
   }
 
   const { data } = await clientApi.put<

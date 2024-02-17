@@ -1,24 +1,32 @@
-import { Auth } from "@aws-amplify/auth";
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { useQueryClient } from "@tanstack/react-query";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
 
-import useConnectedMutation from "../useConnectedMutation";
+export interface DeleteSelfParams extends MutationParams {}
 
-export const DeleteSelf = async () => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(`/self`);
+export const DeleteSelf = async ({
+  clientApi,
+  queryClient,
+}: DeleteSelfParams) => {
+  const { data } = await clientApi.delete(`/self`);
+  // Fix / Remove
   await Auth.signOut();
+  if (queryClient && data.status === "ok") {
+    queryClient.clear();
+  }
   return data;
 };
 
-export const useDeleteSelf = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(DeleteSelf, {
-    onSuccess: (_response: ConnectedXMResponse<null>) => {
-      queryClient.clear();
-    },
-  });
+export const useDeleteSelf = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof DeleteSelf>>,
+    DeleteSelfParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    DeleteSelfParams,
+    Awaited<ReturnType<typeof DeleteSelf>>
+  >(DeleteSelf, params, options);
 };
-
-export default useDeleteSelf;

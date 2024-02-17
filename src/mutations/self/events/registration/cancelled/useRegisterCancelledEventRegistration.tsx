@@ -1,12 +1,3 @@
-import { Registration } from "@context/interfaces";
-import useConnectedMutation from "@context/mutations/useConnectedMutation";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_REGISTRANTS } from "@context/queries/events/useGetEventRegistrants";
-import { QUERY_KEY as EVENT_REGISTRATION } from "@context/queries/self/registration/useGetSelfEventRegistration";
-import { QUERY_KEY as SELF_EVENTS } from "@context/queries/self/useGetSelfEvents";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
-
 export interface RegisterCancelledEventRegistrationParams {
   eventId: string;
   registrationId: string;

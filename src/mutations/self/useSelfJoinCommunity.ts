@@ -33,8 +33,7 @@ export const SelfJoinCommunity = async ({
       locale,
     ]);
     queryClient.setQueryData(
-      COMMUNITY_QUERY_KEY(communityId),
-
+      [...COMMUNITY_QUERY_KEY(communityId), locale],
       (response: any) => {
         if (!response.data) return response;
         return {

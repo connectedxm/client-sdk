@@ -1,65 +1,67 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { PushDevice } from "@context/interfaces";
-import { QUERY_KEY as SELF_PUSH_DEVICE } from "@context/queries/self/useGetSelfPushDevice";
-import { QUERY_KEY as SELF_PUSH_DEVICES } from "@context/queries/self/useGetSelfPushDevices";
-import { env } from "@env";
-import { useQueryClient } from "@tanstack/react-query";
-import * as Device from "expo-device";
-import { Platform } from "react-native";
+//
+// Should probably move to CommunityXM Mobile
+//
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+// import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
+// import { PushDevice } from "@context/interfaces";
+// import { QUERY_KEY as SELF_PUSH_DEVICE } from "@context/queries/self/useGetSelfPushDevice";
+// import { QUERY_KEY as SELF_PUSH_DEVICES } from "@context/queries/self/useGetSelfPushDevices";
+// import { env } from "@env";
+// import { useQueryClient } from "@tanstack/react-query";
+// import * as Device from "expo-device";
+// import { Platform } from "react-native";
 
-export type AppType = "EVENTXM" | "COMMUNITYXM";
+// import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-export interface CreateSelfPushDeviceParams extends MutationParams {
-  expoToken: string;
-  deviceToken: string;
-  appType: AppType;
-  eventId?: string;
-}
+// export type AppType = "EVENTXM" | "COMMUNITYXM";
 
-export const CreateSelfPushDevice = async ({
-  expoToken,
-  deviceToken,
-  eventId,
-  appType,
-}: CreateSelfPushDeviceParams) => {
-  const connectedXM = await ConnectedXM();
+// export interface CreateSelfPushDeviceParams extends MutationParams {
+//   expoToken: string;
+//   deviceToken: string;
+//   appType: AppType;
+//   eventId?: string;
+// }
 
-  const { data } = await connectedXM.post(`/self/push-devices`, {
-    id: expoToken,
-    deviceToken,
-    eventId,
-    name: Device.deviceName,
-    model: Device.modelName,
-    brand: Device.brand,
-    osName: Device.osName,
-    osVersion: Device.osVersion,
-    deviceYearClass: Device.deviceYearClass,
-    manufacturer: Device.manufacturer,
-    supportedCpuArchitectures: Device.supportedCpuArchitectures?.join(","),
-    // totalMemory: Device.totalMemory,
-    appType,
-    pushService: Platform.OS === "ios" ? "apn" : "firebase",
-    pushServiceName: env.SLUG,
-    bundleId: env.BUNDLE_ID,
-  });
-  return data;
-};
+// export const CreateSelfPushDevice = async ({
+//   expoToken,
+//   deviceToken,
+//   eventId,
+//   appType,
+// }: CreateSelfPushDeviceParams) => {
+//   const connectedXM = await ConnectedXM();
 
-export const useCreateSelfPushDevice = (appType: AppType, eventId?: string) => {
-  const queryClient = useQueryClient();
+//   const { data } = await connectedXM.post(`/self/push-devices`, {
+//     id: expoToken,
+//     deviceToken,
+//     eventId,
+//     name: Device.deviceName,
+//     model: Device.modelName,
+//     brand: Device.brand,
+//     osName: Device.osName,
+//     osVersion: Device.osVersion,
+//     deviceYearClass: Device.deviceYearClass,
+//     manufacturer: Device.manufacturer,
+//     supportedCpuArchitectures: Device.supportedCpuArchitectures?.join(","),
+//     // totalMemory: Device.totalMemory,
+//     appType,
+//     pushService: Platform.OS === "ios" ? "apn" : "firebase",
+//     pushServiceName: env.SLUG,
+//     bundleId: env.BUNDLE_ID,
+//   });
+//   return data;
+// };
 
-  return useConnectedMutation(
-    (params: Omit<CreateSelfPushDeviceParams, "appType" | "eventId">) =>
-      CreateSelfPushDevice({ ...params, appType, eventId }),
-    {
-      onSuccess: (response: ConnectedXMResponse<PushDevice>) => {
-        queryClient.invalidateQueries([SELF_PUSH_DEVICE, response.data.id]);
-        queryClient.invalidateQueries([SELF_PUSH_DEVICES]);
-      },
-    }
-  );
-};
+// export const useCreateSelfPushDevice = (appType: AppType, eventId?: string) => {
+//   const queryClient = useQueryClient();
 
-export default useCreateSelfPushDevice;
+//   return useConnectedMutation(
+//     (params: Omit<CreateSelfPushDeviceParams, "appType" | "eventId">) =>
+//       CreateSelfPushDevice({ ...params, appType, eventId }),
+//     {
+//       onSuccess: (response: ConnectedXMResponse<PushDevice>) => {
+//         queryClient.invalidateQueries([SELF_PUSH_DEVICE, response.data.id]);
+//         queryClient.invalidateQueries([SELF_PUSH_DEVICES]);
+//       },
+//     }
+//   );
+// };

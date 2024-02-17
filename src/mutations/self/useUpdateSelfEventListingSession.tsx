@@ -17,6 +17,7 @@ export const UpdateSelfEventListingSession = async ({
   sessionId,
   clientApi,
   queryClient,
+  locale = "en",
 }: UpdateSelfEventListingSessionParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -29,19 +30,22 @@ export const UpdateSelfEventListingSession = async ({
 
   // Possibly broken - looks like this was built assuming the response was a session (it's actually returning an EventListing)
   if (queryClient && data.status === "ok") {
-    queryClient.setQueryData(EVENT_QUERY_KEY(eventId), (event: any) => {
-      if (event && event.data) {
-        const index = event?.data?.sessions?.findIndex(
-          (session: any) => session.id === data.data.id
-        );
-        if (index !== -1 && event.data.sessions) {
-          event.data.sessions[index] = data.data;
-        }
-      }
-      return event;
-    });
     queryClient.setQueryData(
-      SELF_EVENT_LISTING_QUERY_KEY(eventId),
+      [...EVENT_QUERY_KEY(eventId), locale],
+      (event: any) => {
+        if (event && event.data) {
+          const index = event?.data?.sessions?.findIndex(
+            (session: any) => session.id === data.data.id
+          );
+          if (index !== -1 && event.data.sessions) {
+            event.data.sessions[index] = data.data;
+          }
+        }
+        return event;
+      }
+    );
+    queryClient.setQueryData(
+      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
       (event: any) => {
         if (event && event.data) {
           const index = event?.data?.sessions?.findIndex(

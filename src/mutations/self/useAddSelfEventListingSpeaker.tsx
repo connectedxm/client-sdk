@@ -1,9 +1,9 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTING } from "@context/queries/self/useGetSelfEventListing";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { ConnectedXMResponse, EventListing } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
 
 export interface EventListingSpeaker {
   firstName: string | null;
@@ -21,63 +21,68 @@ export interface AddSelfEventListingSpeakerParams extends MutationParams {
 export const AddSelfEventListingSpeaker = async ({
   eventId,
   speaker,
-}: AddSelfEventListingSpeakerParams) => {
-  const connectedXM = await ConnectedXM();
-
-  const { data } = await connectedXM.post(
+  clientApi,
+  queryClient,
+  locale = "en",
+}: AddSelfEventListingSpeakerParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/speakers`,
     {
       speaker,
     }
   );
 
+  if (queryClient && data.status === "ok") {
+    if (data.data) {
+      queryClient.setQueryData(
+        [...EVENT_QUERY_KEY(eventId), locale],
+        (oldData: any) => {
+          const event = oldData
+            ? JSON.parse(JSON.stringify(oldData))
+            : undefined;
+          if (event && event.data) {
+            if (event.data?.speakers) {
+              event.data.speakers.push(data.data);
+            } else {
+              event.data.speakers = [data.data];
+            }
+          }
+          return event;
+        }
+      );
+      queryClient.setQueryData(
+        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+        (oldData: any) => {
+          const event = oldData
+            ? JSON.parse(JSON.stringify(oldData))
+            : undefined;
+          if (event && event.data) {
+            if (event.data?.speakers) {
+              event.data.speakers.push(data.data);
+            } else {
+              event.data.speakers = [data.data];
+            }
+          }
+          return event;
+        }
+      );
+    }
+  }
+
   return data;
 };
 
-export const useAddSelfEventListingSpeaker = (listingId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<AddSelfEventListingSpeakerParams>(
-    (params: AddSelfEventListingSpeakerParams) =>
-      AddSelfEventListingSpeaker({ ...params }),
-    {
-      onSuccess: (response) => {
-        if (response.data) {
-          queryClient.setQueryData([EVENT, listingId], (oldData: any) => {
-            const event = oldData
-              ? JSON.parse(JSON.stringify(oldData))
-              : undefined;
-            if (event && event.data) {
-              if (event.data?.speakers) {
-                event.data.speakers.push(response.data);
-              } else {
-                event.data.speakers = [response.data];
-              }
-            }
-            return event;
-          });
-          queryClient.setQueryData(
-            [EVENT_LISTING, listingId],
-            (oldData: any) => {
-              const event = oldData
-                ? JSON.parse(JSON.stringify(oldData))
-                : undefined;
-              if (event && event.data) {
-                if (event.data?.speakers) {
-                  event.data.speakers.push(response.data);
-                } else {
-                  event.data.speakers = [response.data];
-                }
-              }
-              return event;
-            }
-          );
-        }
-      },
-    },
-    undefined,
-    true
-  );
+export const useAddSelfEventListingSpeaker = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof AddSelfEventListingSpeaker>>,
+    AddSelfEventListingSpeakerParams
+  >
+) => {
+  return useConnectedMutation<
+    AddSelfEventListingSpeakerParams,
+    Awaited<ReturnType<typeof AddSelfEventListingSpeaker>>
+  >(AddSelfEventListingSpeaker, params, options);
 };
-
-export default useAddSelfEventListingSpeaker;

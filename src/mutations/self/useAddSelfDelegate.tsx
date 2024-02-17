@@ -1,33 +1,41 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as SELF_DELEGATES } from "@context/queries/self/useGetSelfDelegates";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { Account, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_DELEGATES_QUERY_KEY } from "@src/queries";
 
 export interface AddSelfDelegateParams extends MutationParams {
   email: string;
 }
 
-export const AddSelfDelegate = async ({ email }: AddSelfDelegateParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(`/self/delegates`, {
-    email,
-  });
+export const AddSelfDelegate = async ({
+  email,
+  clientApi,
+  queryClient,
+}: AddSelfDelegateParams): Promise<ConnectedXMResponse<Account>> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
+    `/self/delegates`,
+    {
+      email,
+    }
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_DELEGATES_QUERY_KEY() });
+  }
   return data;
 };
 
-export const useAddSelfDelegate = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<string>(
-    (email: string) => AddSelfDelegate({ email }),
-    {
-      onSuccess: (_response: ConnectedXMResponse<Account>) => {
-        queryClient.invalidateQueries([SELF_DELEGATES]);
-      },
-    }
-  );
+export const useAddSelfDelegate = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof AddSelfDelegate>>,
+    AddSelfDelegateParams
+  >
+) => {
+  return useConnectedMutation<
+    AddSelfDelegateParams,
+    Awaited<ReturnType<typeof AddSelfDelegate>>
+  >(AddSelfDelegate, params, options);
 };
-
-export default useAddSelfDelegate;

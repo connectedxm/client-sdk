@@ -1,10 +1,9 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { Session } from "@context/interfaces";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTING } from "@context/queries/self/useGetSelfEventListing";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { ConnectedXMResponse, EventListing, Session } from "@src/interfaces";
 
 export interface AddSelfEventListingSessionParams extends MutationParams {
   eventId: string;
@@ -29,63 +28,68 @@ export interface AddSelfEventListingSessionParams extends MutationParams {
 export const AddSelfEventListingSession = async ({
   eventId,
   session,
-}: AddSelfEventListingSessionParams) => {
-  const connectedXM = await ConnectedXM();
-
-  const { data } = await connectedXM.post(
+  clientApi,
+  queryClient,
+  locale = "en",
+}: AddSelfEventListingSessionParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sessions`,
     {
       session,
     }
   );
 
+  if (queryClient && data.status === "ok") {
+    if (data.data && !!eventId) {
+      queryClient.setQueryData(
+        [...EVENT_QUERY_KEY(eventId), locale],
+        (oldData: any) => {
+          const event = oldData
+            ? JSON.parse(JSON.stringify(oldData))
+            : undefined;
+          if (event && event.data) {
+            if (event.data?.sessions) {
+              event.data.sessions.push(data.data);
+            } else {
+              event.data.sessions = [data.data];
+            }
+          }
+          return event;
+        }
+      );
+      queryClient.setQueryData(
+        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+        (oldData: any) => {
+          const event = oldData
+            ? JSON.parse(JSON.stringify(oldData))
+            : undefined;
+          if (event && event.data) {
+            if (event.data?.sessions) {
+              event.data.sessions.push(data.data);
+            } else {
+              event.data.sessions = [data.data];
+            }
+          }
+          return event;
+        }
+      );
+    }
+  }
+
   return data;
 };
 
-export const useAddSelfEventListingSession = (listingId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<AddSelfEventListingSessionParams>(
-    (params: AddSelfEventListingSessionParams) =>
-      AddSelfEventListingSession({ ...params }),
-    {
-      onSuccess: (response) => {
-        if (response.data && !!listingId) {
-          queryClient.setQueryData([EVENT, listingId], (oldData: any) => {
-            const event = oldData
-              ? JSON.parse(JSON.stringify(oldData))
-              : undefined;
-            if (event && event.data) {
-              if (event.data?.sessions) {
-                event.data.sessions.push(response.data);
-              } else {
-                event.data.sessions = [response.data];
-              }
-            }
-            return event;
-          });
-          queryClient.setQueryData(
-            [EVENT_LISTING, listingId],
-            (oldData: any) => {
-              const event = oldData
-                ? JSON.parse(JSON.stringify(oldData))
-                : undefined;
-              if (event && event.data) {
-                if (event.data?.sessions) {
-                  event.data.sessions.push(response.data);
-                } else {
-                  event.data.sessions = [response.data];
-                }
-              }
-              return event;
-            }
-          );
-        }
-      },
-    },
-    undefined,
-    true
-  );
+export const useAddSelfEventListingSession = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof AddSelfEventListingSession>>,
+    AddSelfEventListingSessionParams
+  >
+) => {
+  return useConnectedMutation<
+    AddSelfEventListingSessionParams,
+    Awaited<ReturnType<typeof AddSelfEventListingSession>>
+  >(AddSelfEventListingSession, params, options);
 };
-
-export default useAddSelfEventListingSession;

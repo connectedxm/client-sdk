@@ -1,39 +1,41 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Registration } from "@context/interfaces";
-import { QUERY_KEY as EVENT_REGISTRATIONS } from "@context/queries/self/useGetSelfEventListingRegistrations";
-import { useQueryClient } from "@tanstack/react-query";
+//
+// Pretty sure we don't need this
+//
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+// import { ConnectedXMResponse } from "@src/interfaces";
+// import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-export interface SelfCheckinEventListingRegistrationParams
-  extends MutationParams {
-  accountId: string;
-  eventId: string;
-}
+// export interface SelfCheckinEventListingRegistrationParams
+//   extends MutationParams {
+//   accountId: string;
+//   eventId: string;
+// }
 
-export const SelfCheckinEventListingRegistration = async ({
-  accountId,
-  eventId,
-}: SelfCheckinEventListingRegistrationParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
-    `/self/events/listings/${eventId}/registrations/${accountId}`
-  );
-  return data;
-};
+// export const SelfCheckinEventListingRegistration = async ({
+//   accountId,
+//   eventId,
+//   clientApi,
+//   queryClient
+// }: SelfCheckinEventListingRegistrationParams): Promise<ConnectedXMResponse< => {
 
-export const useSelfCheckinEventLisingRegistration = (eventId: string) => {
-  const queryClient = useQueryClient();
+//   const { data } = await clientApi.post(
+//     `/self/events/listings/${eventId}/registrations/${accountId}`
+//   );
+//   return data;
+// };
 
-  return useConnectedMutation<any>(
-    (params: any) =>
-      SelfCheckinEventListingRegistration({ eventId, ...params }),
-    {
-      onSuccess: (_response: ConnectedXMResponse<Registration>) => {
-        queryClient.invalidateQueries([EVENT_REGISTRATIONS, eventId]);
-      },
-    }
-  );
-};
+// export const useSelfCheckinEventLisingRegistration = (eventId: string) => {
+//   const queryClient = useQueryClient();
 
-export default useSelfCheckinEventLisingRegistration;
+//   return useConnectedMutation<any>(
+//     (params: any) =>
+//       SelfCheckinEventListingRegistration({ eventId, ...params }),
+//     {
+//       onSuccess: (_response: ConnectedXMResponse<Registration>) => {
+//         queryClient.invalidateQueries([EVENT_REGISTRATIONS, eventId]);
+//       },
+//     }
+//   );
+// };
+
+// export default useSelfCheckinEventLisingRegistration;

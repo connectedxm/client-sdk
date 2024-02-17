@@ -1,9 +1,9 @@
-import { Registration } from "@context/interfaces";
+import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
+} from "@src/mutations/useConnectedMutation";
+import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "@src/queries";
 
 export interface UpdateSelfEventRegistrationResponseParams
   extends MutationParams {
@@ -18,9 +18,13 @@ export const UpdateSelfEventRegistrationResponse = async ({
   registrationId,
   questionId,
   response,
-}: UpdateSelfEventRegistrationResponseParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(
+  clientApi,
+  queryClient,
+  locale = "en",
+}: UpdateSelfEventRegistrationResponseParams): Promise<
+  ConnectedXMResponse<Registration>
+> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/registered/response`,
     {
       response,
@@ -32,33 +36,24 @@ export const UpdateSelfEventRegistrationResponse = async ({
     }
   );
 
+  if (queryClient && data.status === "ok") {
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
+      locale,
+    ]);
+  }
+
   return data;
 };
 
 export const useUpdateSelfEventRegistrationResponse = (
-  eventId: string,
-  registrationId: string,
-  questionId: string
+  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateSelfEventRegistrationResponse>>,
+    UpdateSelfEventRegistrationResponseParams
+  >
 ) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (response: string) =>
-      UpdateSelfEventRegistrationResponse({
-        eventId,
-        registrationId,
-        questionId,
-        response,
-      }),
-    {
-      onSuccess: (response: ConnectedXMResponse<Registration>) => {
-        queryClient.setQueryData(
-          ["SELF_EVENT_REGISTRATION", eventId],
-          response
-        );
-      },
-    }
-  );
+  return useConnectedMutation<
+    UpdateSelfEventRegistrationResponseParams,
+    Awaited<ReturnType<typeof UpdateSelfEventRegistrationResponse>>
+  >(UpdateSelfEventRegistrationResponse, params, options);
 };
-
-export default useUpdateSelfEventRegistrationResponse;

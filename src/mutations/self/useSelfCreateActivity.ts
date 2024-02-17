@@ -1,9 +1,22 @@
-import { UpdateCommentsSingle } from "../activities/optimistic/UpdateComments";
+import {
+  ACTIVITIES_QUERY_KEY,
+  ACTIVITY_QUERY_KEY,
+  COMMUNITY_ACTIVITIES_QUERY_KEY,
+  CONTENT_ACTIVITIES_QUERY_KEY,
+  EVENT_ACTIVITIES_QUERY_KEY,
+  SELF_ACTIVITIES_QUERY_KEY,
+  SELF_FEED_QUERY_KEY,
+} from "@src/queries";
+import {
+  UpdateCommentsInfinite,
+  UpdateCommentsSingle,
+} from "../activities/optimistic/UpdateComments";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
+import { AppendInfiniteQuery } from "@src/utilities";
 
 export interface CreateActivity {
   message: string;
@@ -12,6 +25,7 @@ export interface CreateActivity {
   communityId?: string;
   commentedId?: string;
 }
+
 export interface SelfCreateActivityParams extends MutationParams {
   activity: CreateActivity;
   base64Image?: any;
@@ -22,18 +36,20 @@ export const SelfCreateActivity = async ({
   base64Image,
   clientApi,
   queryClient,
-}: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
+}: // locale = "en",
+SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
     if (activity.commentedId) {
-      UpdateCommentsSingle(true, queryClient, [
-        ACTIVITY,
-        data.activity.commentedId,
-      ]);
+      UpdateCommentsSingle(
+        true,
+        queryClient,
+        ACTIVITY_QUERY_KEY(activity.commentedId)
+      );
       UpdateCommentsInfinite(
         true,
         queryClient,
-        [ACTIVITIES],
-        data.activity.commentedId
+        ACTIVITIES_QUERY_KEY(),
+        activity.commentedId
       );
     }
   }
@@ -47,44 +63,39 @@ export const SelfCreateActivity = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.invalidateQueries([ACTIVITIES]);
+    queryClient.invalidateQueries({
+      queryKey: ACTIVITIES_QUERY_KEY(),
+    });
 
-    AppendInfiniteQuery(queryClient, [ACTIVITIES, ""], response?.data);
-    AppendInfiniteQuery(
-      queryClient,
-      [ACTIVITIES, SELF_ACTIVITIES],
-      response?.data
-    );
+    AppendInfiniteQuery(queryClient, ACTIVITIES_QUERY_KEY(), data);
 
-    if (response.data.contentId) {
+    if (!data.data.commented?.id) {
+      AppendInfiniteQuery(queryClient, SELF_FEED_QUERY_KEY(), data);
+    }
+
+    AppendInfiniteQuery(queryClient, SELF_ACTIVITIES_QUERY_KEY(), data);
+
+    if (data.data?.content?.id) {
       AppendInfiniteQuery(
         queryClient,
-        [ACTIVITIES, CONTENT_ACTIVITIES, response.data.contentId, ""],
-        response?.data
+        CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id),
+        data
       );
     }
 
-    if (response.data.eventId) {
+    if (data.data?.event?.id) {
       AppendInfiniteQuery(
         queryClient,
-        [ACTIVITIES, EVENT_ACTIVITIES, response.data.eventId, ""],
-        response?.data
+        EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id),
+        data
       );
     }
 
-    if (response.data.communityId) {
+    if (data.data?.community?.id) {
       AppendInfiniteQuery(
         queryClient,
-        [ACTIVITIES, COMMUNITY_ACTIVITIES, response.data.communityId, ""],
-        response?.data
-      );
-    }
-
-    if (response.data.commentedId) {
-      AppendInfiniteQuery(
-        queryClient,
-        [ACTIVITIES, COMMUNITY_ACTIVITIES, response.data.communityId, ""],
-        response?.data
+        COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id),
+        data
       );
     }
   }
@@ -103,5 +114,3 @@ export const useSelfCreateActivity = (
     Awaited<ReturnType<typeof SelfCreateActivity>>
   >(SelfCreateActivity, params, options);
 };
-
-export default useSelfCreateActivity;

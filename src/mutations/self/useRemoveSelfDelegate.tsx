@@ -1,9 +1,9 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as SELF_DELEGATES } from "@context/queries/self/useGetSelfDelegates";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { Account, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_DELEGATES_QUERY_KEY } from "@src/queries";
 
 export interface RemoveSelfDelegateParams extends MutationParams {
   accountId: string;
@@ -11,20 +11,29 @@ export interface RemoveSelfDelegateParams extends MutationParams {
 
 export const RemoveSelfDelegate = async ({
   accountId,
-}: RemoveSelfDelegateParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(`/self/delegates/${accountId}`);
+  clientApi,
+  queryClient,
+}: RemoveSelfDelegateParams): Promise<ConnectedXMResponse<Account>> => {
+  const { data } = await clientApi.delete<ConnectedXMResponse<Account>>(
+    `/self/delegates/${accountId}`
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_DELEGATES_QUERY_KEY() });
+  }
+
   return data;
 };
 
-export const useRemoveSelfDelegate = (accountId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<any>(() => RemoveSelfDelegate({ accountId }), {
-    onSuccess: (_response: ConnectedXMResponse<Account>) => {
-      queryClient.invalidateQueries([SELF_DELEGATES]);
-    },
-  });
+export const useRemoveSelfDelegate = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof RemoveSelfDelegate>>,
+    RemoveSelfDelegateParams
+  >
+) => {
+  return useConnectedMutation<
+    RemoveSelfDelegateParams,
+    Awaited<ReturnType<typeof RemoveSelfDelegate>>
+  >(RemoveSelfDelegate, params, options);
 };
-
-export default useRemoveSelfDelegate;

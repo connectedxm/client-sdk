@@ -1,9 +1,9 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Purchase } from "@context/interfaces";
-import { QUERY_KEY as SELF_EVENT_SESSIONS } from "@context/queries/self/useGetSelfEventSessions";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { Account, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_EVENT_SESSIONS_QUERY_KEY } from "@src/queries";
 
 export interface RemoveSelfEventSessionParams extends MutationParams {
   eventId: string;
@@ -13,28 +13,29 @@ export interface RemoveSelfEventSessionParams extends MutationParams {
 export const RemoveSelfEventSession = async ({
   eventId,
   sessionId,
-}: RemoveSelfEventSessionParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(
+  clientApi,
+  queryClient,
+}: RemoveSelfEventSessionParams): Promise<ConnectedXMResponse<Account>> => {
+  const { data } = await clientApi.delete<ConnectedXMResponse<Account>>(
     `/self/events/${eventId}/sessions/${sessionId}`
   );
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_SESSIONS_QUERY_KEY(eventId),
+    });
+  }
   return data;
 };
 
 export const useRemoveSelfEventSession = (
-  eventId: string,
-  sessionId: string
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof RemoveSelfEventSession>>,
+    RemoveSelfEventSessionParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    () => RemoveSelfEventSession({ eventId, sessionId }),
-    {
-      onSuccess: (_response: ConnectedXMResponse<Purchase>) => {
-        queryClient.invalidateQueries([SELF_EVENT_SESSIONS]);
-      },
-    }
-  );
+  return useConnectedMutation<
+    RemoveSelfEventSessionParams,
+    Awaited<ReturnType<typeof RemoveSelfEventSession>>
+  >(RemoveSelfEventSession, params, options);
 };
-
-export default useRemoveSelfEventSession;

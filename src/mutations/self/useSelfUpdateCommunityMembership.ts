@@ -15,12 +15,13 @@ export const SelfUpdateCommunityMembership = async ({
   membership,
   clientApi,
   queryClient,
+  locale = "en",
 }: SelfUpdateCommunityMembershipParams): Promise<
   ConnectedXMResponse<CommunityMembership>
 > => {
   if (queryClient) {
     queryClient.setQueryData(
-      SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
+      [...SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId), locale],
       (data: any) => {
         return {
           ...data,

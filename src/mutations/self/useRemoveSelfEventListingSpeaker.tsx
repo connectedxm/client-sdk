@@ -1,9 +1,9 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTING } from "@context/queries/self/useGetSelfEventListing";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { ConnectedXMResponse, EventListing } from "@src/interfaces";
 
 export interface RemoveSelfEventListingSpeakerParams extends MutationParams {
   eventId: string;
@@ -13,51 +13,59 @@ export interface RemoveSelfEventListingSpeakerParams extends MutationParams {
 export const RemoveSelfEventListingSpeaker = async ({
   eventId,
   speakerId,
-}: RemoveSelfEventListingSpeakerParams) => {
-  const connectedXM = await ConnectedXM();
+  clientApi,
+  queryClient,
+  locale = "en",
+}: RemoveSelfEventListingSpeakerParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  if (queryClient) {
+    queryClient.setQueryData(
+      [...EVENT_QUERY_KEY(eventId), locale],
+      (event: any) => {
+        if (event && event.data) {
+          const index = event?.data?.speakers?.findIndex(
+            (speaker: any) => speaker.id === speakerId
+          );
+          if (index !== -1 && event.data.speakers) {
+            event.data.speakers.splice(index, 1);
+          }
+        }
+        return event;
+      }
+    );
+    queryClient.setQueryData(
+      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+      (event: any) => {
+        if (event && event.data) {
+          const index = event?.data?.speakers?.findIndex(
+            (speaker: any) => speaker.id === speakerId
+          );
+          if (index !== -1 && event.data.speakers) {
+            event.data.speakers.splice(index, 1);
+          }
+        }
+        return event;
+      }
+    );
+  }
 
-  const { data } = await connectedXM.delete(
+  const { data } = await clientApi.delete<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/speakers/${speakerId}`
   );
 
   return data;
 };
 
-export const useRemoveSelfEventListingSpeaker = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<RemoveSelfEventListingSpeakerParams>(
-    (params: RemoveSelfEventListingSpeakerParams) =>
-      RemoveSelfEventListingSpeaker({ ...params }),
-    {
-      onMutate: ({ eventId, speakerId }) => {
-        queryClient.setQueryData([EVENT, eventId], (event: any) => {
-          if (event && event.data) {
-            const index = event?.data?.speakers?.findIndex(
-              (speaker: any) => speaker.id === speakerId
-            );
-            if (index !== -1 && event.data.speakers) {
-              event.data.speakers.splice(index, 1);
-            }
-          }
-          return event;
-        });
-        queryClient.setQueryData([EVENT_LISTING, eventId], (event: any) => {
-          if (event && event.data) {
-            const index = event?.data?.speakers?.findIndex(
-              (speaker: any) => speaker.id === speakerId
-            );
-            if (index !== -1 && event.data.speakers) {
-              event.data.speakers.splice(index, 1);
-            }
-          }
-          return event;
-        });
-      },
-    },
-    undefined,
-    true
-  );
+export const useRemoveSelfEventListingSpeaker = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof RemoveSelfEventListingSpeaker>>,
+    RemoveSelfEventListingSpeakerParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    RemoveSelfEventListingSpeakerParams,
+    Awaited<ReturnType<typeof RemoveSelfEventListingSpeaker>>
+  >(RemoveSelfEventListingSpeaker, params, options);
 };
-
-export default useRemoveSelfEventListingSpeaker;

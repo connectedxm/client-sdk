@@ -1,12 +1,18 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Speaker, Session, EventListing } from "@context/interfaces";
-import { QUERY_KEY as COMMUNITY_EVENTS } from "@context/queries/communities/useGetCommunityEvents";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTINGS } from "@context/queries/self/useGetSelfEventListings";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-// import GetImageBuffer from "@utilities/GetImageBuffer";
+import {
+  ConnectedXMResponse,
+  EventListing,
+  Session,
+  Speaker,
+} from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import {
+  COMMUNITY_EVENTS_QUERY_KEY,
+  EVENT_QUERY_KEY,
+  SELF_EVENT_LISTINGS_QUERY_KEY,
+} from "@src/queries";
 
 export type EventType = "physical" | "virtual" | "hybrid";
 export interface CreateEvent {
@@ -44,54 +50,69 @@ export const CreateSelfEventListing = async ({
   sponsorIds,
   speakers,
   sessions,
-}: CreateSelfEventListingParams) => {
-  const connectedXM = await ConnectedXM();
-
-  // if (image) {
-  //   image = await GetImageBuffer(image);
-  // }
-
+  clientApi,
+  queryClient,
+  locale = "en",
+}: CreateSelfEventListingParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  let data;
   if (communityId) {
-    const { data } = await connectedXM.post(
-      `/communityModerator/${communityId}/events`,
-      {
-        event,
-        image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
-        communityId: communityId || undefined,
-        sponsorIds: sponsorIds || undefined,
-        speakers,
-        sessions,
-      }
-    );
-    return data;
-  } else {
-    const { data } = await connectedXM.post(`/self/events/listings`, {
-      event,
-      image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
-      sponsorIds: sponsorIds || undefined,
-      speakers,
-      sessions,
-    });
-    return data;
-  }
-};
-
-export const useCreateSelfEventListing = (communityId?: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<CreateSelfEventListingParams>(
-    (params: CreateSelfEventListingParams) =>
-      CreateSelfEventListing({ ...params }),
-    {
-      onSuccess: (response: ConnectedXMResponse<EventListing>) => {
-        queryClient.invalidateQueries([EVENT_LISTINGS]);
-        if (communityId) {
-          queryClient.invalidateQueries([COMMUNITY_EVENTS, communityId]);
+    data = (
+      await clientApi.post<ConnectedXMResponse<EventListing>>(
+        `/communityModerator/${communityId}/events`,
+        {
+          event,
+          image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+          communityId: communityId || undefined,
+          sponsorIds: sponsorIds || undefined,
+          speakers,
+          sessions,
         }
-        queryClient.setQueryData([EVENT, response.data.slug], response.data);
-      },
+      )
+    ).data;
+  } else {
+    data = (
+      await clientApi.post<ConnectedXMResponse<EventListing>>(
+        `/self/events/listings`,
+        {
+          event,
+          image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+          sponsorIds: sponsorIds || undefined,
+          speakers,
+          sessions,
+        }
+      )
+    ).data;
+  }
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTINGS_QUERY_KEY(false),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTINGS_QUERY_KEY(true),
+    });
+    if (communityId) {
+      queryClient.invalidateQueries({
+        queryKey: COMMUNITY_EVENTS_QUERY_KEY(communityId),
+      });
     }
-  );
+    queryClient.setQueryData([...EVENT_QUERY_KEY(data.data.id), locale], data);
+  }
+
+  return data;
 };
 
-export default useCreateSelfEventListing;
+export const useCreateSelfEventListing = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CreateSelfEventListing>>,
+    CreateSelfEventListingParams
+  >
+) => {
+  return useConnectedMutation<
+    CreateSelfEventListingParams,
+    Awaited<ReturnType<typeof CreateSelfEventListing>>
+  >(CreateSelfEventListing, params, options);
+};
