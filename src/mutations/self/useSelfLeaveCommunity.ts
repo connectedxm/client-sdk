@@ -1,12 +1,15 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Purchase } from "@context/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+
 import {
-  QUERY_KEY as COMMUNITIES,
-  QUERY_KEY as COMMUNITY,
-} from "@context/queries/communities/useGetCommunity";
-import { QUERY_KEY as SELF_COMMUNITY } from "@context/queries/self/useGetSelfCommunityMembership";
-import { QUERY_KEY as SELF_COMMUNITIES } from "@context/queries/self/useGetSelfCommunityMemberships";
-import { useQueryClient } from "@tanstack/react-query";
+  COMMUNITIES_QUERY_KEY,
+  COMMUNITY_QUERY_KEY,
+  SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY,
+  SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
+} from "@src/queries";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
@@ -16,23 +19,39 @@ export interface SelfLeaveCommunityParams extends MutationParams {
 
 export const SelfLeaveCommunity = async ({
   communityId,
-}: SelfLeaveCommunityParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(`/self/communities/${communityId}`);
+  clientApi,
+  queryClient,
+}: SelfLeaveCommunityParams): Promise<ConnectedXMResponse<null>> => {
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
+    `/self/communities/${communityId}`
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: COMMUNITY_QUERY_KEY(communityId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: COMMUNITIES_QUERY_KEY(),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
+    });
+  }
+
   return data;
 };
 
-export const useSelfLeaveCommunity = (communityId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<any>(() => SelfLeaveCommunity({ communityId }), {
-    onSuccess: (_response: ConnectedXMResponse<Purchase>) => {
-      queryClient.invalidateQueries([COMMUNITY, communityId]);
-      queryClient.invalidateQueries([COMMUNITIES]);
-      queryClient.invalidateQueries([SELF_COMMUNITIES]);
-      queryClient.invalidateQueries([SELF_COMMUNITY, communityId]);
-    },
-  });
+export const useSelfLeaveCommunity = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof SelfLeaveCommunity>>,
+    SelfLeaveCommunityParams
+  >
+) => {
+  return useConnectedMutation<
+    SelfLeaveCommunityParams,
+    Awaited<ReturnType<typeof SelfLeaveCommunity>>
+  >((params) => SelfLeaveCommunity({ ...params }), options);
 };
-
-export default useSelfLeaveCommunity;
