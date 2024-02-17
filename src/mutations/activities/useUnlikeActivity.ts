@@ -1,41 +1,43 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { QUERY_KEY as ACTIVITIES } from "@context/queries/activities/useGetActivities";
-import { QUERY_KEY as ACTIVITY } from "@context/queries/activities/useGetActivity";
+import { Activity, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationParams,
+  MutationOptions,
+} from "../useConnectedMutation";
 import {
   UpdateLikesInfinite,
   UpdateLikesSingle,
-} from "@context/utilities/optimistic/UpdateLikes";
-import { useQueryClient } from "@tanstack/react-query";
+} from "./optimistic/UpdateLikes";
+import { ACTIVITIES_QUERY_KEY, ACTIVITY_QUERY_KEY } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
-interface UnlikeActivityParams extends MutationParams {
+export interface UnlikeActivityParams extends MutationParams {
   activityId: string;
 }
 
-export const UnlikeActivity = async ({ activityId }: UnlikeActivityParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(
+export const UnlikeActivity = async ({
+  activityId,
+  clientApi,
+  queryClient,
+}: UnlikeActivityParams): Promise<ConnectedXMResponse<Activity>> => {
+  if (queryClient) {
+    UpdateLikesSingle(false, queryClient, ACTIVITY_QUERY_KEY(activityId));
+    UpdateLikesInfinite(false, queryClient, ACTIVITIES_QUERY_KEY(), activityId);
+  }
+
+  const { data } = await clientApi.delete<ConnectedXMResponse<Activity>>(
     `/self/activities/${activityId}/likes`
   );
+
   return data;
 };
 
-export const useUnlikeActivity = (activityId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UnlikeActivityParams>(
-    (params: MutationParams) => UnlikeActivity({ ...params, activityId }),
-    {
-      onMutate: () => {
-        // Optimistic mutation for single query
-        UpdateLikesSingle(false, queryClient, [ACTIVITY, activityId]);
-        UpdateLikesInfinite(false, queryClient, [ACTIVITIES], activityId);
-      },
-    },
-    undefined,
-    true
-  );
+export const useUnlikeActivity = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UnlikeActivity>>,
+    UnlikeActivityParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    UnlikeActivityParams,
+    Awaited<ReturnType<typeof UnlikeActivity>>
+  >((params) => UnlikeActivity({ ...params }), options);
 };
-
-export default useUnlikeActivity;

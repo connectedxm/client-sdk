@@ -9,8 +9,8 @@ import { AxiosError, AxiosInstance } from "axios";
 import { ConnectedXMResponse, useClientAPI } from "..";
 
 export interface MutationParams {
-  queryClient: QueryClient;
   clientApi: AxiosInstance;
+  queryClient?: QueryClient;
 }
 
 export interface MutationOptions<TResponseData, TMutationParams>
