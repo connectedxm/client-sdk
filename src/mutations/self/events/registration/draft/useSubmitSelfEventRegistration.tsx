@@ -31,7 +31,7 @@ export interface SubmitPaypalResponse {
 
 export type SubmitResponse = SubmitStripeResponse | SubmitPaypalResponse;
 
-interface SubmitSelfEventRegistrationParams extends MutationParams {
+export interface SubmitSelfEventRegistrationParams extends MutationParams {
   eventId: string;
   registrationId: string;
   payment?: SubmitPayment;

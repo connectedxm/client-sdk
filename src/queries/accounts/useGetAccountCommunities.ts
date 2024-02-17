@@ -33,7 +33,7 @@ export const SET_ACCOUNT_COMMUNITIES_QUERY_DATA = (
   );
 };
 
-interface GetAccountCommunitiesProps extends InfiniteQueryParams {
+export interface GetAccountCommunitiesProps extends InfiniteQueryParams {
   accountId: string;
 }
 

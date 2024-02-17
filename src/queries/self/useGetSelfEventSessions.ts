@@ -16,7 +16,7 @@ export const SELF_EVENT_SESSIONS_QUERY_KEY = (eventId: string): QueryKey => [
   "SESSIONS",
 ];
 
-interface GetSelfEventSessionsProps extends InfiniteQueryParams {
+export interface GetSelfEventSessionsProps extends InfiniteQueryParams {
   eventId: string;
 }
 

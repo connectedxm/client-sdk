@@ -31,7 +31,7 @@ export const SET_SERIES_EVENTS_QUERY_DATA = (
   );
 };
 
-interface GetSeriesEventsProps extends InfiniteQueryParams {
+export interface GetSeriesEventsProps extends InfiniteQueryParams {
   seriesId: string;
 }
 

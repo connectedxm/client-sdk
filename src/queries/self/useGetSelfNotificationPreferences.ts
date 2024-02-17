@@ -14,7 +14,8 @@ export const SELF_PREFERENCES_QUERY_KEY = (): QueryKey => [
   "PREFERENCES",
 ];
 
-interface GetSelfNotificationPreferencesProps extends SingleQueryParams {}
+export interface GetSelfNotificationPreferencesProps
+  extends SingleQueryParams {}
 
 export const GetSelfNotificationPreferences = async ({
   clientApi,

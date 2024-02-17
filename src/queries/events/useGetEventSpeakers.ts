@@ -31,7 +31,7 @@ export const SET_EVENT_SPEAKERS_QUERY_DATA = (
   );
 };
 
-interface GetEventSpeakersProps extends InfiniteQueryParams {
+export interface GetEventSpeakersProps extends InfiniteQueryParams {
   eventId: string;
 }
 

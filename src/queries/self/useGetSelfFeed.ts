@@ -15,7 +15,7 @@ export const SELF_FEED_QUERY_KEY = (): QueryKey => [
   "FEED",
 ];
 
-interface GetSelfFeedProps extends InfiniteQueryParams {}
+export interface GetSelfFeedProps extends InfiniteQueryParams {}
 
 export const GetSelfFeed = async ({
   pageParam,

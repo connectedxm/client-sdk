@@ -30,7 +30,7 @@ export const SET_ACCOUNT_QUERY_DATA = (
   );
 };
 
-interface GetAccountProps extends SingleQueryParams {
+export interface GetAccountProps extends SingleQueryParams {
   accountId: string;
 }
 

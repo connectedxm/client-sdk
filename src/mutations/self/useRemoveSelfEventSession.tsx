@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface RemoveSelfEventSessionParams extends MutationParams {
+export interface RemoveSelfEventSessionParams extends MutationParams {
   eventId: string;
   sessionId: string;
 }
@@ -16,14 +16,14 @@ export const RemoveSelfEventSession = async ({
 }: RemoveSelfEventSessionParams) => {
   const connectedXM = await ConnectedXM();
   const { data } = await connectedXM.delete(
-    `/self/events/${eventId}/sessions/${sessionId}`,
+    `/self/events/${eventId}/sessions/${sessionId}`
   );
   return data;
 };
 
 export const useRemoveSelfEventSession = (
   eventId: string,
-  sessionId: string,
+  sessionId: string
 ) => {
   const queryClient = useQueryClient();
 
@@ -33,7 +33,7 @@ export const useRemoveSelfEventSession = (
       onSuccess: (_response: ConnectedXMResponse<Purchase>) => {
         queryClient.invalidateQueries([SELF_EVENT_SESSIONS]);
       },
-    },
+    }
   );
 };
 

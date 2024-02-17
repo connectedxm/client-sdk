@@ -27,7 +27,7 @@ export const SET_BENEFITS_QUERY_DATA = (
   );
 };
 
-interface GetBenefitsProps extends InfiniteQueryParams {}
+export interface GetBenefitsProps extends InfiniteQueryParams {}
 
 export const GetBenefits = async ({
   pageParam,

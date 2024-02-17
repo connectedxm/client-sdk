@@ -30,7 +30,7 @@ export const SET_EVENT_PAGE_QUERY_DATA = (
   );
 };
 
-interface GetEventPageProps extends SingleQueryParams {
+export interface GetEventPageProps extends SingleQueryParams {
   eventId: string;
   pageId: string;
 }

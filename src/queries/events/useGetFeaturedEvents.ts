@@ -31,7 +31,7 @@ export const SET_EVENTS_FEATURED_QUERY_DATA = (
   );
 };
 
-interface GetFeaturedEventsProps extends InfiniteQueryParams {}
+export interface GetFeaturedEventsProps extends InfiniteQueryParams {}
 
 export const GetFeaturedEvents = async ({
   pageParam,

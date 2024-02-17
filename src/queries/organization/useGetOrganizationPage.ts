@@ -32,7 +32,7 @@ export const SET_ORGANIZATION_PAGE_QUERY_DATA = (
 
 export type PageType = "about" | "team" | "privacy" | "terms";
 
-interface GetOrganizationPageProps extends SingleQueryParams {
+export interface GetOrganizationPageProps extends SingleQueryParams {
   type: PageType;
 }
 

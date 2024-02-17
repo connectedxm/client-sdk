@@ -25,7 +25,7 @@ export const SET_SPONSORS_QUERY_DATA = (
   );
 };
 
-interface GetSponsorsProps extends InfiniteQueryParams {}
+export interface GetSponsorsProps extends InfiniteQueryParams {}
 
 export const GetSponsors = async ({
   pageParam,

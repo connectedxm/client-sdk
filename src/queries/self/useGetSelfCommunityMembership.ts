@@ -29,7 +29,7 @@ export const SET_SELF_COMMUNITY_MEMBERSHIP_QUERY_DATA = (
   );
 };
 
-interface GetSelfCommunityMembershipProps extends SingleQueryParams {
+export interface GetSelfCommunityMembershipProps extends SingleQueryParams {
   communityId: string;
 }
 

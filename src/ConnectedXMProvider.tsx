@@ -17,7 +17,7 @@ export const ConnectedXMClientContext =
     {} as ConnectedXMClientContextState
   );
 
-interface ConnectedXMProviderProps
+export interface ConnectedXMProviderProps
   extends Omit<ConnectedXMClientContextState, "token" | "setToken"> {
   children: React.ReactNode;
 }

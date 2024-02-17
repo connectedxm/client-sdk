@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface DeleteActivityParams extends MutationParams {
+export interface DeleteActivityParams extends MutationParams {
   activityId: string;
 }
 

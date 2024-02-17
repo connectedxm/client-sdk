@@ -30,7 +30,7 @@ export const SET_COMMUNITY_ANNOUNCEMENTS_QUERY_DATA = (
   );
 };
 
-interface GetCommunityAnnouncementsProps extends InfiniteQueryParams {
+export interface GetCommunityAnnouncementsProps extends InfiniteQueryParams {
   communityId: string;
 }
 

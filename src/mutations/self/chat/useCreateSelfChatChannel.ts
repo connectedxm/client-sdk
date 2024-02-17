@@ -1,12 +1,10 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { ChatChannel } from "@context/interfaces";
+import { ChatChannel, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannels";
-import { useQueryClient } from "@tanstack/react-query";
+} from "@src/mutations/useConnectedMutation";
+import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@src/queries";
 
-interface CreateSelfChatChannelParams extends MutationParams {
+export interface CreateSelfChatChannelParams extends MutationParams {
   name: string;
   accountIds: string[];
 }
@@ -14,29 +12,31 @@ interface CreateSelfChatChannelParams extends MutationParams {
 export const CreateSelfChatChannel = async ({
   name,
   accountIds,
+  clientApi,
+  queryClient,
 }: CreateSelfChatChannelParams): Promise<ConnectedXMResponse<ChatChannel>> => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(`/self/chat/channels`, {
-    name,
-    accountIds,
-  });
+  const { data } = await clientApi.post<ConnectedXMResponse<ChatChannel>>(
+    `/self/chat/channels`,
+    {
+      name,
+      accountIds,
+    }
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_CHAT_CHANNELS_QUERY_KEY(),
+    });
+  }
+
   return data;
 };
 
 export const useCreateSelfChatChannel = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (params: Omit<CreateSelfChatChannelParams, "name">) =>
-      CreateSelfChatChannel({ ...params, name: "" }),
-    {
-      onSuccess: (
-        _response: Awaited<ReturnType<typeof CreateSelfChatChannel>>
-      ) => {
-        queryClient.invalidateQueries(SELF_CHAT_CHANNELS_QUERY_KEY());
-      },
-    }
-  );
+  return useConnectedMutation<
+    CreateSelfChatChannelParams,
+    Awaited<ReturnType<typeof CreateSelfChatChannel>>
+  >((params) => CreateSelfChatChannel({ ...params, name: "" }));
 };
 
 export default useCreateSelfChatChannel;

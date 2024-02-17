@@ -5,7 +5,8 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { ConnectedXMResponse, NotificationPreferences } from "@src/interfaces";
 
-interface UpdateSelfNotificationPreferencesParams extends MutationParams {
+export interface UpdateSelfNotificationPreferencesParams
+  extends MutationParams {
   newFollowerPush?: boolean;
   newFollowerEmail?: boolean;
   likePush?: boolean;

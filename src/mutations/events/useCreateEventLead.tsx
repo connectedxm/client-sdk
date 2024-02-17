@@ -5,7 +5,7 @@ import {
   useConnectedMutation,
 } from "../useConnectedMutation";
 
-interface CreateEventLeadParams extends MutationParams {
+export interface CreateEventLeadParams extends MutationParams {
   eventId: string;
   purchaseId: string;
   note?: string;

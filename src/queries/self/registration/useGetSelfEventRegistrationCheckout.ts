@@ -22,7 +22,8 @@ export const SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY = (
   "CHECKOUT",
 ];
 
-interface GetSelfEventRegistrationCheckoutProps extends SingleQueryParams {
+export interface GetSelfEventRegistrationCheckoutProps
+  extends SingleQueryParams {
   eventId: string;
   registrationId: string;
 }

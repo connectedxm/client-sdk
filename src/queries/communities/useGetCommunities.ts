@@ -28,7 +28,7 @@ export const SET_COMMUNITIES_QUERY_DATA = (
   );
 };
 
-interface GetCommunitiesProps extends InfiniteQueryParams {
+export interface GetCommunitiesProps extends InfiniteQueryParams {
   privateCommunities?: boolean;
 }
 

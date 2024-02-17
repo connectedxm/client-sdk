@@ -28,7 +28,7 @@ export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
   );
 };
 
-interface GetSelfEventRegistrationProps extends SingleQueryParams {
+export interface GetSelfEventRegistrationProps extends SingleQueryParams {
   eventId: string;
   ticket?: string;
   quantity?: number;

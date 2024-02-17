@@ -5,7 +5,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface SelfCheckinEventListingRegistrationParams extends MutationParams {
+export interface SelfCheckinEventListingRegistrationParams
+  extends MutationParams {
   accountId: string;
   eventId: string;
 }
@@ -16,7 +17,7 @@ export const SelfCheckinEventListingRegistration = async ({
 }: SelfCheckinEventListingRegistrationParams) => {
   const connectedXM = await ConnectedXM();
   const { data } = await connectedXM.post(
-    `/self/events/listings/${eventId}/registrations/${accountId}`,
+    `/self/events/listings/${eventId}/registrations/${accountId}`
   );
   return data;
 };
@@ -31,7 +32,7 @@ export const useSelfCheckinEventLisingRegistration = (eventId: string) => {
       onSuccess: (_response: ConnectedXMResponse<Registration>) => {
         queryClient.invalidateQueries([EVENT_REGISTRATIONS, eventId]);
       },
-    },
+    }
   );
 };
 

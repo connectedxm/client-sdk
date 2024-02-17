@@ -1,10 +1,10 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { ChatChannelMessage } from "@context/interfaces";
+import { ChatChannelMessage, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
-interface CreateSelfChatChannelMessageParams extends MutationParams {
+export interface CreateSelfChatChannelMessageParams extends MutationParams {
   channelId: string;
   text: string;
 }
@@ -12,28 +12,33 @@ interface CreateSelfChatChannelMessageParams extends MutationParams {
 export const CreateSelfChatChannelMessage = async ({
   channelId,
   text,
+  queryClient,
+  clientApi,
 }: CreateSelfChatChannelMessageParams): Promise<
   ConnectedXMResponse<ChatChannelMessage>
 > => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
-    `/self/chat/channels/${channelId}/messages`,
-    {
-      text,
-    }
-  );
+  const { data } = await clientApi.post<
+    ConnectedXMResponse<ChatChannelMessage>
+  >(`/self/chat/channels/${channelId}/messages`, {
+    text,
+  });
+
+  if (queryClient && data.status === "ok") {
+    // NOTHING
+  }
+
   return data;
 };
 
-export const useCreateSelfChatChannelMessage = (channelId: string) => {
+export const useCreateSelfChatChannelMessage = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CreateSelfChatChannelMessage>>,
+    CreateSelfChatChannelMessageParams
+  > = {}
+) => {
   return useConnectedMutation(
-    (params: Omit<CreateSelfChatChannelMessageParams, "channelId">) =>
-      CreateSelfChatChannelMessage({ ...params, channelId }),
-    {
-      onSuccess: (
-        _response: Awaited<ReturnType<typeof CreateSelfChatChannelMessage>>
-      ) => {},
-    }
+    (params) => CreateSelfChatChannelMessage({ ...params }),
+    options
   );
 };
 

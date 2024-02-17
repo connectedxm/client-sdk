@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface SelfJoinNewsletterParams extends MutationParams {}
+export interface SelfJoinNewsletterParams extends MutationParams {}
 
 export const SelfJoinNewsletter = async (_: SelfJoinNewsletterParams) => {
   const connectedXM = await ConnectedXM();

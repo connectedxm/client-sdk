@@ -11,7 +11,7 @@ export const SELF_NOTIFICATION_COUNT_QUERY_KEY = (
   filters: string
 ): QueryKey => [...SELF_QUERY_KEY(), "NOTIFICATION_COUNT", filters];
 
-interface GetSelfNewNotificationsCountProps extends SingleQueryParams {
+export interface GetSelfNewNotificationsCountProps extends SingleQueryParams {
   filters?: string;
 }
 

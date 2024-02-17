@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface AddSelfEventListingSessionParams extends MutationParams {
+export interface AddSelfEventListingSessionParams extends MutationParams {
   eventId: string;
   session: Omit<
     Session,

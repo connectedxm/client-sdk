@@ -5,7 +5,8 @@ import useConnectedMutation, {
 import { useQueryClient } from "@tanstack/react-query";
 import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
 
-interface UpdateSelfEventRegistrationResponseParams extends MutationParams {
+export interface UpdateSelfEventRegistrationResponseParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
   questionId: string;

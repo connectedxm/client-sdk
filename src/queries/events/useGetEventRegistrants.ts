@@ -34,7 +34,7 @@ export const SET_EVENT_REGISTRANTS_QUERY_DATA = (
   );
 };
 
-interface GetEventRegistrantsProps extends InfiniteQueryParams {
+export interface GetEventRegistrantsProps extends InfiniteQueryParams {
   eventId: string;
 }
 

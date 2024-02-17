@@ -7,7 +7,8 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 
-interface CaptureSelfEventRegistrationPaymentParams extends MutationParams {
+export interface CaptureSelfEventRegistrationPaymentParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
 }

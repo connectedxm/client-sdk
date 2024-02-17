@@ -35,7 +35,7 @@ export const SET_EVENT_FAQ_SECTION_QUESTIONS_QUERY_DATA = (
   );
 };
 
-interface GetEventFaqsProps extends InfiniteQueryParams {
+export interface GetEventFaqsProps extends InfiniteQueryParams {
   eventId: string;
   sectionId: string;
 }

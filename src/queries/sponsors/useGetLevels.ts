@@ -27,7 +27,7 @@ export const SET_LEVELS_QUERY_DATA = (
   );
 };
 
-interface GetLevelsProps extends InfiniteQueryParams {}
+export interface GetLevelsProps extends InfiniteQueryParams {}
 
 export const GetLevels = async ({
   pageParam,

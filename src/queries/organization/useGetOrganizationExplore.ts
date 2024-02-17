@@ -24,7 +24,8 @@ interface Explore {
   communities: BaseCommunity[];
   recommendations: BaseAccount[];
 }
-interface GetOrganizationExploreProps extends SingleQueryParams {}
+
+export interface GetOrganizationExploreProps extends SingleQueryParams {}
 
 export const GetOrganizationExplore = async ({
   clientApi,

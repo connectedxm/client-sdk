@@ -28,7 +28,7 @@ export interface CreateEvent {
   registrationLimit?: string;
 }
 
-interface CreateSelfEventListingParams extends MutationParams {
+export interface CreateSelfEventListingParams extends MutationParams {
   event: CreateEvent;
   base64?: any;
   communityId?: string;

@@ -28,7 +28,7 @@ export const SET_CONTENTS_QUERY_DATA = (
   );
 };
 
-interface GetContentParams extends InfiniteQueryParams {}
+export interface GetContentParams extends InfiniteQueryParams {}
 
 export const GetContents = async ({
   pageParam,

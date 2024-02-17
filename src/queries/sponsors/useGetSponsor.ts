@@ -27,7 +27,7 @@ export const SET_SPONSOR_QUERY_DATA = (
   );
 };
 
-interface GetSponsorProps extends SingleQueryParams {
+export interface GetSponsorProps extends SingleQueryParams {
   accountId: string;
 }
 

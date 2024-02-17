@@ -8,7 +8,7 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { ConnectedXMResponse } from "@src/interfaces";
 
-interface RemoveCommunityEventParams extends MutationParams {
+export interface RemoveCommunityEventParams extends MutationParams {
   communityId: string;
   eventId: string;
 }

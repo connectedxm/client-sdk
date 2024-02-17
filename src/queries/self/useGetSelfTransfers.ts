@@ -13,7 +13,7 @@ export const SELF_TRANSFERS_QUERY_KEY = (): QueryKey => [
   "TRANSFERS",
 ];
 
-interface GetSelfTransfersProps extends InfiniteQueryParams {}
+export interface GetSelfTransfersProps extends InfiniteQueryParams {}
 
 export const GetSelfTransfers = async ({
   pageParam,

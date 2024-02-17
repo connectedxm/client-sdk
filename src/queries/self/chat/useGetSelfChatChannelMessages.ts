@@ -32,7 +32,7 @@ export const SET_SELF_CHAT_CHANNEL_MESSAGES_QUERY_DATA = (
   );
 };
 
-interface GetSelfChatChannelMessagesProps extends InfiniteQueryParams {
+export interface GetSelfChatChannelMessagesProps extends InfiniteQueryParams {
   channelId: string;
 }
 

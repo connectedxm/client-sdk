@@ -10,7 +10,8 @@ import { QUERY_KEY as SELF_EVENTS } from "@context/queries/self/useGetSelfEvents
 import { useQueryClient } from "@tanstack/react-query";
 import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
 
-interface SelectSelfEventRegistrationCouponParams extends MutationParams {
+export interface SelectSelfEventRegistrationCouponParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
   couponId: string;

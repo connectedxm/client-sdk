@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface AddSelfEventListingSponsorParams extends MutationParams {
+export interface AddSelfEventListingSponsorParams extends MutationParams {
   eventId: string;
   sponsor: Account;
 }

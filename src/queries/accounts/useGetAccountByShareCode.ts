@@ -30,7 +30,7 @@ export const SET_ACCOUNT_BY_SHARE_CODE_QUERY_DATA = (
   );
 };
 
-interface GetAccountByShareCodeProps extends SingleQueryParams {
+export interface GetAccountByShareCodeProps extends SingleQueryParams {
   shareCode: string;
 }
 

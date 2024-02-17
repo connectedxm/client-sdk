@@ -23,7 +23,7 @@ export const SET_SELF_QUERY_DATA = (
   );
 };
 
-interface GetSelfProps extends SingleQueryParams {}
+export interface GetSelfProps extends SingleQueryParams {}
 
 export const GetSelf = async ({
   clientApi,

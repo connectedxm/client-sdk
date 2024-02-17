@@ -27,7 +27,7 @@ export const SET_EVENT_QUERY_DATA = (
   );
 };
 
-interface GetEventProps extends SingleQueryParams {
+export interface GetEventProps extends SingleQueryParams {
   eventId: string;
 }
 

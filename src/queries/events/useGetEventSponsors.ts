@@ -32,7 +32,7 @@ export const SET_EVENT_SPONSORS_QUERY_DATA = (
   );
 };
 
-interface GetEventSponsorsProps extends InfiniteQueryParams {
+export interface GetEventSponsorsProps extends InfiniteQueryParams {
   eventId: string;
 }
 

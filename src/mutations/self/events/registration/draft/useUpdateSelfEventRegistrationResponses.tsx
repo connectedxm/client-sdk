@@ -9,7 +9,8 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 
-interface UpdateSelfEventRegistrationResponsesParams extends MutationParams {
+export interface UpdateSelfEventRegistrationResponsesParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
   responses: BaseRegistrationQuestionResponse[];

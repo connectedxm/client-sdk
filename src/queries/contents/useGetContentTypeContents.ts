@@ -31,7 +31,7 @@ export const SET_CONTENT_TYPE_CONTENTS_QUERY_DATA = (
   );
 };
 
-interface GetContentParams extends InfiniteQueryParams {
+export interface GetContentParams extends InfiniteQueryParams {
   contentTypeId: string;
 }
 

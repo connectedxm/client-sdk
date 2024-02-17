@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface SelfLeaveCommunityParams extends MutationParams {
+export interface SelfLeaveCommunityParams extends MutationParams {
   communityId: string;
 }
 

@@ -6,7 +6,7 @@ import { QUERY_KEY as EVENT_REGISTRATION_KEY } from "@context/queries/self/regis
 import { useQueryClient } from "@tanstack/react-query";
 import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
 
-interface TransferPurchaseParams extends MutationParams {
+export interface TransferPurchaseParams extends MutationParams {
   email: string;
   purchaseId: string;
   eventId: string;

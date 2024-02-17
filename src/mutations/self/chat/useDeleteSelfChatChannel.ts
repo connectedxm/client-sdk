@@ -1,38 +1,46 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { SELF_CHAT_CHANNEL_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannel";
-import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannels";
-import { useQueryClient } from "@tanstack/react-query";
+  MutationOptions,
+} from "@src/mutations/useConnectedMutation";
+import {
+  SELF_CHAT_CHANNELS_QUERY_KEY,
+  SELF_CHAT_CHANNEL_QUERY_KEY,
+} from "@src/queries";
 
-interface DeleteSelfChatChannelParams extends MutationParams {
+export interface DeleteSelfChatChannelParams extends MutationParams {
   channelId: string;
 }
 
 export const DeleteSelfChatChannel = async ({
   channelId,
+  clientApi,
+  queryClient,
 }: DeleteSelfChatChannelParams): Promise<ConnectedXMResponse<null>> => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(`/self/chat/channels/${channelId}`);
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
+    `/self/chat/channels/${channelId}`
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_CHAT_CHANNELS_QUERY_KEY() });
+    queryClient.removeQueries({
+      queryKey: SELF_CHAT_CHANNEL_QUERY_KEY(channelId),
+    });
+  }
+
   return data;
 };
 
-export const useDeleteSelfChatChannel = (channelId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (params: Omit<DeleteSelfChatChannelParams, "channelId">) =>
-      DeleteSelfChatChannel({ ...params, channelId }),
-    {
-      onSuccess: (
-        _response: Awaited<ReturnType<typeof DeleteSelfChatChannel>>
-      ) => {
-        queryClient.invalidateQueries(SELF_CHAT_CHANNELS_QUERY_KEY());
-        queryClient.removeQueries(SELF_CHAT_CHANNEL_QUERY_KEY(channelId));
-      },
-    }
-  );
+export const useDeleteSelfChatChannel = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof DeleteSelfChatChannel>>,
+    DeleteSelfChatChannelParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    DeleteSelfChatChannelParams,
+    Awaited<ReturnType<typeof DeleteSelfChatChannel>>
+  >((params) => DeleteSelfChatChannel({ ...params }), options);
 };
 
 export default useDeleteSelfChatChannel;

@@ -29,7 +29,7 @@ export const SET_ACTIVITIES_QUERY_DATA = (
   );
 };
 
-interface GetActivitiesProps extends InfiniteQueryParams {}
+export interface GetActivitiesProps extends InfiniteQueryParams {}
 
 export const GetActivities = async ({
   pageParam,

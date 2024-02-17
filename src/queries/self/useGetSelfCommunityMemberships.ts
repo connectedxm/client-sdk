@@ -13,7 +13,7 @@ export const SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY = (): QueryKey => [
   "COMMUNITY_MEMBERSHIPS",
 ];
 
-interface GetSelfCommunityMembershipsProps extends InfiniteQueryParams {}
+export interface GetSelfCommunityMembershipsProps extends InfiniteQueryParams {}
 
 export const GetSelfCommunityMemberships = async ({
   pageParam,

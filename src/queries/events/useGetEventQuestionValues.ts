@@ -12,7 +12,7 @@ export const EVENT_QUESTION_VALUES_QUERY_KEY = (
   questionId: string
 ) => [...EVENT_QUERY_KEY(eventId), "QUESTIONS", questionId, "VALUES"];
 
-interface GetEventQuestionSearchValuesProps extends InfiniteQueryParams {
+export interface GetEventQuestionSearchValuesProps extends InfiniteQueryParams {
   eventId: string;
   questionId: string;
 }

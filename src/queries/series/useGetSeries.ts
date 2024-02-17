@@ -26,7 +26,7 @@ export const SET_SERIES_QUERY_DATA = (
   );
 };
 
-interface GetSeriesProps extends SingleQueryParams {
+export interface GetSeriesProps extends SingleQueryParams {
   seriesId: string;
 }
 

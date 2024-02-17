@@ -14,14 +14,14 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface CreateActivity {
+export interface CreateActivity {
   message: string;
   contentId?: string;
   eventId?: string;
   communityId?: string;
   commentedId?: string;
 }
-interface SelfCreateActivityParams extends MutationParams {
+export interface SelfCreateActivityParams extends MutationParams {
   activity: CreateActivity;
   base64Image?: any;
 }

@@ -15,7 +15,7 @@ export const SELF_DELEGATES_QUERY_KEY = (): QueryKey => [
   "DELEGATES",
 ];
 
-interface GetSelfDelegatesProps extends InfiniteQueryParams {}
+export interface GetSelfDelegatesProps extends InfiniteQueryParams {}
 
 export const GetSelfDelegates = async ({
   pageParam,

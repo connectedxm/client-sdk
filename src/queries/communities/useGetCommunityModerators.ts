@@ -30,7 +30,7 @@ export const SET_COMMUNITY_MODERATORS_QUERY_DATA = (
   );
 };
 
-interface GetCommunityModeratorsProps extends InfiniteQueryParams {
+export interface GetCommunityModeratorsProps extends InfiniteQueryParams {
   communityId: string;
 }
 

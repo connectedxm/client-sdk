@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface RemoveSelfEventListingSessionParams extends MutationParams {
+export interface RemoveSelfEventListingSessionParams extends MutationParams {
   eventId: string;
   sessionId: string;
 }
@@ -17,7 +17,7 @@ export const RemoveSelfEventListingSession = async ({
   const connectedXM = await ConnectedXM();
 
   const { data } = await connectedXM.delete(
-    `/self/events/listings/${eventId}/sessions/${sessionId}`,
+    `/self/events/listings/${eventId}/sessions/${sessionId}`
   );
 
   return data;
@@ -34,7 +34,7 @@ export const useRemoveSelfEventListingSession = () => {
         queryClient.setQueryData([EVENT, eventId], (event: any) => {
           if (event && event.data) {
             const index = event?.data?.sessions?.findIndex(
-              (session: any) => session.id === sessionId,
+              (session: any) => session.id === sessionId
             );
             if (index !== -1 && event.data.sessions) {
               event.data.sessions.splice(index, 1);
@@ -45,7 +45,7 @@ export const useRemoveSelfEventListingSession = () => {
         queryClient.setQueryData([EVENT_LISTING, eventId], (event: any) => {
           if (event && event.data) {
             const index = event?.data?.sessions?.findIndex(
-              (session: any) => session.id === sessionId,
+              (session: any) => session.id === sessionId
             );
             if (index !== -1 && event.data.sessions) {
               event.data.sessions.splice(index, 1);
@@ -56,7 +56,7 @@ export const useRemoveSelfEventListingSession = () => {
       },
     },
     undefined,
-    true,
+    true
   );
 };
 

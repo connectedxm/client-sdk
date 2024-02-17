@@ -29,7 +29,7 @@ export const SET_ADVERTISEMENT_QUERY_DATA = (
   );
 };
 
-interface GetAdvertisementProps extends SingleQueryParams {}
+export interface GetAdvertisementProps extends SingleQueryParams {}
 
 export const GetAdvertisement = async ({
   clientApi,

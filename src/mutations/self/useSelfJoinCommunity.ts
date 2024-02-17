@@ -14,7 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface SelfJoinCommunityParams extends MutationParams {
+export interface SelfJoinCommunityParams extends MutationParams {
   communityId: string;
 }
 
@@ -49,7 +49,7 @@ export const useSelfJoinCommunity = (communityId: string) => {
         queryClient.invalidateQueries([SELF_COMMUNITIES]);
         queryClient.invalidateQueries([SELF_COMMUNITY, communityId]);
       },
-    },
+    }
   );
 };
 

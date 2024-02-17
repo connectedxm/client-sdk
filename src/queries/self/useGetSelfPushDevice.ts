@@ -29,7 +29,7 @@ export const SET_PUSH_DEVICE_QUERY_DATA = (
   );
 };
 
-interface GetSelfPushDeviceProps extends SingleQueryParams {
+export interface GetSelfPushDeviceProps extends SingleQueryParams {
   pushDeviceId: string;
 }
 

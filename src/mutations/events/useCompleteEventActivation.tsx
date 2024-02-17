@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationOptions,
 } from "../useConnectedMutation";
 
-interface CompleteEventActivationParams extends MutationParams {
+export interface CompleteEventActivationParams extends MutationParams {
   eventId: string;
   activationId: string;
   code?: string;
