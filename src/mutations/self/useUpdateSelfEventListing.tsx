@@ -1,12 +1,15 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { EventListing } from "@context/interfaces";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTING } from "@context/queries/self/useGetSelfEventListing";
-import { QUERY_KEY as EVENT_LISTINGS } from "@context/queries/self/useGetSelfEventListings";
-import { useQueryClient } from "@tanstack/react-query";
-// import GetImageBuffer from "@utilities/GetImageBuffer";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { ConnectedXMResponse, EventListing } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import {
+  EVENT_QUERY_KEY,
+  SELF_EVENT_LISTINGS_QUERY_KEY,
+  SELF_EVENT_LISTING_QUERY_KEY,
+  SET_EVENT_QUERY_DATA,
+  SET_SELF_EVENT_LISTING_QUERY_DATA,
+} from "@src/queries";
 
 export interface UpdateListing {
   eventType: string;
@@ -31,7 +34,7 @@ export interface UpdateListing {
   externalUrl: string | null;
 }
 
-interface UpdateSelfEventListingParams extends MutationParams {
+export interface UpdateSelfEventListingParams extends MutationParams {
   eventId: string;
   event: UpdateListing;
   base64?: any;
@@ -41,33 +44,46 @@ export const UpdateSelfEventListing = async ({
   eventId,
   event,
   base64,
-}: UpdateSelfEventListingParams) => {
-  const connectedXM = await ConnectedXM();
+  clientApi,
+  queryClient,
+}: UpdateSelfEventListingParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
+    `/self/events/listings/${eventId}`,
+    {
+      event,
+      image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+    }
+  );
 
-  const { data } = await connectedXM.put(`/self/events/listings/${eventId}`, {
-    event,
-    image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
-  });
+  if (queryClient && data.status === "ok") {
+    SET_EVENT_QUERY_DATA(queryClient, [eventId], data);
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+
+    queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTING_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTINGS_QUERY_KEY(false),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTINGS_QUERY_KEY(true),
+    });
+  }
+
   return data;
 };
 
-export const useUpdateSelfEventListing = (eventId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateSelfEventListingParams>(
-    (params: Omit<UpdateSelfEventListingParams, "eventId">) =>
-      UpdateSelfEventListing({ eventId, ...params }),
-    {
-      onSuccess: (response: ConnectedXMResponse<EventListing>) => {
-        queryClient.setQueryData([EVENT, eventId], response);
-        queryClient.setQueryData([EVENT_LISTING, eventId], response);
-
-        queryClient.invalidateQueries([EVENT, eventId]);
-        queryClient.invalidateQueries([EVENT_LISTING, eventId]);
-        queryClient.invalidateQueries([EVENT_LISTINGS]);
-      },
-    }
-  );
+export const useUpdateSelfEventListing = (
+  options: MutationOptions<
+    Awaited<ConnectedXMResponse<EventListing>>,
+    UpdateSelfEventListingParams
+  >
+) => {
+  return useConnectedMutation<
+    UpdateSelfEventListingParams,
+    Awaited<ConnectedXMResponse<EventListing>>
+  >((params) => UpdateSelfEventListing({ ...params }), options);
 };
-
-export default useUpdateSelfEventListing;

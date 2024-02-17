@@ -1,11 +1,11 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as SELF } from "@context/queries/self/useGetSelf";
-import { useQueryClient } from "@tanstack/react-query";
+import { ConnectedXMResponse, Self } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_QUERY_KEY } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
-interface UpdateSelfParams extends MutationParams {
+export interface UpdateSelfParams extends MutationParams {
   firstName: string;
   lastName: string;
   phone: string;
@@ -31,20 +31,28 @@ interface UpdateSelfParams extends MutationParams {
   username: string;
 }
 
-export const UpdateSelf = async (params: UpdateSelfParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(`/self`, params);
+export const UpdateSelf = async ({
+  clientApi,
+  queryClient,
+  ...params
+}: UpdateSelfParams): Promise<ConnectedXMResponse<Self>> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
+    `/self`,
+    params
+  );
+
+  if (queryClient && data.status !== "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_QUERY_KEY() });
+  }
+
   return data;
 };
 
-export const useUpdateSelf = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateSelfParams>(UpdateSelf, {
-    onSuccess: (_response: ConnectedXMResponse<Account>) => {
-      queryClient.invalidateQueries([SELF]);
-    },
-  });
+export const useUpdateSelf = (
+  options: MutationOptions<Awaited<ConnectedXMResponse<Self>>, UpdateSelfParams>
+) => {
+  return useConnectedMutation<
+    UpdateSelfParams,
+    Awaited<ConnectedXMResponse<Self>>
+  >((params) => UpdateSelf({ ...params }), options);
 };
-
-export default useUpdateSelf;
