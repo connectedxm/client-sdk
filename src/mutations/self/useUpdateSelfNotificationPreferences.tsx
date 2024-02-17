@@ -46,6 +46,7 @@ export const UpdateSelfNotificationPreferences = async ({
 };
 
 export const useUpdateSelfNotificationPreferences = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>,
     UpdateSelfNotificationPreferencesParams
@@ -54,5 +55,5 @@ export const useUpdateSelfNotificationPreferences = (
   return useConnectedMutation<
     UpdateSelfNotificationPreferencesParams,
     Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>
-  >(UpdateSelfNotificationPreferences, options);
+  >(UpdateSelfNotificationPreferences, params, options);
 };

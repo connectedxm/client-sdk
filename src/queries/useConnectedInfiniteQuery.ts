@@ -18,8 +18,8 @@ export interface InfiniteQueryParams {
   search?: string;
   locale?: string;
   pageParam: number;
-  queryClient: QueryClient;
   clientApi: AxiosInstance;
+  queryClient?: QueryClient;
 }
 
 export interface InfiniteQueryOptions<

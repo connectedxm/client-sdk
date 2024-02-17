@@ -39,6 +39,7 @@ export const RemoveCommunityEvent = async ({
 };
 
 export const useRemoveCommunityEvent = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof RemoveCommunityEvent>>,
     RemoveCommunityEventParams
@@ -47,7 +48,7 @@ export const useRemoveCommunityEvent = (
   return useConnectedMutation<
     RemoveCommunityEventParams,
     Awaited<ReturnType<typeof RemoveCommunityEvent>>
-  >(RemoveCommunityEvent, options);
+  >(RemoveCommunityEvent, params, options);
 };
 
 export default useRemoveCommunityEvent;

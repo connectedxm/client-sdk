@@ -33,6 +33,7 @@ export const FollowAccount = async ({
 };
 
 export const useFollowAccount = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof FollowAccount>>,
     FollowAccountParams
@@ -41,5 +42,5 @@ export const useFollowAccount = (
   return useConnectedMutation<
     FollowAccountParams,
     Awaited<ReturnType<typeof FollowAccount>>
-  >((params) => FollowAccount({ ...params }), options);
+  >(FollowAccount, params, options);
 };

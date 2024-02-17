@@ -35,6 +35,7 @@ export const CreateSupportTicket = async ({
 };
 
 export const useCreateSupportTicket = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof CreateSupportTicket>>,
     CreateSupportTicketParams
@@ -43,5 +44,5 @@ export const useCreateSupportTicket = (
   return useConnectedMutation<
     CreateSupportTicketParams,
     Awaited<ReturnType<typeof CreateSupportTicket>>
-  >((params) => CreateSupportTicket({ ...params }), options);
+  >(CreateSupportTicket, params, options);
 };

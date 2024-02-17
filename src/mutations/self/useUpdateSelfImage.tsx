@@ -29,6 +29,7 @@ export const UpdateSelfImage = async ({
 };
 
 export const useUpdateSelfImage = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ConnectedXMResponse<Self>>,
     UpdateSelfImageParams
@@ -37,5 +38,5 @@ export const useUpdateSelfImage = (
   return useConnectedMutation<
     UpdateSelfImageParams,
     Awaited<ConnectedXMResponse<Self>>
-  >((params) => UpdateSelfImage({ ...params }), options);
+  >(UpdateSelfImage, params, options);
 };

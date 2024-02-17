@@ -46,6 +46,7 @@ export const UpdateCommunity = async ({
 };
 
 export const useUpdateCommunity = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof UpdateCommunity>>,
     UpdateCommunityParams
@@ -54,7 +55,7 @@ export const useUpdateCommunity = (
   return useConnectedMutation<
     UpdateCommunityParams,
     Awaited<ReturnType<typeof UpdateCommunity>>
-  >((params) => UpdateCommunity({ ...params }), options);
+  >(UpdateCommunity, params, options);
 };
 
 export default useUpdateCommunity;

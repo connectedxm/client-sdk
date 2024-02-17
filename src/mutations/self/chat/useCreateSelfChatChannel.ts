@@ -1,5 +1,6 @@
 import { ChatChannel, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
 import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@src/queries";
@@ -32,11 +33,17 @@ export const CreateSelfChatChannel = async ({
   return data;
 };
 
-export const useCreateSelfChatChannel = () => {
+export const useCreateSelfChatChannel = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CreateSelfChatChannel>>,
+    CreateSelfChatChannelParams
+  > = {}
+) => {
   return useConnectedMutation<
     CreateSelfChatChannelParams,
     Awaited<ReturnType<typeof CreateSelfChatChannel>>
-  >((params) => CreateSelfChatChannel({ ...params, name: "" }));
+  >(CreateSelfChatChannel, params, options);
 };
 
 export default useCreateSelfChatChannel;

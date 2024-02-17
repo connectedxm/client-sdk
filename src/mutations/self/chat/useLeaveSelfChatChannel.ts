@@ -32,6 +32,7 @@ export const LeaveSelfChatChannel = async ({
 };
 
 export const useLeaveSelfChatChannel = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof LeaveSelfChatChannel>>,
     LeaveSelfChatChannelParams
@@ -40,7 +41,7 @@ export const useLeaveSelfChatChannel = (
   return useConnectedMutation<
     LeaveSelfChatChannelParams,
     Awaited<ReturnType<typeof LeaveSelfChatChannel>>
-  >((params) => LeaveSelfChatChannel({ ...params }), options);
+  >(LeaveSelfChatChannel, params, options);
 };
 
 export default useLeaveSelfChatChannel;

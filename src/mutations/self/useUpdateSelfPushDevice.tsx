@@ -39,6 +39,7 @@ export const UpdateSelfPushDevice = async ({
 };
 
 export const useUpdateSelfPushDevice = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof UpdateSelfPushDevice>>,
     UpdateSelfPushDeviceParams
@@ -47,5 +48,5 @@ export const useUpdateSelfPushDevice = (
   return useConnectedMutation<
     UpdateSelfPushDeviceParams,
     Awaited<ReturnType<typeof UpdateSelfPushDevice>>
-  >((params) => UpdateSelfPushDevice({ ...params }), options);
+  >(UpdateSelfPushDevice, params, options);
 };
