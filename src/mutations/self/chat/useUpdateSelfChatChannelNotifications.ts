@@ -52,5 +52,3 @@ export const useUpdateSelfChatChannelNotifications = (
     Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>
   >(UpdateSelfChatChannelNotifications, params, options);
 };
-
-export default useUpdateSelfChatChannelNotifications;

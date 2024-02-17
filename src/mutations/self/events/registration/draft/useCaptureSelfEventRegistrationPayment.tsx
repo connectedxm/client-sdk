@@ -1,11 +1,9 @@
-import { Registration } from "@context/interfaces";
-import { QUERY_KEY as EVENT_REGISTRATION } from "@context/queries/self/registration/useGetSelfEventRegistration";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
-
+import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
 } from "../../../../useConnectedMutation";
+import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "@src/queries";
 
 export interface CaptureSelfEventRegistrationPaymentParams
   extends MutationParams {
@@ -16,39 +14,34 @@ export interface CaptureSelfEventRegistrationPaymentParams
 export const CaptureSelfEventRegistrationPayment = async ({
   eventId,
   registrationId,
+  clientApi,
+  queryClient,
+  locale = "en",
 }: CaptureSelfEventRegistrationPaymentParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/draft/capture`
   );
+
+  if (queryClient && data.status === "ok") {
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
+      locale,
+    ]);
+  }
 
   return data;
 };
 
 export const useCaptureSelfEventRegistrationPayment = (
-  eventId: string,
-  registrationId: string
+  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CaptureSelfEventRegistrationPayment>>,
+    CaptureSelfEventRegistrationPaymentParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    () =>
-      CaptureSelfEventRegistrationPayment({
-        eventId,
-        registrationId,
-      }),
-    {
-      onSuccess: async (
-        response: Awaited<
-          ReturnType<typeof CaptureSelfEventRegistrationPayment>
-        >
-      ) => {
-        queryClient.setQueryData([EVENT_REGISTRATION, eventId], response);
-      },
-    }
-  );
+  return useConnectedMutation<
+    CaptureSelfEventRegistrationPaymentParams,
+    Awaited<ReturnType<typeof CaptureSelfEventRegistrationPayment>>
+  >(CaptureSelfEventRegistrationPayment, params, options);
 };
-
-export default useCaptureSelfEventRegistrationPayment;

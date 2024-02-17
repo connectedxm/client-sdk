@@ -36,19 +36,18 @@ export const SelfCreateActivity = async ({
   base64Image,
   clientApi,
   queryClient,
-}: // locale = "en",
-SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
+  locale = "en",
+}: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
     if (activity.commentedId) {
-      UpdateCommentsSingle(
-        true,
-        queryClient,
-        ACTIVITY_QUERY_KEY(activity.commentedId)
-      );
+      UpdateCommentsSingle(true, queryClient, [
+        ...ACTIVITY_QUERY_KEY(activity.commentedId),
+        locale,
+      ]);
       UpdateCommentsInfinite(
         true,
         queryClient,
-        ACTIVITIES_QUERY_KEY(),
+        [...ACTIVITIES_QUERY_KEY(), locale],
         activity.commentedId
       );
     }
@@ -64,21 +63,29 @@ SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: ACTIVITIES_QUERY_KEY(),
+      queryKey: [...ACTIVITIES_QUERY_KEY(), locale],
     });
 
-    AppendInfiniteQuery(queryClient, ACTIVITIES_QUERY_KEY(), data);
+    AppendInfiniteQuery(queryClient, [...ACTIVITIES_QUERY_KEY(), locale], data);
 
     if (!data.data.commented?.id) {
-      AppendInfiniteQuery(queryClient, SELF_FEED_QUERY_KEY(), data);
+      AppendInfiniteQuery(
+        queryClient,
+        [...SELF_FEED_QUERY_KEY(), locale],
+        data
+      );
     }
 
-    AppendInfiniteQuery(queryClient, SELF_ACTIVITIES_QUERY_KEY(), data);
+    AppendInfiniteQuery(
+      queryClient,
+      [...SELF_ACTIVITIES_QUERY_KEY(), locale],
+      data
+    );
 
     if (data.data?.content?.id) {
       AppendInfiniteQuery(
         queryClient,
-        CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id),
+        [...CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id), locale],
         data
       );
     }
@@ -86,7 +93,7 @@ SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
     if (data.data?.event?.id) {
       AppendInfiniteQuery(
         queryClient,
-        EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id),
+        [...EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id), locale],
         data
       );
     }
@@ -94,7 +101,7 @@ SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
     if (data.data?.community?.id) {
       AppendInfiniteQuery(
         queryClient,
-        COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id),
+        [...COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id), locale],
         data
       );
     }

@@ -43,5 +43,3 @@ export const useAddSelfChatChannelMember = (
     Awaited<ReturnType<typeof AddSelfChatChannelMember>>
   >(AddSelfChatChannelMember, params, options);
 };
-
-export default useAddSelfChatChannelMember;

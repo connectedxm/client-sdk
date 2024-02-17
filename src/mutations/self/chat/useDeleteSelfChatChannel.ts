@@ -43,5 +43,3 @@ export const useDeleteSelfChatChannel = (
     Awaited<ReturnType<typeof DeleteSelfChatChannel>>
   >(DeleteSelfChatChannel, params, options);
 };
-
-export default useDeleteSelfChatChannel;

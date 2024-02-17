@@ -50,5 +50,3 @@ export const useRemoveCommunityEvent = (
     Awaited<ReturnType<typeof RemoveCommunityEvent>>
   >(RemoveCommunityEvent, params, options);
 };
-
-export default useRemoveCommunityEvent;

@@ -45,5 +45,3 @@ export const useCreateEventLead = (
     Awaited<ReturnType<typeof CreateEventLead>>
   >(CreateEventLead, params, options);
 };
-
-export default useCreateEventLead;

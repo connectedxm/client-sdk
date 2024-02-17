@@ -1,14 +1,15 @@
-import { Registration } from "@context/interfaces";
+import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_REGISTRANTS } from "@context/queries/events/useGetEventRegistrants";
-import { QUERY_KEY as EVENT_REGISTRATION } from "@context/queries/self/registration/useGetSelfEventRegistration";
-import { SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY } from "@context/queries/self/registration/useGetSelfEventRegistrationCheckout";
-import { QUERY_KEY as SELF_EVENTS } from "@context/queries/self/useGetSelfEvents";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
+} from "@src/mutations/useConnectedMutation";
+import {
+  EVENT_QUERY_KEY,
+  EVENT_REGISTRANTS_QUERY_KEY,
+  SELF_EVENTS_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY,
+  SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
+} from "@src/queries";
 
 export interface SelectSelfEventRegistrationCouponParams
   extends MutationParams {
@@ -21,38 +22,54 @@ export const SelectSelfEventRegistrationCoupon = async ({
   eventId,
   registrationId,
   couponId,
-}: SelectSelfEventRegistrationCouponParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  clientApi,
+  queryClient,
+  locale = "en",
+}: SelectSelfEventRegistrationCouponParams): Promise<
+  ConnectedXMResponse<Registration>
+> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/draft/coupon`,
     {
       couponId,
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
+      locale,
+    ]);
+    queryClient.removeQueries({
+      queryKey: SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(
+        eventId,
+        registrationId
+      ),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(false),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(true),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
+    });
+  }
   return data;
 };
 
 export const useSelectSelfEventRegistrationCoupon = (
-  eventId: string,
-  registrationId: string
+  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>,
+    SelectSelfEventRegistrationCouponParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<string>(
-    (couponId: string) =>
-      SelectSelfEventRegistrationCoupon({ eventId, registrationId, couponId }),
-    {
-      onSuccess: (response: ConnectedXMResponse<Registration>) => {
-        queryClient.removeQueries(
-          SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(eventId, registrationId)
-        );
-        queryClient.setQueryData([EVENT_REGISTRATION, eventId], response);
-        queryClient.invalidateQueries([SELF_EVENTS]);
-        queryClient.invalidateQueries([EVENT, eventId]);
-        queryClient.invalidateQueries([EVENT_REGISTRANTS, eventId]);
-      },
-    }
-  );
+  return useConnectedMutation<
+    SelectSelfEventRegistrationCouponParams,
+    Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>
+  >(SelectSelfEventRegistrationCoupon, params, options);
 };
-
-export default useSelectSelfEventRegistrationCoupon;

@@ -43,5 +43,3 @@ export const useLeaveSelfChatChannel = (
     Awaited<ReturnType<typeof LeaveSelfChatChannel>>
   >(LeaveSelfChatChannel, params, options);
 };
-
-export default useLeaveSelfChatChannel;

@@ -1,13 +1,17 @@
-import { Registration } from "@context/interfaces";
-import useConnectedMutation from "@context/mutations/useConnectedMutation";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_REGISTRANTS } from "@context/queries/events/useGetEventRegistrants";
-import { QUERY_KEY as EVENT_REGISTRATION } from "@context/queries/self/registration/useGetSelfEventRegistration";
-import { QUERY_KEY as SELF_EVENTS } from "@context/queries/self/useGetSelfEvents";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
+import { ConnectedXMResponse, Registration } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "@src/mutations/useConnectedMutation";
+import {
+  EVENT_QUERY_KEY,
+  EVENT_REGISTRANTS_QUERY_KEY,
+  SELF_EVENTS_QUERY_KEY,
+  SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
+} from "@src/queries";
 
-export interface RegisterCancelledEventRegistrationParams {
+export interface RegisterCancelledEventRegistrationParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
 }
@@ -15,38 +19,47 @@ export interface RegisterCancelledEventRegistrationParams {
 export const RegisterCancelledEventRegistration = async ({
   eventId,
   registrationId,
-}: RegisterCancelledEventRegistrationParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  clientApi,
+  queryClient,
+  locale = "en",
+}: RegisterCancelledEventRegistrationParams): Promise<
+  ConnectedXMResponse<Registration>
+> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/cancelled/register`
   );
+
+  if (queryClient && data.status === "ok") {
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
+      locale,
+    ]);
+
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(false),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(true),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
+    });
+  }
+
   return data;
 };
 
 export const useRegisterCancelledEventRegistration = (
-  eventId: string,
-  registrationId: string
+  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof RegisterCancelledEventRegistration>>,
+    RegisterCancelledEventRegistrationParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-
   return useConnectedMutation<
-    Omit<RegisterCancelledEventRegistrationParams, "eventId" | "registrationId">
-  >(
-    (params) =>
-      RegisterCancelledEventRegistration({
-        eventId,
-        registrationId,
-        ...params,
-      }),
-    {
-      onSuccess: (response: ConnectedXMResponse<Registration>) => {
-        queryClient.setQueryData([EVENT_REGISTRATION, eventId], response);
-        queryClient.invalidateQueries([SELF_EVENTS]);
-        queryClient.invalidateQueries([EVENT, eventId]);
-        queryClient.invalidateQueries([EVENT_REGISTRANTS, eventId]);
-      },
-    }
-  );
+    RegisterCancelledEventRegistrationParams,
+    Awaited<ReturnType<typeof RegisterCancelledEventRegistration>>
+  >(RegisterCancelledEventRegistration, params, options);
 };
-
-export default useRegisterCancelledEventRegistration;

@@ -50,5 +50,3 @@ export const useAddCommunityEvent = (
     Awaited<ReturnType<typeof AddCommunityEvent>>
   >(AddCommunityEvent, params, options);
 };
-
-export default useAddCommunityEvent;

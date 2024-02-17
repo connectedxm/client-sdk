@@ -1,10 +1,9 @@
-import type { Transfer } from "@context/interfaces";
+import { ConnectedXMResponse, Transfer } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { QUERY_KEY as EVENT_REGISTRATION_KEY } from "@context/queries/self/registration/useGetSelfEventRegistration";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
+} from "@src/mutations/useConnectedMutation";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
 export interface CancelTransferParams extends MutationParams {
   transferId: string;
@@ -16,25 +15,30 @@ export const CancelTransfer = async ({
   transferId,
   eventId,
   registrationId,
+  clientApi,
+  queryClient,
 }: CancelTransferParams): Promise<ConnectedXMResponse<Transfer>> => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(
+  const { data } = await clientApi.delete<ConnectedXMResponse<Transfer>>(
     `/self/events/${eventId}/registration/${registrationId}/transfer/${transferId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+  }
   return data;
 };
 
-export const useCancelTransfer = (eventId: string, registrationId: string) => {
-  const queryClient = useQueryClient();
-  return useConnectedMutation(
-    (params: Omit<CancelTransferParams, "eventId" | "registrationId">) =>
-      CancelTransfer({ ...params, eventId, registrationId }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([EVENT_REGISTRATION_KEY, eventId]);
-      },
-    }
-  );
+export const useCancelTransfer = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CancelTransfer>>,
+    CancelTransferParams
+  >
+) => {
+  return useConnectedMutation<
+    CancelTransferParams,
+    Awaited<ReturnType<typeof CancelTransfer>>
+  >(CancelTransfer, params, options);
 };
-
-export default useCancelTransfer;

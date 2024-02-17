@@ -1,10 +1,9 @@
-import type { Transfer } from "@context/interfaces";
+import { ConnectedXMResponse, Transfer } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { QUERY_KEY as EVENT_REGISTRATION_KEY } from "@context/queries/self/registration/useGetSelfEventRegistration";
-import { useQueryClient } from "@tanstack/react-query";
-import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
+} from "@src/mutations/useConnectedMutation";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
 export interface TransferPurchaseParams extends MutationParams {
   email: string;
@@ -18,32 +17,31 @@ export const TransferPurchase = async ({
   purchaseId,
   eventId,
   registrationId,
+  clientApi,
+  queryClient,
 }: TransferPurchaseParams): Promise<ConnectedXMResponse<Transfer>> => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
     `/self/events/${eventId}/registration/${registrationId}/transfer`,
     {
       email,
       purchaseId,
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+  }
   return data;
 };
 
 export const useTransferPurchase = (
-  eventId: string,
-  registrationId: string
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof TransferPurchase>>,
+    TransferPurchaseParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-  return useConnectedMutation(
-    (params: Omit<TransferPurchaseParams, "eventId" | "registrationId">) =>
-      TransferPurchase({ ...params, eventId, registrationId }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([EVENT_REGISTRATION_KEY, eventId]);
-      },
-    }
-  );
+  return useConnectedMutation(TransferPurchase, params, options);
 };
-
-export default useTransferPurchase;

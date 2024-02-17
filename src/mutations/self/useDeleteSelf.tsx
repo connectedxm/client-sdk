@@ -10,8 +10,7 @@ export const DeleteSelf = async ({
   queryClient,
 }: DeleteSelfParams) => {
   const { data } = await clientApi.delete(`/self`);
-  // Fix / Remove
-  await Auth.signOut();
+  // await Auth.signOut();
   if (queryClient && data.status === "ok") {
     queryClient.clear();
   }

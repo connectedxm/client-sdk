@@ -39,5 +39,3 @@ export const useCreateSelfChatChannelMessage = (
 ) => {
   return useConnectedMutation(CreateSelfChatChannelMessage, params, options);
 };
-
-export default useCreateSelfChatChannelMessage;

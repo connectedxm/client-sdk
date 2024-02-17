@@ -49,5 +49,3 @@ export const useReshareActivity = (
     Awaited<ReturnType<typeof ReshareActivity>>
   >(ReshareActivity, params, options);
 };
-
-export default useReshareActivity;

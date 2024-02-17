@@ -62,5 +62,3 @@ export const useCreateCommunityAnnouncement = (
     ConnectedXMResponse<Announcement>
   >(CreateCommunityAnnouncement, params, options);
 };
-
-export default useCreateCommunityAnnouncement;

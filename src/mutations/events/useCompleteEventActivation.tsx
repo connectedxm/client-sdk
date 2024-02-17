@@ -54,5 +54,3 @@ export const useCompleteEventActivation = (
     Awaited<ReturnType<typeof CompleteEventActivation>>
   >(CompleteEventActivation, params, options);
 };
-
-export default useCompleteEventActivation;

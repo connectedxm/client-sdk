@@ -58,5 +58,3 @@ export const useUpdateCommunity = (
     Awaited<ReturnType<typeof UpdateCommunity>>
   >(UpdateCommunity, params, options);
 };
-
-export default useUpdateCommunity;
