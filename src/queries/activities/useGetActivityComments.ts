@@ -32,7 +32,7 @@ export const SET_ACTIVITY_COMMENTS_QUERY_DATA = (
   );
 };
 
-interface GetActivityCommentsProps extends InfiniteQueryParams {
+export interface GetActivityCommentsProps extends InfiniteQueryParams {
   activityId: string;
 }
 

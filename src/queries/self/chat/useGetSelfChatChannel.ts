@@ -31,7 +31,7 @@ export const SET_SELF_CHAT_CHANNEL_QUERY_DATA = (
   );
 };
 
-interface GetSelfChatChannelProps extends SingleQueryParams {
+export interface GetSelfChatChannelProps extends SingleQueryParams {
   channelId: string;
 }
 

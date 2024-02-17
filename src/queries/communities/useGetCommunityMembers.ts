@@ -31,7 +31,7 @@ export const SET_COMMUNITY_MEMBERS_QUERY_DATA = (
   );
 };
 
-interface GetCommunityMembersProps extends InfiniteQueryParams {
+export interface GetCommunityMembersProps extends InfiniteQueryParams {
   communityId: string;
 }
 

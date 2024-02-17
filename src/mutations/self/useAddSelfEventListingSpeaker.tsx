@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface EventListingSpeaker {
+export interface EventListingSpeaker {
   firstName: string | null;
   lastName: string | null;
   title: string | null;
@@ -13,7 +13,7 @@ interface EventListingSpeaker {
   bio: string | null;
 }
 
-interface AddSelfEventListingSpeakerParams extends MutationParams {
+export interface AddSelfEventListingSpeakerParams extends MutationParams {
   eventId: string;
   speaker: EventListingSpeaker;
 }

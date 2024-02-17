@@ -29,7 +29,7 @@ export const SET_EVENT_SPEAKER_QUERY_DATA = (
   );
 };
 
-interface GetEventSpeakerProps extends SingleQueryParams {
+export interface GetEventSpeakerProps extends SingleQueryParams {
   eventId: string;
   speakerId: string;
 }

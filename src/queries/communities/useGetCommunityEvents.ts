@@ -36,7 +36,7 @@ export const SET_COMMUNITY_EVENTS_QUERY_DATA = (
   );
 };
 
-interface GetCommunityEventsProps extends InfiniteQueryParams {
+export interface GetCommunityEventsProps extends InfiniteQueryParams {
   communityId: string;
   past?: boolean;
 }

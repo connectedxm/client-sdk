@@ -28,7 +28,7 @@ export const SET_SELF_CHAT_CHANNELS_QUERY_DATA = (
   );
 };
 
-interface GetSelfChatChannelsProps extends InfiniteQueryParams {}
+export interface GetSelfChatChannelsProps extends InfiniteQueryParams {}
 
 export const GetSelfChatChannels = async ({
   pageParam,

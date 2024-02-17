@@ -4,7 +4,7 @@ import { ConnectedXM } from "src/context/api/ConnectedXM";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface RejectTransferParams extends MutationParams {
+export interface RejectTransferParams extends MutationParams {
   transferId: string;
 }
 

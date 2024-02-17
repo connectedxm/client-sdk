@@ -29,7 +29,7 @@ export const SET_ACCOUNTS_QUERY_DATA = (
   );
 };
 
-interface GetAccountsProps extends InfiniteQueryParams {}
+export interface GetAccountsProps extends InfiniteQueryParams {}
 
 export const GetAccounts = async ({
   pageSize,

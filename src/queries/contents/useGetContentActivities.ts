@@ -33,7 +33,7 @@ export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (
   );
 };
 
-interface GetContentParams extends InfiniteQueryParams {
+export interface GetContentParams extends InfiniteQueryParams {
   contentId: string;
 }
 

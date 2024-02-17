@@ -24,7 +24,7 @@ export const SET_LEVEL_QUERY_DATA = (
   );
 };
 
-interface GetLevelProps extends SingleQueryParams {
+export interface GetLevelProps extends SingleQueryParams {
   levelId: string;
 }
 

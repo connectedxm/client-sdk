@@ -9,7 +9,7 @@ import {
 } from "./optimistic/UpdateReshares";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 
-interface ReshareActivityParams extends MutationParams {
+export interface ReshareActivityParams extends MutationParams {
   activityId: string;
 }
 

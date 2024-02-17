@@ -32,7 +32,7 @@ export const SET_COMMUNITY_SPONSORS_QUERY_DATA = (
   );
 };
 
-interface GetCommunitySponsorsProps extends InfiniteQueryParams {
+export interface GetCommunitySponsorsProps extends InfiniteQueryParams {
   communityId: string;
 }
 

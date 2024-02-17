@@ -30,7 +30,7 @@ export const SET_SELF_EVENT_LISTING_QUERY_DATA = (
   );
 };
 
-interface GetSelfEventListingProps extends SingleQueryParams {
+export interface GetSelfEventListingProps extends SingleQueryParams {
   eventId: string;
 }
 

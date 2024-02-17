@@ -14,7 +14,7 @@ export const SELF_NOTIFICATIONS_QUERY_KEY = (filters: string): QueryKey => [
   filters,
 ];
 
-interface GetSelfNotificationsProps extends InfiniteQueryParams {
+export interface GetSelfNotificationsProps extends InfiniteQueryParams {
   filters?: string;
 }
 

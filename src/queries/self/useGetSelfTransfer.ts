@@ -12,7 +12,7 @@ export const SELF_PENDING_TRANSFER_QUERY_KEY = (
   transferId: string
 ): QueryKey => [...SELF_TRANSFERS_QUERY_KEY(), transferId];
 
-interface GetSelfTransferProps extends SingleQueryParams {
+export interface GetSelfTransferProps extends SingleQueryParams {
   transferId: string;
 }
 

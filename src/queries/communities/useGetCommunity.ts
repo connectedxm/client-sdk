@@ -32,7 +32,7 @@ export const SET_COMMUNITY_QUERY_DATA = (
   );
 };
 
-interface GetCommunityProps extends SingleQueryParams {
+export interface GetCommunityProps extends SingleQueryParams {
   communityId: string;
 }
 

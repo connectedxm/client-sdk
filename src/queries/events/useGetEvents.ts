@@ -34,7 +34,7 @@ export const SET_EVENTS_QUERY_DATA = (
   );
 };
 
-interface GetEventsProps extends InfiniteQueryParams {
+export interface GetEventsProps extends InfiniteQueryParams {
   past?: boolean;
 }
 

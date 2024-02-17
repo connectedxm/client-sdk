@@ -32,7 +32,7 @@ export const SET_EVENT_PAGES_QUERY_DATA = (
   );
 };
 
-interface GetEventPagesProps extends InfiniteQueryParams {
+export interface GetEventPagesProps extends InfiniteQueryParams {
   eventId: string;
 }
 

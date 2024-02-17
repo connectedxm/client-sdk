@@ -11,7 +11,7 @@ import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
 export type AppType = "EVENTXM" | "COMMUNITYXM";
 
-interface CreateSelfPushDeviceParams extends MutationParams {
+export interface CreateSelfPushDeviceParams extends MutationParams {
   expoToken: string;
   deviceToken: string;
   appType: AppType;

@@ -13,7 +13,7 @@ export const SELF_INTERESTS_QUERY_KEY = (): QueryKey => [
   "INTERESTS",
 ];
 
-interface GetSelfInterestsProps extends InfiniteQueryParams {}
+export interface GetSelfInterestsProps extends InfiniteQueryParams {}
 
 export const GetSelfInterests = async ({
   pageParam,

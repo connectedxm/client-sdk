@@ -16,7 +16,8 @@ export const SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY = (
   checkedIn ? "CHECKED_IN" : "ALL",
 ];
 
-interface GetSelfEventListingRegistrationsProps extends InfiniteQueryParams {
+export interface GetSelfEventListingRegistrationsProps
+  extends InfiniteQueryParams {
   eventId: string;
   checkedIn?: boolean;
 }

@@ -7,7 +7,7 @@ import { QUERY_KEY as SELF_EVENTS } from "@context/queries/self/useGetSelfEvents
 import { useQueryClient } from "@tanstack/react-query";
 import { ConnectedXM, ConnectedXMResponse } from "src/context/api/ConnectedXM";
 
-interface CancelEventRegistrationParams {
+export interface CancelEventRegistrationParams {
   eventId: string;
   registrationId: string;
 }

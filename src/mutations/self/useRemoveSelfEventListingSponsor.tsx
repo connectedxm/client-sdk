@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface RemoveSelfEventListingSponsorParams extends MutationParams {
+export interface RemoveSelfEventListingSponsorParams extends MutationParams {
   eventId: string;
   sponsorId: string;
 }
@@ -17,7 +17,7 @@ export const RemoveSelfEventListingSponsor = async ({
   const connectedXM = await ConnectedXM();
 
   const { data } = await connectedXM.delete(
-    `/self/events/listings/${eventId}/sponsors/${sponsorId}`,
+    `/self/events/listings/${eventId}/sponsors/${sponsorId}`
   );
 
   return data;
@@ -34,7 +34,7 @@ export const useRemoveSelfEventListingSponsor = () => {
         queryClient.setQueryData([EVENT, eventId], (event: any) => {
           if (event && event.data) {
             const index = event?.data?.sponsors?.findIndex(
-              (sponsor: any) => sponsor.id === sponsorId,
+              (sponsor: any) => sponsor.id === sponsorId
             );
             if (index !== -1 && event.data.sponsors) {
               event.data.sponsors.splice(index, 1);
@@ -45,7 +45,7 @@ export const useRemoveSelfEventListingSponsor = () => {
         queryClient.setQueryData([EVENT_LISTING, eventId], (event: any) => {
           if (event && event.data) {
             const index = event?.data?.sponsors?.findIndex(
-              (sponsor: any) => sponsor.id === sponsorId,
+              (sponsor: any) => sponsor.id === sponsorId
             );
             if (index !== -1 && event.data.sponsors) {
               event.data.sponsors.splice(index, 1);
@@ -56,7 +56,7 @@ export const useRemoveSelfEventListingSponsor = () => {
       },
     },
     undefined,
-    true,
+    true
   );
 };
 

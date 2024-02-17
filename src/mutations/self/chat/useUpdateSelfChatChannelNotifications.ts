@@ -7,7 +7,8 @@ import { SET_SELF_CHAT_CHANNEL_QUERY_DATA } from "@context/queries/self/chat/use
 import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannels";
 import { useQueryClient } from "@tanstack/react-query";
 
-interface UpdateSelfChatChannelNotificationsParams extends MutationParams {
+export interface UpdateSelfChatChannelNotificationsParams
+  extends MutationParams {
   channelId: string;
   notifications: boolean;
 }

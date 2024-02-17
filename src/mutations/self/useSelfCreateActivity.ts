@@ -4,14 +4,14 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 
-interface CreateActivity {
+export interface CreateActivity {
   message: string;
   contentId?: string;
   eventId?: string;
   communityId?: string;
   commentedId?: string;
 }
-interface SelfCreateActivityParams extends MutationParams {
+export interface SelfCreateActivityParams extends MutationParams {
   activity: CreateActivity;
   base64Image?: any;
 }

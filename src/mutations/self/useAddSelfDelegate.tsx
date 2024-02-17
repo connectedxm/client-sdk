@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface AddSelfDelegateParams extends MutationParams {
+export interface AddSelfDelegateParams extends MutationParams {
   email: string;
 }
 

@@ -33,7 +33,7 @@ export const SET_EVENT_ACTIVITIES_QUERY_DATA = (
   );
 };
 
-interface GetEventActivitiesProps extends InfiniteQueryParams {
+export interface GetEventActivitiesProps extends InfiniteQueryParams {
   eventId: string;
 }
 

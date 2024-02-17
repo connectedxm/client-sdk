@@ -31,7 +31,7 @@ export const SET_ACTIVITY_QUERY_DATA = (
   );
 };
 
-interface GetActivityProps extends SingleQueryParams {
+export interface GetActivityProps extends SingleQueryParams {
   activityId: string;
 }
 

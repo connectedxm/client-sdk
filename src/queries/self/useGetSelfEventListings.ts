@@ -16,7 +16,7 @@ export const SELF_EVENT_LISTINGS_QUERY_KEY = (past: boolean): QueryKey => [
   past ? "PAST" : "UPCOMING",
 ];
 
-interface GetSelfEventListingsProps extends InfiniteQueryParams {
+export interface GetSelfEventListingsProps extends InfiniteQueryParams {
   past?: boolean;
 }
 

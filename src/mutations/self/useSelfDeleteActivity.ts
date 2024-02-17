@@ -5,7 +5,7 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { ACTIVITIES_QUERY_KEY } from "@src/queries";
 
-interface DeleteActivityParams extends MutationParams {
+export interface DeleteActivityParams extends MutationParams {
   activityId: string;
 }
 

@@ -29,7 +29,7 @@ export const SET_EVENT_SESSION_QUERY_DATA = (
   );
 };
 
-interface GetEventSessionProps extends SingleQueryParams {
+export interface GetEventSessionProps extends SingleQueryParams {
   eventId: string;
   sessionId: string;
 }

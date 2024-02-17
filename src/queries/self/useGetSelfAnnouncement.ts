@@ -12,7 +12,7 @@ export const SELF_ANNOUNCEMENT_QUERY_KEY = (
   announcementId: string
 ): QueryKey => [...SELF_QUERY_KEY(), "ANNOUNCEMENT", announcementId];
 
-interface GetSelfAnnouncementProps extends SingleQueryParams {
+export interface GetSelfAnnouncementProps extends SingleQueryParams {
   announcementId: string;
 }
 

@@ -32,7 +32,7 @@ export const SET_ACCOUNT_FOLLOWINGS_QUERY_DATA = (
   );
 };
 
-interface GetAccountFollowingsProps extends InfiniteQueryParams {
+export interface GetAccountFollowingsProps extends InfiniteQueryParams {
   accountId: string;
 }
 

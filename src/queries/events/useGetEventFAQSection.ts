@@ -30,7 +30,7 @@ export const SET_EVENT_FAQ_SECTION_QUERY_DATA = (
   );
 };
 
-interface GetEventFAQSectionProps extends SingleQueryParams {
+export interface GetEventFAQSectionProps extends SingleQueryParams {
   eventId: string;
   sectionId: string;
 }

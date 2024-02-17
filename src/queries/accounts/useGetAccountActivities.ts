@@ -32,7 +32,7 @@ export const SET_ACCOUNT_ACTIVITIES_QUERY_DATA = (
   );
 };
 
-interface GetAccountActivitiesProps extends InfiniteQueryParams {
+export interface GetAccountActivitiesProps extends InfiniteQueryParams {
   accountId: string;
 }
 

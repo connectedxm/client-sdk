@@ -10,7 +10,7 @@ import {
 import { AppendInfiniteQuery } from "@src/utilities";
 import { COMMUNITY_ANNOUNCEMENTS_QUERY_KEY } from "@src/queries";
 
-interface CreateCommunityAnnouncementParams extends MutationParams {
+export interface CreateCommunityAnnouncementParams extends MutationParams {
   communityId: string;
   title: string;
   html: string;

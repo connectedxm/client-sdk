@@ -8,7 +8,7 @@ import {
   SELF_EVENT_LISTINGS_QUERY_KEY,
 } from "@src/queries";
 
-interface AddCommunityEventParams extends MutationParams {
+export interface AddCommunityEventParams extends MutationParams {
   communityId: string;
   eventId: string;
 }

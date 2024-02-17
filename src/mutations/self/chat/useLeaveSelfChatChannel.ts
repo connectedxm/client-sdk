@@ -1,40 +1,46 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { SELF_CHAT_CHANNEL_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannel";
-import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannels";
-import { useQueryClient } from "@tanstack/react-query";
+  MutationOptions,
+} from "@src/mutations/useConnectedMutation";
+import {
+  SELF_CHAT_CHANNELS_QUERY_KEY,
+  SELF_CHAT_CHANNEL_QUERY_KEY,
+} from "@src/queries";
 
-interface LeaveSelfChatChannelParams extends MutationParams {
+export interface LeaveSelfChatChannelParams extends MutationParams {
   channelId: string;
 }
 
 export const LeaveSelfChatChannel = async ({
   channelId,
+  clientApi,
+  queryClient,
 }: LeaveSelfChatChannelParams): Promise<ConnectedXMResponse<null>> => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/chat/channels/${channelId}/leave`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_CHAT_CHANNELS_QUERY_KEY() });
+    queryClient.removeQueries({
+      queryKey: SELF_CHAT_CHANNEL_QUERY_KEY(channelId),
+    });
+  }
+
   return data;
 };
 
-export const useLeaveSelfChatChannel = (channelId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (params: Omit<LeaveSelfChatChannelParams, "channelId">) =>
-      LeaveSelfChatChannel({ ...params, channelId }),
-    {
-      onSuccess: (
-        _response: Awaited<ReturnType<typeof LeaveSelfChatChannel>>
-      ) => {
-        queryClient.invalidateQueries(SELF_CHAT_CHANNELS_QUERY_KEY());
-        queryClient.removeQueries(SELF_CHAT_CHANNEL_QUERY_KEY(channelId));
-      },
-    }
-  );
+export const useLeaveSelfChatChannel = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof LeaveSelfChatChannel>>,
+    LeaveSelfChatChannelParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    LeaveSelfChatChannelParams,
+    Awaited<ReturnType<typeof LeaveSelfChatChannel>>
+  >((params) => LeaveSelfChatChannel({ ...params }), options);
 };
 
 export default useLeaveSelfChatChannel;

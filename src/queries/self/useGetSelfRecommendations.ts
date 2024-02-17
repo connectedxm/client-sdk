@@ -20,7 +20,7 @@ export const SELF_RECOMMENDATIONS_QUERY_KEY = (
 
 export type RecomendationType = "following" | "contacts" | "popular";
 
-interface GetSelfRecommendationsProps extends InfiniteQueryParams {
+export interface GetSelfRecommendationsProps extends InfiniteQueryParams {
   eventId?: string;
   type?: RecomendationType;
 }

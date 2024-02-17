@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
 
-interface DeleteSelfPushDeviceParams extends MutationParams {
+export interface DeleteSelfPushDeviceParams extends MutationParams {
   pushDeviceId: string;
 }
 

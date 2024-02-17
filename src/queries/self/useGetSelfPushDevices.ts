@@ -15,7 +15,7 @@ export const SELF_PUSH_DEVICES_QUERY_KEY = (): QueryKey => [
   "PUSH_DEVICES",
 ];
 
-interface GetSelfPushDevicesProps extends InfiniteQueryParams {}
+export interface GetSelfPushDevicesProps extends InfiniteQueryParams {}
 
 export const GetSelfPushDevices = async ({
   pageParam,

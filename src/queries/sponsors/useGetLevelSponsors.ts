@@ -31,7 +31,7 @@ export const SET_LEVEL_SPONSORS_QUERY_DATA = (
   );
 };
 
-interface GetLevelSponsorsProps extends InfiniteQueryParams {
+export interface GetLevelSponsorsProps extends InfiniteQueryParams {
   levelId: string;
 }
 

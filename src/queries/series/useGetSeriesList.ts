@@ -27,7 +27,7 @@ export const SET_SERIES_LIST_QUERY_DATA = (
   );
 };
 
-interface GetSeriesListProps extends InfiniteQueryParams {
+export interface GetSeriesListProps extends InfiniteQueryParams {
   past?: boolean;
 }
 

@@ -29,7 +29,7 @@ export const SET_EVENT_TICKETS_QUERY_DATA = (
   );
 };
 
-interface GetEventTicketsProps extends InfiniteQueryParams {
+export interface GetEventTicketsProps extends InfiniteQueryParams {
   eventId: string;
 }
 

@@ -1,12 +1,11 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { ChatChannelMember } from "@context/interfaces";
+import { ChatChannelMember, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { SELF_CHAT_CHANNEL_MEMBERS_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannelMembers";
-import { useQueryClient } from "@tanstack/react-query";
+} from "@src/mutations/useConnectedMutation";
+import { SELF_CHAT_CHANNEL_MEMBERS_QUERY_KEY } from "@src/queries";
 
-interface AddSelfChatChannelMemberParams extends MutationParams {
+export interface AddSelfChatChannelMemberParams extends MutationParams {
   channelId: string;
   accountId: string;
 }
@@ -14,32 +13,34 @@ interface AddSelfChatChannelMemberParams extends MutationParams {
 export const AddSelfChatChannelMember = async ({
   channelId,
   accountId,
+  clientApi,
+  queryClient,
 }: AddSelfChatChannelMemberParams): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  const { data } = await clientApi.post<ConnectedXMResponse<ChatChannelMember>>(
     `/self/chat/channels/${channelId}/members/${accountId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_CHAT_CHANNEL_MEMBERS_QUERY_KEY(channelId),
+    });
+  }
+
   return data;
 };
 
-export const useAddSelfChatChannelMember = (channelId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (params: Omit<AddSelfChatChannelMemberParams, "channelId">) =>
-      AddSelfChatChannelMember({ ...params, channelId }),
-    {
-      onSuccess: (
-        _response: Awaited<ReturnType<typeof AddSelfChatChannelMember>>
-      ) => {
-        queryClient.invalidateQueries(
-          SELF_CHAT_CHANNEL_MEMBERS_QUERY_KEY(channelId)
-        );
-      },
-    }
-  );
+export const useAddSelfChatChannelMember = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof AddSelfChatChannelMember>>,
+    AddSelfChatChannelMemberParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    AddSelfChatChannelMemberParams,
+    Awaited<ReturnType<typeof AddSelfChatChannelMember>>
+  >((params) => AddSelfChatChannelMember({ ...params }), options);
 };
 
 export default useAddSelfChatChannelMember;

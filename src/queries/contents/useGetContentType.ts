@@ -28,7 +28,7 @@ export const SET_CONTENT_TYPE_QUERY_DATA = (
   );
 };
 
-interface GetContentTypeParams extends SingleQueryParams {
+export interface GetContentTypeParams extends SingleQueryParams {
   contentTypeId: string;
 }
 

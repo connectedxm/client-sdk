@@ -15,7 +15,7 @@ export const SELF_ACTIVITIES_QUERY_KEY = (): QueryKey => [
   "ACTIVITIES",
 ];
 
-interface GetSelfActivitiesProps extends InfiniteQueryParams {}
+export interface GetSelfActivitiesProps extends InfiniteQueryParams {}
 
 export const GetSelfActivities = async ({
   pageParam,

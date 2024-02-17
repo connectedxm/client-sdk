@@ -7,7 +7,7 @@ import { QueryKey } from "@tanstack/react-query";
 
 export const ORGANIZATION_QUERY_KEY = (): QueryKey => ["ORGANIZATION"];
 
-interface GetOrganizationParams extends SingleQueryParams {}
+export interface GetOrganizationParams extends SingleQueryParams {}
 
 export const GetOrganization = async ({
   clientApi,

@@ -10,7 +10,7 @@ import {
 } from "../useConnectedMutation";
 import { Community, ConnectedXMResponse } from "@src/interfaces";
 
-interface UpdateCommunityParams extends MutationParams {
+export interface UpdateCommunityParams extends MutationParams {
   communityId: string;
   description?: string;
   externalUrl?: string;

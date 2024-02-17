@@ -1,11 +1,11 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannelMessages";
-import { useQueryClient } from "@tanstack/react-query";
+} from "@src/mutations/useConnectedMutation";
+import { SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY } from "@src/queries";
 
-interface DeleteSelfChatChannelMessageParams extends MutationParams {
+export interface DeleteSelfChatChannelMessageParams extends MutationParams {
   channelId: string;
   messageId: string;
 }
@@ -13,37 +13,32 @@ interface DeleteSelfChatChannelMessageParams extends MutationParams {
 export const DeleteSelfChatChannelMessage = async ({
   channelId,
   messageId,
+  clientApi,
+  queryClient,
 }: DeleteSelfChatChannelMessageParams): Promise<ConnectedXMResponse<null>> => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.delete(
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/chat/channels/${channelId}/messages/${messageId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY(channelId),
+    });
+  }
+
   return data;
 };
 
 export const useDeleteSelfChatChannelMessage = (
-  channelId: string,
-  messageId: string
+  options: MutationOptions<
+    Awaited<ReturnType<typeof DeleteSelfChatChannelMessage>>,
+    DeleteSelfChatChannelMessageParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (
-      params: Omit<
-        DeleteSelfChatChannelMessageParams,
-        "channelId" | "messageId"
-      >
-    ) => DeleteSelfChatChannelMessage({ ...params, channelId, messageId }),
-    {
-      onSuccess: (
-        _response: Awaited<ReturnType<typeof DeleteSelfChatChannelMessage>>
-      ) => {
-        queryClient.invalidateQueries(
-          SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY(channelId)
-        );
-      },
-    }
-  );
+  return useConnectedMutation<
+    DeleteSelfChatChannelMessageParams,
+    Awaited<ReturnType<typeof DeleteSelfChatChannelMessage>>
+  >((params) => DeleteSelfChatChannelMessage({ ...params }), options);
 };
 
 export default useDeleteSelfChatChannelMessage;

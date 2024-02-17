@@ -31,7 +31,7 @@ export const SET_EVENT_SESSIONS_QUERY_DATA = (
   );
 };
 
-interface GetEventSessionsProps extends InfiniteQueryParams {
+export interface GetEventSessionsProps extends InfiniteQueryParams {
   eventId: string;
 }
 
