@@ -1,11 +1,10 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as LEAD_KEY } from "@context/queries/self/useGetSelfLead";
-import { useQueryClient } from "@tanstack/react-query";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { ConnectedXMResponse, Lead } from "@src/interfaces";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
-interface UpdateSelfLeadParams extends MutationParams {
+export interface UpdateSelfLeadParams extends MutationParams {
   leadId: string;
   note: string;
 }
@@ -13,22 +12,31 @@ interface UpdateSelfLeadParams extends MutationParams {
 export const UpdateSelfLead = async ({
   leadId,
   note,
-}: UpdateSelfLeadParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(`/self/leads/${leadId}`, {
-    note,
-  });
+  clientApi,
+}: UpdateSelfLeadParams): Promise<ConnectedXMResponse<Lead>> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<Lead>>(
+    `/self/leads/${leadId}`,
+    {
+      note,
+    }
+  );
+
+  // TO DO: Update invalidate query - we don't have a getter yet so we don't have a query key
+  // if(queryClient && data.status === "ok") {
+  //   queryClient.invalidateQueries([LEAD_KEY, response?.data?.id]);
+  // }
+
   return data;
 };
 
-export const useUpdateSelfLead = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateSelfLeadParams>(UpdateSelfLead, {
-    onSuccess: (response: ConnectedXMResponse<Account>) => {
-      queryClient.invalidateQueries([LEAD_KEY, response?.data?.id]);
-    },
-  });
+export const useUpdateSelfLead = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateSelfLead>>,
+    UpdateSelfLeadParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    UpdateSelfLeadParams,
+    Awaited<ReturnType<typeof UpdateSelfLead>>
+  >((params) => UpdateSelfLead({ ...params }), options);
 };
-
-export default useUpdateSelfLead;

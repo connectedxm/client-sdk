@@ -1,31 +1,28 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { QUERY_KEY as EVENT } from "@context/queries/events/useGetEvent";
-import { QUERY_KEY as EVENT_LISTING } from "@context/queries/self/useGetSelfEventListing";
-import { useQueryClient } from "@tanstack/react-query";
+import { ConnectedXMResponse, EventListing } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-// import GetImageBuffer from "@utilities/GetImageBuffer";
-
-interface UpdateSelfEventListingSpeakerParams extends MutationParams {
+export interface UpdateSelfEventListingSpeakerParams extends MutationParams {
   eventId: string;
   speaker: any;
   speakerId: string;
-  imageBlob?: Blob;
+  buffer?: string;
 }
 
 export const UpdateSelfEventListingSpeaker = async ({
   eventId,
   speaker,
   speakerId,
-}: UpdateSelfEventListingSpeakerParams) => {
-  const connectedXM = await ConnectedXM();
-
-  let buffer;
-  // if (imageBlob) {
-  //   buffer = await GetImageBuffer(imageBlob);
-  // }
-
-  const { data } = await connectedXM.put(
+  buffer,
+  clientApi,
+  queryClient,
+}: UpdateSelfEventListingSpeakerParams): Promise<
+  ConnectedXMResponse<EventListing>
+> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/speakers/${speakerId}`,
     {
       speaker,
@@ -33,54 +30,51 @@ export const UpdateSelfEventListingSpeaker = async ({
     }
   );
 
+  if (queryClient && data.status === "ok") {
+    queryClient.setQueryData(EVENT_QUERY_KEY(eventId), (event: any) => {
+      if (event && event.data) {
+        const index = event?.data?.speakers?.findIndex(
+          (speaker: any) => speaker.id === data.data.id
+        );
+        if (index !== -1 && event.data.speakers) {
+          event.data.speakers[index] = data.data;
+        }
+      }
+
+      return event;
+    });
+    queryClient.setQueryData(
+      SELF_EVENT_LISTING_QUERY_KEY(eventId),
+      (event: any) => {
+        if (event && event.data) {
+          const index = event?.data?.speakers?.findIndex(
+            (speaker: any) => speaker.id === data.data.id
+          );
+          if (index !== -1 && event.data.speakers) {
+            event.data.speakers[index] = data.data;
+          }
+        }
+
+        return event;
+      }
+    );
+  }
+
   return data;
 };
 
-export const useUpdateSelfEventListingSpeaker = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateSelfEventListingSpeakerParams>(
+export const useUpdateSelfEventListingSpeaker = (
+  options: MutationOptions<
+    Awaited<ConnectedXMResponse<EventListing>>,
+    UpdateSelfEventListingSpeakerParams
+  >
+) => {
+  return useConnectedMutation<
+    UpdateSelfEventListingSpeakerParams,
+    Awaited<ConnectedXMResponse<EventListing>>
+  >(
     (params: UpdateSelfEventListingSpeakerParams) =>
       UpdateSelfEventListingSpeaker({ ...params }),
-    {
-      onSuccess: (response) => {
-        if (response.data) {
-          queryClient.setQueryData(
-            [EVENT, response.data.event.slug],
-            (event: any) => {
-              if (event && event.data) {
-                const index = event?.data?.speakers?.findIndex(
-                  (speaker: any) => speaker.id === response.data.id
-                );
-                if (index !== -1 && event.data.speakers) {
-                  event.data.speakers[index] = response.data;
-                }
-              }
-
-              return event;
-            }
-          );
-          queryClient.setQueryData(
-            [EVENT_LISTING, response.data.event.slug],
-            (event: any) => {
-              if (event && event.data) {
-                const index = event?.data?.speakers?.findIndex(
-                  (speaker: any) => speaker.id === response.data.id
-                );
-                if (index !== -1 && event.data.speakers) {
-                  event.data.speakers[index] = response.data;
-                }
-              }
-
-              return event;
-            }
-          );
-        }
-      },
-    },
-    undefined,
-    true
+    options
   );
 };
-
-export default useUpdateSelfEventListingSpeaker;

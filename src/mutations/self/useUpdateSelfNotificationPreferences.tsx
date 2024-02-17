@@ -1,8 +1,9 @@
-import ConnectedXM from "@context/api/ConnectedXM";
-import { QUERY_KEY as NOTIFICATION_PREFERENCES } from "@context/queries/self/useGetSelfNotificationPreferences";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { SELF_PREFERENCES_QUERY_KEY } from "@src/queries";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { ConnectedXMResponse, NotificationPreferences } from "@src/interfaces";
 
 interface UpdateSelfNotificationPreferencesParams extends MutationParams {
   newFollowerPush?: boolean;
@@ -18,35 +19,39 @@ interface UpdateSelfNotificationPreferencesParams extends MutationParams {
   chatUnreadEmail?: boolean;
 }
 
-export const UpdateSelfNotificationPreferences = async (
-  params: UpdateSelfNotificationPreferencesParams,
-) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(
-    `/self/notificationPreferences`,
-    params,
-  );
+export const UpdateSelfNotificationPreferences = async ({
+  clientApi,
+  queryClient,
+  ...params
+}: UpdateSelfNotificationPreferencesParams): Promise<
+  ConnectedXMResponse<NotificationPreferences>
+> => {
+  if (queryClient) {
+    queryClient.setQueryData(SELF_PREFERENCES_QUERY_KEY(), (oldData: any) => {
+      if (oldData?.data) {
+        oldData.data = { ...oldData.data, ...params };
+        return oldData;
+      } else {
+        return oldData;
+      }
+    });
+  }
+
+  const { data } = await clientApi.put<
+    ConnectedXMResponse<NotificationPreferences>
+  >(`/self/notificationPreferences`, params);
+
   return data;
 };
 
-export const useUpdateSelfNotificationPreferences = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateSelfNotificationPreferencesParams>(
-    UpdateSelfNotificationPreferences,
-    {
-      onMutate: (newData) => {
-        queryClient.setQueryData([NOTIFICATION_PREFERENCES], (oldData: any) => {
-          if (oldData?.data) {
-            oldData.data = { ...oldData.data, ...newData };
-            return oldData;
-          } else {
-            return oldData;
-          }
-        });
-      },
-    },
-  );
+export const useUpdateSelfNotificationPreferences = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>,
+    UpdateSelfNotificationPreferencesParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    UpdateSelfNotificationPreferencesParams,
+    Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>
+  >(UpdateSelfNotificationPreferences, options);
 };
-
-export default useUpdateSelfNotificationPreferences;
