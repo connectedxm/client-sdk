@@ -36,5 +36,3 @@ export const useDeleteActivity = (
     Awaited<ReturnType<typeof DeleteActivity>>
   >((params) => DeleteActivity({ ...params }), options);
 };
-
-export default useDeleteActivity;

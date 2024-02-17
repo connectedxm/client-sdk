@@ -1,3 +1,4 @@
+import { UpdateCommentsSingle } from "../activities/optimistic/UpdateComments";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -23,7 +24,7 @@ export const SelfCreateActivity = async ({
   queryClient,
 }: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
-    if (data.activity.commentedId) {
+    if (activity.commentedId) {
       UpdateCommentsSingle(true, queryClient, [
         ACTIVITY,
         data.activity.commentedId,

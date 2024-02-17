@@ -11,8 +11,6 @@ import {
   SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
 } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
 export interface SelfLeaveCommunityParams extends MutationParams {
   communityId: string;
 }
