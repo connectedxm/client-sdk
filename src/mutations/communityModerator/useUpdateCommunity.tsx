@@ -1,11 +1,14 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as COMMUNITIES } from "@context/queries/communities/useGetCommunities";
-import { QUERY_KEY as COMMUNITY } from "@context/queries/communities/useGetCommunity";
-import { QUERY_KEY as SELF_COMMUNITIES } from "@context/queries/self/useGetSelfCommunityMemberships";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import {
+  COMMUNITIES_QUERY_KEY,
+  SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY,
+  SET_COMMUNITY_QUERY_DATA,
+} from "@src/queries";
+import {
+  MutationParams,
+  useConnectedMutation,
+  MutationOptions,
+} from "../useConnectedMutation";
+import { Community, ConnectedXMResponse } from "@src/interfaces";
 
 interface UpdateCommunityParams extends MutationParams {
   communityId: string;
@@ -19,70 +22,39 @@ export const UpdateCommunity = async ({
   description,
   externalUrl,
   base64,
-}: UpdateCommunityParams) => {
-  const connectedXM = await ConnectedXM();
+  clientApi,
+  queryClient,
+}: UpdateCommunityParams): Promise<ConnectedXMResponse<Community>> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
+    `/communityModerator/${communityId}`,
+    {
+      description: description || undefined,
+      externalUrl: externalUrl || undefined,
+      buffer: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+    }
+  );
 
-  const { data } = await connectedXM.put(`/communityModerator/${communityId}`, {
-    description: description || undefined,
-    externalUrl: externalUrl || undefined,
-    buffer: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
-  });
+  if (queryClient && data.status === "ok") {
+    SET_COMMUNITY_QUERY_DATA(queryClient, [data.data.slug], data);
+    queryClient.invalidateQueries({
+      queryKey: SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
+    });
+    queryClient.invalidateQueries({ queryKey: COMMUNITIES_QUERY_KEY() });
+  }
+
   return data;
 };
 
-export const useUpdateCommunity = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateCommunityParams>(UpdateCommunity, {
-    onSuccess: (response: ConnectedXMResponse<Account>) => {
-      // Update for single cached community
-      queryClient.setQueryData([COMMUNITY, response.data.username], response);
-
-      // Update for cached self community relationships
-      queryClient.setQueryData([SELF_COMMUNITIES], (data: any) => {
-        if (!data?.pages || data?.pages?.length === 0) return data;
-        let pageIndex;
-        let communityIndex;
-        for (let x = 0; x < data.pages.length; x++) {
-          for (let y = 0; y < data.pages[x].data.length; y++) {
-            if (data.pages[x].data[y].community.id === response.data.id) {
-              pageIndex = x;
-              communityIndex = y;
-            }
-          }
-        }
-        if (
-          typeof pageIndex != "undefined" &&
-          typeof communityIndex != "undefined"
-        ) {
-          data.pages[pageIndex].data[communityIndex].community = response.data;
-        }
-        return data;
-      });
-
-      // Update for cached communities
-      queryClient.setQueryData([COMMUNITIES], (data: any) => {
-        if (!data?.pages || data?.pages?.length === 0) return data;
-        let pageIndex;
-        let communityIndex;
-        for (let x = 0; x < data.pages.length; x++) {
-          for (let y = 0; y < data.pages[x].data.length; y++) {
-            if (data.pages[x].data[y].id === response.data.id) {
-              pageIndex = x;
-              communityIndex = y;
-            }
-          }
-        }
-        if (
-          typeof pageIndex != "undefined" &&
-          typeof communityIndex != "undefined"
-        ) {
-          data.pages[pageIndex].data[communityIndex] = response.data;
-        }
-        return data;
-      });
-    },
-  });
+export const useUpdateCommunity = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateCommunity>>,
+    UpdateCommunityParams
+  >
+) => {
+  return useConnectedMutation<
+    UpdateCommunityParams,
+    Awaited<ReturnType<typeof UpdateCommunity>>
+  >((params) => UpdateCommunity({ ...params }), options);
 };
 
 export default useUpdateCommunity;

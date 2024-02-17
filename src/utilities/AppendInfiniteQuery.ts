@@ -1,9 +1,10 @@
-import { QueryClient, QueryFilters } from "@tanstack/react-query";
+import { QueryClient, QueryFilters, QueryKey } from "@tanstack/react-query";
+import { ConnectedXMResponse } from "..";
 
-export const AppendInfiniteQuery = (
+export const AppendInfiniteQuery = <TData = unknown>(
   queryClient: QueryClient,
-  key: string[],
-  newData: any
+  key: QueryKey,
+  newData: ConnectedXMResponse<TData>
 ) => {
   queryClient.setQueriesData(key as QueryFilters, (data: any) => {
     if (data?.pages?.[0]?.data) {
