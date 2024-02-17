@@ -20,6 +20,7 @@ export const SelfJoinCommunity = async ({
   communityId,
   clientApi,
   queryClient,
+  locale = "en",
 }: SelfJoinCommunityParams): Promise<
   ConnectedXMResponse<CommunityMembership>
 > => {
@@ -28,7 +29,9 @@ export const SelfJoinCommunity = async ({
   >(`/self/communities/${communityId}`);
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_COMMUNITY_MEMBERSHIP_QUERY_DATA(queryClient, [communityId], data);
+    SET_SELF_COMMUNITY_MEMBERSHIP_QUERY_DATA(queryClient, [communityId], data, [
+      locale,
+    ]);
     queryClient.setQueryData(
       COMMUNITY_QUERY_KEY(communityId),
 
@@ -65,7 +68,7 @@ export const useSelfJoinCommunity = (
   options: MutationOptions<
     Awaited<ReturnType<typeof SelfJoinCommunity>>,
     SelfJoinCommunityParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     SelfJoinCommunityParams,

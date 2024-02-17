@@ -30,7 +30,7 @@ export const useCreateTeamAccount = (
   options: MutationOptions<
     Awaited<ReturnType<typeof CreateTeamAccount>>,
     CreateTeamAccountParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     CreateTeamAccountParams,

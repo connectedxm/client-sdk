@@ -68,7 +68,7 @@ export const useUpdateSelfEventListingSpeaker = (
   options: MutationOptions<
     Awaited<ReturnType<typeof UpdateSelfEventListingSpeaker>>,
     UpdateSelfEventListingSpeakerParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     UpdateSelfEventListingSpeakerParams,

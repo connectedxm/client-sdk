@@ -47,7 +47,7 @@ export const useSelfLeaveCommunity = (
   options: MutationOptions<
     Awaited<ReturnType<typeof SelfLeaveCommunity>>,
     SelfLeaveCommunityParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     SelfLeaveCommunityParams,

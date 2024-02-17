@@ -64,7 +64,7 @@ export const useUpdateSelfEventListingSession = (
   options: MutationOptions<
     Awaited<ReturnType<typeof UpdateSelfEventListingSession>>,
     UpdateSelfEventListingSessionParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     UpdateSelfEventListingSessionParams,

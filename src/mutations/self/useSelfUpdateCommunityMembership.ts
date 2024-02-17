@@ -45,7 +45,7 @@ export const useSelfUpdateCommunityMembership = (
   options: MutationOptions<
     Awaited<ReturnType<typeof SelfUpdateCommunityMembership>>,
     SelfUpdateCommunityMembershipParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     SelfUpdateCommunityMembershipParams,

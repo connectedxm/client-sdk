@@ -16,14 +16,15 @@ export const UnfollowAccount = async ({
   accountId,
   clientApi,
   queryClient,
+  locale = "en",
 }: UnfollowAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/accounts/${accountId}/unfollow`
   );
 
   if (queryClient && data.status === "ok") {
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data);
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data);
+    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data, [locale]);
+    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data, [locale]);
     queryClient.invalidateQueries({
       queryKey: ACCOUNT_FOLLOWERS_QUERY_KEY(data.data.id),
     });
