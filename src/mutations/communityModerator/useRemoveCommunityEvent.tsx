@@ -1,9 +1,12 @@
-import { ConnectedXM } from "@context/api/ConnectedXM";
-import { QUERY_KEY as COMMUNITY_EVENTS } from "@context/queries/communities/useGetCommunityEvents";
-import { QUERY_KEY as SELF_LISTINGS } from "@context/queries/self/useGetSelfEventListings";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import {
+  COMMUNITY_EVENTS_QUERY_KEY,
+  SELF_EVENT_LISTINGS_QUERY_KEY,
+} from "@src/queries";
+import useConnectedMutation, {
+  MutationParams,
+  MutationOptions,
+} from "../useConnectedMutation";
+import { ConnectedXMResponse } from "@src/interfaces";
 
 interface RemoveCommunityEventParams extends MutationParams {
   communityId: string;
@@ -13,26 +16,38 @@ interface RemoveCommunityEventParams extends MutationParams {
 export const RemoveCommunityEvent = async ({
   communityId,
   eventId,
-}: RemoveCommunityEventParams) => {
-  const connectedXM = await ConnectedXM();
-
-  const { data } = await connectedXM.delete(
-    `/communityModerator/${communityId}/events/${eventId}`,
+  clientApi,
+  queryClient,
+}: RemoveCommunityEventParams): Promise<ConnectedXMResponse<null>> => {
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
+    `/communityModerator/${communityId}/events/${eventId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: COMMUNITY_EVENTS_QUERY_KEY(communityId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTINGS_QUERY_KEY(true),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_LISTINGS_QUERY_KEY(false),
+    });
+  }
+
   return data;
 };
 
-export const useRemoveCommunityEvent = (communityId: string) => {
-  const queryClient = useQueryClient();
-  return useConnectedMutation<RemoveCommunityEventParams>(
-    RemoveCommunityEvent,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([COMMUNITY_EVENTS, communityId]);
-        queryClient.invalidateQueries([SELF_LISTINGS]);
-      },
-    },
-  );
+export const useRemoveCommunityEvent = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof RemoveCommunityEvent>>,
+    RemoveCommunityEventParams
+  >
+) => {
+  return useConnectedMutation<
+    RemoveCommunityEventParams,
+    Awaited<ReturnType<typeof RemoveCommunityEvent>>
+  >(RemoveCommunityEvent, options);
 };
 
 export default useRemoveCommunityEvent;
