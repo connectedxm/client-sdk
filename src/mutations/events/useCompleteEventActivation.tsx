@@ -1,11 +1,8 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Purchase } from "@context/interfaces";
-import { QUERY_KEY as EVENT_ACTIVATION } from "@context/queries/events/useGetEventActivation";
-import { QUERY_KEY as EVENT_ACTIVATION_COMPLETIONS } from "@context/queries/events/useGetEventActivationCompletions";
-import { QUERY_KEY as EVENT_ACTIVATIONS_SUMMARY } from "@context/queries/self/useGetSelfEventActivationsSummary";
-import { useQueryClient } from "@tanstack/react-query";
-
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
+import { ConnectedXMResponse, EventActivation } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationParams,
+  MutationOptions,
+} from "../useConnectedMutation";
 
 interface CompleteEventActivationParams extends MutationParams {
   eventId: string;
@@ -17,42 +14,44 @@ export const CompleteEventActivation = async ({
   eventId,
   activationId,
   code,
-}: CompleteEventActivationParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(
+  clientApi,
+  queryClient,
+}: CompleteEventActivationParams): Promise<
+  ConnectedXMResponse<EventActivation>
+> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<EventActivation>>(
     `/events/${eventId}/activations/${activationId}`,
     {
       code: code || undefined,
-    },
+    }
   );
+
+  if (queryClient && data.status === "ok") {
+    // TODO: QUERIES NEED TO BE ADDED
+    // queryClient.invalidateQueries({
+    //   queryKey: EVENT_ACTIVATION_QUERY_KEY(eventId, activationId),
+    // });
+    // queryClient.invalidateQueries([
+    //   EVENT_ACTIVATION_COMPLETIONS,
+    //   eventId,
+    //   activationId,
+    // ]);
+    // queryClient.invalidateQueries([EVENT_ACTIVATIONS_SUMMARY, eventId]);
+  }
+
   return data;
 };
 
 export const useCompleteEventActivation = (
-  eventId: string,
-  activationId: string,
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CompleteEventActivation>>,
+    CompleteEventActivationParams
+  > = {}
 ) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<any>(
-    (params: Omit<CompleteEventActivationParams, "eventId" | "activationId">) =>
-      CompleteEventActivation({ eventId, activationId, ...params }),
-    {
-      onSuccess: (_response: ConnectedXMResponse<Purchase>) => {
-        queryClient.invalidateQueries([
-          EVENT_ACTIVATION,
-          eventId,
-          activationId,
-        ]);
-        queryClient.invalidateQueries([
-          EVENT_ACTIVATION_COMPLETIONS,
-          eventId,
-          activationId,
-        ]);
-        queryClient.invalidateQueries([EVENT_ACTIVATIONS_SUMMARY, eventId]);
-      },
-    },
-  );
+  return useConnectedMutation<
+    CompleteEventActivationParams,
+    Awaited<ReturnType<typeof CompleteEventActivation>>
+  >((params) => CompleteEventActivation({ ...params }), options);
 };
 
 export default useCompleteEventActivation;
