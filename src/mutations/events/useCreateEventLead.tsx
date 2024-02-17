@@ -34,6 +34,7 @@ export const CreateEventLead = async ({
 };
 
 export const useCreateEventLead = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof CreateEventLead>>,
     CreateEventLeadParams
@@ -42,7 +43,7 @@ export const useCreateEventLead = (
   return useConnectedMutation<
     CreateEventLeadParams,
     Awaited<ReturnType<typeof CreateEventLead>>
-  >((params) => CreateEventLead({ ...params }), options);
+  >(CreateEventLead, params, options);
 };
 
 export default useCreateEventLead;

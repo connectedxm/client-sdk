@@ -49,13 +49,14 @@ export const UpdateSelf = async ({
 };
 
 export const useUpdateSelf = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
-    Awaited<ReturnType<typeof UpdateSelf>>,
+    Awaited<ConnectedXMResponse<Self>>,
     UpdateSelfParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     UpdateSelfParams,
-    Awaited<ReturnType<typeof UpdateSelf>>
-  >((params) => UpdateSelf({ ...params }), options);
+    Awaited<ConnectedXMResponse<Self>>
+  >(UpdateSelf, params, options);
 };

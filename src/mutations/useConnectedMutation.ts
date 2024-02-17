@@ -6,9 +6,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError, AxiosInstance } from "axios";
-import { ConnectedXMResponse, useClientAPI } from "..";
+import { ConnectedXMResponse, useClientAPI, useConnectedXM } from "..";
 
 export interface MutationParams {
+  locale?: string;
   clientApi: AxiosInstance;
   queryClient?: QueryClient;
 }
@@ -21,12 +22,17 @@ export interface MutationOptions<TResponseData, TMutationParams>
   > {}
 
 export const useConnectedMutation = <
-  TMutationParams extends Omit<MutationParams, "queryClient" | "clientApi">,
+  TMutationParams extends Omit<
+    MutationParams,
+    "locale" | "queryClient" | "clientApi"
+  >,
   TResponseData extends ConnectedXMResponse<any>
 >(
   mutation: MutationFunction<TResponseData, TMutationParams>,
+  params?: Omit<MutationParams, "queryClient" | "clientApi">,
   options?: MutationOptions<TResponseData, TMutationParams>
 ) => {
+  const { locale } = useConnectedXM();
   const queryClient = useQueryClient();
   const clientApi = useClientAPI();
 
@@ -35,7 +41,13 @@ export const useConnectedMutation = <
     AxiosError<TResponseData> | Error,
     TMutationParams
   >({
-    mutationFn: (params) => mutation({ queryClient, clientApi, ...params }),
+    mutationFn: (data) =>
+      mutation({
+        queryClient,
+        locale: params?.locale || locale,
+        clientApi,
+        ...data,
+      }),
     ...options,
   });
 };

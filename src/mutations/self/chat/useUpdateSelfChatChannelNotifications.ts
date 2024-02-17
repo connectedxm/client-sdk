@@ -1,11 +1,12 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { ChatChannelMember } from "@context/interfaces";
+import { ChatChannelMember, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
+  MutationOptions,
   MutationParams,
-} from "@context/mutations/useConnectedMutation";
-import { SET_SELF_CHAT_CHANNEL_QUERY_DATA } from "@context/queries/self/chat/useGetSelfChatChannel";
-import { SELF_CHAT_CHANNELS_QUERY_KEY } from "@context/queries/self/chat/useGetSelfChatChannels";
-import { useQueryClient } from "@tanstack/react-query";
+} from "@src/mutations/useConnectedMutation";
+import {
+  SELF_CHAT_CHANNELS_QUERY_KEY,
+  SET_SELF_CHAT_CHANNEL_QUERY_DATA,
+} from "@src/queries";
 
 export interface UpdateSelfChatChannelNotificationsParams
   extends MutationParams {
@@ -16,38 +17,40 @@ export interface UpdateSelfChatChannelNotificationsParams
 export const UpdateSelfChatChannelNotifications = async ({
   channelId,
   notifications,
+  clientApi,
+  queryClient,
+  locale = "en",
 }: UpdateSelfChatChannelNotificationsParams): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(
+  const { data } = await clientApi.put<ConnectedXMResponse<ChatChannelMember>>(
     `/self/chat/channels/${channelId}/notifications`,
     {
       notifications,
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], data, [locale]);
+    queryClient.invalidateQueries({
+      queryKey: SELF_CHAT_CHANNELS_QUERY_KEY(),
+    });
+  }
+
   return data;
 };
 
-export const useUpdateSelfChatChannelNotifications = (channelId: string) => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation(
-    (params: Omit<UpdateSelfChatChannelNotificationsParams, "channelId">) =>
-      UpdateSelfChatChannelNotifications({ ...params, channelId }),
-    {
-      onSuccess: (
-        response: Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>
-      ) => {
-        queryClient.invalidateQueries(SELF_CHAT_CHANNELS_QUERY_KEY());
-        SET_SELF_CHAT_CHANNEL_QUERY_DATA(
-          queryClient,
-          [response.data.channelId.toString()],
-          response
-        );
-      },
-    }
-  );
+export const useUpdateSelfChatChannelNotifications = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>,
+    UpdateSelfChatChannelNotificationsParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    UpdateSelfChatChannelNotificationsParams,
+    Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>
+  >(UpdateSelfChatChannelNotifications, params, options);
 };
 
 export default useUpdateSelfChatChannelNotifications;

@@ -16,14 +16,15 @@ export const UnfollowAccount = async ({
   accountId,
   clientApi,
   queryClient,
+  locale = "en",
 }: UnfollowAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/accounts/${accountId}/unfollow`
   );
 
   if (queryClient && data.status === "ok") {
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data);
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data);
+    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data, [locale]);
+    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data, [locale]);
     queryClient.invalidateQueries({
       queryKey: ACCOUNT_FOLLOWERS_QUERY_KEY(data.data.id),
     });
@@ -33,6 +34,7 @@ export const UnfollowAccount = async ({
 };
 
 export const useUnfollowAccount = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof UnfollowAccount>>,
     UnfollowAccountParams
@@ -41,5 +43,5 @@ export const useUnfollowAccount = (
   return useConnectedMutation<
     UnfollowAccountParams,
     Awaited<ReturnType<typeof UnfollowAccount>>
-  >((params) => UnfollowAccount({ ...params }), options);
+  >(UnfollowAccount, params, options);
 };

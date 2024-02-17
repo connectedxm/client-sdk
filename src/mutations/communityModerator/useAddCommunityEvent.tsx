@@ -39,6 +39,7 @@ export const AddCommunityEvent = async ({
 };
 
 export const useAddCommunityEvent = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof AddCommunityEvent>>,
     AddCommunityEventParams
@@ -47,7 +48,7 @@ export const useAddCommunityEvent = (
   return useConnectedMutation<
     AddCommunityEventParams,
     Awaited<ReturnType<typeof AddCommunityEvent>>
-  >((params) => AddCommunityEvent({ ...params }), options);
+  >(AddCommunityEvent, params, options);
 };
 
 export default useAddCommunityEvent;

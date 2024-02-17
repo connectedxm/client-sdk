@@ -51,6 +51,7 @@ export const CreateCommunityAnnouncement = async ({
 };
 
 export const useCreateCommunityAnnouncement = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     ConnectedXMResponse<Announcement>,
     CreateCommunityAnnouncementParams
@@ -59,7 +60,7 @@ export const useCreateCommunityAnnouncement = (
   return useConnectedMutation<
     CreateCommunityAnnouncementParams,
     ConnectedXMResponse<Announcement>
-  >((params) => CreateCommunityAnnouncement({ ...params }), options);
+  >(CreateCommunityAnnouncement, params, options);
 };
 
 export default useCreateCommunityAnnouncement;

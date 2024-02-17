@@ -36,6 +36,7 @@ export const DeleteReshare = async ({
 };
 
 export const useDeleteReshare = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof DeleteReshare>>,
     DeleteReshareParams
@@ -44,5 +45,5 @@ export const useDeleteReshare = (
   return useConnectedMutation<
     DeleteReshareParams,
     Awaited<ReturnType<typeof DeleteReshare>>
-  >((params) => DeleteReshare({ ...params }), options);
+  >(DeleteReshare, params, options);
 };

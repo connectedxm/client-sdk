@@ -31,6 +31,7 @@ export const UnlikeActivity = async ({
 };
 
 export const useUnlikeActivity = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof UnlikeActivity>>,
     UnlikeActivityParams
@@ -39,5 +40,5 @@ export const useUnlikeActivity = (
   return useConnectedMutation<
     UnlikeActivityParams,
     Awaited<ReturnType<typeof UnlikeActivity>>
-  >((params) => UnlikeActivity({ ...params }), options);
+  >(UnlikeActivity, params, options);
 };

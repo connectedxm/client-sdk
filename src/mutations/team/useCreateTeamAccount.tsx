@@ -26,13 +26,14 @@ export const CreateTeamAccount = async ({
 };
 
 export const useCreateTeamAccount = (
+  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: MutationOptions<
     Awaited<ReturnType<typeof CreateTeamAccount>>,
     CreateTeamAccountParams
-  >
+  > = {}
 ) => {
   return useConnectedMutation<
     CreateTeamAccountParams,
     Awaited<ReturnType<typeof CreateTeamAccount>>
-  >((params) => CreateTeamAccount({ ...params }), options);
+  >(CreateTeamAccount, params, options);
 };
