@@ -1,30 +1,41 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
-import { QUERY_KEY as SELF } from "@context/queries/self/useGetSelf";
-import { useQueryClient } from "@tanstack/react-query";
+import { ConnectedXMResponse, Self } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
+import { SELF_QUERY_KEY } from "@src/queries";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-interface UpdateSelfImageParams extends MutationParams {
+export interface UpdateSelfImageParams extends MutationParams {
   base64: string;
 }
 
-export const UpdateSelfImage = async ({ base64 }: UpdateSelfImageParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.put(`/self/image`, {
-    buffer: `data:image/jpeg;base64,${base64}`,
-  });
+export const UpdateSelfImage = async ({
+  base64,
+  clientApi,
+  queryClient,
+}: UpdateSelfImageParams): Promise<ConnectedXMResponse<Self>> => {
+  const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
+    `/self/image`,
+    {
+      buffer: `data:image/jpeg;base64,${base64}`,
+    }
+  );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_QUERY_KEY() });
+  }
 
   return data;
 };
 
-export const useUpdateSelfImage = () => {
-  const queryClient = useQueryClient();
-
-  return useConnectedMutation<UpdateSelfImageParams>(UpdateSelfImage, {
-    onSuccess: (_response: ConnectedXMResponse<Account>) => {
-      queryClient.invalidateQueries([SELF]);
-    },
-  });
+export const useUpdateSelfImage = (
+  options: MutationOptions<
+    Awaited<ConnectedXMResponse<Self>>,
+    UpdateSelfImageParams
+  > = {}
+) => {
+  return useConnectedMutation<
+    UpdateSelfImageParams,
+    Awaited<ConnectedXMResponse<Self>>
+  >((params) => UpdateSelfImage({ ...params }), options);
 };
-
-export default useUpdateSelfImage;

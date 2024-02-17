@@ -1,30 +1,38 @@
-import { ConnectedXM, ConnectedXMResponse } from "@context/api/ConnectedXM";
-import { Account } from "@context/interfaces";
+import { Account, ConnectedXMResponse } from "@src/interfaces";
+import useConnectedMutation, {
+  MutationOptions,
+  MutationParams,
+} from "../useConnectedMutation";
 
-import useConnectedMutation, { MutationParams } from "../useConnectedMutation";
-
-interface CreateTeamAccountParams extends MutationParams {
+export interface CreateTeamAccountParams extends MutationParams {
   name: string;
   email: string;
 }
 
-export const CreateTeamAccount = async (params: CreateTeamAccountParams) => {
-  const connectedXM = await ConnectedXM();
-  const { data } = await connectedXM.post(`/self/team`, params);
+export const CreateTeamAccount = async ({
+  name,
+  email,
+  clientApi,
+}: CreateTeamAccountParams): Promise<ConnectedXMResponse<Account>> => {
+  const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
+    `/self/team`,
+    {
+      name,
+      email,
+    }
+  );
+
   return data;
 };
 
-export const useCreateTeamAccount = () => {
-  return useConnectedMutation<CreateTeamAccountParams>(CreateTeamAccount, {
-    onSuccess: async (response: ConnectedXMResponse<Account>) => {
-      if (response.data) {
-        // window.localStorage.setItem(DELEGATION_KEY, response.data.id);
-        // await router.replace("/account");
-        // queryClient.clear();
-        // queryClient.setQueryData([SELF], response);
-      }
-    },
-  });
+export const useCreateTeamAccount = (
+  options: MutationOptions<
+    Awaited<ReturnType<typeof CreateTeamAccount>>,
+    CreateTeamAccountParams
+  >
+) => {
+  return useConnectedMutation<
+    CreateTeamAccountParams,
+    Awaited<ReturnType<typeof CreateTeamAccount>>
+  >((params) => CreateTeamAccount({ ...params }), options);
 };
-
-export default useCreateTeamAccount;
