@@ -5,7 +5,7 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
-import type { Activity } from "@interfaces";
+import type { SingleActivity } from "@interfaces";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
@@ -38,7 +38,7 @@ export interface GetActivityProps extends SingleQueryParams {
 export const GetActivity = async ({
   activityId,
   clientApi,
-}: GetActivityProps): Promise<ConnectedXMResponse<Activity>> => {
+}: GetActivityProps): Promise<ConnectedXMResponse<SingleActivity>> => {
   const { data } = await clientApi.get(`/activities/${activityId}`);
   return data;
 };
