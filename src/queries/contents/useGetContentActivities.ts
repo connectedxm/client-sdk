@@ -33,7 +33,7 @@ export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (
   );
 };
 
-export interface GetContentParams extends InfiniteQueryParams {
+export interface GetContentActivitiesParams extends InfiniteQueryParams {
   contentId: string;
 }
 
@@ -46,7 +46,7 @@ export const GetContentActivities = async ({
   queryClient,
   clientApi,
   locale,
-}: GetContentParams): Promise<ConnectedXMResponse<Activity[]>> => {
+}: GetContentActivitiesParams): Promise<ConnectedXMResponse<Activity[]>> => {
   const { data } = await clientApi.get(`/contents/${contentId}/activities`, {
     params: {
       page: pageParam || undefined,

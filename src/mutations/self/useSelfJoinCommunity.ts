@@ -64,9 +64,12 @@ export const SelfJoinCommunity = async ({
 
 export const useSelfJoinCommunity = (
   params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
-  options: MutationOptions<
-    Awaited<ReturnType<typeof SelfJoinCommunity>>,
-    SelfJoinCommunityParams
+  options: Omit<
+    MutationOptions<
+      Awaited<ReturnType<typeof SelfJoinCommunity>>,
+      Omit<SelfJoinCommunityParams, "queryClient" | "clientApi">
+    >,
+    "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<

@@ -31,7 +31,7 @@ export const SET_CONTENT_TYPE_CONTENTS_QUERY_DATA = (
   );
 };
 
-export interface GetContentParams extends InfiniteQueryParams {
+export interface GetContentTypeContentsParams extends InfiniteQueryParams {
   contentTypeId: string;
 }
 
@@ -44,7 +44,7 @@ export const GetContentTypeContents = async ({
   queryClient,
   clientApi,
   locale,
-}: GetContentParams): Promise<ConnectedXMResponse<Content[]>> => {
+}: GetContentTypeContentsParams): Promise<ConnectedXMResponse<Content[]>> => {
   const { data } = await clientApi.get(
     `/contentTypes/${contentTypeId}/contents`,
     {

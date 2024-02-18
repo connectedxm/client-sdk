@@ -28,7 +28,7 @@ export const SET_CONTENT_TYPES_QUERY_DATA = (
   );
 };
 
-export interface GetContentParams extends InfiniteQueryParams {}
+export interface GetContentTypesParams extends InfiniteQueryParams {}
 
 export const GetContentTypes = async ({
   pageParam,
@@ -38,7 +38,7 @@ export const GetContentTypes = async ({
   queryClient,
   clientApi,
   locale,
-}: GetContentParams): Promise<ConnectedXMResponse<ContentType[]>> => {
+}: GetContentTypesParams): Promise<ConnectedXMResponse<ContentType[]>> => {
   const { data } = await clientApi.get(`/contentTypes`, {
     params: {
       page: pageParam || undefined,

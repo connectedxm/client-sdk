@@ -9,8 +9,8 @@ import { AxiosError, AxiosInstance } from "axios";
 import { ConnectedXMResponse, useClientAPI, useConnectedXM } from "..";
 
 export interface MutationParams {
-  locale?: string;
   clientApi: AxiosInstance;
+  locale?: string;
   queryClient?: QueryClient;
 }
 
@@ -22,15 +22,18 @@ export interface MutationOptions<TResponseData, TMutationParams>
   > {}
 
 export const useConnectedMutation = <
-  TMutationParams extends Omit<
-    MutationParams,
-    "locale" | "queryClient" | "clientApi"
-  >,
+  TMutationParams extends MutationParams,
   TResponseData extends ConnectedXMResponse<any>
 >(
   mutation: MutationFunction<TResponseData, TMutationParams>,
   params?: Omit<MutationParams, "queryClient" | "clientApi">,
-  options?: MutationOptions<TResponseData, TMutationParams>
+  options?: Omit<
+    MutationOptions<
+      TResponseData,
+      Omit<TMutationParams, "queryClient" | "clientApi">
+    >,
+    "mutationFn"
+  >
 ) => {
   const { locale } = useConnectedXM();
   const queryClient = useQueryClient();
@@ -39,15 +42,15 @@ export const useConnectedMutation = <
   return useMutation<
     TResponseData,
     AxiosError<TResponseData> | Error,
-    TMutationParams
+    Omit<TMutationParams, "queryClient" | "clientApi">
   >({
     mutationFn: (data) =>
       mutation({
-        queryClient,
         locale: params?.locale || locale,
-        clientApi,
         ...data,
-      }),
+        queryClient,
+        clientApi,
+      } as TMutationParams),
     ...options,
   });
 };

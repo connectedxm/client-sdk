@@ -35,9 +35,12 @@ export const UnfollowAccount = async ({
 
 export const useUnfollowAccount = (
   params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
-  options: MutationOptions<
-    Awaited<ReturnType<typeof UnfollowAccount>>,
-    UnfollowAccountParams
+  options: Omit<
+    MutationOptions<
+      Awaited<ReturnType<typeof UnfollowAccount>>,
+      Omit<UnfollowAccountParams, "queryClient" | "clientApi">
+    >,
+    "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<

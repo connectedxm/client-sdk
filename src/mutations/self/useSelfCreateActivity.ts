@@ -111,10 +111,13 @@ export const SelfCreateActivity = async ({
 
 export const useSelfCreateActivity = (
   params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
-  options: MutationOptions<
-    Awaited<ReturnType<typeof SelfCreateActivity>>,
-    SelfCreateActivityParams
-  >
+  options: Omit<
+    MutationOptions<
+      Awaited<ReturnType<typeof SelfCreateActivity>>,
+      Omit<SelfCreateActivityParams, "queryClient" | "clientApi">
+    >,
+    "mutationFn"
+  > = {}
 ) => {
   return useConnectedMutation<
     SelfCreateActivityParams,
