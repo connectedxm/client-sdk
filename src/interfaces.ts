@@ -22,6 +22,7 @@ export interface BaseImage {
   uri: string;
   width: number;
   height: number;
+  moderation: "safe" | "warning";
 }
 
 export enum ImageType {
@@ -209,7 +210,9 @@ export interface AccountShare extends Account {
 export interface BaseActivity {
   id: string;
   message: string;
+  readMore: boolean;
   image: BaseImage | null;
+  video: BaseVideo | null;
   linkPreview: LinkPreview | null;
   account: BaseAccount;
   createdAt: string;
@@ -238,6 +241,10 @@ export interface Activity extends BaseActivity {
     comments: number;
     reshares: number;
   };
+}
+export interface SingleActivity extends Activity {
+  html: string;
+  text: string;
 }
 
 export const isTypeActivity = (
@@ -370,6 +377,7 @@ export interface RegistrationEventDetails {
   _count: {
     sections: number;
     tickets: number;
+    coupons: number;
   };
 }
 
@@ -384,6 +392,7 @@ export enum RegistrationQuestionType {
   radio = "radio",
   checkbox = "checkbox",
   search = "search",
+  file = "file",
 }
 
 export interface BaseRegistrationQuestion {
@@ -400,6 +409,8 @@ export interface BaseRegistrationQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  validation: string | null;
+  validationMessage: string | null;
   primary: boolean;
   guest: boolean;
 }
@@ -417,6 +428,7 @@ export interface RegistrationSectionQuestion {
 export interface BaseRegistrationQuestionChoice {
   id: number;
   value: string;
+  supply: number | null;
   description: string | null;
   sortOrder: number;
   question: RegistrationQuestion;
@@ -451,6 +463,7 @@ export interface BaseRegistrationSection {
   id: number;
   name: string;
   description: string | null;
+  guestDescription: string | null;
   sortOrder: number;
 }
 
@@ -505,8 +518,8 @@ export interface BaseTicket {
   price: number;
   accessLevel: TicketEventAccessLevel;
   featuredImage: BaseImage | null;
-  minQuantityPerSale: number | null;
-  maxQuantityPerSale: number | null;
+  minQuantityPerSale: number;
+  maxQuantityPerSale: number;
   minGuests: number;
   maxGuests: number;
   supply: number | null;
@@ -1417,3 +1430,12 @@ export interface BaseSeries {
 }
 
 export interface Series extends BaseSeries {}
+
+export interface BaseVideo {
+  id: string;
+  width: number;
+  height: number;
+  thumbnailUrl: string;
+  previewUrl: string;
+  readyToStream: string;
+}
