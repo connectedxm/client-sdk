@@ -43,7 +43,7 @@ export const CreateCommunityAnnouncement = async ({
     AppendInfiniteQuery<Announcement>(
       queryClient,
       COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
-      data
+      data.data
     );
   }
 

@@ -31,31 +31,46 @@ export const CacheIndividualQueries = <TData extends ItemWithId>(
       // Query Client, keyparams, response
       queryClient.setQueryData(
         [...queryKeyFn(item.id), ...GetBaseSingleQueryKeys(locale)],
-        SudoResponse
+        SudoResponse,
+        {
+          updatedAt: Date.now() - 1000 * 60,
+        }
       );
 
       if (item.slug) {
         queryClient.setQueryData(
           [...queryKeyFn(item.slug), ...GetBaseSingleQueryKeys(locale)],
-          SudoResponse
+          SudoResponse,
+          {
+            updatedAt: Date.now() - 1000 * 60,
+          }
         );
       }
       if (item.username) {
         queryClient.setQueryData(
           [...queryKeyFn(item.username), ...GetBaseSingleQueryKeys(locale)],
-          SudoResponse
+          SudoResponse,
+          {
+            updatedAt: Date.now() - 1000 * 60,
+          }
         );
       }
       if (item.code) {
         queryClient.setQueryData(
           [...queryKeyFn(item.code), ...GetBaseSingleQueryKeys(locale)],
-          SudoResponse
+          SudoResponse,
+          {
+            updatedAt: Date.now() - 1000 * 60,
+          }
         );
       }
       if (item.name) {
         queryClient.setQueryData(
           [...queryKeyFn(item.name), ...GetBaseSingleQueryKeys(locale)],
-          SudoResponse
+          SudoResponse,
+          {
+            updatedAt: Date.now() - 1000 * 60,
+          }
         );
       }
       if (item.alternateId) {
@@ -64,7 +79,10 @@ export const CacheIndividualQueries = <TData extends ItemWithId>(
             ...queryKeyFn(item.alternateId.toString()),
             ...GetBaseSingleQueryKeys(locale),
           ],
-          SudoResponse
+          SudoResponse,
+          {
+            updatedAt: Date.now() - 1000 * 60,
+          }
         );
       }
     }

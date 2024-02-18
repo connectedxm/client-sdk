@@ -8,6 +8,7 @@ export interface ConnectedXMClientContextState {
     | "http://localhost:4001";
   token: string | undefined;
   setToken: Dispatch<SetStateAction<string | undefined>>;
+  refreshToken?: () => Promise<string>;
   executeAs?: string;
   locale: string;
 }

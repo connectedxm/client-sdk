@@ -1,6 +1,5 @@
 import { ConnectedXMResponse } from "../interfaces";
 import {
-  DefaultError,
   InfiniteData,
   QueryClient,
   QueryKey,
@@ -10,7 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { useConnectedXM } from "../hooks";
 import { useClientAPI } from "@src/hooks/useClientAPI";
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 
 export interface InfiniteQueryParams {
   pageSize?: number;
@@ -27,7 +26,7 @@ export interface InfiniteQueryOptions<
 > extends Omit<
     UseInfiniteQueryOptions<
       TQueryData,
-      DefaultError,
+      AxiosError<ConnectedXMResponse<null>>,
       InfiniteData<TQueryData, number>,
       TQueryData,
       QueryKey,
@@ -63,7 +62,7 @@ export const useConnectedInfiniteQuery = <
   > = {},
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const { locale } = useConnectedXM();
+  const { locale, refreshToken } = useConnectedXM();
   const queryClient = useQueryClient();
   const clientApi = useClientAPI(locale);
 
@@ -80,9 +79,29 @@ export const useConnectedInfiniteQuery = <
   };
 
   // prettier-ignore
-  return useInfiniteQuery<TQueryData,DefaultError,InfiniteData<TQueryData, number>,QueryKey,number>({
+  return useInfiniteQuery<TQueryData,AxiosError<ConnectedXMResponse<null>>,InfiniteData<TQueryData, number>,QueryKey,number>({
     staleTime: 60 * 1000, // 60 Seconds
-    retry: options?.retry || 3,
+    retry: (failureCount, error) => {
+      // RESOURCE NOT FOUND
+      if (error.status === 404) return false;
+
+      // USER DOES NOT HAVE PERMISSION
+      if (error.status === 403) return false;
+
+      // TOKEN IS POSSIBLY EXPIRED
+      if (error.status === 401) {
+        if (refreshToken && failureCount < 2) {
+          refreshToken()
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      // DEFAULT
+      if (failureCount < 3) return true;
+      return false;
+    },
     ...options,
     queryKey: [
       ...queryKeys,

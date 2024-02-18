@@ -66,7 +66,11 @@ export const SelfCreateActivity = async ({
       queryKey: [...ACTIVITIES_QUERY_KEY(), locale],
     });
 
-    AppendInfiniteQuery(queryClient, [...ACTIVITIES_QUERY_KEY(), locale], data);
+    AppendInfiniteQuery<Activity>(
+      queryClient,
+      [...ACTIVITIES_QUERY_KEY(), locale],
+      data.data
+    );
 
     if (!data.data.commented?.id) {
       AppendInfiniteQuery(
@@ -76,33 +80,33 @@ export const SelfCreateActivity = async ({
       );
     }
 
-    AppendInfiniteQuery(
+    AppendInfiniteQuery<Activity>(
       queryClient,
       [...SELF_ACTIVITIES_QUERY_KEY(), locale],
-      data
+      data.data
     );
 
     if (data.data?.content?.id) {
-      AppendInfiniteQuery(
+      AppendInfiniteQuery<Activity>(
         queryClient,
         [...CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id), locale],
-        data
+        data.data
       );
     }
 
     if (data.data?.event?.id) {
-      AppendInfiniteQuery(
+      AppendInfiniteQuery<Activity>(
         queryClient,
         [...EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id), locale],
-        data
+        data.data
       );
     }
 
     if (data.data?.community?.id) {
-      AppendInfiniteQuery(
+      AppendInfiniteQuery<Activity>(
         queryClient,
         [...COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id), locale],
-        data
+        data.data
       );
     }
   }
