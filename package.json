@@ -5,7 +5,7 @@
   "author": "ConnectedXM Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/connectedxm/client-sdk.git"
+    "url": "https://github.com/connectedxm/client-sdk.git"
   },
   "license": "MIT",
   "private": false,
@@ -17,8 +17,7 @@
     "lint": "yarn tsc && eslint src/**/*.ts",
     "test": "vitest run",
     "build": "tsup src/index.ts --format cjs,esm --dts",
-    "ci": "yarn run lint && yarn run test && yarn run build",
-    "release": "yarn run lint && yarn run test && yarn run build && changeset publish"
+    "ci": "yarn run lint && yarn run test && yarn run build"
   },
   "dependencies": {
     "axios": "^1.6.5"
