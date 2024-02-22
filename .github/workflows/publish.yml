@@ -28,6 +28,7 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: https://registry.npmjs.org/
+      - run: npm ci
       - run: npm run build
       - run: npm publish
         env:
@@ -42,6 +43,7 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: https://npm.pkg.github.com/
+      - run: npm ci
       - run: npm run build
       - run: npm publish
         env:
