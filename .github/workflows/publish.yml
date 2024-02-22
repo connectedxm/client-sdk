@@ -16,13 +16,13 @@ jobs:
           node-version: "18.x"
           cache: "yarn"
           scope: "@connectedxm"
-          always-auth: true
+          registry-url: "https://registry.npmjs.org"
 
       - run: yarn install --frozen-lockfile
 
       - run: yarn ci
 
       - name: Publish to NPM
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc && yarn publish --registry https://registry.npmjs.org/
+        run: yarn publish
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
