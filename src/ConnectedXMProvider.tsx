@@ -2,14 +2,12 @@ import { AxiosError } from "axios";
 import React from "react";
 import { ConnectedXMResponse } from "./interfaces";
 
-export type CLIENT_API_URL =
-  | "https://client-api.connectedxm.com"
-  | "https://staging-client-api.connectedxm.com"
-  | "http://localhost:4001";
-
 export interface ConnectedXMClientContextState {
   organizationId: string;
-  apiUrl: CLIENT_API_URL;
+  apiUrl:
+    | "https://client-api.connectedxm.com"
+    | "https://staging-client-api.connectedxm.com"
+    | "http://localhost:4001";
   token: string | undefined;
   setToken: (token: string) => void;
   executeAs: string | undefined;

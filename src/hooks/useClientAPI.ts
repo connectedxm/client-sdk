@@ -1,9 +1,11 @@
 import axios, { AxiosInstance } from "axios";
 import { useConnectedXM } from "./useConnectedXM";
-import { CLIENT_API_URL } from "@src/ConnectedXMProvider";
 
 export const getClientAPI = (
-  apiUrl: CLIENT_API_URL,
+  apiUrl:
+    | "https://client-api.connectedxm.com"
+    | "https://staging-client-api.connectedxm.com"
+    | "http://localhost:4001",
   organizationId: string,
   token?: string,
   executeAs?: string,
