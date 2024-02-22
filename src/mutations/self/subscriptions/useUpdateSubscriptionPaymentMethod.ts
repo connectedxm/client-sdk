@@ -5,12 +5,12 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "@src/queries/self/subscriptions/useGetSelfSubscription";
 
-interface UpdateSubscriptionPaymentMethodParams extends MutationParams {
+export interface UpdateSubscriptionPaymentMethodParams extends MutationParams {
   subscriptionId: string;
   paymentMethodId: string;
 }
 
-const UpdateSubscriptionPaymentMethod = async ({
+export const UpdateSubscriptionPaymentMethod = async ({
   subscriptionId,
   paymentMethodId,
   clientApi,
@@ -33,7 +33,7 @@ const UpdateSubscriptionPaymentMethod = async ({
   return data;
 };
 
-const useUpdateSubscriptionPaymentMethod = (
+export const useUpdateSubscriptionPaymentMethod = (
   params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: Omit<
     MutationOptions<
@@ -45,5 +45,3 @@ const useUpdateSubscriptionPaymentMethod = (
 ) => {
   return useConnectedMutation(UpdateSubscriptionPaymentMethod, params, options);
 };
-
-export default useUpdateSubscriptionPaymentMethod;

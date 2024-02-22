@@ -6,10 +6,11 @@ import useConnectedMutation, {
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "@src/queries/self/subscriptions/useGetSelfSubscription";
 import { SELF_SUBSCRIPTIONS_QUERY_KEY } from "@src/queries/self/subscriptions/useGetSelfSubscriptions";
 
-interface CancelSubscriptionParams extends MutationParams {
+export interface CancelSubscriptionParams extends MutationParams {
   subscriptionId: string;
 }
-const CancelSubscription = async ({
+
+export const CancelSubscription = async ({
   subscriptionId,
   clientApi,
   queryClient,
@@ -30,7 +31,7 @@ const CancelSubscription = async ({
   return data;
 };
 
-const useCancelSubscription = (
+export const useCancelSubscription = (
   params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: Omit<
     MutationOptions<
@@ -45,5 +46,3 @@ const useCancelSubscription = (
     Awaited<ReturnType<typeof CancelSubscription>>
   >(CancelSubscription, params, options);
 };
-
-export default useCancelSubscription;

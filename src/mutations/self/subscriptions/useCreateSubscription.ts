@@ -4,18 +4,18 @@ import useConnectedMutation, {
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
 
-interface CreateSubscriptionParams extends MutationParams {
+export interface CreateSubscriptionParams extends MutationParams {
   subscriptionId: string;
   productId: string;
   priceId: string;
 }
 
-interface CreateSubscriptionResponse {
+export interface CreateSubscriptionResponse {
   type: string;
   clientSecret: string;
 }
 
-const CreateSubscription = async ({
+export const CreateSubscription = async ({
   productId,
   priceId,
   clientApi,
@@ -33,7 +33,7 @@ const CreateSubscription = async ({
   return data;
 };
 
-const useCreateSubscription = (
+export const useCreateSubscription = (
   params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
   options: Omit<
     MutationOptions<
@@ -48,5 +48,3 @@ const useCreateSubscription = (
     Awaited<ReturnType<typeof CreateSubscription>>
   >(CreateSubscription, params, options);
 };
-
-export default useCreateSubscription;

@@ -13,7 +13,7 @@ export const SELF_SUBSCRIPTION_QUERY_KEY = (
   subscriptionId: string
 ): QueryKey => [...SELF_SUBSCRIPTIONS_QUERY_KEY(), subscriptionId];
 
-interface GetSelfSubcriptionProps extends SingleQueryParams {
+export interface GetSelfSubcriptionProps extends SingleQueryParams {
   subscriptionId: string;
 }
 
@@ -25,7 +25,7 @@ export const GetSelfSubcription = async ({
   return data;
 };
 
-const useGetSelfSubcription = (
+export const useGetSelfSubcription = (
   subscriptionId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfSubcription>>
 ) => {
@@ -40,5 +40,3 @@ const useGetSelfSubcription = (
     }
   );
 };
-
-export default useGetSelfSubcription;

@@ -11,7 +11,7 @@ export const SELF_SUBSCRIPTION_PAYMENTS_QUERY_KEY = (
   subscriptionId: string
 ) => [...SELF_SUBSCRIPTION_QUERY_KEY(subscriptionId), "PAYMENTS"];
 
-interface GetSelfSubscriptionPaymentsProps extends InfiniteQueryParams {
+export interface GetSelfSubscriptionPaymentsProps extends InfiniteQueryParams {
   subscriptionId: string;
 }
 
@@ -39,7 +39,7 @@ export const GetSelfSubscriptionPayments = async ({
   return data;
 };
 
-const useGetSelfSubscriptionPayments = (
+export const useGetSelfSubscriptionPayments = (
   subscriptionId: string,
   params: Omit<
     InfiniteQueryParams,
@@ -64,5 +64,3 @@ const useGetSelfSubscriptionPayments = (
     }
   );
 };
-
-export default useGetSelfSubscriptionPayments;
