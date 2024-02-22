@@ -1134,7 +1134,7 @@ export interface Registration {
   couponId: string | null;
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
-  payments: BaseRegistrationPayment[];
+  payments: Payment[];
   responses: BaseRegistrationQuestionResponse[];
   guests: BaseRegistrationGuest[];
   createdAt: string;
@@ -1150,17 +1150,23 @@ export interface BaseRegistrationGuest {
 
 export interface RegistrationGuest extends BaseRegistrationGuest {}
 
-export interface BaseRegistrationPayment {
+enum RegistrationPaymentType {
+  charge = "charge",
+  refund = "refund",
+}
+
+export interface BasePayment {
   id: string;
+  type: RegistrationPaymentType;
   chargedAmt: number;
-  ticketId: string;
-  ticket: BaseTicket;
-  quantity: number;
+  ticketId: string | null;
+  ticket: BaseTicket | null;
+  last4: string | null;
   stripeId: string | null;
   createdAt: string;
 }
 
-export interface RegistrationPayment extends BaseRegistrationPayment {}
+export interface Payment extends BasePayment {}
 export interface BaseLead {
   id: string;
   firstName: string | null;
@@ -1438,6 +1444,66 @@ export interface BaseVideo {
   thumbnailUrl: string;
   previewUrl: string;
   readyToStream: string;
-  hlsUrl: string;
-  dashUrl: string;
+}
+
+export enum SubscriptionStatus {
+  active = "active",
+  canceled = "canceled",
+  paused = "paused",
+  trialing = "trialing",
+  past_due = "past_due",
+  unpaid = "unpaid",
+}
+
+export interface BaseSubscription {
+  id: string;
+  status: SubscriptionStatus;
+  expiresAt: string;
+  cancelAtEnd: boolean;
+  subscriptionProduct: BaseSubscriptionProduct;
+}
+
+export interface Subscription extends BaseSubscription {
+  account: BaseAccount;
+  price: BaseSubscriptionProductPrice;
+  paymentMethod?: {
+    brand: "amex" | "discover" | "mastercard" | "visa" | "unknown" | null;
+    last4: string | null;
+    expMonth: number | null;
+    expYear: number | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseSubscriptionProduct {
+  id: string;
+  active: boolean;
+  name: string;
+  description: string | null;
+  featured: boolean;
+}
+
+export interface SubscriptionProduct extends BaseSubscriptionProduct {
+  prices: SubscriptionProductPrice[];
+  features: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseSubscriptionProductPrice {
+  id: string;
+  active: boolean;
+  amount: number;
+  interval: "day" | "week" | "month" | "year";
+  intervalCount: number;
+  maxAmount: number;
+  minAmount: number;
+  type: string;
+}
+
+export interface SubscriptionProductPrice extends BaseSubscriptionProductPrice {
+  subscriptionProduct: BaseSubscriptionProduct;
+  createdAt: string;
+  updatedAt: string;
 }
