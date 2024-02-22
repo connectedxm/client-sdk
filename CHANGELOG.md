@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.52
+
+### Patch Changes
+
+- e27ffd5: updating interfaces
+
 ## 0.0.5
 
 ### Patch Changes
