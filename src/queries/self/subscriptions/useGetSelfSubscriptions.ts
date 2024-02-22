@@ -18,7 +18,7 @@ export const SELF_SUBSCRIPTIONS_QUERY_KEY = (status?: SubscriptionStatus) => {
   return key;
 };
 
-interface GetSelfSubscriptionsProps extends InfiniteQueryParams {
+export interface GetSelfSubscriptionsProps extends InfiniteQueryParams {
   status?: SubscriptionStatus;
 }
 
@@ -54,7 +54,7 @@ export const GetSelfSubscriptions = async ({
   return data;
 };
 
-const useGetSelfSubscriptions = (
+export const useGetSelfSubscriptions = (
   status?: SubscriptionStatus,
   params: Omit<
     InfiniteQueryParams,
@@ -79,5 +79,3 @@ const useGetSelfSubscriptions = (
     }
   );
 };
-
-export default useGetSelfSubscriptions;
