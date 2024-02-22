@@ -1,5 +1,11 @@
 # @connectedxm/client-sdk
 
+## 0.0.52
+
+### Patch Changes
+
+- 1faf585: Adding in mutations and better hooks
+
 ## 0.0.5
 
 ### Patch Changes
