@@ -17,7 +17,7 @@
     "lint": "yarn tsc && eslint src/**/*.ts",
     "test": "vitest run",
     "build": "tsup src/index.ts --format cjs,esm --dts",
-    "ci": "yarn run lint && yarn run test && yarn run build"
+    "release": "yarn run lint && yarn run test && yarn run build"
   },
   "dependencies": {
     "axios": "^1.6.5"
