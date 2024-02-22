@@ -7,7 +7,7 @@ import { SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 
 export interface SelfUpdateCommunityMembershipParams extends MutationParams {
   communityId: string;
-  membership: CommunityMembership;
+  membership: Partial<CommunityMembership>;
 }
 
 export const SelfUpdateCommunityMembership = async ({

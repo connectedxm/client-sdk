@@ -62,7 +62,8 @@ export const useConnectedInfiniteQuery = <
   > = {},
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const { locale, refreshToken } = useConnectedXM();
+  const { locale, onModuleForbidden, onNotAuthorized, onNotFound } =
+    useConnectedXM();
   const queryClient = useQueryClient();
   const clientApi = useClientAPI(locale);
 
@@ -83,19 +84,21 @@ export const useConnectedInfiniteQuery = <
     staleTime: 60 * 1000, // 60 Seconds
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
-      if (error.status === 404) return false;
+      if (error.response?.status === 404) {
+        if (onNotFound) onNotFound(error);
+        return false;
+      }
 
-      // USER DOES NOT HAVE PERMISSION
-      if (error.status === 403) return false;
+      // MODULE FORBIDDEN FOR USER
+      if (error.response?.status === 403) {
+        if (onModuleForbidden) onModuleForbidden(error);
+        return false;
+      }
 
-      // TOKEN IS POSSIBLY EXPIRED
-      if (error.status === 401) {
-        if (refreshToken && failureCount < 2) {
-          refreshToken()
-          return true;
-        } else {
-          return false;
-        }
+      // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
+      if (error.response?.status === 401) {
+        if (onNotAuthorized) onNotAuthorized(error);
+        return false;
       }
 
       // DEFAULT

@@ -22,7 +22,7 @@ export const UpdateSelfImage = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.invalidateQueries({ queryKey: SELF_QUERY_KEY() });
+    queryClient.refetchQueries({ queryKey: SELF_QUERY_KEY() });
   }
 
   return data;
