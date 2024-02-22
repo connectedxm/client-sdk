@@ -15,8 +15,8 @@ jobs:
         with:
           node-version: "18.x"
           cache: "yarn"
-          registry-url: "https://registry.npmjs.org"
           scope: "@connectedxm"
+          always-auth: true
 
       - run: yarn install --frozen-lockfile
 
