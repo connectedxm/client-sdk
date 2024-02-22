@@ -2,18 +2,17 @@ name: Publish to NPM
 on:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
-          scope: "@connectedxm"
 
       - name: Install
         run: yarn install --frozen-lockfile
