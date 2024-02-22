@@ -3,7 +3,10 @@
   "version": "0.0.52",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
-  "repository": "https://github.com/connectedxm/client-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connectedxm/client-sdk.git"
+  },
   "license": "MIT",
   "private": false,
   "main": "dist/index.js",
