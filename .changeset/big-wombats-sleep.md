@@ -2,4 +2,4 @@
 "@connectedxm/client": patch
 ---
 
-updating interfaces
+Adding in mutations and better hooks
