@@ -17,6 +17,7 @@ export * from "./useRemoveSelfEventListingSession";
 export * from "./useRemoveSelfEventListingSpeaker";
 export * from "./useRemoveSelfEventListingSponsor";
 export * from "./useRemoveSelfEventSession";
+export * from "./useSelfCheckinRegistration";
 export * from "./useSelfCreateActivity";
 export * from "./useSelfDeleteActivity";
 export * from "./useSelfJoinCommunity";
