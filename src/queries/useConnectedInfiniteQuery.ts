@@ -19,6 +19,7 @@ export interface InfiniteQueryParams {
   pageParam: number;
   clientApi: AxiosInstance;
   queryClient?: QueryClient;
+  token?: string;
 }
 
 export interface InfiniteQueryOptions<
@@ -62,8 +63,9 @@ export const useConnectedInfiniteQuery = <
   > = {},
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const { locale, onModuleForbidden, onNotAuthorized, onNotFound } =
+  const { locale, onModuleForbidden, onNotAuthorized, onNotFound, setToken } =
     useConnectedXM();
+
   const queryClient = useQueryClient();
   const clientApi = useClientAPI(locale);
 
@@ -85,19 +87,19 @@ export const useConnectedInfiniteQuery = <
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound) onNotFound(error);
+        if (onNotFound) onNotFound(error, queryKeys, setToken);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden) onModuleForbidden(error);
+        if (onModuleForbidden) onModuleForbidden(error, queryKeys, setToken);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized) onNotAuthorized(error);
+        if (onNotAuthorized) onNotAuthorized(error, queryKeys, setToken);
         return false;
       }
 

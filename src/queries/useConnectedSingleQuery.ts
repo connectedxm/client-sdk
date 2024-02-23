@@ -28,7 +28,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
   queryFn: (params: SingleQueryParams) => TQueryData,
   options?: SingleQueryOptions<TQueryData>
 ) => {
-  const { locale, onModuleForbidden, onNotAuthorized, onNotFound } =
+  const { locale, onModuleForbidden, onNotAuthorized, onNotFound, setToken } =
     useConnectedXM();
   const clientApi = useClientAPI(locale);
 
@@ -42,19 +42,19 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound) onNotFound(error);
+        if (onNotFound) onNotFound(error, queryKeys, setToken);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden) onModuleForbidden(error);
+        if (onModuleForbidden) onModuleForbidden(error, queryKeys, setToken);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized) onNotAuthorized(error);
+        if (onNotAuthorized) onNotAuthorized(error, queryKeys, setToken);
         return false;
       }
 
