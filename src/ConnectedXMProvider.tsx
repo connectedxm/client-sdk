@@ -9,7 +9,7 @@ export interface ConnectedXMClientContextState {
     | "https://staging-client-api.connectedxm.com"
     | "http://localhost:4001";
   token: string | undefined;
-  setToken: (token: string) => void;
+  setToken: (token: string | undefined) => void;
   executeAs: string | undefined;
   setExecuteAs: (accountId: string) => void;
   locale: string;
