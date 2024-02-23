@@ -15,6 +15,7 @@ export interface UpdateListing {
   eventType: keyof typeof EventType;
   name: string;
   shortDescription: string;
+  longDescription: string;
   eventStart: string;
   eventEnd: string;
   registration: boolean;
