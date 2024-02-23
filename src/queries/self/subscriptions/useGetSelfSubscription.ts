@@ -27,7 +27,7 @@ export const GetSelfSubcription = async ({
 
 export const useGetSelfSubcription = (
   subscriptionId: string = "",
-  options: SingleQueryOptions<ReturnType<typeof GetSelfSubcription>>
+  options: SingleQueryOptions<ReturnType<typeof GetSelfSubcription>> = {}
 ) => {
   const { token } = useConnectedXM();
 

@@ -6,29 +6,29 @@ import useConnectedMutation, {
 import { SELF_QUERY_KEY } from "@src/queries";
 
 export interface UpdateSelfParams extends MutationParams {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  title: string;
-  company: string;
-  bio: string;
-  dietaryRestrictions: string;
-  address1: string;
-  address2: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  facebook: string;
-  twitter: string;
-  instagram: string;
-  tikTok: string;
-  linkedIn: string;
-  youtube: string;
-  discord: string;
-  video: string;
-  website: string;
-  username: string;
+  username?: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  phone?: string | null;
+  title?: string | null;
+  company?: string | null;
+  bio?: string | null;
+  dietaryRestrictions?: string | null;
+  address1?: string | null;
+  address2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip?: string | null;
+  country?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  tikTok?: string | null;
+  linkedIn?: string | null;
+  youtube?: string | null;
+  discord?: string | null;
+  video?: string | null;
+  website?: string | null;
 }
 
 export const UpdateSelf = async ({

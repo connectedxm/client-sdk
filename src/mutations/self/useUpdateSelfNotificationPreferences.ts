@@ -12,12 +12,20 @@ export interface UpdateSelfNotificationPreferencesParams
   likePush?: boolean;
   resharePush?: boolean;
   commentPush?: boolean;
+  commentEmail?: boolean;
   transferPush?: boolean;
   transferEmail?: boolean;
   supportTicketConfirmationEmail?: boolean;
   chatPush?: boolean;
   chatUnreadPush?: boolean;
   chatUnreadEmail?: boolean;
+  eventReminderEmail?: boolean;
+  eventAnnouncementPush?: boolean;
+  eventAnnouncementEmail?: boolean;
+  organizationAnnouncementPush?: boolean;
+  organizationAnnouncementEmail?: boolean;
+  communityAnnouncementPush?: boolean;
+  communityAnnouncementEmail?: boolean;
 }
 
 export const UpdateSelfNotificationPreferences = async ({

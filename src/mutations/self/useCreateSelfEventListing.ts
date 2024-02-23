@@ -15,7 +15,7 @@ import {
   SELF_EVENT_LISTINGS_QUERY_KEY,
 } from "@src/queries";
 
-export interface CreateEvent {
+export interface CreateEventListing {
   name: string;
   shortDescription: string;
   eventStart: string;
@@ -35,7 +35,7 @@ export interface CreateEvent {
 }
 
 export interface CreateSelfEventListingParams extends MutationParams {
-  event: CreateEvent;
+  event: CreateEventListing;
   base64?: any;
   communityId?: string;
   sponsorIds?: string[];
