@@ -111,7 +111,7 @@ export const useConnectedInfiniteQuery = <
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
     queryFn: ({ pageParam }) =>
-      queryFn({ ...params, pageSize: params.pageSize || 10, locale: params.locale || locale, pageParam, queryClient, clientApi }),
+      queryFn({ ...params, pageSize: params.pageSize || 25, locale: params.locale || locale, pageParam, queryClient, clientApi }),
     initialPageParam: 1,
     getNextPageParam,
   });
