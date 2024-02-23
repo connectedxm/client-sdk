@@ -8,8 +8,10 @@ export const useConnectedXM = () => {
   const context = React.useContext<ConnectedXMClientContextState>(
     ConnectedXMClientContext
   );
+
   if (!context) {
     throw new Error("useConnectedXM must be used within a ConnectedXMProvider");
   }
+
   return context;
 };
