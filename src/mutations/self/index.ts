@@ -1,5 +1,6 @@
 export * from "./chat";
 export * from "./events";
+export * from "./subscriptions";
 
 export * from "./useAcceptTransfer";
 export * from "./useAddSelfDelegate";

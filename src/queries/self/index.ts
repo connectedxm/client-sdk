@@ -1,5 +1,6 @@
 export * from "./chat";
 export * from "./registration";
+export * from "./subscriptions";
 
 export * from "./useGetSelf";
 export * from "./useGetSelfActivities";
