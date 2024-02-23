@@ -11,7 +11,7 @@ export const ORGANIZATION_SUBSCRIPTIONS_QUERY_KEY = () => [
   "SUBSCRIPTIONS",
 ];
 
-interface GetOrganizationSubscriptionProductsProps
+export interface GetOrganizationSubscriptionProductsProps
   extends InfiniteQueryParams {}
 
 export const GetOrganizationSubscriptionProducts = async ({
@@ -26,7 +26,7 @@ export const GetOrganizationSubscriptionProducts = async ({
   return data;
 };
 
-const useGetOrganizationSubscriptionProducts = (
+export const useGetOrganizationSubscriptionProducts = (
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApi"
@@ -45,5 +45,3 @@ const useGetOrganizationSubscriptionProducts = (
     options
   );
 };
-
-export default useGetOrganizationSubscriptionProducts;
