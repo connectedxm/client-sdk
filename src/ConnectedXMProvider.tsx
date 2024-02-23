@@ -1,8 +1,10 @@
 import { AxiosError } from "axios";
 import React from "react";
 import { ConnectedXMResponse } from "./interfaces";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export interface ConnectedXMClientContextState {
+  queryClient: QueryClient;
   organizationId: string;
   apiUrl:
     | "https://client-api.connectedxm.com"
@@ -18,10 +20,9 @@ export interface ConnectedXMClientContextState {
   onNotFound?: (error: AxiosError<ConnectedXMResponse<any>>) => void;
 }
 
-export const ConnectedXMClientContext =
-  React.createContext<ConnectedXMClientContextState>(
-    {} as ConnectedXMClientContextState
-  );
+export const ConnectedXMClientContext = React.createContext<
+  Omit<ConnectedXMClientContextState, "queryClient">
+>({} as Omit<ConnectedXMClientContextState, "queryClient">);
 
 export interface ConnectedXMProviderProps
   extends Omit<
@@ -32,23 +33,35 @@ export interface ConnectedXMProviderProps
 }
 
 export const ConnectedXMProvider = ({
+  queryClient,
   children,
   ...state
 }: ConnectedXMProviderProps) => {
+  const [ssr, setSSR] = React.useState<boolean>(true);
   const [token, setToken] = React.useState<string | undefined>();
   const [executeAs, setExecuteAs] = React.useState<string | undefined>();
 
-  return (
-    <ConnectedXMClientContext.Provider
-      value={{
-        ...state,
-        token,
-        setToken,
-        executeAs,
-        setExecuteAs,
-      }}
-    >
-      {children}
-    </ConnectedXMClientContext.Provider>
-  );
+  React.useEffect(() => {
+    setSSR(false);
+  }, []);
+
+  const render = () => {
+    return (
+      <ConnectedXMClientContext.Provider
+        value={{
+          ...state,
+          token,
+          setToken,
+          executeAs,
+          setExecuteAs,
+        }}
+      >
+        {children}
+      </ConnectedXMClientContext.Provider>
+    );
+  };
+
+  // prettier-ignore
+  if (ssr) return <QueryClientProvider client={queryClient}>{render()}</QueryClientProvider>
+  else return render();
 };
