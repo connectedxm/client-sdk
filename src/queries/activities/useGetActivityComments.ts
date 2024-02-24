@@ -11,6 +11,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITY_QUERY_KEY } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const ACTIVITY_COMMENTS_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITY_QUERY_KEY(activityId),
@@ -43,9 +44,20 @@ export const GetActivityComments = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetActivityCommentsProps): Promise<ConnectedXMResponse<Activity[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/activities/${activityId}/comments`, {
     params: {
       page: pageParam || undefined,
@@ -70,7 +82,12 @@ export const useGetActivityComments = (
   activityId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetActivityComments>>

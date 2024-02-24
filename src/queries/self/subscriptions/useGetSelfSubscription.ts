@@ -19,7 +19,11 @@ export interface GetSelfSubcriptionProps extends SingleQueryParams {
 
 export const GetSelfSubcription = async ({
   subscriptionId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfSubcriptionProps): Promise<ConnectedXMResponse<Subscription>> => {
   const { data } = await clientApi.get(`/self/subscriptions/${subscriptionId}`);
   return data;

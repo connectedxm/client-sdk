@@ -20,7 +20,11 @@ export const GetSelfInterests = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfInterestsProps): Promise<ConnectedXMResponse<Interest[]>> => {
   const { data } = await clientApi.get(`/self/interests`, {
     params: {
@@ -36,7 +40,12 @@ export const GetSelfInterests = async ({
 export const useGetSelfInterests = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfInterests>>

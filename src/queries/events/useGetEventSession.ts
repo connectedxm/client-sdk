@@ -37,7 +37,11 @@ export interface GetEventSessionProps extends SingleQueryParams {
 export const GetEventSession = async ({
   eventId,
   sessionId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventSessionProps): Promise<ConnectedXMResponse<Session>> => {
   const { data } = await clientApi.get(
     `/events/${eventId}/sessions/${sessionId}`

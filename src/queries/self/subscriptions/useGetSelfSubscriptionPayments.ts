@@ -21,7 +21,11 @@ export const GetSelfSubscriptionPayments = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfSubscriptionPaymentsProps): Promise<
   ConnectedXMResponse<Payment[]>
 > => {
@@ -43,7 +47,12 @@ export const useGetSelfSubscriptionPayments = (
   subscriptionId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfSubscriptionPayments>>

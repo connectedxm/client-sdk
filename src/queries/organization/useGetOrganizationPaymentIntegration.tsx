@@ -14,7 +14,11 @@ export interface GetOrganizationPaymentIntegrationParams
   extends SingleQueryParams {}
 
 export const GetOrganizationPaymentIntegration = async ({
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetOrganizationPaymentIntegrationParams): Promise<
   ConnectedXMResponse<{
     connectionId: string;

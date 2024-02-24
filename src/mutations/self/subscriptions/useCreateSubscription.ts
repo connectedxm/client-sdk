@@ -18,7 +18,11 @@ export interface CreateSubscriptionResponse {
 export const CreateSubscription = async ({
   productId,
   priceId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: CreateSubscriptionParams): Promise<
   ConnectedXMResponse<CreateSubscriptionResponse>
 > => {

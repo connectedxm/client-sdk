@@ -7,6 +7,7 @@ import { Content } from "@interfaces";
 import { CONTENTS_QUERY_KEY } from "./useGetContents";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const CONTENT_QUERY_KEY = (contentId: string): QueryKey => [
   ...CONTENTS_QUERY_KEY(),
@@ -34,8 +35,20 @@ export interface GetContentParams extends SingleQueryParams {
 
 export const GetContent = async ({
   contentId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetContentParams): Promise<ConnectedXMResponse<Content>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/contents/${contentId}`);
 
   return data;

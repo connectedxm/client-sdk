@@ -37,7 +37,11 @@ export interface GetSelfChatChannelProps extends SingleQueryParams {
 
 export const GetSelfChatChannel = async ({
   channelId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfChatChannelProps): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {

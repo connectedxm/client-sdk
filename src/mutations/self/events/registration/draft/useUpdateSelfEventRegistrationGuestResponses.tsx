@@ -21,7 +21,11 @@ export const UpdateSelfEventRegistrationGuestResponses = async ({
   registrationId,
   guestId,
   responses,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: UpdateSelfEventRegistrationGuestResponsesParams): Promise<
   ConnectedXMResponse<RegistrationQuestionResponse>
 > => {

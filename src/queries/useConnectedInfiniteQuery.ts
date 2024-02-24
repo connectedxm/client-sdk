@@ -7,9 +7,8 @@ import {
   UseInfiniteQueryOptions,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useConnectedXM } from "../hooks";
-import { useClientAPI } from "@src/hooks/useClientAPI";
-import { AxiosError, AxiosInstance } from "axios";
+import { API_URL, useConnectedXM } from "../hooks";
+import { AxiosError } from "axios";
 
 export interface InfiniteQueryParams {
   pageSize?: number;
@@ -17,9 +16,11 @@ export interface InfiniteQueryParams {
   search?: string;
   locale?: string;
   pageParam: number;
-  clientApi: AxiosInstance;
+  apiUrl: API_URL;
+  organizationId: string;
+  getToken: () => string | undefined;
+  getExecuteAs?: () => string | undefined;
   queryClient?: QueryClient;
-  token?: string;
 }
 
 export interface InfiniteQueryOptions<
@@ -59,15 +60,27 @@ export const useConnectedInfiniteQuery = <
   queryFn: (params: InfiniteQueryParams) => Promise<TQueryData>,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "apiUrl"
+    | "organizationId"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options?: InfiniteQueryOptions<TQueryData>
 ) => {
-  const { locale, onModuleForbidden, onNotAuthorized, onNotFound, setToken } =
-    useConnectedXM();
+  const {
+    locale,
+    onModuleForbidden,
+    onNotAuthorized,
+    onNotFound,
+    getToken,
+    organizationId,
+    apiUrl,
+    getExecuteAs,
+  } = useConnectedXM();
 
   const queryClient = useQueryClient();
-  const clientApi = useClientAPI(locale);
 
   const getNextPageParam = (
     lastPage: TQueryData, // Use the PageData interface
@@ -87,19 +100,19 @@ export const useConnectedInfiniteQuery = <
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound) onNotFound(error, queryKeys, setToken);
+        if (onNotFound) onNotFound(error, queryKeys);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden) onModuleForbidden(error, queryKeys, setToken);
+        if (onModuleForbidden) onModuleForbidden(error, queryKeys);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized) onNotAuthorized(error, queryKeys, setToken);
+        if (onNotAuthorized) onNotAuthorized(error, queryKeys);
         return false;
       }
 
@@ -113,7 +126,16 @@ export const useConnectedInfiniteQuery = <
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
     queryFn: ({ pageParam }) =>
-      queryFn({ ...params, pageSize: params.pageSize || 25, locale: params.locale || locale, pageParam, queryClient, clientApi }),
+      queryFn({ 
+        ...params, 
+        pageSize: params.pageSize || 25, 
+        locale: params.locale || locale, pageParam, 
+        queryClient, 
+        organizationId,
+        apiUrl,
+        getToken,
+        getExecuteAs
+       }),
     initialPageParam: 1,
     getNextPageParam,
   });

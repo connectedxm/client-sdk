@@ -9,6 +9,7 @@ import type { Community } from "@interfaces";
 import { COMMUNITIES_QUERY_KEY } from "./useGetCommunities";
 import { QueryClient, SetDataOptions, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const COMMUNITY_QUERY_KEY = (communityId: string): QueryKey => [
   ...COMMUNITIES_QUERY_KEY(),
@@ -38,8 +39,19 @@ export interface GetCommunityProps extends SingleQueryParams {
 
 export const GetCommunity = async ({
   communityId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetCommunityProps): Promise<ConnectedXMResponse<Community>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
   const { data } = await clientApi.get(`/communities/${communityId}`);
   return data;
 };

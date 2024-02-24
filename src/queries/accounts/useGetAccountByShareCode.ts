@@ -9,7 +9,7 @@ import { AccountShare } from "@interfaces";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
-import { useConnectedXM } from "@src/hooks";
+import { getClientAPI, useConnectedXM } from "@src/hooks";
 
 export const ACCOUNT_BY_SHARE_CODE_QUERY_KEY = (
   shareCode: string
@@ -36,8 +36,20 @@ export interface GetAccountByShareCodeProps extends SingleQueryParams {
 
 export const GetAccountByShareCode = async ({
   shareCode,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetAccountByShareCodeProps): Promise<ConnectedXMResponse<AccountShare>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/accounts/shareCode/${shareCode}`);
   return data;
 };

@@ -29,7 +29,10 @@ export const GetSelfSubscriptions = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfSubscriptionsProps): Promise<ConnectedXMResponse<Subscription[]>> => {
   const { data } = await clientApi.get(`/self/subscriptions`, {
@@ -58,7 +61,12 @@ export const useGetSelfSubscriptions = (
   status?: SubscriptionStatus,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfSubscriptions>>

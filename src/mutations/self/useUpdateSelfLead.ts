@@ -12,7 +12,11 @@ export interface UpdateSelfLeadParams extends MutationParams {
 export const UpdateSelfLead = async ({
   leadId,
   note,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: UpdateSelfLeadParams): Promise<ConnectedXMResponse<Lead>> => {
   const { data } = await clientApi.put<ConnectedXMResponse<Lead>>(
     `/self/leads/${leadId}`,

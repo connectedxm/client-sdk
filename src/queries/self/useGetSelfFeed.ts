@@ -23,7 +23,10 @@ export const GetSelfFeed = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfFeedProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const { data } = await clientApi.get(`/self/activities/feed`, {
@@ -50,7 +53,12 @@ export const GetSelfFeed = async ({
 export const useGetSelfFeed = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSelfFeed>>> = {}
 ) => {

@@ -33,7 +33,11 @@ export interface GetSelfProps extends SingleQueryParams {
 
 export const GetSelf = async ({
   authenticated,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfProps): Promise<ConnectedXMResponse<Self>> => {
   if (authenticated) clientApi.defaults.headers.delete["executeAs"];
 

@@ -18,7 +18,11 @@ export interface GetSelfAnnouncementProps extends SingleQueryParams {
 
 export const GetSelfAnnouncement = async ({
   announcementId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfAnnouncementProps): Promise<ConnectedXMResponse<Announcement>> => {
   const { data } = await clientApi.get(`/self/announcements/${announcementId}`);
   return data;

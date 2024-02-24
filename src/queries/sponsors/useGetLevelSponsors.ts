@@ -42,7 +42,10 @@ export const GetLevelSponsors = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetLevelSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/levels/${levelId}/accounts`, {
@@ -70,7 +73,12 @@ export const useGetLevelSponsors = (
   levelId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetLevelSponsors>>

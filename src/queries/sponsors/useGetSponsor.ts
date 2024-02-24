@@ -33,7 +33,11 @@ export interface GetSponsorProps extends SingleQueryParams {
 
 export const GetSponsor = async ({
   accountId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSponsorProps): Promise<ConnectedXMResponse<Account>> => {
   const { data } = await clientApi.get(`/sponsors/${accountId}`);
   return data;

@@ -39,7 +39,11 @@ export const GetSelfChatChannelMembers = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfChatChannelMembersProps): Promise<
   ConnectedXMResponse<ChatChannelMember[]>
 > => {
@@ -61,7 +65,12 @@ export const useGetSelfChatChannelMembers = (
   channelId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfChatChannelMembers>>

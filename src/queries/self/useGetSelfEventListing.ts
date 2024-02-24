@@ -36,7 +36,11 @@ export interface GetSelfEventListingProps extends SingleQueryParams {
 
 export const GetSelfEventListing = async ({
   eventId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfEventListingProps): Promise<ConnectedXMResponse<EventListing>> => {
   const { data } = await clientApi.get(`self/events/listings/${eventId}`);
   return data;

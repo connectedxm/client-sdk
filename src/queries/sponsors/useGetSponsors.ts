@@ -32,7 +32,11 @@ export const GetSponsors = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/sponsors`, {
     params: {
@@ -48,7 +52,12 @@ export const GetSponsors = async ({
 export const useGetSponsors = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSponsors>>> = {}
 ) => {

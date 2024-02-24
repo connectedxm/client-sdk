@@ -15,7 +15,11 @@ export interface GetOrganizationSubscriptionProductsProps
   extends InfiniteQueryParams {}
 
 export const GetOrganizationSubscriptionProducts = async ({
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetOrganizationSubscriptionProductsProps): Promise<
   ConnectedXMResponse<SubscriptionProduct[]>
 > => {
@@ -29,7 +33,12 @@ export const GetOrganizationSubscriptionProducts = async ({
 export const useGetOrganizationSubscriptionProducts = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetOrganizationSubscriptionProducts>>

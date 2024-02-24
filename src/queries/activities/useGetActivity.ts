@@ -10,6 +10,7 @@ import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const ACTIVITY_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITIES_QUERY_KEY(),
@@ -37,8 +38,20 @@ export interface GetActivityProps extends SingleQueryParams {
 
 export const GetActivity = async ({
   activityId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetActivityProps): Promise<ConnectedXMResponse<SingleActivity>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/activities/${activityId}`);
   return data;
 };

@@ -12,6 +12,7 @@ import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const COMMUNITY_ACTIVITIES_QUERY_KEY = (
   communityId: string
@@ -43,9 +44,19 @@ export const GetCommunityActivities = async ({
   search,
   communityId,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetCommunityActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
   const { data } = await clientApi.get(
     `/communities/${communityId}/activities`,
     {
@@ -73,7 +84,12 @@ export const useGetCommunityActivities = (
   communityId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityActivities>>

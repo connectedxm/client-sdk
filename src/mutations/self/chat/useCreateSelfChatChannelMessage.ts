@@ -13,7 +13,11 @@ export const CreateSelfChatChannelMessage = async ({
   channelId,
   text,
   queryClient,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: CreateSelfChatChannelMessageParams): Promise<
   ConnectedXMResponse<ChatChannelMessage>
 > => {

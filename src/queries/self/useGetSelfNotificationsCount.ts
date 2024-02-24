@@ -17,7 +17,11 @@ export interface GetSelfNewNotificationsCountProps extends SingleQueryParams {
 
 export const GetSelfNewNotificationsCount = async ({
   filters,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfNewNotificationsCountProps): Promise<
   ConnectedXMResponse<Notification[]>
 > => {

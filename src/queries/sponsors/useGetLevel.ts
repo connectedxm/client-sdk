@@ -30,7 +30,11 @@ export interface GetLevelProps extends SingleQueryParams {
 
 export const GetLevel = async ({
   levelId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetLevelProps): Promise<ConnectedXMResponse<SponsorshipLevel>> => {
   const { data } = await clientApi.get(`/levels/${levelId}`, {});
   return data;

@@ -8,7 +8,7 @@ import {
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks";
+import { getClientAPI, useConnectedXM } from "@src/hooks";
 
 export const ACCOUNT_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNTS_QUERY_KEY(),
@@ -36,8 +36,19 @@ export interface GetAccountProps extends SingleQueryParams {
 
 export const GetAccount = async ({
   accountId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetAccountProps): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
   const { data } = await clientApi.get(`/accounts/${accountId}`);
   return data;
 };

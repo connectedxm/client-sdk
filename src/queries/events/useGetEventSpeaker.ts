@@ -37,7 +37,11 @@ export interface GetEventSpeakerProps extends SingleQueryParams {
 export const GetEventSpeaker = async ({
   eventId,
   speakerId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventSpeakerProps): Promise<ConnectedXMResponse<Speaker>> => {
   const { data } = await clientApi.get(
     `/events/${eventId}/speakers/${speakerId}`

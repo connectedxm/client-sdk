@@ -23,7 +23,10 @@ export const GetSelfDelegates = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfDelegatesProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/self/delegates`, {
@@ -50,7 +53,12 @@ export const GetSelfDelegates = async ({
 export const useGetSelfDelegates = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfDelegates>>

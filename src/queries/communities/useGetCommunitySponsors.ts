@@ -11,6 +11,7 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { SPONSOR_QUERY_KEY } from "../sponsors/useGetSponsor";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const COMMUNITY_SPONSORS_QUERY_KEY = (communityId: string): QueryKey => [
   ...COMMUNITY_QUERY_KEY(communityId),
@@ -43,9 +44,20 @@ export const GetCommunitySponsors = async ({
   search,
   communityId,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetCommunitySponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/communities/${communityId}/sponsors`, {
     params: {
       page: pageParam || undefined,
@@ -54,6 +66,7 @@ export const GetCommunitySponsors = async ({
       search: search || undefined,
     },
   });
+
   if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,
@@ -70,7 +83,12 @@ export const useGetCommunitySponsors = (
   communityId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunitySponsors>>

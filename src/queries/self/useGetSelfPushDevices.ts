@@ -23,7 +23,10 @@ export const GetSelfPushDevices = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfPushDevicesProps): Promise<ConnectedXMResponse<PushDevice[]>> => {
   const { data } = await clientApi.get(`/self/push-devices`, {
@@ -50,7 +53,12 @@ export const GetSelfPushDevices = async ({
 export const useGetSelfPushDevices = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfPushDevices>>

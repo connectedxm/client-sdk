@@ -38,7 +38,11 @@ export interface GetOrganizationPageProps extends SingleQueryParams {
 
 export const GetOrganizationPage = async ({
   type,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetOrganizationPageProps): Promise<ConnectedXMResponse<Page | null>> => {
   const { data } = await clientApi.get(`/organization/pages/${type}`);
   return data;

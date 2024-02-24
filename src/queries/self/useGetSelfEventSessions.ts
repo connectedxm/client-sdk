@@ -27,7 +27,10 @@ export const GetSelfEventSessions = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
   const { data } = await clientApi.get(`/self/events/${eventId}/sessions`, {
@@ -56,7 +59,12 @@ export const useGetSelfEventSessions = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfEventSessions>>

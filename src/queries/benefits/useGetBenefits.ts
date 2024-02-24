@@ -9,6 +9,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const BENEFITS_QUERY_KEY = (): QueryKey => ["BENEFITS"];
 
@@ -34,8 +35,20 @@ export const GetBenefits = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetBenefitsProps): Promise<ConnectedXMResponse<Benefit[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/benefits`, {
     params: {
       page: pageParam || undefined,
@@ -50,7 +63,12 @@ export const GetBenefits = async ({
 export const useGetBenefits = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetBenefits>>> = {}
 ) => {

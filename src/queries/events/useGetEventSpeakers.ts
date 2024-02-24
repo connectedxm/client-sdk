@@ -42,7 +42,10 @@ export const GetEventSpeakers = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetEventSpeakersProps): Promise<ConnectedXMResponse<Speaker[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/speakers`, {
@@ -70,7 +73,12 @@ export const useGetEventSpeakers = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventSpeakers>>

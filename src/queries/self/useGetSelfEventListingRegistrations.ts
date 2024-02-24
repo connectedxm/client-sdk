@@ -29,7 +29,11 @@ export const GetSelfEventListingRegistrations = async ({
   orderBy,
   search,
   checkedIn,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfEventListingRegistrationsProps): Promise<
   ConnectedXMResponse<Registration[]>
 > => {
@@ -53,7 +57,12 @@ export const useGetSelfEventListingsRegistrations = (
   checkedIn: boolean = false,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>

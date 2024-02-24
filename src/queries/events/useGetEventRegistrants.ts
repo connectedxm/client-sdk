@@ -45,7 +45,10 @@ export const GetEventRegistrants = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetEventRegistrantsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/registrants`, {
@@ -73,7 +76,12 @@ export const useGetEventRegistrants = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventRegistrants>>

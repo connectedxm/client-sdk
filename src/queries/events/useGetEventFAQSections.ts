@@ -43,7 +43,10 @@ export const GetEventFaqSections = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetEventFaqSectionsProps): Promise<ConnectedXMResponse<FaqSection[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/faqs`, {
@@ -71,7 +74,12 @@ export const useGetEventFaqSections = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventFaqSections>>

@@ -32,7 +32,11 @@ export interface GetSeriesProps extends SingleQueryParams {
 
 export const GetSeries = async ({
   seriesId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSeriesProps): Promise<ConnectedXMResponse<Series>> => {
   const { data } = await clientApi.get(`/series/${seriesId}`);
   return data;

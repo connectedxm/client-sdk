@@ -33,7 +33,10 @@ export const GetSelfRecommendations = async ({
   eventId,
   type,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfRecommendationsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const { data } = await clientApi.get(`/self/recommendations`, {
@@ -64,7 +67,12 @@ export const useGetSelfRecommendations = (
   eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfRecommendations>>

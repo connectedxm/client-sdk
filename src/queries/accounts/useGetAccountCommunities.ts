@@ -12,6 +12,7 @@ import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "../communities/useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const ACCOUNT_COMMUNITIES_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNT_QUERY_KEY(accountId),
@@ -44,9 +45,20 @@ export const GetAccountCommunities = async ({
   search,
   accountId,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetAccountCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/accounts/${accountId}/communities`, {
     params: {
       page: pageParam || undefined,
@@ -71,7 +83,12 @@ export const useGetAccountCommunities = (
   accountId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetAccountCommunities>>

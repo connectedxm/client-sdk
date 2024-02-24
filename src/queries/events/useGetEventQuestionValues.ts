@@ -24,7 +24,11 @@ export const GetEventQuestionSearchValues = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventQuestionSearchValuesProps): Promise<
   ConnectedXMResponse<RegistrationQuestionSearchValue[]>
 > => {
@@ -47,7 +51,12 @@ export const useGetEventQuestionSearchValues = (
   questionId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventQuestionSearchValues>>

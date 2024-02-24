@@ -43,7 +43,10 @@ export const GetEventPages = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetEventPagesProps): Promise<ConnectedXMResponse<BaseEventPage[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/pages`, {
@@ -71,7 +74,12 @@ export const useGetEventPages = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventPages>>> = {}
 ) => {

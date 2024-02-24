@@ -18,7 +18,11 @@ export const CreateSupportTicket = async ({
   request,
   eventId,
   productId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: CreateSupportTicketParams): Promise<ConnectedXMResponse<SupportTicket>> => {
   const { data } = await clientApi.post<ConnectedXMResponse<SupportTicket>>(
     "/supportTickets",

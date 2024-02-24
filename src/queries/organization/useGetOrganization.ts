@@ -10,7 +10,11 @@ export const ORGANIZATION_QUERY_KEY = (): QueryKey => ["ORGANIZATION"];
 export interface GetOrganizationParams extends SingleQueryParams {}
 
 export const GetOrganization = async ({
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetOrganizationParams): Promise<ConnectedXMResponse<Organization>> => {
   const { data } = await clientApi.get(`/organization`);
   return data;

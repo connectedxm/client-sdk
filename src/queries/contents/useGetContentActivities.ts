@@ -12,6 +12,7 @@ import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { CONTENT_QUERY_KEY } from "./useGetContent";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const CONTENT_ACTIVITIES_QUERY_KEY = (contentId: string): QueryKey => [
   "ACTIVITIES",
@@ -44,9 +45,20 @@ export const GetContentActivities = async ({
   search,
   contentId,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetContentActivitiesParams): Promise<ConnectedXMResponse<Activity[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/contents/${contentId}/activities`, {
     params: {
       page: pageParam || undefined,
@@ -71,7 +83,12 @@ export const useGetContentActivities = (
   contentId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetContentActivities>>

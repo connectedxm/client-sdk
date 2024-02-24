@@ -44,7 +44,11 @@ export const GetEventFAQSectionQuestion = async ({
   eventId,
   sectionId,
   questionId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventFAQSectionQuestionProps): Promise<ConnectedXMResponse<Faq>> => {
   const { data } = await clientApi.get(
     `/events/${eventId}/faqs/${sectionId}/questions/${questionId}`

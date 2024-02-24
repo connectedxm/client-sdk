@@ -10,6 +10,7 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const COMMUNITIES_QUERY_KEY = (): QueryKey => ["COMMUNITIES"];
 
@@ -39,7 +40,10 @@ export const GetCommunities = async ({
   search,
   privateCommunities,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
   if (privateCommunities) {
@@ -49,6 +53,14 @@ export const GetCommunities = async ({
       data: [],
     };
   }
+
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
 
   const { data } = await clientApi.get(`/communities`, {
     params: {
@@ -74,7 +86,12 @@ export const GetCommunities = async ({
 export const useGetCommunities = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetCommunities>>> = {}
 ) => {

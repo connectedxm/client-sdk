@@ -38,7 +38,10 @@ export const GetFeaturedEvents = async ({
   pageSize,
   orderBy,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetFeaturedEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const { data } = await clientApi.get(`/events/featured`, {
@@ -64,7 +67,12 @@ export const GetFeaturedEvents = async ({
 export const useGetFeaturedEvents = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetFeaturedEvents>>

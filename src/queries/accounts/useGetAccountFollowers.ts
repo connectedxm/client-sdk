@@ -11,6 +11,7 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const ACCOUNT_FOLLOWERS_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNT_QUERY_KEY(accountId),
@@ -43,9 +44,20 @@ export const GetAccountFollowers = async ({
   search,
   accountId,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetAccountFollowersProps): Promise<ConnectedXMResponse<Account[]>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/accounts/${accountId}/followers`, {
     params: {
       page: pageParam || undefined,
@@ -70,7 +82,12 @@ export const useGetAccountFollowers = (
   accountId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetAccountFollowers>>

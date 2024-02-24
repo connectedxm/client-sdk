@@ -18,7 +18,11 @@ export interface GetSelfNotificationPreferencesProps
   extends SingleQueryParams {}
 
 export const GetSelfNotificationPreferences = async ({
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfNotificationPreferencesProps): Promise<
   ConnectedXMResponse<NotificationPreferences>
 > => {

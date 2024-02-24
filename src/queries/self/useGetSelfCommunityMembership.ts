@@ -35,7 +35,11 @@ export interface GetSelfCommunityMembershipProps extends SingleQueryParams {
 
 export const GetSelfCommunityMembership = async ({
   communityId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfCommunityMembershipProps): Promise<
   ConnectedXMResponse<CommunityMembership>
 > => {

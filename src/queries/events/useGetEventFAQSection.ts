@@ -38,7 +38,11 @@ export interface GetEventFAQSectionProps extends SingleQueryParams {
 export const GetEventFAQSection = async ({
   eventId,
   sectionId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventFAQSectionProps): Promise<ConnectedXMResponse<FaqSection>> => {
   const { data } = await clientApi.get(`/events/${eventId}/faqs/${sectionId}`);
   return data;

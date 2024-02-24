@@ -20,7 +20,11 @@ export const GetSelfTransfers = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfTransfersProps): Promise<ConnectedXMResponse<Transfer[]>> => {
   const { data } = await clientApi.get(`/self/transfers`, {
     params: {
@@ -36,7 +40,12 @@ export const GetSelfTransfers = async ({
 export const useGetSelfTransfers = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfTransfers>>

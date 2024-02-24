@@ -38,7 +38,11 @@ export interface GetEventPageProps extends SingleQueryParams {
 export const GetEventPage = async ({
   eventId,
   pageId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventPageProps): Promise<ConnectedXMResponse<EventPage>> => {
   const { data } = await clientApi.get(`/events/${eventId}/pages/${pageId}`);
   return data;

@@ -16,7 +16,11 @@ export interface ReshareActivityParams extends MutationParams {
 export const ReshareActivity = async ({
   activityId,
   queryClient,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: ReshareActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
     UpdateResharesSingle(true, queryClient, ACTIVITY_QUERY_KEY(activityId));

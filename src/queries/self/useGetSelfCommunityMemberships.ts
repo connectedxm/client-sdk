@@ -20,7 +20,11 @@ export const GetSelfCommunityMemberships = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfCommunityMembershipsProps): Promise<
   ConnectedXMResponse<CommunityMembership[]>
 > => {
@@ -38,7 +42,12 @@ export const GetSelfCommunityMemberships = async ({
 export const useGetSelfCommunityMemberships = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfCommunityMemberships>>

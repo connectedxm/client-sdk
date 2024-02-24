@@ -40,7 +40,11 @@ export const GetSelfEventRegistration = async ({
   ticket,
   quantity,
   coupon,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfEventRegistrationProps): Promise<
   ConnectedXMResponse<Registration>
 > => {

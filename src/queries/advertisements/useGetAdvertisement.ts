@@ -8,6 +8,7 @@ import {
 import type { Advertisement } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const ADVERTISEMENT_QUERY_KEY = (position: string): QueryKey => [
   "ADVERTISEMENT",
@@ -32,8 +33,20 @@ export const SET_ADVERTISEMENT_QUERY_DATA = (
 export interface GetAdvertisementProps extends SingleQueryParams {}
 
 export const GetAdvertisement = async ({
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetAdvertisementProps): Promise<ConnectedXMResponse<Advertisement>> => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
+
   const { data } = await clientApi.get(`/advertisement`);
   return data;
 };

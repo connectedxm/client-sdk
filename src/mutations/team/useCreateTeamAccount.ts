@@ -12,7 +12,11 @@ export interface CreateTeamAccountParams extends MutationParams {
 export const CreateTeamAccount = async ({
   name,
   email,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: CreateTeamAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/self/team`,

@@ -10,6 +10,7 @@ import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { getClientAPI } from "@src/hooks";
 
 export const COMMUNITY_ANNOUNCEMENTS_QUERY_KEY = (
   communityId: string
@@ -40,10 +41,21 @@ export const GetCommunityAnnouncements = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetCommunityAnnouncementsProps): Promise<
   ConnectedXMResponse<Announcement[]>
 > => {
+  const clientApi = getClientAPI(
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+    locale
+  );
   const { data } = await clientApi.get(
     `/communities/${communityId}/announcements`,
     {
@@ -62,7 +74,12 @@ export const useGetCommunityAnnouncements = (
   communityId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityAnnouncements>>

@@ -35,7 +35,11 @@ export interface GetSelfPushDeviceProps extends SingleQueryParams {
 
 export const GetSelfPushDevice = async ({
   pushDeviceId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfPushDeviceProps): Promise<ConnectedXMResponse<PushDevice>> => {
   const { data } = await clientApi.get(`/self/push-devices/${pushDeviceId}`);
   return data;

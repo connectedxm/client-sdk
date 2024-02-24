@@ -37,7 +37,10 @@ export const GetSeriesList = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSeriesListProps): Promise<ConnectedXMResponse<Series[]>> => {
   const { data } = await clientApi.get(`/series`, {
@@ -64,7 +67,12 @@ export const GetSeriesList = async ({
 export const useGetSeriesList = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSeriesList>>> = {}
 ) => {

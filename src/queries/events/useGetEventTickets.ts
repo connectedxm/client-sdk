@@ -39,7 +39,11 @@ export const GetEventTickets = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetEventTicketsProps): Promise<ConnectedXMResponse<Ticket[]>> => {
   const { data } = await clientApi.get(`/events/${eventId}/tickets`, {
     params: {
@@ -56,7 +60,12 @@ export const useGetEventTickets = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventTickets>>

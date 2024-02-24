@@ -18,7 +18,11 @@ export interface GetSelfTransferProps extends SingleQueryParams {
 
 export const GetSelfTransfer = async ({
   transferId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfTransferProps): Promise<ConnectedXMResponse<Transfer>> => {
   const { data } = await clientApi.get(`/self/transfers/${transferId}`);
   return data;

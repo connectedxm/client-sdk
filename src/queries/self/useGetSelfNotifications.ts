@@ -24,7 +24,11 @@ export const GetSelfNotifications = async ({
   orderBy,
   search,
   filters,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfNotificationsProps): Promise<ConnectedXMResponse<Notification[]>> => {
   const { data } = await clientApi.get(`/self/notifications`, {
     params: {
@@ -42,7 +46,12 @@ export const useGetSelfNotifications = (
   filters: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfNotifications>>

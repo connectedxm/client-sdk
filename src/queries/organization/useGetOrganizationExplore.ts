@@ -28,7 +28,11 @@ interface Explore {
 export interface GetOrganizationExploreProps extends SingleQueryParams {}
 
 export const GetOrganizationExplore = async ({
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetOrganizationExploreProps): Promise<ConnectedXMResponse<Explore>> => {
   const { data } = await clientApi.get(`/organization/explore`);
 

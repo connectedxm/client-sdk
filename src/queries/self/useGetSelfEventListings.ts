@@ -27,7 +27,10 @@ export const GetSelfEventListings = async ({
   search,
   past,
   queryClient,
-  clientApi,
+  organizationId,
+  apiUrl,
+  getToken,
+  getExecuteAs,
   locale,
 }: GetSelfEventListingsProps): Promise<ConnectedXMResponse<EventListing[]>> => {
   const { data } = await clientApi.get(`/self/events/listings`, {
@@ -56,7 +59,12 @@ export const useGetSelfEventListings = (
   past: boolean = false,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    | "pageParam"
+    | "queryClient"
+    | "organizationId"
+    | "apiUrl"
+    | "getToken"
+    | "getExecuteAs"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfEventListings>>

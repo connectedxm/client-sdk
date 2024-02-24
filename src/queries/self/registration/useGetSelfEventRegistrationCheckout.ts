@@ -31,7 +31,11 @@ export interface GetSelfEventRegistrationCheckoutProps
 export const GetSelfEventRegistrationCheckout = async ({
   eventId,
   registrationId,
-  clientApi,
+  apiUrl,
+  organizationId,
+  getToken,
+  getExecuteAs,
+  locale,
 }: GetSelfEventRegistrationCheckoutProps): Promise<
   Awaited<ConnectedXMResponse<CheckoutResponse>>
 > => {
