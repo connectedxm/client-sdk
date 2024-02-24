@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_DELEGATES_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface AddSelfDelegateParams extends MutationParams {
   email: string;
@@ -11,9 +12,10 @@ export interface AddSelfDelegateParams extends MutationParams {
 
 export const AddSelfDelegate = async ({
   email,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: AddSelfDelegateParams): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/self/delegates`,
     {
@@ -28,11 +30,11 @@ export const AddSelfDelegate = async ({
 };
 
 export const useAddSelfDelegate = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfDelegate>>,
-      Omit<AddSelfDelegateParams, "queryClient" | "clientApi">
+      Omit<AddSelfDelegateParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

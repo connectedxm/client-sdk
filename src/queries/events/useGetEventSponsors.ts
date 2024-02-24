@@ -11,6 +11,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { EVENT_TICKETS_QUERY_KEY } from "./useGetEventTickets";
 import { SPONSOR_QUERY_KEY } from "../sponsors/useGetSponsor";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_SPONSORS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
@@ -43,9 +44,10 @@ export const GetEventSponsors = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetEventSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/sponsors`, {
     params: {
       page: pageParam || undefined,
@@ -71,7 +73,7 @@ export const useGetEventSponsors = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventSponsors>>

@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -12,9 +13,10 @@ export interface CancelSubscriptionParams extends MutationParams {
 
 export const CancelSubscription = async ({
   subscriptionId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: CancelSubscriptionParams): Promise<ConnectedXMResponse<null>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/subscriptions/${subscriptionId}`
   );
@@ -32,11 +34,11 @@ export const CancelSubscription = async ({
 };
 
 export const useCancelSubscription = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelSubscription>>,
-      Omit<CancelSubscriptionParams, "queryClient" | "clientApi">
+      Omit<CancelSubscriptionParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

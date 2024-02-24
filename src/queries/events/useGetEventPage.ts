@@ -9,6 +9,7 @@ import type { EventPage } from "@interfaces";
 import { EVENT_PAGES_QUERY_KEY } from "./useGetEventPages";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_PAGE_QUERY_KEY = (
   eventId: string,
@@ -38,8 +39,9 @@ export interface GetEventPageProps extends SingleQueryParams {
 export const GetEventPage = async ({
   eventId,
   pageId,
-  clientApi,
+  clientApiParams,
 }: GetEventPageProps): Promise<ConnectedXMResponse<EventPage>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/pages/${pageId}`);
   return data;
 };

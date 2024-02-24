@@ -6,9 +6,9 @@ import {
 } from "../../useConnectedInfiniteQuery";
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { Subscription, SubscriptionStatus } from "@interfaces";
-import { useConnectedXM } from "@src/hooks";
 import { CacheIndividualQueries } from "@src/utilities";
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "./useGetSelfSubscription";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_SUBSCRIPTIONS_QUERY_KEY = (status?: SubscriptionStatus) => {
   const key = [...SELF_QUERY_KEY(), "SUBSCRIPTIONS"];
@@ -29,9 +29,10 @@ export const GetSelfSubscriptions = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetSelfSubscriptionsProps): Promise<ConnectedXMResponse<Subscription[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/subscriptions`, {
     params: {
       page: pageParam || undefined,
@@ -58,14 +59,12 @@ export const useGetSelfSubscriptions = (
   status?: SubscriptionStatus,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfSubscriptions>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfSubscriptions>>
   >(
@@ -75,7 +74,6 @@ export const useGetSelfSubscriptions = (
     params,
     {
       ...options,
-      enabled: !!token,
     }
   );
 };

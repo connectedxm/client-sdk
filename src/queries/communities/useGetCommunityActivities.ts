@@ -8,10 +8,10 @@ import {
 import { Activity } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const COMMUNITY_ACTIVITIES_QUERY_KEY = (
   communityId: string
@@ -43,9 +43,10 @@ export const GetCommunityActivities = async ({
   search,
   communityId,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetCommunityActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/communities/${communityId}/activities`,
     {
@@ -73,14 +74,12 @@ export const useGetCommunityActivities = (
   communityId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityActivities>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetCommunityActivities>>
   >(
@@ -90,7 +89,7 @@ export const useGetCommunityActivities = (
     params,
     {
       ...options,
-      enabled: !!token && !!communityId && (options?.enabled ?? true),
+      enabled: !!communityId && (options?.enabled ?? true),
     }
   );
 };

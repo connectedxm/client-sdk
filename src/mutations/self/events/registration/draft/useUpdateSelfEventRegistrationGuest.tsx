@@ -7,6 +7,7 @@ import {
   ConnectedXMResponse,
   Registration,
 } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "@src/queries";
 
 export interface UpdateSelfEventRegistrationGuestParams extends MutationParams {
@@ -21,12 +22,13 @@ export const UpdateSelfEventRegistrationGuest = async ({
   registrationId,
   guestId,
   guest,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: UpdateSelfEventRegistrationGuestParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/draft/guests/${guestId}`,
     guest
@@ -42,11 +44,14 @@ export const UpdateSelfEventRegistrationGuest = async ({
 };
 
 export const useUpdateSelfEventRegistrationGuest = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventRegistrationGuest>>,
-      Omit<UpdateSelfEventRegistrationGuestParams, "queryClient" | "clientApi">
+      Omit<
+        UpdateSelfEventRegistrationGuestParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

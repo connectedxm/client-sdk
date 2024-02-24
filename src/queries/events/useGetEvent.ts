@@ -9,6 +9,7 @@ import type { Event } from "@interfaces";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENTS_QUERY_KEY(),
@@ -33,8 +34,9 @@ export interface GetEventProps extends SingleQueryParams {
 
 export const GetEvent = async ({
   eventId,
-  clientApi,
+  clientApiParams,
 }: GetEventProps): Promise<ConnectedXMResponse<Event>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}`);
   return data;
 };

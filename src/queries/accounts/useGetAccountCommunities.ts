@@ -7,11 +7,11 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Community } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "../communities/useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ACCOUNT_COMMUNITIES_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNT_QUERY_KEY(accountId),
@@ -44,9 +44,10 @@ export const GetAccountCommunities = async ({
   search,
   accountId,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetAccountCommunitiesProps): Promise<ConnectedXMResponse<Community[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/${accountId}/communities`, {
     params: {
       page: pageParam || undefined,
@@ -71,14 +72,12 @@ export const useGetAccountCommunities = (
   accountId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetAccountCommunities>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetAccountCommunities>>
   >(
@@ -88,7 +87,7 @@ export const useGetAccountCommunities = (
     params,
     {
       ...options,
-      enabled: !!token && !!accountId && (options?.enabled ?? true),
+      enabled: !!accountId && (options?.enabled ?? true),
     }
   );
 };

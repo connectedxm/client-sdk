@@ -6,6 +6,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../../../useConnectedMutation";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfEventRegistrationResponseFileParams
   extends MutationParams {
@@ -22,10 +23,11 @@ export const UpdateSelfEventRegistrationResponseFile = async ({
   dataUrl,
   name,
   questionId,
-  clientApi,
+  clientApiParams,
 }: UpdateSelfEventRegistrationResponseFileParams): Promise<
   ConnectedXMResponse<RegistrationQuestionResponse>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<
     ConnectedXMResponse<RegistrationQuestionResponse>
   >(
@@ -41,13 +43,13 @@ export const UpdateSelfEventRegistrationResponseFile = async ({
 };
 
 export const useUpdateSelfEventRegistrationResponseFile = (
-  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventRegistrationResponseFile>>,
       Omit<
         UpdateSelfEventRegistrationResponseFileParams,
-        "queryClient" | "clientApi"
+        "queryClient" | "clientApiParams"
       >
     >,
     "mutationFn"

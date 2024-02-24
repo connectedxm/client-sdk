@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse, Transfer } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -17,9 +18,10 @@ export const TransferPurchase = async ({
   purchaseId,
   eventId,
   registrationId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: TransferPurchaseParams): Promise<ConnectedXMResponse<Transfer>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
     `/self/events/${eventId}/registration/${registrationId}/transfer`,
     {
@@ -37,11 +39,11 @@ export const TransferPurchase = async ({
 };
 
 export const useTransferPurchase = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof TransferPurchase>>,
-      Omit<TransferPurchaseParams, "queryClient" | "clientApi">
+      Omit<TransferPurchaseParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

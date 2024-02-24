@@ -4,6 +4,7 @@ import {
   MutationParams,
   useConnectedMutation,
 } from "../useConnectedMutation";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateEventLeadParams extends MutationParams {
   eventId: string;
@@ -15,9 +16,10 @@ export const CreateEventLead = async ({
   eventId,
   purchaseId,
   note,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: CreateEventLeadParams): Promise<ConnectedXMResponse<Lead>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post(
     `/events/${eventId}/leads/${purchaseId}`,
     {
@@ -34,11 +36,11 @@ export const CreateEventLead = async ({
 };
 
 export const useCreateEventLead = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateEventLead>>,
-      Omit<CreateEventLeadParams, "queryClient" | "clientApi">
+      Omit<CreateEventLeadParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

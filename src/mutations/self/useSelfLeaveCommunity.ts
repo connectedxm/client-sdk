@@ -10,6 +10,7 @@ import {
   SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY,
   SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
 } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface SelfLeaveCommunityParams extends MutationParams {
   communityId: string;
@@ -17,9 +18,10 @@ export interface SelfLeaveCommunityParams extends MutationParams {
 
 export const SelfLeaveCommunity = async ({
   communityId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: SelfLeaveCommunityParams): Promise<ConnectedXMResponse<null>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/communities/${communityId}`
   );
@@ -43,11 +45,11 @@ export const SelfLeaveCommunity = async ({
 };
 
 export const useSelfLeaveCommunity = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfLeaveCommunity>>,
-      Omit<SelfLeaveCommunityParams, "queryClient" | "clientApi">
+      Omit<SelfLeaveCommunityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

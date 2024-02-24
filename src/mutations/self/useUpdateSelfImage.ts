@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfImageParams extends MutationParams {
   base64: string;
@@ -11,9 +12,10 @@ export interface UpdateSelfImageParams extends MutationParams {
 
 export const UpdateSelfImage = async ({
   base64,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: UpdateSelfImageParams): Promise<ConnectedXMResponse<Self>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
     `/self/image`,
     {
@@ -29,11 +31,11 @@ export const UpdateSelfImage = async ({
 };
 
 export const useUpdateSelfImage = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfImage>>,
-      Omit<UpdateSelfImageParams, "queryClient" | "clientApi">
+      Omit<UpdateSelfImageParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

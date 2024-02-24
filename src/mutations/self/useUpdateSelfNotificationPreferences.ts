@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { ConnectedXMResponse, NotificationPreferences } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfNotificationPreferencesParams
   extends MutationParams {
@@ -29,7 +30,7 @@ export interface UpdateSelfNotificationPreferencesParams
 }
 
 export const UpdateSelfNotificationPreferences = async ({
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
   ...params
@@ -50,6 +51,7 @@ export const UpdateSelfNotificationPreferences = async ({
     );
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<
     ConnectedXMResponse<NotificationPreferences>
   >(`/self/notificationPreferences`, params);
@@ -58,11 +60,14 @@ export const UpdateSelfNotificationPreferences = async ({
 };
 
 export const useUpdateSelfNotificationPreferences = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>,
-      Omit<UpdateSelfNotificationPreferencesParams, "queryClient" | "clientApi">
+      Omit<
+        UpdateSelfNotificationPreferencesParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

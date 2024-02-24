@@ -7,6 +7,7 @@ import useConnectedMutation, {
   MutationOptions,
 } from "../useConnectedMutation";
 import { ConnectedXMResponse } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface RemoveCommunityEventParams extends MutationParams {
   communityId: string;
@@ -16,9 +17,10 @@ export interface RemoveCommunityEventParams extends MutationParams {
 export const RemoveCommunityEvent = async ({
   communityId,
   eventId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: RemoveCommunityEventParams): Promise<ConnectedXMResponse<null>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/communityModerator/${communityId}/events/${eventId}`
   );
@@ -39,11 +41,11 @@ export const RemoveCommunityEvent = async ({
 };
 
 export const useRemoveCommunityEvent = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveCommunityEvent>>,
-      Omit<RemoveCommunityEventParams, "queryClient" | "clientApi">
+      Omit<RemoveCommunityEventParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

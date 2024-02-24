@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_PUSH_DEVICES_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface DeleteSelfPushDeviceParams extends MutationParams {
   pushDeviceId: string;
@@ -11,9 +12,10 @@ export interface DeleteSelfPushDeviceParams extends MutationParams {
 
 export const DeleteSelfPushDevice = async ({
   pushDeviceId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: DeleteSelfPushDeviceParams): Promise<ConnectedXMResponse<PushDevice>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<PushDevice>>(
     `/self/push-devices/${pushDeviceId}`
   );
@@ -26,11 +28,11 @@ export const DeleteSelfPushDevice = async ({
 };
 
 export const useDeleteSelfPushDevice = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteSelfPushDevice>>,
-      Omit<DeleteSelfPushDeviceParams, "queryClient" | "clientApi">
+      Omit<DeleteSelfPushDeviceParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

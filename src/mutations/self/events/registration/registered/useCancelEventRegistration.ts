@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -18,12 +19,13 @@ export interface CancelEventRegistrationParams extends MutationParams {
 export const CancelEventRegistration = async ({
   eventId,
   registrationId,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "env",
 }: CancelEventRegistrationParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/registered/cancel`
   );
@@ -49,11 +51,11 @@ export const CancelEventRegistration = async ({
 };
 
 export const useCancelEventRegistration = (
-  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelEventRegistration>>,
-      Omit<CancelEventRegistrationParams, "queryClient" | "clientApi">
+      Omit<CancelEventRegistrationParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

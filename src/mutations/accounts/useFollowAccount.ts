@@ -7,6 +7,7 @@ import {
   SET_ACCOUNT_QUERY_DATA,
 } from "@src/queries";
 import { Account, ConnectedXMResponse } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface FollowAccountParams extends MutationParams {
   accountId: string;
@@ -14,10 +15,11 @@ export interface FollowAccountParams extends MutationParams {
 
 export const FollowAccount = async ({
   accountId,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: FollowAccountParams): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/accounts/${accountId}/follow`
   );
@@ -34,11 +36,14 @@ export const FollowAccount = async ({
 };
 
 export const useFollowAccount = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
-  options: Omit<MutationOptions<
-    Awaited<ReturnType<typeof FollowAccount>>,
-    Omit<FollowAccountParams, "queryClient" | "clientApi">
-  >, "mutationFn"> = {}
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
+  options: Omit<
+    MutationOptions<
+      Awaited<ReturnType<typeof FollowAccount>>,
+      Omit<FollowAccountParams, "queryClient" | "clientApiParams">
+    >,
+    "mutationFn"
+  > = {}
 ) => {
   return useConnectedMutation<
     FollowAccountParams,

@@ -10,6 +10,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_SPEAKER_QUERY_KEY } from "./useGetEventSpeaker";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_SPEAKERS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
@@ -42,9 +43,10 @@ export const GetEventSpeakers = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetEventSpeakersProps): Promise<ConnectedXMResponse<Speaker[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/speakers`, {
     params: {
       page: pageParam || undefined,
@@ -70,7 +72,7 @@ export const useGetEventSpeakers = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventSpeakers>>

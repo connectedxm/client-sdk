@@ -5,7 +5,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
-import { useConnectedXM } from "@src/hooks";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
@@ -29,10 +29,11 @@ export const GetSelfEventListingRegistrations = async ({
   orderBy,
   search,
   checkedIn,
-  clientApi,
+  clientApiParams,
 }: GetSelfEventListingRegistrationsProps): Promise<
   ConnectedXMResponse<Registration[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/self/events/listings/${eventId}/registrations`,
     {
@@ -53,14 +54,12 @@ export const useGetSelfEventListingsRegistrations = (
   checkedIn: boolean = false,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   >(
@@ -70,7 +69,7 @@ export const useGetSelfEventListingsRegistrations = (
     params,
     {
       ...options,
-      enabled: !!token && !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

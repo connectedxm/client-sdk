@@ -6,6 +6,7 @@ import useConnectedSingleQuery, {
 } from "../useConnectedSingleQuery";
 import { SPONSORS_QUERY_KEY } from "./useGetSponsors";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SPONSOR_QUERY_KEY = (sponsorId: string): QueryKey => [
   ...SPONSORS_QUERY_KEY(),
@@ -33,8 +34,9 @@ export interface GetSponsorProps extends SingleQueryParams {
 
 export const GetSponsor = async ({
   accountId,
-  clientApi,
+  clientApiParams,
 }: GetSponsorProps): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/sponsors/${accountId}`);
   return data;
 };

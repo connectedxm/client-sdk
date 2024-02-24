@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -16,9 +17,10 @@ export interface UpdateSelfPushDeviceParams extends MutationParams {
 export const UpdateSelfPushDevice = async ({
   pushDeviceId,
   pushDevice,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: UpdateSelfPushDeviceParams): Promise<ConnectedXMResponse<PushDevice>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<PushDevice>>(
     `/self/push-devices/${pushDeviceId}`,
     {
@@ -39,11 +41,11 @@ export const UpdateSelfPushDevice = async ({
 };
 
 export const useUpdateSelfPushDevice = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfPushDevice>>,
-      Omit<UpdateSelfPushDeviceParams, "queryClient" | "clientApi">
+      Omit<UpdateSelfPushDeviceParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

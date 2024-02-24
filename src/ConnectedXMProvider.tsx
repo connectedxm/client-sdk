@@ -14,25 +14,20 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com"
     | "http://localhost:4001";
-  token: string | undefined;
-  setToken: (token: string | undefined) => void;
-  executeAs: string | undefined;
-  setExecuteAs: (accountId: string) => void;
+  getToken: () => Promise<string | undefined> | string | undefined;
+  getExecuteAs?: () => Promise<string | undefined> | string | undefined;
   locale: string;
   onNotAuthorized?: (
     error: AxiosError<ConnectedXMResponse<any>>,
-    key: QueryKey,
-    setToken: (token: string | undefined) => void
+    key: QueryKey
   ) => void;
   onModuleForbidden?: (
     error: AxiosError<ConnectedXMResponse<any>>,
-    key: QueryKey,
-    setToken: (token: string | undefined) => void
+    key: QueryKey
   ) => void;
   onNotFound?: (
     error: AxiosError<ConnectedXMResponse<any>>,
-    key: QueryKey,
-    setToken: (token: string | undefined) => void
+    key: QueryKey
   ) => void;
 }
 
@@ -54,33 +49,14 @@ export const ConnectedXMProvider = ({
   ...state
 }: ConnectedXMProviderProps) => {
   const [ssr, setSSR] = React.useState<boolean>(true);
-  const [token, _setToken] = React.useState<string | undefined>();
-  const [executeAs, setExecuteAs] = React.useState<string | undefined>();
 
   React.useEffect(() => {
     setSSR(false);
   }, []);
 
-  const setToken = (value: string | undefined) => {
-    const newValue = value || undefined;
-    _setToken((old) => {
-      if (old === newValue) return old;
-      console.log("Setting token to new value");
-      return newValue;
-    });
-  };
-
   const render = () => {
     return (
-      <ConnectedXMClientContext.Provider
-        value={{
-          ...state,
-          token,
-          setToken,
-          executeAs,
-          setExecuteAs,
-        }}
-      >
+      <ConnectedXMClientContext.Provider value={state}>
         {children}
       </ConnectedXMClientContext.Provider>
     );

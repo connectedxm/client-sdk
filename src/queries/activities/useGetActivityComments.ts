@@ -8,9 +8,9 @@ import {
 import { Activity } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITY_QUERY_KEY } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ACTIVITY_COMMENTS_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITY_QUERY_KEY(activityId),
@@ -43,9 +43,10 @@ export const GetActivityComments = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetActivityCommentsProps): Promise<ConnectedXMResponse<Activity[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/activities/${activityId}/comments`, {
     params: {
       page: pageParam || undefined,
@@ -70,14 +71,12 @@ export const useGetActivityComments = (
   activityId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetActivityComments>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetActivityComments>>
   >(
@@ -86,7 +85,7 @@ export const useGetActivityComments = (
       GetActivityComments({ activityId, ...params }),
     params,
     {
-      enabled: !!token && !!activityId && (options?.enabled ?? true),
+      enabled: !!activityId && (options?.enabled ?? true),
     }
   );
 };

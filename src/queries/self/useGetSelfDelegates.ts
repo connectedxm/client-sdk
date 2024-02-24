@@ -7,8 +7,8 @@ import {
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import { useConnectedXM } from "@src/hooks";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_DELEGATES_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -23,9 +23,10 @@ export const GetSelfDelegates = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetSelfDelegatesProps): Promise<ConnectedXMResponse<Account[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/delegates`, {
     params: {
       page: pageParam || undefined,
@@ -50,14 +51,12 @@ export const GetSelfDelegates = async ({
 export const useGetSelfDelegates = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfDelegates>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfDelegates>>
   >(
@@ -66,7 +65,6 @@ export const useGetSelfDelegates = (
     params,
     {
       ...options,
-      enabled: !!token,
     }
   );
 };

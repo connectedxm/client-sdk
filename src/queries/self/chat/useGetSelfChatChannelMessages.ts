@@ -7,11 +7,11 @@ import {
   useConnectedInfiniteQuery,
 } from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import {
   SELF_CHAT_CHANNEL_QUERY_KEY,
   SET_SELF_CHAT_CHANNEL_QUERY_DATA,
 } from "./useGetSelfChatChannel";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY = (
   channelId: string
@@ -43,10 +43,11 @@ export const GetSelfChatChannelMessages = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
 }: GetSelfChatChannelMessagesProps): Promise<
   ConnectedXMResponse<ChatChannelMessage[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/self/chat/channels/${channelId}/messages`,
     {
@@ -76,14 +77,12 @@ export const useGetSelfChatChannelMessages = (
   channelId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfChatChannelMessages>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfChatChannelMessages>>
   >(
@@ -93,7 +92,7 @@ export const useGetSelfChatChannelMessages = (
     params,
     {
       ...options,
-      enabled: !!token && !!channelId && (options?.enabled ?? true),
+      enabled: !!channelId && (options?.enabled ?? true),
     }
   );
 };

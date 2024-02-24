@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_DELEGATES_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface RemoveSelfDelegateParams extends MutationParams {
   accountId: string;
@@ -11,9 +12,10 @@ export interface RemoveSelfDelegateParams extends MutationParams {
 
 export const RemoveSelfDelegate = async ({
   accountId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: RemoveSelfDelegateParams): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Account>>(
     `/self/delegates/${accountId}`
   );
@@ -26,11 +28,11 @@ export const RemoveSelfDelegate = async ({
 };
 
 export const useRemoveSelfDelegate = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfDelegate>>,
-      Omit<RemoveSelfDelegateParams, "queryClient" | "clientApi">
+      Omit<RemoveSelfDelegateParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

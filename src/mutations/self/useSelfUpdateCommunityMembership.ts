@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface SelfUpdateCommunityMembershipParams extends MutationParams {
   communityId: string;
@@ -13,7 +14,7 @@ export interface SelfUpdateCommunityMembershipParams extends MutationParams {
 export const SelfUpdateCommunityMembership = async ({
   communityId,
   membership,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: SelfUpdateCommunityMembershipParams): Promise<
@@ -34,6 +35,7 @@ export const SelfUpdateCommunityMembership = async ({
     );
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<
     ConnectedXMResponse<CommunityMembership>
   >(`/self/communities/${communityId}`, membership);
@@ -42,11 +44,14 @@ export const SelfUpdateCommunityMembership = async ({
 };
 
 export const useSelfUpdateCommunityMembership = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfUpdateCommunityMembership>>,
-      Omit<SelfUpdateCommunityMembershipParams, "queryClient" | "clientApi">
+      Omit<
+        SelfUpdateCommunityMembershipParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

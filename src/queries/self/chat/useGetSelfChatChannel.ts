@@ -6,10 +6,10 @@ import {
 } from "@src/queries/useConnectedSingleQuery";
 
 import type { ChatChannelMember, ConnectedXMResponse } from "@interfaces";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { QueryClient, Updater } from "@tanstack/react-query";
 import { SELF_CHAT_CHANNELS_QUERY_KEY } from "./useGetSelfChatChannels";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_CHAT_CHANNEL_QUERY_KEY = (channelId: string): QueryKey => [
   ...SELF_CHAT_CHANNELS_QUERY_KEY(),
@@ -37,10 +37,11 @@ export interface GetSelfChatChannelProps extends SingleQueryParams {
 
 export const GetSelfChatChannel = async ({
   channelId,
-  clientApi,
+  clientApiParams,
 }: GetSelfChatChannelProps): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/chat/channels/${channelId}`);
   return data;
 };
@@ -49,8 +50,6 @@ export const useGetSelfChatChannel = (
   channelId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfChatChannel>> = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelfChatChannel>>(
     SELF_CHAT_CHANNEL_QUERY_KEY(channelId),
     (params: any) =>
@@ -61,7 +60,7 @@ export const useGetSelfChatChannel = (
     {
       staleTime: Infinity,
       ...options,
-      enabled: !!token && !!channelId && (options?.enabled ?? true),
+      enabled: !!channelId && (options?.enabled ?? true),
     }
   );
 };

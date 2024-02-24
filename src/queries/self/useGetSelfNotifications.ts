@@ -1,4 +1,4 @@
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
+import { GetClientAPI } from "@src/ClientAPI";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -24,8 +24,9 @@ export const GetSelfNotifications = async ({
   orderBy,
   search,
   filters,
-  clientApi,
+  clientApiParams,
 }: GetSelfNotificationsProps): Promise<ConnectedXMResponse<Notification[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/notifications`, {
     params: {
       page: pageParam || undefined,
@@ -42,13 +43,12 @@ export const useGetSelfNotifications = (
   filters: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfNotifications>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfNotifications>>
   >(
@@ -59,7 +59,6 @@ export const useGetSelfNotifications = (
     {
       staleTime: 0,
       ...options,
-      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

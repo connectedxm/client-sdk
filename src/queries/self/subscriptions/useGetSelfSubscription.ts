@@ -6,8 +6,8 @@ import {
   useConnectedSingleQuery,
 } from "../../useConnectedSingleQuery";
 import { SELF_SUBSCRIPTIONS_QUERY_KEY } from "./useGetSelfSubscriptions";
-import { useConnectedXM } from "@src/hooks";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_SUBSCRIPTION_QUERY_KEY = (
   subscriptionId: string
@@ -19,8 +19,9 @@ export interface GetSelfSubcriptionProps extends SingleQueryParams {
 
 export const GetSelfSubcription = async ({
   subscriptionId,
-  clientApi,
+  clientApiParams,
 }: GetSelfSubcriptionProps): Promise<ConnectedXMResponse<Subscription>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/subscriptions/${subscriptionId}`);
   return data;
 };
@@ -29,14 +30,12 @@ export const useGetSelfSubcription = (
   subscriptionId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfSubcription>> = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelfSubcription>>(
     SELF_SUBSCRIPTION_QUERY_KEY(subscriptionId),
     (params) => GetSelfSubcription({ subscriptionId, ...params }),
     {
       ...options,
-      enabled: !!token && !!subscriptionId,
+      enabled: !!subscriptionId,
     }
   );
 };

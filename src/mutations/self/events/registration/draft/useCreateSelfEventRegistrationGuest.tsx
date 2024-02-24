@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 import { ConnectedXMResponse, Registration } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateGuest {
   firstName: string;
@@ -21,12 +22,13 @@ export const CreateSelfEventRegistrationGuest = async ({
   eventId,
   registrationId,
   guest,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: CreateSelfEventRegistrationGuestParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/draft/guests`,
     guest
@@ -42,11 +44,14 @@ export const CreateSelfEventRegistrationGuest = async ({
 };
 
 export const useCreateSelfEventRegistrationGuest = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSelfEventRegistrationGuest>>,
-      Omit<CreateSelfEventRegistrationGuestParams, "queryClient" | "clientApi">
+      Omit<
+        CreateSelfEventRegistrationGuestParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

@@ -6,6 +6,7 @@ import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const LEVEL_QUERY_KEY = (levelId: string): QueryKey => [
   ...LEVELS_QUERY_KEY(),
@@ -30,8 +31,9 @@ export interface GetLevelProps extends SingleQueryParams {
 
 export const GetLevel = async ({
   levelId,
-  clientApi,
+  clientApiParams,
 }: GetLevelProps): Promise<ConnectedXMResponse<SponsorshipLevel>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/levels/${levelId}`, {});
   return data;
 };

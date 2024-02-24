@@ -7,6 +7,7 @@ import {
   SET_ACCOUNT_QUERY_DATA,
 } from "@src/queries";
 import { ConnectedXMResponse, Account } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UnfollowAccountParams extends MutationParams {
   accountId: string;
@@ -14,10 +15,11 @@ export interface UnfollowAccountParams extends MutationParams {
 
 export const UnfollowAccount = async ({
   accountId,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: UnfollowAccountParams): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/accounts/${accountId}/unfollow`
   );
@@ -34,11 +36,11 @@ export const UnfollowAccount = async ({
 };
 
 export const useUnfollowAccount = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UnfollowAccount>>,
-      Omit<UnfollowAccountParams, "queryClient" | "clientApi">
+      Omit<UnfollowAccountParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

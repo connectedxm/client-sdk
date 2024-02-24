@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -13,11 +14,12 @@ export interface UpdateSubscriptionPaymentMethodParams extends MutationParams {
 export const UpdateSubscriptionPaymentMethod = async ({
   subscriptionId,
   paymentMethodId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: UpdateSubscriptionPaymentMethodParams): Promise<
   ConnectedXMResponse<null>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<null>>(
     `/self/subscriptions/${subscriptionId}/payment-method`,
     {
@@ -34,11 +36,14 @@ export const UpdateSubscriptionPaymentMethod = async ({
 };
 
 export const useUpdateSubscriptionPaymentMethod = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSubscriptionPaymentMethod>>,
-      Omit<UpdateSubscriptionPaymentMethodParams, "queryClient" | "clientApi">
+      Omit<
+        UpdateSubscriptionPaymentMethodParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

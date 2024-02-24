@@ -8,9 +8,9 @@ import {
 import { Activity, ConnectedXMResponse } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ACCOUNT_ACTIVITIES_QUERY_KEY = (accountId: string): QueryKey => [
   "ACTIVITIES",
@@ -43,9 +43,10 @@ export const GetAccountActivities = async ({
   search,
   accountId,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetAccountActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/${accountId}/activities`, {
     params: {
       page: pageParam || undefined,
@@ -70,14 +71,12 @@ export const useGetAccountActivities = (
   accountId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetAccountActivities>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetAccountActivities>>
   >(
@@ -87,7 +86,7 @@ export const useGetAccountActivities = (
     params,
     {
       ...options,
-      enabled: !!token && !!accountId,
+      enabled: !!accountId,
     }
   );
 };

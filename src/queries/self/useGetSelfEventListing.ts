@@ -8,7 +8,7 @@ import {
 import type { ConnectedXMResponse, EventListing } from "@interfaces";
 import { SELF_EVENT_LISTINGS_QUERY_KEY } from "./useGetSelfEventListings";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_EVENT_LISTING_QUERY_KEY = (eventId: string): QueryKey => [
   ...SELF_EVENT_LISTINGS_QUERY_KEY(false),
@@ -36,8 +36,9 @@ export interface GetSelfEventListingProps extends SingleQueryParams {
 
 export const GetSelfEventListing = async ({
   eventId,
-  clientApi,
+  clientApiParams,
 }: GetSelfEventListingProps): Promise<ConnectedXMResponse<EventListing>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`self/events/listings/${eventId}`);
   return data;
 };
@@ -46,14 +47,12 @@ export const useGetSelfEventListing = (
   eventId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventListing>>(
     SELF_EVENT_LISTING_QUERY_KEY(eventId),
     (params) => GetSelfEventListing({ eventId, ...params }),
     {
       ...options,
-      enabled: !!token && !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

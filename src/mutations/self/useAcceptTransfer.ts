@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_TRANSFERS_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface AcceptTransferParams extends MutationParams {
   transferId: string;
@@ -11,9 +12,10 @@ export interface AcceptTransferParams extends MutationParams {
 
 export const AcceptTransfer = async ({
   transferId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: AcceptTransferParams): Promise<ConnectedXMResponse<Transfer>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
     `/self/transfers/${transferId}`
   );
@@ -26,11 +28,11 @@ export const AcceptTransfer = async ({
 };
 
 export const useAcceptTransfer = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AcceptTransfer>>,
-      Omit<AcceptTransferParams, "queryClient" | "clientApi">
+      Omit<AcceptTransferParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

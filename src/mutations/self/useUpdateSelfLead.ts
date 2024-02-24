@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -12,8 +13,9 @@ export interface UpdateSelfLeadParams extends MutationParams {
 export const UpdateSelfLead = async ({
   leadId,
   note,
-  clientApi,
+  clientApiParams,
 }: UpdateSelfLeadParams): Promise<ConnectedXMResponse<Lead>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Lead>>(
     `/self/leads/${leadId}`,
     {
@@ -30,11 +32,11 @@ export const UpdateSelfLead = async ({
 };
 
 export const useUpdateSelfLead = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfLead>>,
-      Omit<UpdateSelfLeadParams, "queryClient" | "clientApi">
+      Omit<UpdateSelfLeadParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

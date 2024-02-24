@@ -12,6 +12,7 @@ import {
 } from "../useConnectedSingleQuery";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ORGANIZATION_EXPLORE_QUERY_KEY = (): QueryKey => [
   ...ORGANIZATION_QUERY_KEY(),
@@ -28,8 +29,9 @@ interface Explore {
 export interface GetOrganizationExploreProps extends SingleQueryParams {}
 
 export const GetOrganizationExplore = async ({
-  clientApi,
+  clientApiParams,
 }: GetOrganizationExploreProps): Promise<ConnectedXMResponse<Explore>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/organization/explore`);
 
   return data;
