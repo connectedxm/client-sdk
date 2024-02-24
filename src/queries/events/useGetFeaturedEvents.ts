@@ -10,6 +10,7 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENTS_FEATURED_QUERY_KEY = (): QueryKey => [
   ...EVENTS_QUERY_KEY(),
@@ -38,9 +39,10 @@ export const GetFeaturedEvents = async ({
   pageSize,
   orderBy,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetFeaturedEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/featured`, {
     params: {
       page: pageParam || undefined,
@@ -64,7 +66,7 @@ export const GetFeaturedEvents = async ({
 export const useGetFeaturedEvents = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetFeaturedEvents>>

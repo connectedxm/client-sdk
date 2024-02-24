@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { ACTIVITIES_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface DeleteActivityParams extends MutationParams {
   activityId: string;
@@ -11,9 +12,10 @@ export interface DeleteActivityParams extends MutationParams {
 
 export const DeleteActivity = async ({
   activityId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: DeleteActivityParams): Promise<ConnectedXMResponse<null>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/activities/${activityId}`
   );
@@ -26,11 +28,11 @@ export const DeleteActivity = async ({
 };
 
 export const useDeleteActivity = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteActivity>>,
-      Omit<DeleteActivityParams, "queryClient" | "clientApi">
+      Omit<DeleteActivityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

@@ -17,6 +17,7 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { AppendInfiniteQuery } from "@src/utilities";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateActivity {
   message: string;
@@ -36,7 +37,7 @@ export const SelfCreateActivity = async ({
   activity,
   base64Image,
   videoUri,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
@@ -55,6 +56,7 @@ export const SelfCreateActivity = async ({
     }
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
     `/self/activities`,
     {
@@ -117,11 +119,11 @@ export const SelfCreateActivity = async ({
 };
 
 export const useSelfCreateActivity = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfCreateActivity>>,
-      Omit<SelfCreateActivityParams, "queryClient" | "clientApi">
+      Omit<SelfCreateActivityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

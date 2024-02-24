@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -18,10 +19,11 @@ export interface CreateSubscriptionResponse {
 export const CreateSubscription = async ({
   productId,
   priceId,
-  clientApi,
+  clientApiParams,
 }: CreateSubscriptionParams): Promise<
   ConnectedXMResponse<CreateSubscriptionResponse>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<
     ConnectedXMResponse<CreateSubscriptionResponse>
   >("/self/subscriptions", {
@@ -34,11 +36,11 @@ export const CreateSubscription = async ({
 };
 
 export const useCreateSubscription = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSubscription>>,
-      Omit<CreateSubscriptionParams, "queryClient" | "clientApi">
+      Omit<CreateSubscriptionParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

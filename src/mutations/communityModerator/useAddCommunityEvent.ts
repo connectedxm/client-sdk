@@ -7,6 +7,7 @@ import {
   COMMUNITY_EVENTS_QUERY_KEY,
   SELF_EVENT_LISTINGS_QUERY_KEY,
 } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface AddCommunityEventParams extends MutationParams {
   communityId: string;
@@ -16,9 +17,10 @@ export interface AddCommunityEventParams extends MutationParams {
 export const AddCommunityEvent = async ({
   communityId,
   eventId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: AddCommunityEventParams): Promise<ConnectedXMResponse<Event>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Event>>(
     `/communityModerator/${communityId}/events/${eventId}`
   );
@@ -39,11 +41,11 @@ export const AddCommunityEvent = async ({
 };
 
 export const useAddCommunityEvent = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddCommunityEvent>>,
-      Omit<AddCommunityEventParams, "queryClient" | "clientApi">
+      Omit<AddCommunityEventParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

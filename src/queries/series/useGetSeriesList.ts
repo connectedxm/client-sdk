@@ -9,6 +9,7 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SERIES_LIST_QUERY_KEY = (): QueryKey => ["SERIES"];
 
@@ -37,9 +38,10 @@ export const GetSeriesList = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetSeriesListProps): Promise<ConnectedXMResponse<Series[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/series`, {
     params: {
       page: pageParam || undefined,
@@ -64,7 +66,7 @@ export const GetSeriesList = async ({
 export const useGetSeriesList = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSeriesList>>> = {}
 ) => {

@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface AddSelfEventListingSponsorParams extends MutationParams {
   eventId: string;
@@ -13,7 +14,7 @@ export interface AddSelfEventListingSponsorParams extends MutationParams {
 export const AddSelfEventListingSponsor = async ({
   eventId,
   sponsor,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: AddSelfEventListingSponsorParams): Promise<
@@ -50,6 +51,7 @@ export const AddSelfEventListingSponsor = async ({
     );
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sponsors`,
     {
@@ -61,11 +63,11 @@ export const AddSelfEventListingSponsor = async ({
 };
 
 export const useAddSelfEventListingSponsor = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfEventListingSponsor>>,
-      Omit<AddSelfEventListingSponsorParams, "queryClient" | "clientApi">
+      Omit<AddSelfEventListingSponsorParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

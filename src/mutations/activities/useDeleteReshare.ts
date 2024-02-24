@@ -8,6 +8,7 @@ import {
   UpdateResharesInfinite,
   UpdateResharesSingle,
 } from "./optimistic/UpdateReshares";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface DeleteReshareParams extends MutationParams {
   activityId: string;
@@ -15,7 +16,7 @@ export interface DeleteReshareParams extends MutationParams {
 
 export const DeleteReshare = async ({
   activityId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: DeleteReshareParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
@@ -28,6 +29,7 @@ export const DeleteReshare = async ({
     );
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Activity>>(
     `/self/activities/${activityId}/reshares`
   );
@@ -36,11 +38,11 @@ export const DeleteReshare = async ({
 };
 
 export const useDeleteReshare = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteReshare>>,
-      Omit<DeleteReshareParams, "queryClient" | "clientApi">
+      Omit<DeleteReshareParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

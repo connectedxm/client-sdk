@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -21,12 +22,13 @@ export const UpdateSelfEventRegistrationGuestResponseFile = async ({
   guestId,
   dataUrl,
   name,
-  clientApi,
+  clientApiParams,
 }: UpdateSelfEventRegistrationGuestResponseFileParams): Promise<
   ConnectedXMResponse<RegistrationQuestionResponse>
 > => {
   if (!guestId) throw new Error("Guest ID is required");
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<
     ConnectedXMResponse<RegistrationQuestionResponse>
   >(
@@ -42,13 +44,13 @@ export const UpdateSelfEventRegistrationGuestResponseFile = async ({
 };
 
 export const useUpdateSelfEventRegistrationGuestResponseFile = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventRegistrationGuestResponseFile>>,
       Omit<
         UpdateSelfEventRegistrationGuestResponseFileParams,
-        "queryClient" | "clientApi"
+        "queryClient" | "clientApiParams"
       >
     >,
     "mutationFn"

@@ -11,6 +11,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CONTENT_QUERY_KEY } from "./useGetContent";
 import { CONTENT_TYPE_QUERY_KEY } from "./useGetContentType";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const CONTENT_TYPE_CONTENTS_QUERY_KEY = (
   contentTypeId: string
@@ -42,9 +43,10 @@ export const GetContentTypeContents = async ({
   search,
   contentTypeId,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetContentTypeContentsParams): Promise<ConnectedXMResponse<Content[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/contentTypes/${contentTypeId}/contents`,
     {
@@ -69,10 +71,10 @@ export const GetContentTypeContents = async ({
 };
 
 export const useGetContentTypeContents = (
-  contentTypeId: string,
+  contentTypeId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetContentTypeContents>>

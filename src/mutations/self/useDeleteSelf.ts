@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -6,9 +7,10 @@ import useConnectedMutation, {
 export interface DeleteSelfParams extends MutationParams {}
 
 export const DeleteSelf = async ({
-  clientApi,
+  clientApiParams,
   queryClient,
 }: DeleteSelfParams) => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete(`/self`);
   // await Auth.signOut();
   if (queryClient && data.status === "ok") {
@@ -18,11 +20,11 @@ export const DeleteSelf = async ({
 };
 
 export const useDeleteSelf = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteSelf>>,
-      Omit<DeleteSelfParams, "queryClient" | "clientApi">
+      Omit<DeleteSelfParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

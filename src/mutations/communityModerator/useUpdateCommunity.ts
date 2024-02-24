@@ -9,6 +9,7 @@ import {
   MutationOptions,
 } from "../useConnectedMutation";
 import { Community, ConnectedXMResponse } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateCommunityParams extends MutationParams {
   communityId: string;
@@ -22,10 +23,11 @@ export const UpdateCommunity = async ({
   description,
   externalUrl,
   base64,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: UpdateCommunityParams): Promise<ConnectedXMResponse<Community>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
     `/communityModerator/${communityId}`,
     {
@@ -47,11 +49,11 @@ export const UpdateCommunity = async ({
 };
 
 export const useUpdateCommunity = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateCommunity>>,
-      Omit<UpdateCommunityParams, "queryClient" | "clientApi">
+      Omit<UpdateCommunityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

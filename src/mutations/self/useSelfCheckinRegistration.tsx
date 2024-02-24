@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -12,9 +13,10 @@ export interface SelfCheckinRegistrationParams extends MutationParams {
 export const SelfCheckinRegistration = async ({
   accountId,
   eventId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: SelfCheckinRegistrationParams) => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post(
     `/self/events/listings/${eventId}/registrations/${accountId}`
   );
@@ -31,11 +33,11 @@ export const SelfCheckinRegistration = async ({
 };
 
 export const useSelfCheckinRegistration = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfCheckinRegistration>>,
-      Omit<SelfCheckinRegistrationParams, "queryClient" | "clientApi">
+      Omit<SelfCheckinRegistrationParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

@@ -10,6 +10,7 @@ import {
   SET_EVENT_QUERY_DATA,
   SET_SELF_EVENT_LISTING_QUERY_DATA,
 } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateListing {
   eventType: keyof typeof EventType;
@@ -45,12 +46,13 @@ export const UpdateSelfEventListing = async ({
   eventId,
   event,
   base64,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: UpdateSelfEventListingParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}`,
     {
@@ -79,11 +81,11 @@ export const UpdateSelfEventListing = async ({
 };
 
 export const useUpdateSelfEventListing = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventListing>>,
-      Omit<UpdateSelfEventListingParams, "queryClient" | "clientApi">
+      Omit<UpdateSelfEventListingParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

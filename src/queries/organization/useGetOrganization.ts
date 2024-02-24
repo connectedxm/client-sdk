@@ -4,14 +4,16 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ORGANIZATION_QUERY_KEY = (): QueryKey => ["ORGANIZATION"];
 
 export interface GetOrganizationParams extends SingleQueryParams {}
 
 export const GetOrganization = async ({
-  clientApi,
+  clientApiParams,
 }: GetOrganizationParams): Promise<ConnectedXMResponse<Organization>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/organization`);
   return data;
 };

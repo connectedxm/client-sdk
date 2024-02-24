@@ -3,6 +3,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateSupportTicketParams extends MutationParams {
   type: "support" | "inquiry";
@@ -18,8 +19,9 @@ export const CreateSupportTicket = async ({
   request,
   eventId,
   productId,
-  clientApi,
+  clientApiParams,
 }: CreateSupportTicketParams): Promise<ConnectedXMResponse<SupportTicket>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<SupportTicket>>(
     "/supportTickets",
     {
@@ -35,11 +37,11 @@ export const CreateSupportTicket = async ({
 };
 
 export const useCreateSupportTicket = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSupportTicket>>,
-      Omit<CreateSupportTicketParams, "queryClient" | "clientApi">
+      Omit<CreateSupportTicketParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

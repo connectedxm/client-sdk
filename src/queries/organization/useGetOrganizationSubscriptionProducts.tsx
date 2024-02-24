@@ -5,6 +5,7 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ORGANIZATION_SUBSCRIPTIONS_QUERY_KEY = () => [
   ...ORGANIZATION_QUERY_KEY(),
@@ -15,10 +16,11 @@ export interface GetOrganizationSubscriptionProductsProps
   extends InfiniteQueryParams {}
 
 export const GetOrganizationSubscriptionProducts = async ({
-  clientApi,
+  clientApiParams,
 }: GetOrganizationSubscriptionProductsProps): Promise<
   ConnectedXMResponse<SubscriptionProduct[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get<
     ConnectedXMResponse<SubscriptionProduct[]>
   >(`/organization/subscriptions`);
@@ -29,7 +31,7 @@ export const GetOrganizationSubscriptionProducts = async ({
 export const useGetOrganizationSubscriptionProducts = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetOrganizationSubscriptionProducts>>

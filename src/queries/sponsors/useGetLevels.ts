@@ -9,6 +9,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const LEVELS_QUERY_KEY = (): QueryKey => ["LEVELS"];
 
@@ -35,9 +36,10 @@ export const GetLevels = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetLevelsProps): Promise<ConnectedXMResponse<SponsorshipLevel[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/levels`, {
     params: {
       page: pageParam || undefined,
@@ -62,7 +64,7 @@ export const GetLevels = async ({
 export const useGetLevels = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetLevels>>> = {}
 ) => {

@@ -7,6 +7,7 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SPONSORS_QUERY_KEY = (): QueryKey => ["SPONSORS"];
 
@@ -32,8 +33,9 @@ export const GetSponsors = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  clientApiParams,
 }: GetSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/sponsors`, {
     params: {
       page: pageParam || undefined,
@@ -48,7 +50,7 @@ export const GetSponsors = async ({
 export const useGetSponsors = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSponsors>>> = {}
 ) => {

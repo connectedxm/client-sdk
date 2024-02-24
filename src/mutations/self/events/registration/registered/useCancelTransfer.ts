@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse, Transfer } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -15,9 +16,10 @@ export const CancelTransfer = async ({
   transferId,
   eventId,
   registrationId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: CancelTransferParams): Promise<ConnectedXMResponse<Transfer>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Transfer>>(
     `/self/events/${eventId}/registration/${registrationId}/transfer/${transferId}`
   );
@@ -31,11 +33,11 @@ export const CancelTransfer = async ({
 };
 
 export const useCancelTransfer = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelTransfer>>,
-      Omit<CancelTransferParams, "queryClient" | "clientApi">
+      Omit<CancelTransferParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

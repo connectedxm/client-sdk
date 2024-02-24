@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -5,7 +6,6 @@ import {
 } from "../../useConnectedInfiniteQuery";
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "./useGetSelfSubscription";
 import { ConnectedXMResponse, Payment } from "@interfaces";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_SUBSCRIPTION_PAYMENTS_QUERY_KEY = (
   subscriptionId: string
@@ -21,10 +21,11 @@ export const GetSelfSubscriptionPayments = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  clientApiParams,
 }: GetSelfSubscriptionPaymentsProps): Promise<
   ConnectedXMResponse<Payment[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/self/subscriptions/${subscriptionId}/payments`,
     {
@@ -43,13 +44,12 @@ export const useGetSelfSubscriptionPayments = (
   subscriptionId: string,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfSubscriptionPayments>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfSubscriptionPayments>>
   >(
@@ -60,7 +60,6 @@ export const useGetSelfSubscriptionPayments = (
 
     {
       ...options,
-      enabled: !!token,
     }
   );
 };

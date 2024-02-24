@@ -8,6 +8,7 @@ import {
   UpdateResharesSingle,
 } from "./optimistic/UpdateReshares";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface ReshareActivityParams extends MutationParams {
   activityId: string;
@@ -16,7 +17,7 @@ export interface ReshareActivityParams extends MutationParams {
 export const ReshareActivity = async ({
   activityId,
   queryClient,
-  clientApi,
+  clientApiParams,
 }: ReshareActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
     UpdateResharesSingle(true, queryClient, ACTIVITY_QUERY_KEY(activityId));
@@ -28,6 +29,7 @@ export const ReshareActivity = async ({
     );
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
     `/self/activities/${activityId}/reshares`,
     {
@@ -38,11 +40,11 @@ export const ReshareActivity = async ({
 };
 
 export const useReshareActivity = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof ReshareActivity>>,
-      Omit<ReshareActivityParams, "queryClient" | "clientApi">
+      Omit<ReshareActivityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

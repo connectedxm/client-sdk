@@ -8,6 +8,7 @@ import {
 import type { ConnectedXMResponse, Session } from "@interfaces";
 import { EVENT_SESSIONS_QUERY_KEY } from "./useGetEventSessions";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_SESSION_QUERY_KEY = (
   eventId: string,
@@ -37,8 +38,9 @@ export interface GetEventSessionProps extends SingleQueryParams {
 export const GetEventSession = async ({
   eventId,
   sessionId,
-  clientApi,
+  clientApiParams,
 }: GetEventSessionProps): Promise<ConnectedXMResponse<Session>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/events/${eventId}/sessions/${sessionId}`
   );
@@ -46,9 +48,8 @@ export const GetEventSession = async ({
 };
 
 export const useGetEventSession = (
-  eventId: string,
-  sessionId: string,
-
+  eventId: string = "",
+  sessionId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetEventSession>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSession>>(

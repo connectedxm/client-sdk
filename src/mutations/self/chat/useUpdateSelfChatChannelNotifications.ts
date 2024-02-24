@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ChatChannelMember, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -17,12 +18,13 @@ export interface UpdateSelfChatChannelNotificationsParams
 export const UpdateSelfChatChannelNotifications = async ({
   channelId,
   notifications,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: UpdateSelfChatChannelNotificationsParams): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<ChatChannelMember>>(
     `/self/chat/channels/${channelId}/notifications`,
     {
@@ -41,13 +43,13 @@ export const UpdateSelfChatChannelNotifications = async ({
 };
 
 export const useUpdateSelfChatChannelNotifications = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>,
       Omit<
         UpdateSelfChatChannelNotificationsParams,
-        "queryClient" | "clientApi"
+        "queryClient" | "clientApiParams"
       >
     >,
     "mutationFn"

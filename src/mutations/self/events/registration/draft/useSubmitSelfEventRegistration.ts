@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 interface SubmitStripe {
   type: "stripe";
@@ -39,12 +40,13 @@ export const SubmitSelfEventRegistration = async ({
   eventId,
   registrationId,
   payment,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: SubmitSelfEventRegistrationParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/draft/submit`,
     payment
@@ -60,11 +62,11 @@ export const SubmitSelfEventRegistration = async ({
 };
 
 export const useSubmitSelfEventRegistration = (
-  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SubmitSelfEventRegistration>>,
-      Omit<SubmitSelfEventRegistrationParams, "queryClient" | "clientApi">
+      Omit<SubmitSelfEventRegistrationParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

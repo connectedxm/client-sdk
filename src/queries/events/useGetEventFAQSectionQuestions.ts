@@ -11,6 +11,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_FAQ_SECTION_QUESTION_QUERY_KEY } from "./useGetEventFAQSectionQuestion";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_FAQ_SECTION_QUESTIONS_QUERY_KEY = (
   eventId: string,
@@ -48,9 +49,10 @@ export const GetEventFaqs = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetEventFaqsProps): Promise<ConnectedXMResponse<Faq[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/events/${eventId}/faqs/${sectionId}/questions`,
     {
@@ -77,11 +79,11 @@ export const GetEventFaqs = async ({
 };
 
 export const useGetEventFaqs = (
-  eventId: string,
-  sectionId: string,
+  eventId: string = "",
+  sectionId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventFaqs>>> = {}
 ) => {

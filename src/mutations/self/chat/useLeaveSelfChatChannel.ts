@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
@@ -14,9 +15,10 @@ export interface LeaveSelfChatChannelParams extends MutationParams {
 
 export const LeaveSelfChatChannel = async ({
   channelId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: LeaveSelfChatChannelParams): Promise<ConnectedXMResponse<null>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/chat/channels/${channelId}/leave`
   );
@@ -32,11 +34,11 @@ export const LeaveSelfChatChannel = async ({
 };
 
 export const useLeaveSelfChatChannel = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof LeaveSelfChatChannel>>,
-      Omit<LeaveSelfChatChannelParams, "queryClient" | "clientApi">
+      Omit<LeaveSelfChatChannelParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

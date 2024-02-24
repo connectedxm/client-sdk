@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { SELF_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfParams extends MutationParams {
   username?: string;
@@ -32,10 +33,11 @@ export interface UpdateSelfParams extends MutationParams {
 }
 
 export const UpdateSelf = async ({
-  clientApi,
+  clientApiParams,
   queryClient,
   ...params
 }: UpdateSelfParams): Promise<ConnectedXMResponse<Self>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
     `/self`,
     params
@@ -49,11 +51,11 @@ export const UpdateSelf = async ({
 };
 
 export const useUpdateSelf = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelf>>,
-      Omit<UpdateSelfParams, "queryClient" | "clientApi">
+      Omit<UpdateSelfParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

@@ -5,8 +5,8 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import { useConnectedXM } from "@src/hooks";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -20,10 +20,11 @@ export const GetSelfCommunityMemberships = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  clientApiParams,
 }: GetSelfCommunityMembershipsProps): Promise<
   ConnectedXMResponse<CommunityMembership[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/communities`, {
     params: {
       page: pageParam || undefined,
@@ -38,14 +39,12 @@ export const GetSelfCommunityMemberships = async ({
 export const useGetSelfCommunityMemberships = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSelfCommunityMemberships>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfCommunityMemberships>>
   >(
@@ -54,7 +53,6 @@ export const useGetSelfCommunityMemberships = (
     params,
     {
       ...options,
-      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

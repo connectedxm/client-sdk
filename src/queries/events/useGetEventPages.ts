@@ -11,6 +11,7 @@ import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_PAGE_QUERY_KEY } from "./useGetEventPage";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_PAGES_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
@@ -43,9 +44,10 @@ export const GetEventPages = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetEventPagesProps): Promise<ConnectedXMResponse<BaseEventPage[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/pages`, {
     params: {
       page: pageParam || undefined,
@@ -68,10 +70,10 @@ export const GetEventPages = async ({
 };
 
 export const useGetEventPages = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventPages>>> = {}
 ) => {

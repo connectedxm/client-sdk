@@ -8,6 +8,7 @@ import {
   UpdateLikesSingle,
 } from "./optimistic/UpdateLikes";
 import { ACTIVITIES_QUERY_KEY, ACTIVITY_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface LikeActivityParams extends MutationParams {
   activityId: string;
@@ -15,7 +16,7 @@ export interface LikeActivityParams extends MutationParams {
 
 export const LikeActivity = async ({
   activityId,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: LikeActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
@@ -23,6 +24,7 @@ export const LikeActivity = async ({
     UpdateLikesInfinite(true, queryClient, ACTIVITIES_QUERY_KEY(), activityId);
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
     `/self/activities/${activityId}/likes`
   );
@@ -31,11 +33,11 @@ export const LikeActivity = async ({
 };
 
 export const useLikeActivity = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof LikeActivity>>,
-      Omit<LikeActivityParams, "queryClient" | "clientApi">
+      Omit<LikeActivityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

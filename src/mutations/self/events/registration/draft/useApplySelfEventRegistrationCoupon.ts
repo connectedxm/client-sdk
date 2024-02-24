@@ -1,3 +1,4 @@
+import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -22,12 +23,13 @@ export const SelectSelfEventRegistrationCoupon = async ({
   eventId,
   registrationId,
   couponId,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: SelectSelfEventRegistrationCouponParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/draft/coupon`,
     {
@@ -62,11 +64,14 @@ export const SelectSelfEventRegistrationCoupon = async ({
 };
 
 export const useSelectSelfEventRegistrationCoupon = (
-  params: Omit<MutationParams, "clientApi" | "queryClient"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>,
-      Omit<SelectSelfEventRegistrationCouponParams, "queryClient" | "clientApi">
+      Omit<
+        SelectSelfEventRegistrationCouponParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

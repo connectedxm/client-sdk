@@ -1,11 +1,11 @@
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useConnectedXM } from "../hooks";
-import { useClientAPI } from "@src/hooks/useClientAPI";
-import { AxiosError, AxiosInstance } from "axios";
+import { AxiosError } from "axios";
 import { ConnectedXMResponse } from "..";
+import { ClientApiParams } from "@src/ClientAPI";
 
 export interface SingleQueryParams {
-  clientApi: AxiosInstance;
+  clientApiParams: ClientApiParams;
 }
 
 export interface SingleQueryOptions<TQueryData = unknown>
@@ -28,9 +28,16 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
   queryFn: (params: SingleQueryParams) => TQueryData,
   options?: SingleQueryOptions<TQueryData>
 ) => {
-  const { locale, onModuleForbidden, onNotAuthorized, onNotFound } =
-    useConnectedXM();
-  const clientApi = useClientAPI(locale);
+  const {
+    locale,
+    onModuleForbidden,
+    onNotAuthorized,
+    onNotFound,
+    apiUrl,
+    organizationId,
+    getToken,
+    getExecuteAs,
+  } = useConnectedXM();
 
   return useQuery<
     TQueryData,
@@ -42,19 +49,19 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound) onNotFound(error);
+        if (onNotFound) onNotFound(error, queryKeys);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden) onModuleForbidden(error);
+        if (onModuleForbidden) onModuleForbidden(error, queryKeys);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized) onNotAuthorized(error);
+        if (onNotAuthorized) onNotAuthorized(error, queryKeys);
         return false;
       }
 
@@ -66,7 +73,13 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     queryKey: [...queryKeys, ...GetBaseSingleQueryKeys(locale)],
     queryFn: () =>
       queryFn({
-        clientApi,
+        clientApiParams: {
+          apiUrl,
+          organizationId,
+          getToken,
+          getExecuteAs,
+          locale,
+        },
       }),
   });
 };

@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface RemoveSelfEventListingSessionParams extends MutationParams {
   eventId: string;
@@ -13,7 +14,7 @@ export interface RemoveSelfEventListingSessionParams extends MutationParams {
 export const RemoveSelfEventListingSession = async ({
   eventId,
   sessionId,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: RemoveSelfEventListingSessionParams): Promise<
@@ -50,6 +51,7 @@ export const RemoveSelfEventListingSession = async ({
     );
   }
 
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sessions/${sessionId}`
   );
@@ -58,11 +60,14 @@ export const RemoveSelfEventListingSession = async ({
 };
 
 export const useRemoveSelfEventListingSession = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfEventListingSession>>,
-      Omit<RemoveSelfEventListingSessionParams, "queryClient" | "clientApi">
+      Omit<
+        RemoveSelfEventListingSessionParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

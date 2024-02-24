@@ -8,11 +8,11 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetEventSessions } from "./useGetEventSessions";
 import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
@@ -45,9 +45,10 @@ export const GetEventRegistrants = async ({
   orderBy,
   search,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetEventRegistrantsProps): Promise<ConnectedXMResponse<Account[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/registrants`, {
     params: {
       page: pageParam || undefined,
@@ -70,17 +71,15 @@ export const GetEventRegistrants = async ({
 };
 
 export const useGetEventRegistrants = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventRegistrants>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventRegistrants>>
   >(
@@ -90,7 +89,7 @@ export const useGetEventRegistrants = (
     params,
     {
       ...options,
-      enabled: !!token && !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

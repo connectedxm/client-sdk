@@ -7,7 +7,7 @@ import {
 
 import type { ConnectedXMResponse, Self } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_QUERY_KEY = (authenticated?: boolean): QueryKey => {
   const keys = ["SELF"];
@@ -33,9 +33,12 @@ export interface GetSelfProps extends SingleQueryParams {
 
 export const GetSelf = async ({
   authenticated,
-  clientApi,
+  clientApiParams,
 }: GetSelfProps): Promise<ConnectedXMResponse<Self>> => {
-  if (authenticated) clientApi.defaults.headers.delete["executeAs"];
+  const clientApi = await GetClientAPI({
+    ...clientApiParams,
+    getExecuteAs: authenticated ? undefined : clientApiParams.getExecuteAs,
+  });
 
   const { data } = await clientApi.get(`/self`);
 
@@ -46,13 +49,11 @@ export const useGetSelf = (
   authenticated?: boolean,
   options: SingleQueryOptions<ReturnType<typeof GetSelf>> = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelf>>(
     SELF_QUERY_KEY(authenticated),
     (params: SingleQueryParams) => GetSelf({ authenticated, ...params }),
     {
-      enabled: !!token && (options?.enabled ?? true),
+      ...options,
     }
   );
 };

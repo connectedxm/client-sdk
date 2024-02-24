@@ -8,6 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_TICKETS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
@@ -39,8 +40,9 @@ export const GetEventTickets = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  clientApiParams,
 }: GetEventTicketsProps): Promise<ConnectedXMResponse<Ticket[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/tickets`, {
     params: {
       page: pageParam || undefined,
@@ -53,10 +55,10 @@ export const GetEventTickets = async ({
 };
 
 export const useGetEventTickets = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventTickets>>

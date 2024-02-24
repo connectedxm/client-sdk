@@ -9,6 +9,7 @@ import {
 } from "../useConnectedMutation";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { COMMUNITY_ANNOUNCEMENTS_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateCommunityAnnouncementParams extends MutationParams {
   communityId: string;
@@ -24,11 +25,12 @@ export const CreateCommunityAnnouncement = async ({
   html,
   email,
   push,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: CreateCommunityAnnouncementParams): Promise<
   ConnectedXMResponse<Announcement>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Announcement>>(
     `/communityModerator/${communityId}/announcements`,
     {
@@ -51,11 +53,11 @@ export const CreateCommunityAnnouncement = async ({
 };
 
 export const useCreateCommunityAnnouncement = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateCommunityAnnouncement>>,
-      Omit<CreateCommunityAnnouncementParams, "queryClient" | "clientApi">
+      Omit<CreateCommunityAnnouncementParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

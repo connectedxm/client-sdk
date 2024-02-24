@@ -14,6 +14,7 @@ import {
   EVENT_QUERY_KEY,
   SELF_EVENT_LISTINGS_QUERY_KEY,
 } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateEventListing {
   name: string;
@@ -50,12 +51,13 @@ export const CreateSelfEventListing = async ({
   sponsorIds,
   speakers,
   sessions,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: CreateSelfEventListingParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   let data;
   if (communityId) {
     data = (
@@ -105,11 +107,11 @@ export const CreateSelfEventListing = async ({
 };
 
 export const useCreateSelfEventListing = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSelfEventListing>>,
-      Omit<CreateSelfEventListingParams, "queryClient" | "clientApi">
+      Omit<CreateSelfEventListingParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

@@ -11,6 +11,7 @@ import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const COMMUNITY_EVENTS_QUERY_KEY = (
   communityId: string,
@@ -49,9 +50,10 @@ export const GetCommunityEvents = async ({
   communityId,
   past,
   queryClient,
-  clientApi,
+  clientApiParams,
   locale,
 }: GetCommunityEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/communities/${communityId}/events`, {
     params: {
       page: pageParam || undefined,
@@ -74,11 +76,11 @@ export const GetCommunityEvents = async ({
 };
 
 export const useGetCommunityEvents = (
-  communityId: string,
+  communityId: string = "",
   past: boolean = false,
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityEvents>>

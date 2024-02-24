@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface EventListingSpeaker {
   firstName: string | null;
@@ -21,12 +22,13 @@ export interface AddSelfEventListingSpeakerParams extends MutationParams {
 export const AddSelfEventListingSpeaker = async ({
   eventId,
   speaker,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: AddSelfEventListingSpeakerParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/speakers`,
     {
@@ -75,11 +77,11 @@ export const AddSelfEventListingSpeaker = async ({
 };
 
 export const useAddSelfEventListingSpeaker = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfEventListingSpeaker>>,
-      Omit<AddSelfEventListingSpeakerParams, "queryClient" | "clientApi">
+      Omit<AddSelfEventListingSpeakerParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

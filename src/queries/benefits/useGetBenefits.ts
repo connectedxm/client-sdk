@@ -1,4 +1,3 @@
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { Benefit } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
@@ -9,6 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const BENEFITS_QUERY_KEY = (): QueryKey => ["BENEFITS"];
 
@@ -34,8 +34,9 @@ export const GetBenefits = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  clientApiParams,
 }: GetBenefitsProps): Promise<ConnectedXMResponse<Benefit[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/benefits`, {
     params: {
       page: pageParam || undefined,
@@ -50,18 +51,16 @@ export const GetBenefits = async ({
 export const useGetBenefits = (
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetBenefits>>> = {}
 ) => {
-  const { token } = useConnectedXM();
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetBenefits>>>(
     BENEFITS_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetBenefits(params),
     params,
     {
       ...options,
-      enabled: !!token && (options?.enabled ?? true),
     }
   );
 };

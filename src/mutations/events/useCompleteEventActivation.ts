@@ -3,6 +3,7 @@ import useConnectedMutation, {
   MutationParams,
   MutationOptions,
 } from "../useConnectedMutation";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CompleteEventActivationParams extends MutationParams {
   eventId: string;
@@ -14,11 +15,12 @@ export const CompleteEventActivation = async ({
   eventId,
   activationId,
   code,
-  clientApi,
+  clientApiParams,
   queryClient,
 }: CompleteEventActivationParams): Promise<
   ConnectedXMResponse<EventActivation>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<EventActivation>>(
     `/events/${eventId}/activations/${activationId}`,
     {
@@ -43,11 +45,11 @@ export const CompleteEventActivation = async ({
 };
 
 export const useCompleteEventActivation = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CompleteEventActivation>>,
-      Omit<CompleteEventActivationParams, "queryClient" | "clientApi">
+      Omit<CompleteEventActivationParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

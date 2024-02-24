@@ -6,6 +6,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_QUESTION_VALUES_QUERY_KEY = (
   eventId: string,
@@ -24,10 +25,11 @@ export const GetEventQuestionSearchValues = async ({
   pageSize,
   orderBy,
   search,
-  clientApi,
+  clientApiParams,
 }: GetEventQuestionSearchValuesProps): Promise<
   ConnectedXMResponse<RegistrationQuestionSearchValue[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/events/${eventId}/questions/${questionId}/values`,
     {
@@ -43,11 +45,11 @@ export const GetEventQuestionSearchValues = async ({
 };
 
 export const useGetEventQuestionSearchValues = (
-  eventId: string,
-  questionId: string,
+  eventId: string = "",
+  questionId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetEventQuestionSearchValues>>

@@ -1,4 +1,3 @@
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import type { ConnectedXMResponse, Transfer } from "@interfaces";
 import {
   SingleQueryOptions,
@@ -7,6 +6,7 @@ import {
 } from "../useConnectedSingleQuery";
 import { SELF_TRANSFERS_QUERY_KEY } from "./useGetSelfTransfers";
 import { QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_PENDING_TRANSFER_QUERY_KEY = (
   transferId: string
@@ -18,8 +18,9 @@ export interface GetSelfTransferProps extends SingleQueryParams {
 
 export const GetSelfTransfer = async ({
   transferId,
-  clientApi,
+  clientApiParams,
 }: GetSelfTransferProps): Promise<ConnectedXMResponse<Transfer>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/transfers/${transferId}`);
   return data;
 };
@@ -28,14 +29,12 @@ export const useGetSelfTransfer = (
   transferId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfTransfer>> = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelfTransfer>>(
     SELF_PENDING_TRANSFER_QUERY_KEY(transferId),
     (params) => GetSelfTransfer({ ...params, transferId }),
     {
       ...options,
-      enabled: !!token && !!transferId && (options?.enabled ?? true),
+      enabled: !!transferId && (options?.enabled ?? true),
     }
   );
 };

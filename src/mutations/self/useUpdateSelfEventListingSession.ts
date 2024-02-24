@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfEventListingSessionParams extends MutationParams {
   eventId: string;
@@ -15,12 +16,13 @@ export const UpdateSelfEventListingSession = async ({
   eventId,
   session,
   sessionId,
-  clientApi,
+  clientApiParams,
   queryClient,
   locale = "en",
 }: UpdateSelfEventListingSessionParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sessions/${sessionId}`,
     {
@@ -64,11 +66,14 @@ export const UpdateSelfEventListingSession = async ({
 };
 
 export const useUpdateSelfEventListingSession = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventListingSession>>,
-      Omit<UpdateSelfEventListingSessionParams, "queryClient" | "clientApi">
+      Omit<
+        UpdateSelfEventListingSessionParams,
+        "queryClient" | "clientApiParams"
+      >
     >,
     "mutationFn"
   > = {}

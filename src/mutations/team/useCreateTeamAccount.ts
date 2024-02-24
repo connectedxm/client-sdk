@@ -3,6 +3,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateTeamAccountParams extends MutationParams {
   name: string;
@@ -12,8 +13,9 @@ export interface CreateTeamAccountParams extends MutationParams {
 export const CreateTeamAccount = async ({
   name,
   email,
-  clientApi,
+  clientApiParams,
 }: CreateTeamAccountParams): Promise<ConnectedXMResponse<Account>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/self/team`,
     {
@@ -26,11 +28,11 @@ export const CreateTeamAccount = async ({
 };
 
 export const useCreateTeamAccount = (
-  params: Omit<MutationParams, "queryClient" | "clientApi"> = {},
+  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateTeamAccount>>,
-      Omit<CreateTeamAccountParams, "queryClient" | "clientApi">
+      Omit<CreateTeamAccountParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}

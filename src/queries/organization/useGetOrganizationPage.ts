@@ -8,6 +8,7 @@ import {
 import type { ConnectedXMResponse, Page } from "@interfaces";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ORGANIZATION_PAGE_QUERY_KEY = (type: PageType): QueryKey => [
   ...ORGANIZATION_QUERY_KEY(),
@@ -38,8 +39,9 @@ export interface GetOrganizationPageProps extends SingleQueryParams {
 
 export const GetOrganizationPage = async ({
   type,
-  clientApi,
+  clientApiParams,
 }: GetOrganizationPageProps): Promise<ConnectedXMResponse<Page | null>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/organization/pages/${type}`);
   return data;
 };

@@ -6,10 +6,10 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { SingleActivity } from "@interfaces";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const ACTIVITY_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITIES_QUERY_KEY(),
@@ -37,25 +37,24 @@ export interface GetActivityProps extends SingleQueryParams {
 
 export const GetActivity = async ({
   activityId,
-  clientApi,
+  clientApiParams,
 }: GetActivityProps): Promise<ConnectedXMResponse<SingleActivity>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/activities/${activityId}`);
   return data;
 };
 
 export const useGetActivity = (
-  activityId: string,
+  activityId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetActivity>> = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetActivity>>(
     ACTIVITY_QUERY_KEY(activityId),
     (params: SingleQueryParams) =>
       GetActivity({ activityId: activityId || "unknown", ...params }),
     {
       ...options,
-      enabled: !!token && !!activityId && (options?.enabled ?? true),
+      enabled: !!activityId && (options?.enabled ?? true),
     }
   );
 };

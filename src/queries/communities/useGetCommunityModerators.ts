@@ -7,9 +7,9 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { CommunityMembership } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { useConnectedXM } from "@src/hooks/useConnectedXM";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
+import { GetClientAPI } from "@src/ClientAPI";
 
 export const COMMUNITY_MODERATORS_QUERY_KEY = (
   communityId: string
@@ -40,10 +40,11 @@ export const GetCommunityModerators = async ({
   orderBy,
   search,
   communityId,
-  clientApi,
+  clientApiParams,
 }: GetCommunityModeratorsProps): Promise<
   ConnectedXMResponse<CommunityMembership[]>
 > => {
+  const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/communities/${communityId}/moderators`,
     {
@@ -59,17 +60,15 @@ export const GetCommunityModerators = async ({
 };
 
 export const useGetCommunityModerators = (
-  communityId: string,
+  communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApi"
+    "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetCommunityModerators>>
   > = {}
 ) => {
-  const { token } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetCommunityModerators>>
   >(
@@ -79,7 +78,7 @@ export const useGetCommunityModerators = (
     params,
     {
       ...options,
-      enabled: !!token && !!communityId && (options?.enabled ?? true),
+      enabled: !!communityId && (options?.enabled ?? true),
     }
   );
 };
