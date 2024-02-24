@@ -55,10 +55,9 @@ export const GetEventFAQSectionQuestion = async ({
 };
 
 export const useGetEventFAQSectionQuestion = (
-  eventId: string,
-  sectionId: string,
-  questionId: string,
-
+  eventId: string = "",
+  sectionId: string = "",
+  questionId: string = "",
   options: SingleQueryOptions<
     ReturnType<typeof GetEventFAQSectionQuestion>
   > = {}

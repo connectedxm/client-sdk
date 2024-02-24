@@ -76,7 +76,7 @@ export const GetCommunityEvents = async ({
 };
 
 export const useGetCommunityEvents = (
-  communityId: string,
+  communityId: string = "",
   past: boolean = false,
   params: Omit<
     InfiniteQueryParams,

@@ -41,7 +41,7 @@ export const GetSeries = async ({
 };
 
 export const useGetSeries = (
-  seriesId: string,
+  seriesId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSeries>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSeries>>(

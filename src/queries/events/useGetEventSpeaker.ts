@@ -48,9 +48,8 @@ export const GetEventSpeaker = async ({
 };
 
 export const useGetEventSpeaker = (
-  eventId: string,
-  speakerId: string,
-
+  eventId: string = "",
+  speakerId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetEventSpeaker>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSpeaker>>(

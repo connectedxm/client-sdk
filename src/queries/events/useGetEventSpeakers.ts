@@ -69,7 +69,7 @@ export const GetEventSpeakers = async ({
 };
 
 export const useGetEventSpeakers = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

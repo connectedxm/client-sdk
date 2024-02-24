@@ -47,7 +47,7 @@ export const GetCommunity = async ({
 };
 
 export const useGetCommunity = (
-  communityId: string,
+  communityId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetCommunity>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetCommunity>>(

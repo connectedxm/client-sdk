@@ -71,7 +71,7 @@ export const GetCommunityActivities = async ({
 };
 
 export const useGetCommunityActivities = (
-  communityId: string,
+  communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

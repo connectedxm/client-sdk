@@ -39,7 +39,7 @@ export const GetLevel = async ({
 };
 
 export const useGetLevel = (
-  levelId: string,
+  levelId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetLevel>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetLevel>>(

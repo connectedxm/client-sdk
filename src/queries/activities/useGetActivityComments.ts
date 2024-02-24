@@ -68,7 +68,7 @@ export const GetActivityComments = async ({
 };
 
 export const useGetActivityComments = (
-  activityId: string,
+  activityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

@@ -60,7 +60,7 @@ export const GetCommunityAnnouncements = async ({
 };
 
 export const useGetCommunityAnnouncements = (
-  communityId: string,
+  communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

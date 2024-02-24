@@ -44,7 +44,7 @@ export const GetContentType = async ({
 };
 
 export const useGetContentType = (
-  contentTypeId: string,
+  contentTypeId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetContentType>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetContentType>>(

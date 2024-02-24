@@ -48,9 +48,8 @@ export const GetEventSession = async ({
 };
 
 export const useGetEventSession = (
-  eventId: string,
-  sessionId: string,
-
+  eventId: string = "",
+  sessionId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetEventSession>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSession>>(

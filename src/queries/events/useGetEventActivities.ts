@@ -69,7 +69,7 @@ export const GetEventActivities = async ({
 };
 
 export const useGetEventActivities = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

@@ -47,8 +47,8 @@ export const GetEventFAQSection = async ({
 };
 
 export const useGetEventFAQSection = (
-  eventId: string,
-  sectionId: string,
+  eventId: string = "",
+  sectionId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetEventFAQSection>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventFAQSection>>(

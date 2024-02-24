@@ -69,7 +69,7 @@ export const GetEventSessions = async ({
 };
 
 export const useGetEventSessions = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

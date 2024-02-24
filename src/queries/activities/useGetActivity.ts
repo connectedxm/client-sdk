@@ -45,7 +45,7 @@ export const GetActivity = async ({
 };
 
 export const useGetActivity = (
-  activityId: string,
+  activityId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetActivity>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetActivity>>(

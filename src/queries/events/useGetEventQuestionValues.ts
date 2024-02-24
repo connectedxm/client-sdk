@@ -45,8 +45,8 @@ export const GetEventQuestionSearchValues = async ({
 };
 
 export const useGetEventQuestionSearchValues = (
-  eventId: string,
-  questionId: string,
+  eventId: string = "",
+  questionId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

@@ -69,7 +69,7 @@ export const GetContentActivities = async ({
 };
 
 export const useGetContentActivities = (
-  contentId: string,
+  contentId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

@@ -44,7 +44,7 @@ export const GetAccountByShareCode = async ({
 };
 
 export const useGetAccountByShareCode = (
-  shareCode: string,
+  shareCode: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetAccountByShareCode>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetAccountByShareCode>>(

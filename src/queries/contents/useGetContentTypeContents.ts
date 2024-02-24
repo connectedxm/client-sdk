@@ -71,7 +71,7 @@ export const GetContentTypeContents = async ({
 };
 
 export const useGetContentTypeContents = (
-  contentTypeId: string,
+  contentTypeId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

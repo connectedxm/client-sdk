@@ -70,7 +70,7 @@ export const GetEventSponsors = async ({
 };
 
 export const useGetEventSponsors = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

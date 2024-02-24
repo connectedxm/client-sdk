@@ -58,7 +58,7 @@ export const GetCommunityMembers = async ({
 };
 
 export const useGetCommunityMembers = (
-  communityId: string,
+  communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

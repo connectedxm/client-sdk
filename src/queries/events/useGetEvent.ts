@@ -42,7 +42,7 @@ export const GetEvent = async ({
 };
 
 export const useGetEvent = (
-  eventId: string,
+  eventId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetEvent>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEvent>>(

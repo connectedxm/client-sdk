@@ -69,7 +69,7 @@ export const GetAccountCommunities = async ({
 };
 
 export const useGetAccountCommunities = (
-  accountId: string,
+  accountId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

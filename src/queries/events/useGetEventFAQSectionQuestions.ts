@@ -79,8 +79,8 @@ export const GetEventFaqs = async ({
 };
 
 export const useGetEventFaqs = (
-  eventId: string,
-  sectionId: string,
+  eventId: string = "",
+  sectionId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

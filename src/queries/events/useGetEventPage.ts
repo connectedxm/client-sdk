@@ -47,7 +47,7 @@ export const GetEventPage = async ({
 };
 
 export const useGetEventPage = (
-  eventId: string,
+  eventId: string = "",
   pageId: string,
   options: SingleQueryOptions<ReturnType<typeof GetEventPage>> = {}
 ) => {

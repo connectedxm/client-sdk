@@ -69,7 +69,7 @@ export const GetCommunitySponsors = async ({
 };
 
 export const useGetCommunitySponsors = (
-  communityId: string,
+  communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

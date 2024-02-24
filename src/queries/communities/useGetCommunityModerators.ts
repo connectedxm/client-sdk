@@ -60,7 +60,7 @@ export const GetCommunityModerators = async ({
 };
 
 export const useGetCommunityModerators = (
-  communityId: string,
+  communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

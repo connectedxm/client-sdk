@@ -55,7 +55,7 @@ export const GetEventTickets = async ({
 };
 
 export const useGetEventTickets = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

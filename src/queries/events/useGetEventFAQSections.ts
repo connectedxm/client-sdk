@@ -70,7 +70,7 @@ export const GetEventFaqSections = async ({
 };
 
 export const useGetEventFaqSections = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

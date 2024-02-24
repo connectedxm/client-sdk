@@ -42,8 +42,7 @@ export const GetSponsor = async ({
 };
 
 export const useGetSponsor = (
-  accountId: string,
-
+  accountId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSponsor>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSponsor>>(

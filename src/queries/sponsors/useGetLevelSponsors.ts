@@ -69,7 +69,7 @@ export const GetLevelSponsors = async ({
 };
 
 export const useGetLevelSponsors = (
-  levelId: string,
+  levelId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

@@ -68,7 +68,7 @@ export const GetAccountFollowings = async ({
 };
 
 export const useGetAccountFollowings = (
-  accountId: string,
+  accountId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

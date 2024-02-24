@@ -71,7 +71,7 @@ export const GetEventRegistrants = async ({
 };
 
 export const useGetEventRegistrants = (
-  eventId: string,
+  eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
