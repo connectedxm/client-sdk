@@ -44,7 +44,7 @@ export const GetAccount = async ({
 };
 
 export const useGetAccount = (
-  accountId: string,
+  accountId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetAccount>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetAccount>>(
