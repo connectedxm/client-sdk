@@ -37,7 +37,8 @@ export const useGetSelfAnnouncement = (
     (params) => GetSelfAnnouncement({ announcementId, ...params }),
     {
       ...options,
-      enabled: !!announcementId && (options?.enabled ?? true),
+      enabled:
+        !!authenticated && !!announcementId && (options?.enabled ?? true),
     }
   );
 };

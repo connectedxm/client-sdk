@@ -68,7 +68,7 @@ export const useGetSelfActivities = (
     params,
     {
       ...options,
-      enabled: options.enabled ?? true,
+      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };
