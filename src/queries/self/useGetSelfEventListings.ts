@@ -9,6 +9,7 @@ import { SELF_QUERY_KEY } from "./useGetSelf";
 import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_LISTINGS_QUERY_KEY = (past: boolean): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -63,6 +64,8 @@ export const useGetSelfEventListings = (
     Awaited<ReturnType<typeof GetSelfEventListings>>
   > = {}
 ) => {
+  const { authenticated } = useConnectedXM();
+
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventListings>>
   >(
@@ -71,6 +74,7 @@ export const useGetSelfEventListings = (
     params,
     {
       ...options,
+      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };
