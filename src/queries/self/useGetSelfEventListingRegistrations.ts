@@ -6,6 +6,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
@@ -60,6 +61,8 @@ export const useGetSelfEventListingsRegistrations = (
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   > = {}
 ) => {
+  const { authenticated } = useConnectedXM();
+
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   >(
@@ -69,7 +72,7 @@ export const useGetSelfEventListingsRegistrations = (
     params,
     {
       ...options,
-      enabled: !!eventId && (options?.enabled ?? true),
+      enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );
 };

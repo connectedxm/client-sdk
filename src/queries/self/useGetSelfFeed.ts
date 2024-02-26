@@ -9,6 +9,7 @@ import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_FEED_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -55,12 +56,15 @@ export const useGetSelfFeed = (
   > = {},
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetSelfFeed>>> = {}
 ) => {
+  const { authenticated } = useConnectedXM();
+
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfFeed>>>(
     SELF_FEED_QUERY_KEY(),
     (params: InfiniteQueryParams) => GetSelfFeed(params),
     params,
     {
       ...options,
+      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };
