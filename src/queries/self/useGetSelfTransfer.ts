@@ -36,7 +36,7 @@ export const useGetSelfTransfer = (
     (params) => GetSelfTransfer({ ...params, transferId }),
     {
       ...options,
-      enabled: !!transferId && authenticated && (options?.enabled ?? true),
+      enabled: !!authenticated && !!transferId && (options?.enabled ?? true),
     }
   );
 };

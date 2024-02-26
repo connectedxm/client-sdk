@@ -82,7 +82,7 @@ export const useGetSelfRecommendations = (
     params,
     {
       ...options,
-      enabled: authenticated && (options.enabled ?? true),
+      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };

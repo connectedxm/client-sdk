@@ -53,7 +53,7 @@ export const useGetSelfPushDevice = (
     (params) => GetSelfPushDevice({ pushDeviceId, ...params }),
     {
       ...options,
-      enabled: !!pushDeviceId && authenticated && (options?.enabled ?? true),
+      enabled: !!authenticated && !!pushDeviceId && (options?.enabled ?? true),
     }
   );
 };
