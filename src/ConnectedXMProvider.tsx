@@ -14,6 +14,7 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com"
     | "http://localhost:4001";
+  authenticated: boolean;
   getToken: () => Promise<string | undefined> | string | undefined;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
   locale: string;
@@ -45,6 +46,7 @@ export interface ConnectedXMProviderProps
 
 export const ConnectedXMProvider = ({
   queryClient,
+  authenticated = true,
   children,
   ...state
 }: ConnectedXMProviderProps) => {
@@ -56,7 +58,12 @@ export const ConnectedXMProvider = ({
 
   const render = () => {
     return (
-      <ConnectedXMClientContext.Provider value={state}>
+      <ConnectedXMClientContext.Provider
+        value={{
+          ...state,
+          authenticated,
+        }}
+      >
         {children}
       </ConnectedXMClientContext.Provider>
     );
