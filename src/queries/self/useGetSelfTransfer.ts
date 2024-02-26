@@ -7,6 +7,7 @@ import {
 import { SELF_TRANSFERS_QUERY_KEY } from "./useGetSelfTransfers";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_PENDING_TRANSFER_QUERY_KEY = (
   transferId: string
@@ -29,12 +30,13 @@ export const useGetSelfTransfer = (
   transferId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfTransfer>> = {}
 ) => {
+  const { authenticated } = useConnectedXM();
   return useConnectedSingleQuery<ReturnType<typeof GetSelfTransfer>>(
     SELF_PENDING_TRANSFER_QUERY_KEY(transferId),
     (params) => GetSelfTransfer({ ...params, transferId }),
     {
       ...options,
-      enabled: !!transferId && (options?.enabled ?? true),
+      enabled: !!authenticated && !!transferId && (options?.enabled ?? true),
     }
   );
 };

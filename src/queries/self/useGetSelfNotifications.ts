@@ -7,6 +7,7 @@ import {
 import { SELF_QUERY_KEY } from "./useGetSelf";
 import { ConnectedXMResponse, Notification } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_NOTIFICATIONS_QUERY_KEY = (filters: string): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -49,6 +50,7 @@ export const useGetSelfNotifications = (
     Awaited<ReturnType<typeof GetSelfNotifications>>
   > = {}
 ) => {
+  const { authenticated } = useConnectedXM();
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfNotifications>>
   >(
@@ -59,6 +61,7 @@ export const useGetSelfNotifications = (
     {
       staleTime: 0,
       ...options,
+      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };
