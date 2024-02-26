@@ -1444,6 +1444,8 @@ export interface BaseVideo {
   thumbnailUrl: string;
   previewUrl: string;
   readyToStream: string;
+  hlsUrl: string;
+  dashUrl: string;
 }
 
 export enum SubscriptionStatus {
