@@ -9,6 +9,7 @@ import { SELF_PUSH_DEVICE_QUERY_KEY } from "./useGetSelfPushDevice";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_PUSH_DEVICES_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -57,6 +58,7 @@ export const useGetSelfPushDevices = (
     Awaited<ReturnType<typeof GetSelfPushDevices>>
   > = {}
 ) => {
+  const { authenticated } = useConnectedXM();
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfPushDevices>>
   >(
@@ -65,6 +67,7 @@ export const useGetSelfPushDevices = (
     params,
     {
       ...options,
+      enabled: authenticated && (options.enabled ?? true),
     }
   );
 };
