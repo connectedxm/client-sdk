@@ -78,7 +78,7 @@ export const useGetSelfChatChannelMembers = (
     params,
     {
       ...options,
-      enabled: !!channelId && authenticated && (options?.enabled ?? true),
+      enabled: !!authenticated && !!channelId && (options?.enabled ?? true),
     }
   );
 };

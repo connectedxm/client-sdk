@@ -62,7 +62,7 @@ export const useGetSelfChatChannel = (
     {
       staleTime: Infinity,
       ...options,
-      enabled: !!channelId && authenticated && (options?.enabled ?? true),
+      enabled: !!authenticated && !!channelId && (options?.enabled ?? true),
     }
   );
 };

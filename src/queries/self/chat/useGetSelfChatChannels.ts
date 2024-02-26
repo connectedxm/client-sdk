@@ -88,7 +88,7 @@ export const useGetSelfChatChannels = (
     params,
     {
       ...options,
-      enabled: authenticated && (options.enabled ?? true),
+      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };
