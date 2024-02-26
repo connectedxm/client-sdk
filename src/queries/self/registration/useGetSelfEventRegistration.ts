@@ -7,6 +7,7 @@ import useConnectedSingleQuery, {
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_QUERY_KEY = (
   eventId: string
@@ -62,6 +63,7 @@ export const useGetSelfEventRegistration = (
   coupon?: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventRegistration>> = {}
 ) => {
+  const { authenticated } = useConnectedXM();
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventRegistration>>(
     SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
     (params: SingleQueryParams) =>
@@ -77,7 +79,7 @@ export const useGetSelfEventRegistration = (
       staleTime: Infinity,
       refetchOnMount: false,
       ...options,
-      enabled: !!eventId && (options?.enabled ?? true),
+      enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );
 };
