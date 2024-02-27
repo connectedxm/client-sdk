@@ -70,6 +70,7 @@ export const useConnectedInfiniteQuery = <
     getToken,
     organizationId,
     getExecuteAs,
+    queryClient,
   } = useConnectedXM();
 
   const getNextPageParam = (
@@ -116,7 +117,7 @@ export const useConnectedInfiniteQuery = <
       ...GetBaseInfiniteQueryKeys(params?.locale || locale, params?.search),
     ],
     queryFn: ({ pageParam }) =>
-      queryFn({ ...params, pageSize: params.pageSize || 25, locale: params.locale || locale, pageParam, clientApiParams: {
+      queryFn({ ...params, pageSize: params.pageSize || 25, locale: params.locale || locale, pageParam, queryClient, clientApiParams: {
         apiUrl,
         getToken,
         organizationId,

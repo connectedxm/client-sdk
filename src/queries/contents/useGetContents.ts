@@ -49,6 +49,7 @@ export const GetContents = async ({
       search: search || undefined,
     },
   });
+
   if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,

@@ -32,9 +32,10 @@ export interface ConnectedXMClientContextState {
   ) => void;
 }
 
-export const ConnectedXMClientContext = React.createContext<
-  Omit<ConnectedXMClientContextState, "queryClient">
->({} as Omit<ConnectedXMClientContextState, "queryClient">);
+export const ConnectedXMClientContext =
+  React.createContext<ConnectedXMClientContextState>(
+    {} as ConnectedXMClientContextState
+  );
 
 export interface ConnectedXMProviderProps
   extends Omit<
@@ -61,6 +62,7 @@ export const ConnectedXMProvider = ({
       <ConnectedXMClientContext.Provider
         value={{
           ...state,
+          queryClient,
           authenticated,
         }}
       >
