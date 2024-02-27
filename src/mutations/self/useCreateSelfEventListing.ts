@@ -65,7 +65,7 @@ export const CreateSelfEventListing = async ({
         `/communityModerator/${communityId}/events`,
         {
           event,
-          image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+          image: base64 ? base64 : undefined,
           communityId: communityId || undefined,
           sponsorIds: sponsorIds || undefined,
           speakers,
@@ -79,7 +79,7 @@ export const CreateSelfEventListing = async ({
         `/self/events/listings`,
         {
           event,
-          image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+          image: base64 ? base64 : undefined,
           sponsorIds: sponsorIds || undefined,
           speakers,
           sessions,

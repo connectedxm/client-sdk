@@ -33,7 +33,7 @@ export const UpdateCommunity = async ({
     {
       description: description || undefined,
       externalUrl: externalUrl || undefined,
-      buffer: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+      buffer: base64 ? base64 : undefined,
     }
   );
 
