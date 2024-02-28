@@ -11,7 +11,6 @@ import { ClientApiParams } from "@src/ClientAPI";
 
 export interface MutationParams {
   clientApiParams: ClientApiParams;
-  locale?: string;
   queryClient?: QueryClient;
 }
 
@@ -27,7 +26,6 @@ export const useConnectedMutation = <
   TResponseData extends ConnectedXMResponse<any>
 >(
   mutation: MutationFunction<TResponseData, TMutationParams>,
-  params?: Omit<MutationParams, "queryClient" | "clientApiParams">,
   options?: Omit<
     MutationOptions<
       TResponseData,
@@ -48,13 +46,12 @@ export const useConnectedMutation = <
     mutationFn: (data) =>
       mutation({
         queryClient,
-        locale: params?.locale || locale,
         clientApiParams: {
           apiUrl,
           getToken,
           organizationId,
           getExecuteAs,
-          locale: params?.locale || locale,
+          locale,
         },
         ...data,
       } as TMutationParams),
