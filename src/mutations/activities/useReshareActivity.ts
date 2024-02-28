@@ -40,7 +40,6 @@ export const ReshareActivity = async ({
 };
 
 export const useReshareActivity = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof ReshareActivity>>,
@@ -52,5 +51,5 @@ export const useReshareActivity = (
   return useConnectedMutation<
     ReshareActivityParams,
     Awaited<ReturnType<typeof ReshareActivity>>
-  >(ReshareActivity, params, options);
+  >(ReshareActivity, options);
 };

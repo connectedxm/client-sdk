@@ -84,7 +84,6 @@ export const AddSelfEventListingSession = async ({
 };
 
 export const useAddSelfEventListingSession = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfEventListingSession>>,
@@ -96,5 +95,5 @@ export const useAddSelfEventListingSession = (
   return useConnectedMutation<
     AddSelfEventListingSessionParams,
     Awaited<ReturnType<typeof AddSelfEventListingSession>>
-  >(AddSelfEventListingSession, params, options);
+  >(AddSelfEventListingSession, options);
 };

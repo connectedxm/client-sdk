@@ -60,7 +60,6 @@ export const RemoveSelfEventListingSponsor = async ({
 };
 
 export const useRemoveSelfEventListingSponsor = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfEventListingSponsor>>,
@@ -75,5 +74,5 @@ export const useRemoveSelfEventListingSponsor = (
   return useConnectedMutation<
     RemoveSelfEventListingSponsorParams,
     Awaited<ReturnType<typeof RemoveSelfEventListingSponsor>>
-  >(RemoveSelfEventListingSponsor, params, options);
+  >(RemoveSelfEventListingSponsor, options);
 };

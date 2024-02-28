@@ -39,7 +39,6 @@ export const TransferPurchase = async ({
 };
 
 export const useTransferPurchase = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof TransferPurchase>>,
@@ -51,5 +50,5 @@ export const useTransferPurchase = (
   return useConnectedMutation<
     TransferPurchaseParams,
     Awaited<ReturnType<typeof TransferPurchase>>
-  >(TransferPurchase, params, options);
+  >(TransferPurchase, options);
 };

@@ -51,7 +51,6 @@ export const CancelEventRegistration = async ({
 };
 
 export const useCancelEventRegistration = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelEventRegistration>>,
@@ -63,5 +62,5 @@ export const useCancelEventRegistration = (
   return useConnectedMutation<
     CancelEventRegistrationParams,
     Awaited<ReturnType<typeof CancelEventRegistration>>
-  >(CancelEventRegistration, params, options);
+  >(CancelEventRegistration, options);
 };

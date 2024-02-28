@@ -28,7 +28,6 @@ export const DeleteActivity = async ({
 };
 
 export const useDeleteActivity = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteActivity>>,
@@ -40,5 +39,5 @@ export const useDeleteActivity = (
   return useConnectedMutation<
     DeleteActivityParams,
     Awaited<ReturnType<typeof DeleteActivity>>
-  >(DeleteActivity, params, options);
+  >(DeleteActivity, options);
 };

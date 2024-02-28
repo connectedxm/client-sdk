@@ -19,7 +19,7 @@ export const UpdateSelfImage = async ({
   const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
     `/self/image`,
     {
-      buffer: `data:image/jpeg;base64,${base64}`,
+      buffer: base64,
     }
   );
 
@@ -31,7 +31,6 @@ export const UpdateSelfImage = async ({
 };
 
 export const useUpdateSelfImage = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfImage>>,
@@ -43,5 +42,5 @@ export const useUpdateSelfImage = (
   return useConnectedMutation<
     UpdateSelfImageParams,
     Awaited<ConnectedXMResponse<Self>>
-  >(UpdateSelfImage, params, options);
+  >(UpdateSelfImage, options);
 };

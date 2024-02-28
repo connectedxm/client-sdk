@@ -59,7 +59,6 @@ export const SelectSelfEventRegistrationTicket = async ({
 };
 
 export const useSelectSelfEventRegistrationTicket = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelectSelfEventRegistrationTicket>>,
@@ -74,5 +73,5 @@ export const useSelectSelfEventRegistrationTicket = (
   return useConnectedMutation<
     SelectSelfEventRegistrationTicketParams,
     Awaited<ReturnType<typeof SelectSelfEventRegistrationTicket>>
-  >(SelectSelfEventRegistrationTicket, params, options);
+  >(SelectSelfEventRegistrationTicket, options);
 };

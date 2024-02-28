@@ -30,7 +30,6 @@ export const RemoveSelfEventSession = async ({
 };
 
 export const useRemoveSelfEventSession = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfEventSession>>,
@@ -42,5 +41,5 @@ export const useRemoveSelfEventSession = (
   return useConnectedMutation<
     RemoveSelfEventSessionParams,
     Awaited<ReturnType<typeof RemoveSelfEventSession>>
-  >(RemoveSelfEventSession, params, options);
+  >(RemoveSelfEventSession, options);
 };

@@ -45,7 +45,6 @@ export const SelfLeaveCommunity = async ({
 };
 
 export const useSelfLeaveCommunity = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfLeaveCommunity>>,
@@ -57,5 +56,5 @@ export const useSelfLeaveCommunity = (
   return useConnectedMutation<
     SelfLeaveCommunityParams,
     Awaited<ReturnType<typeof SelfLeaveCommunity>>
-  >(SelfLeaveCommunity, params, options);
+  >(SelfLeaveCommunity, options);
 };

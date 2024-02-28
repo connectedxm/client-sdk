@@ -107,7 +107,6 @@ export const CreateSelfEventListing = async ({
 };
 
 export const useCreateSelfEventListing = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSelfEventListing>>,
@@ -119,5 +118,5 @@ export const useCreateSelfEventListing = (
   return useConnectedMutation<
     CreateSelfEventListingParams,
     Awaited<ReturnType<typeof CreateSelfEventListing>>
-  >(CreateSelfEventListing, params, options);
+  >(CreateSelfEventListing, options);
 };

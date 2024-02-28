@@ -61,7 +61,6 @@ export const RemoveSelfEventRegistrationCoupon = async ({
 };
 
 export const useRemoveSelfEventRegistrationCoupon = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfEventRegistrationCoupon>>,
@@ -76,5 +75,5 @@ export const useRemoveSelfEventRegistrationCoupon = (
   return useConnectedMutation<
     RemoveSelfEventRegistrationCouponParams,
     Awaited<ReturnType<typeof RemoveSelfEventRegistrationCoupon>>
-  >(RemoveSelfEventRegistrationCoupon, params, options);
+  >(RemoveSelfEventRegistrationCoupon, options);
 };

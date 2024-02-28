@@ -77,7 +77,6 @@ export const AddSelfEventListingSpeaker = async ({
 };
 
 export const useAddSelfEventListingSpeaker = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfEventListingSpeaker>>,
@@ -89,5 +88,5 @@ export const useAddSelfEventListingSpeaker = (
   return useConnectedMutation<
     AddSelfEventListingSpeakerParams,
     Awaited<ReturnType<typeof AddSelfEventListingSpeaker>>
-  >(AddSelfEventListingSpeaker, params, options);
+  >(AddSelfEventListingSpeaker, options);
 };

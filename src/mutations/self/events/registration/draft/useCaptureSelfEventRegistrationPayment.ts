@@ -36,7 +36,6 @@ export const CaptureSelfEventRegistrationPayment = async ({
 };
 
 export const useCaptureSelfEventRegistrationPayment = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CaptureSelfEventRegistrationPayment>>,
@@ -51,5 +50,5 @@ export const useCaptureSelfEventRegistrationPayment = (
   return useConnectedMutation<
     CaptureSelfEventRegistrationPaymentParams,
     Awaited<ReturnType<typeof CaptureSelfEventRegistrationPayment>>
-  >(CaptureSelfEventRegistrationPayment, params, options);
+  >(CaptureSelfEventRegistrationPayment, options);
 };

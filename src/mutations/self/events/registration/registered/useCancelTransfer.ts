@@ -33,7 +33,6 @@ export const CancelTransfer = async ({
 };
 
 export const useCancelTransfer = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelTransfer>>,
@@ -45,5 +44,5 @@ export const useCancelTransfer = (
   return useConnectedMutation<
     CancelTransferParams,
     Awaited<ReturnType<typeof CancelTransfer>>
-  >(CancelTransfer, params, options);
+  >(CancelTransfer, options);
 };

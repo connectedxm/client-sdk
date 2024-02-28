@@ -45,7 +45,6 @@ export const CompleteEventActivation = async ({
 };
 
 export const useCompleteEventActivation = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CompleteEventActivation>>,
@@ -57,5 +56,5 @@ export const useCompleteEventActivation = (
   return useConnectedMutation<
     CompleteEventActivationParams,
     Awaited<ReturnType<typeof CompleteEventActivation>>
-  >(CompleteEventActivation, params, options);
+  >(CompleteEventActivation, options);
 };

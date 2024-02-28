@@ -44,7 +44,6 @@ export const UpdateSelfEventRegistrationGuest = async ({
 };
 
 export const useUpdateSelfEventRegistrationGuest = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventRegistrationGuest>>,
@@ -59,5 +58,5 @@ export const useUpdateSelfEventRegistrationGuest = (
   return useConnectedMutation<
     UpdateSelfEventRegistrationGuestParams,
     Awaited<ReturnType<typeof UpdateSelfEventRegistrationGuest>>
-  >(UpdateSelfEventRegistrationGuest, params, options);
+  >(UpdateSelfEventRegistrationGuest, options);
 };

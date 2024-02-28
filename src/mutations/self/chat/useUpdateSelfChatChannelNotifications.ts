@@ -43,7 +43,6 @@ export const UpdateSelfChatChannelNotifications = async ({
 };
 
 export const useUpdateSelfChatChannelNotifications = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>,
@@ -58,5 +57,5 @@ export const useUpdateSelfChatChannelNotifications = (
   return useConnectedMutation<
     UpdateSelfChatChannelNotificationsParams,
     Awaited<ReturnType<typeof UpdateSelfChatChannelNotifications>>
-  >(UpdateSelfChatChannelNotifications, params, options);
+  >(UpdateSelfChatChannelNotifications, options);
 };
