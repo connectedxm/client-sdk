@@ -17,7 +17,6 @@ export const FollowAccount = async ({
   accountId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: FollowAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
@@ -25,8 +24,12 @@ export const FollowAccount = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data, [locale]);
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data, [locale]);
+    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data, [
+      clientApiParams.locale,
+    ]);
+    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data, [
+      clientApiParams.locale,
+    ]);
     queryClient.invalidateQueries({
       queryKey: ACCOUNT_FOLLOWERS_QUERY_KEY(data.data.id),
     });
