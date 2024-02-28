@@ -10,9 +10,12 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_CHAT_CHANNEL_QUERY_KEY } from "./useGetSelfChatChannel";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { SELF_QUERY_KEY } from "../useGetSelf";
 
-export const SELF_CHAT_CHANNELS_QUERY_KEY = (): QueryKey => ["CHANNELS"];
+export const SELF_CHAT_CHANNELS_QUERY_KEY = (): QueryKey => [
+  SELF_QUERY_KEY(),
+  "CHANNELS",
+];
 
 export const SET_SELF_CHAT_CHANNELS_QUERY_DATA = (
   client: QueryClient,
@@ -79,7 +82,6 @@ export const useGetSelfChatChannels = (
     Awaited<ReturnType<typeof GetSelfChatChannels>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfChatChannels>>
   >(
@@ -88,7 +90,6 @@ export const useGetSelfChatChannels = (
     params,
     {
       ...options,
-      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };

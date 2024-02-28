@@ -9,7 +9,6 @@ import { CommunityMembership, ConnectedXMResponse } from "@interfaces";
 import { SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY } from "./useGetSelfCommunityMemberships";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY = (
   communityId: string
@@ -53,15 +52,13 @@ export const useGetSelfCommunityMembership = (
     ReturnType<typeof GetSelfCommunityMembership>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelfCommunityMembership>>(
     SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
     (params: SingleQueryParams) =>
       GetSelfCommunityMembership({ communityId, ...params }),
     {
       ...options,
-      enabled: !!authenticated && !!communityId && (options?.enabled ?? true),
+      enabled: !!communityId && (options?.enabled ?? true),
     }
   );
 };

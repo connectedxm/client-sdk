@@ -9,7 +9,6 @@ import type { ConnectedXMResponse, EventListing } from "@interfaces";
 import { SELF_EVENT_LISTINGS_QUERY_KEY } from "./useGetSelfEventListings";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_LISTING_QUERY_KEY = (eventId: string): QueryKey => [
   ...SELF_EVENT_LISTINGS_QUERY_KEY(false),
@@ -48,13 +47,12 @@ export const useGetSelfEventListing = (
   eventId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventListing>>(
     SELF_EVENT_LISTING_QUERY_KEY(eventId),
     (params) => GetSelfEventListing({ eventId, ...params }),
     {
       ...options,
-      enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

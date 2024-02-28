@@ -7,7 +7,6 @@ import {
 import { SELF_QUERY_KEY } from "./useGetSelf";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_INTERESTS_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -44,8 +43,6 @@ export const useGetSelfInterests = (
     Awaited<ReturnType<typeof GetSelfInterests>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfInterests>>
   >(
@@ -54,7 +51,6 @@ export const useGetSelfInterests = (
     params,
     {
       ...options,
-      enabled: !!authenticated && (options.enabled ?? true),
     }
   );
 };
