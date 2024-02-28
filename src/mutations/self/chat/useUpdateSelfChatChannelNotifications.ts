@@ -20,7 +20,6 @@ export const UpdateSelfChatChannelNotifications = async ({
   notifications,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateSelfChatChannelNotificationsParams): Promise<
   ConnectedXMResponse<ChatChannelMember>
 > => {
@@ -33,7 +32,9 @@ export const UpdateSelfChatChannelNotifications = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], data, [locale]);
+    SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], data, [
+      clientApiParams.locale,
+    ]);
     queryClient.invalidateQueries({
       queryKey: SELF_CHAT_CHANNELS_QUERY_KEY(),
     });

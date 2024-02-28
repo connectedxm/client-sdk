@@ -24,7 +24,6 @@ export const UpdateSelfEventRegistrationGuest = async ({
   guest,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateSelfEventRegistrationGuestParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -36,7 +35,7 @@ export const UpdateSelfEventRegistrationGuest = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
   }
 

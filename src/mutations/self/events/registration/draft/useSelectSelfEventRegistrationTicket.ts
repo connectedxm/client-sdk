@@ -25,7 +25,6 @@ export const SelectSelfEventRegistrationTicket = async ({
   ticketId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: SelectSelfEventRegistrationTicketParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -40,7 +39,7 @@ export const SelectSelfEventRegistrationTicket = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(

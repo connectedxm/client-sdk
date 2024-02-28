@@ -16,13 +16,12 @@ export const AddSelfEventListingSponsor = async ({
   sponsor,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: AddSelfEventListingSponsorParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
   if (queryClient) {
     queryClient.setQueryData(
-      [...EVENT_QUERY_KEY(eventId), locale],
+      [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
       (oldData: any) => {
         const event = oldData ? JSON.parse(JSON.stringify(oldData)) : undefined;
         if (event && event.data) {
@@ -36,7 +35,7 @@ export const AddSelfEventListingSponsor = async ({
       }
     );
     queryClient.setQueryData(
-      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
       (oldData: any) => {
         const event = oldData ? JSON.parse(JSON.stringify(oldData)) : undefined;
         if (event && event.data) {

@@ -24,7 +24,6 @@ export const AddSelfEventListingSpeaker = async ({
   speaker,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: AddSelfEventListingSpeakerParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -39,7 +38,7 @@ export const AddSelfEventListingSpeaker = async ({
   if (queryClient && data.status === "ok") {
     if (data.data) {
       queryClient.setQueryData(
-        [...EVENT_QUERY_KEY(eventId), locale],
+        [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
         (oldData: any) => {
           const event = oldData
             ? JSON.parse(JSON.stringify(oldData))
@@ -55,7 +54,7 @@ export const AddSelfEventListingSpeaker = async ({
         }
       );
       queryClient.setQueryData(
-        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
         (oldData: any) => {
           const event = oldData
             ? JSON.parse(JSON.stringify(oldData))

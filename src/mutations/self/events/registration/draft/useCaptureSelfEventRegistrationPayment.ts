@@ -17,7 +17,6 @@ export const CaptureSelfEventRegistrationPayment = async ({
   registrationId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: CaptureSelfEventRegistrationPaymentParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -28,7 +27,7 @@ export const CaptureSelfEventRegistrationPayment = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
   }
 

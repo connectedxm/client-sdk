@@ -23,7 +23,6 @@ export const RemoveSelfEventRegistrationCoupon = async ({
   registrationId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: RemoveSelfEventRegistrationCouponParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -40,7 +39,7 @@ export const RemoveSelfEventRegistrationCoupon = async ({
       ),
     });
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
 
     queryClient.invalidateQueries({

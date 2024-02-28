@@ -39,8 +39,6 @@ export const UpdateSelf = async ({
 }: UpdateSelfParams): Promise<ConnectedXMResponse<Self>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
-  if (params.locale) delete params.locale;
-
   const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
     `/self`,
     params

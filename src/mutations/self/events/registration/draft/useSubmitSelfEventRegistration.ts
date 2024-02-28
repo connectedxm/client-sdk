@@ -42,7 +42,6 @@ export const SubmitSelfEventRegistration = async ({
   payment,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: SubmitSelfEventRegistrationParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -54,7 +53,7 @@ export const SubmitSelfEventRegistration = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
   }
 

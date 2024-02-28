@@ -22,7 +22,6 @@ export const RegisterCancelledEventRegistration = async ({
   registrationId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: RegisterCancelledEventRegistrationParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -33,7 +32,7 @@ export const RegisterCancelledEventRegistration = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
 
     queryClient.invalidateQueries({

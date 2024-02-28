@@ -48,7 +48,6 @@ export const UpdateSelfEventListing = async ({
   base64,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateSelfEventListingParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -62,8 +61,12 @@ export const UpdateSelfEventListing = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_EVENT_QUERY_DATA(queryClient, [eventId], data, [locale]);
-    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data, [locale]);
+    SET_EVENT_QUERY_DATA(queryClient, [eventId], data, [
+      clientApiParams.locale,
+    ]);
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data, [
+      clientApiParams.locale,
+    ]);
 
     queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
     queryClient.invalidateQueries({

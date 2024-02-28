@@ -25,7 +25,6 @@ export const UpdateCommunity = async ({
   base64,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateCommunityParams): Promise<ConnectedXMResponse<Community>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
@@ -38,7 +37,9 @@ export const UpdateCommunity = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_COMMUNITY_QUERY_DATA(queryClient, [data.data.slug], data, [locale]);
+    SET_COMMUNITY_QUERY_DATA(queryClient, [data.data.slug], data, [
+      clientApiParams.locale,
+    ]);
     queryClient.invalidateQueries({
       queryKey: SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
     });

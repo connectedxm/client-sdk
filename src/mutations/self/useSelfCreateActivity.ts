@@ -39,18 +39,17 @@ export const SelfCreateActivity = async ({
   videoUri,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
     if (activity.commentedId) {
       UpdateCommentsSingle(true, queryClient, [
         ...ACTIVITY_QUERY_KEY(activity.commentedId),
-        locale,
+        clientApiParams.locale,
       ]);
       UpdateCommentsInfinite(
         true,
         queryClient,
-        [...ACTIVITIES_QUERY_KEY(), locale],
+        [...ACTIVITIES_QUERY_KEY(), clientApiParams.locale],
         activity.commentedId
       );
     }
@@ -68,33 +67,36 @@ export const SelfCreateActivity = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: [...ACTIVITIES_QUERY_KEY(), locale],
+      queryKey: [...ACTIVITIES_QUERY_KEY(), clientApiParams.locale],
     });
 
     AppendInfiniteQuery<Activity>(
       queryClient,
-      [...ACTIVITIES_QUERY_KEY(), locale],
+      [...ACTIVITIES_QUERY_KEY(), clientApiParams.locale],
       data.data
     );
 
     if (!data.data.commented?.id) {
       AppendInfiniteQuery(
         queryClient,
-        [...SELF_FEED_QUERY_KEY(), locale],
+        [...SELF_FEED_QUERY_KEY(), clientApiParams.locale],
         data
       );
     }
 
     AppendInfiniteQuery<Activity>(
       queryClient,
-      [...SELF_ACTIVITIES_QUERY_KEY(), locale],
+      [...SELF_ACTIVITIES_QUERY_KEY(), clientApiParams.locale],
       data.data
     );
 
     if (data.data?.content?.id) {
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [...CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id), locale],
+        [
+          ...CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id),
+          clientApiParams.locale,
+        ],
         data.data
       );
     }
@@ -102,7 +104,10 @@ export const SelfCreateActivity = async ({
     if (data.data?.event?.id) {
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [...EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id), locale],
+        [
+          ...EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id),
+          clientApiParams.locale,
+        ],
         data.data
       );
     }
@@ -110,7 +115,10 @@ export const SelfCreateActivity = async ({
     if (data.data?.community?.id) {
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [...COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id), locale],
+        [
+          ...COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id),
+          clientApiParams.locale,
+        ],
         data.data
       );
     }

@@ -53,7 +53,6 @@ export const CreateSelfEventListing = async ({
   sessions,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: CreateSelfEventListingParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -100,7 +99,10 @@ export const CreateSelfEventListing = async ({
         queryKey: COMMUNITY_EVENTS_QUERY_KEY(communityId),
       });
     }
-    queryClient.setQueryData([...EVENT_QUERY_KEY(data.data.id), locale], data);
+    queryClient.setQueryData(
+      [...EVENT_QUERY_KEY(data.data.id), clientApiParams.locale],
+      data
+    );
   }
 
   return data;
