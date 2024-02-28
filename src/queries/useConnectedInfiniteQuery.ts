@@ -32,7 +32,9 @@ export interface InfiniteQueryOptions<
       number
     >,
     "queryKey" | "queryFn" | "getNextPageParam" | "initialPageParam"
-  > {}
+  > {
+  shouldRedirect?: boolean;
+}
 
 export const GetBaseInfiniteQueryKeys = (
   locale: string,
@@ -59,7 +61,9 @@ export const useConnectedInfiniteQuery = <
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
-  options?: InfiniteQueryOptions<TQueryData>
+  options: InfiniteQueryOptions<TQueryData> = {
+    shouldRedirect: false,
+  }
 ) => {
   const {
     locale,
@@ -91,19 +95,19 @@ export const useConnectedInfiniteQuery = <
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound) onNotFound(error, queryKeys);
+        if (onNotFound) onNotFound(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden) onModuleForbidden(error, queryKeys);
+        if (onModuleForbidden) onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized) onNotAuthorized(error, queryKeys);
+        if (onNotAuthorized) onNotAuthorized(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 

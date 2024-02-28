@@ -14,21 +14,23 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com"
     | "http://localhost:4001";
-  authenticated: boolean;
   getToken: () => Promise<string | undefined> | string | undefined;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
   locale: string;
   onNotAuthorized?: (
     error: AxiosError<ConnectedXMResponse<any>>,
-    key: QueryKey
+    key: QueryKey,
+    shouldRedirect: boolean
   ) => void;
   onModuleForbidden?: (
     error: AxiosError<ConnectedXMResponse<any>>,
-    key: QueryKey
+    key: QueryKey,
+    shouldRedirect: boolean
   ) => void;
   onNotFound?: (
     error: AxiosError<ConnectedXMResponse<any>>,
-    key: QueryKey
+    key: QueryKey,
+    shouldRedirect: boolean
   ) => void;
 }
 
@@ -47,7 +49,6 @@ export interface ConnectedXMProviderProps
 
 export const ConnectedXMProvider = ({
   queryClient,
-  authenticated = true,
   children,
   ...state
 }: ConnectedXMProviderProps) => {
@@ -63,7 +64,6 @@ export const ConnectedXMProvider = ({
         value={{
           ...state,
           queryClient,
-          authenticated,
         }}
       >
         {children}
