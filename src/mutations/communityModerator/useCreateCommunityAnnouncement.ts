@@ -10,6 +10,7 @@ import {
 import { AppendInfiniteQuery } from "@src/utilities";
 import { COMMUNITY_ANNOUNCEMENTS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 
 export interface CreateCommunityAnnouncementParams extends MutationParams {
   communityId: string;
@@ -44,7 +45,10 @@ export const CreateCommunityAnnouncement = async ({
   if (queryClient && data.status === "ok") {
     AppendInfiniteQuery<Announcement>(
       queryClient,
-      COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
+      [
+        ...COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ],
       data.data
     );
   }

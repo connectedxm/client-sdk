@@ -13,7 +13,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { SELF_QUERY_KEY } from "../useGetSelf";
 
 export const SELF_CHAT_CHANNELS_QUERY_KEY = (): QueryKey => [
-  SELF_QUERY_KEY(),
+  ...SELF_QUERY_KEY(),
   "CHANNELS",
 ];
 
