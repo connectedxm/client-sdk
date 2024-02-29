@@ -4,6 +4,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
+import { SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY } from "@src/queries";
 
 export interface CreateSelfChatChannelMessageParams extends MutationParams {
   channelId: string;
@@ -26,7 +27,9 @@ export const CreateSelfChatChannelMessage = async ({
   });
 
   if (queryClient && data.status === "ok") {
-    // NOTHING
+    queryClient.invalidateQueries({
+      queryKey: SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY(channelId.toString()),
+    });
   }
 
   return data;

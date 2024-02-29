@@ -5,3 +5,5 @@ export * from "./events";
 export * from "./self";
 export * from "./supportTicket";
 export * from "./team";
+
+export * from "./useConnectedMutation";

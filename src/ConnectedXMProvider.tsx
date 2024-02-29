@@ -14,7 +14,7 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com"
     | "http://localhost:4001";
-  getToken: () => Promise<string | undefined> | string | undefined;
+  getToken: () => Promise<string | undefined>;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
   locale: string;
   onNotAuthorized?: (
@@ -42,7 +42,7 @@ export const ConnectedXMClientContext =
 export interface ConnectedXMProviderProps
   extends Omit<
     ConnectedXMClientContextState,
-    "token" | "setToken" | "executeAs" | "setExecuteAs"
+    "token" | "setToken" | "executeAs" | "setExecuteAs" | "websocket"
   > {
   children: React.ReactNode;
 }
@@ -58,20 +58,29 @@ export const ConnectedXMProvider = ({
     setSSR(false);
   }, []);
 
-  const render = () => {
+  if (ssr) {
     return (
-      <ConnectedXMClientContext.Provider
-        value={{
-          ...state,
-          queryClient,
-        }}
-      >
-        {children}
-      </ConnectedXMClientContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <ConnectedXMClientContext.Provider
+          value={{
+            ...state,
+            queryClient,
+          }}
+        >
+          {children}
+        </ConnectedXMClientContext.Provider>
+      </QueryClientProvider>
     );
-  };
+  }
 
-  // prettier-ignore
-  if (ssr) return <QueryClientProvider client={queryClient}>{render()}</QueryClientProvider>
-  return render();
+  return (
+    <ConnectedXMClientContext.Provider
+      value={{
+        ...state,
+        queryClient,
+      }}
+    >
+      {children}
+    </ConnectedXMClientContext.Provider>
+  );
 };
