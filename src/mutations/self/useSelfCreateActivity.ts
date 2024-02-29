@@ -60,8 +60,8 @@ export const SelfCreateActivity = async ({
     `/self/activities`,
     {
       activity,
-      buffer: base64Image ? `data:image/jpeg;base64,${base64Image}` : undefined,
-      videoUri: videoUri || undefined,
+      imageUri: base64Image ?? undefined,
+      videoUri: videoUri ?? undefined,
     }
   );
 
