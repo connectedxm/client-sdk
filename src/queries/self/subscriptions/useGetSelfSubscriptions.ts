@@ -9,7 +9,6 @@ import { Subscription, SubscriptionStatus } from "@interfaces";
 import { CacheIndividualQueries } from "@src/utilities";
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "./useGetSelfSubscription";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_SUBSCRIPTIONS_QUERY_KEY = (status?: SubscriptionStatus) => {
   const key = [...SELF_QUERY_KEY(), "SUBSCRIPTIONS"];
@@ -66,8 +65,6 @@ export const useGetSelfSubscriptions = (
     Awaited<ReturnType<typeof GetSelfSubscriptions>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfSubscriptions>>
   >(
@@ -77,7 +74,7 @@ export const useGetSelfSubscriptions = (
     params,
     {
       ...options,
-      enabled: !!authenticated && (options.enabled ?? true),
+      enabled: options.enabled ?? true,
     }
   );
 };

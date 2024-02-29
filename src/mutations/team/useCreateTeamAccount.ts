@@ -28,7 +28,6 @@ export const CreateTeamAccount = async ({
 };
 
 export const useCreateTeamAccount = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateTeamAccount>>,
@@ -40,5 +39,5 @@ export const useCreateTeamAccount = (
   return useConnectedMutation<
     CreateTeamAccountParams,
     Awaited<ReturnType<typeof CreateTeamAccount>>
-  >(CreateTeamAccount, params, options);
+  >(CreateTeamAccount, options);
 };

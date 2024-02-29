@@ -16,13 +16,15 @@ export const SelfUpdateCommunityMembership = async ({
   membership,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: SelfUpdateCommunityMembershipParams): Promise<
   ConnectedXMResponse<CommunityMembership>
 > => {
   if (queryClient) {
     queryClient.setQueryData(
-      [...SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId), locale],
+      [
+        ...SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
+        clientApiParams.locale,
+      ],
       (data: any) => {
         return {
           ...data,
@@ -44,7 +46,6 @@ export const SelfUpdateCommunityMembership = async ({
 };
 
 export const useSelfUpdateCommunityMembership = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfUpdateCommunityMembership>>,
@@ -59,5 +60,5 @@ export const useSelfUpdateCommunityMembership = (
   return useConnectedMutation<
     SelfUpdateCommunityMembershipParams,
     Awaited<ConnectedXMResponse<CommunityMembership>>
-  >(SelfUpdateCommunityMembership, params, options);
+  >(SelfUpdateCommunityMembership, options);
 };

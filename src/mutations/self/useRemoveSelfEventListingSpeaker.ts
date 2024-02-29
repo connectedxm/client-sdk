@@ -16,13 +16,12 @@ export const RemoveSelfEventListingSpeaker = async ({
   speakerId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: RemoveSelfEventListingSpeakerParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
   if (queryClient) {
     queryClient.setQueryData(
-      [...EVENT_QUERY_KEY(eventId), locale],
+      [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
       (event: any) => {
         if (event && event.data) {
           const index = event?.data?.speakers?.findIndex(
@@ -36,7 +35,7 @@ export const RemoveSelfEventListingSpeaker = async ({
       }
     );
     queryClient.setQueryData(
-      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
       (event: any) => {
         if (event && event.data) {
           const index = event?.data?.speakers?.findIndex(
@@ -60,7 +59,6 @@ export const RemoveSelfEventListingSpeaker = async ({
 };
 
 export const useRemoveSelfEventListingSpeaker = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfEventListingSpeaker>>,
@@ -75,5 +73,5 @@ export const useRemoveSelfEventListingSpeaker = (
   return useConnectedMutation<
     RemoveSelfEventListingSpeakerParams,
     Awaited<ReturnType<typeof RemoveSelfEventListingSpeaker>>
-  >(RemoveSelfEventListingSpeaker, params, options);
+  >(RemoveSelfEventListingSpeaker, options);
 };

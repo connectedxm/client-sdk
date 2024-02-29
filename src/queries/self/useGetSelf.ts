@@ -8,7 +8,6 @@ import {
 import type { ConnectedXMResponse, Self } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_QUERY_KEY = (ignoreExecuteAs?: boolean): QueryKey => {
   const keys = ["SELF"];
@@ -50,14 +49,11 @@ export const useGetSelf = (
   ignoreExecuteAs?: boolean,
   options: SingleQueryOptions<ReturnType<typeof GetSelf>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
-
   return useConnectedSingleQuery<ReturnType<typeof GetSelf>>(
     SELF_QUERY_KEY(ignoreExecuteAs),
     (params: SingleQueryParams) => GetSelf({ ignoreExecuteAs, ...params }),
     {
       ...options,
-      enabled: authenticated && (options.enabled ?? true),
     }
   );
 };

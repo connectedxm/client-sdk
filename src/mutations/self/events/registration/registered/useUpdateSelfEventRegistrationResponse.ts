@@ -21,7 +21,6 @@ export const UpdateSelfEventRegistrationResponse = async ({
   response,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateSelfEventRegistrationResponseParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -40,7 +39,7 @@ export const UpdateSelfEventRegistrationResponse = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
   }
 
@@ -48,7 +47,6 @@ export const UpdateSelfEventRegistrationResponse = async ({
 };
 
 export const useUpdateSelfEventRegistrationResponse = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventRegistrationResponse>>,
@@ -63,5 +61,5 @@ export const useUpdateSelfEventRegistrationResponse = (
   return useConnectedMutation<
     UpdateSelfEventRegistrationResponseParams,
     Awaited<ReturnType<typeof UpdateSelfEventRegistrationResponse>>
-  >(UpdateSelfEventRegistrationResponse, params, options);
+  >(UpdateSelfEventRegistrationResponse, options);
 };

@@ -34,7 +34,6 @@ export const DeleteSelfChatChannel = async ({
 };
 
 export const useDeleteSelfChatChannel = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteSelfChatChannel>>,
@@ -46,5 +45,5 @@ export const useDeleteSelfChatChannel = (
   return useConnectedMutation<
     DeleteSelfChatChannelParams,
     Awaited<ReturnType<typeof DeleteSelfChatChannel>>
-  >(DeleteSelfChatChannel, params, options);
+  >(DeleteSelfChatChannel, options);
 };

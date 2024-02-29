@@ -8,7 +8,7 @@ export interface ClientApiParams {
   organizationId: string;
   getToken: () => Promise<string | undefined> | string | undefined;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
-  locale?: string;
+  locale: string;
 }
 
 export const GetClientAPI = async (

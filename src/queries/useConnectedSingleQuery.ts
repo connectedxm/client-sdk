@@ -17,7 +17,9 @@ export interface SingleQueryOptions<TQueryData = unknown>
       QueryKey
     >,
     "queryFn" | "queryKey"
-  > {}
+  > {
+  shouldRedirect?: boolean;
+}
 
 export const GetBaseSingleQueryKeys = (locale: string): QueryKey => {
   return [locale];
@@ -26,7 +28,7 @@ export const GetBaseSingleQueryKeys = (locale: string): QueryKey => {
 export const useConnectedSingleQuery = <TQueryData = unknown>(
   queryKeys: QueryKey,
   queryFn: (params: SingleQueryParams) => TQueryData,
-  options?: SingleQueryOptions<TQueryData>
+  options: SingleQueryOptions<TQueryData> = {}
 ) => {
   const {
     locale,
@@ -49,19 +51,22 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound) onNotFound(error, queryKeys);
+        if (onNotFound)
+          onNotFound(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden) onModuleForbidden(error, queryKeys);
+        if (onModuleForbidden)
+          onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized) onNotAuthorized(error, queryKeys);
+        if (onNotAuthorized)
+          onNotAuthorized(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 

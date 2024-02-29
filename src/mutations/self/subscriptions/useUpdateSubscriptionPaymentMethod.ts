@@ -36,7 +36,6 @@ export const UpdateSubscriptionPaymentMethod = async ({
 };
 
 export const useUpdateSubscriptionPaymentMethod = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSubscriptionPaymentMethod>>,
@@ -48,5 +47,5 @@ export const useUpdateSubscriptionPaymentMethod = (
     "mutationFn"
   > = {}
 ) => {
-  return useConnectedMutation(UpdateSubscriptionPaymentMethod, params, options);
+  return useConnectedMutation(UpdateSubscriptionPaymentMethod, options);
 };

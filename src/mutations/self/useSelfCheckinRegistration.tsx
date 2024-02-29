@@ -33,7 +33,6 @@ export const SelfCheckinRegistration = async ({
 };
 
 export const useSelfCheckinRegistration = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof SelfCheckinRegistration>>,
@@ -45,5 +44,5 @@ export const useSelfCheckinRegistration = (
   return useConnectedMutation<
     SelfCheckinRegistrationParams,
     Awaited<ReturnType<typeof SelfCheckinRegistration>>
-  >(SelfCheckinRegistration, params, options);
+  >(SelfCheckinRegistration, options);
 };

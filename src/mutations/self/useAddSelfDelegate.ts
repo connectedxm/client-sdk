@@ -30,7 +30,6 @@ export const AddSelfDelegate = async ({
 };
 
 export const useAddSelfDelegate = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfDelegate>>,
@@ -42,5 +41,5 @@ export const useAddSelfDelegate = (
   return useConnectedMutation<
     AddSelfDelegateParams,
     Awaited<ReturnType<typeof AddSelfDelegate>>
-  >(AddSelfDelegate, params, options);
+  >(AddSelfDelegate, options);
 };

@@ -5,7 +5,6 @@ import useConnectedSingleQuery, {
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 import { ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export interface CheckoutResponse {
   type: "stripe" | "paypal";
@@ -50,7 +49,6 @@ export const useGetSelfEventRegistrationCheckout = (
     ReturnType<typeof GetSelfEventRegistrationCheckout>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationCheckout>
   >(
@@ -62,11 +60,7 @@ export const useGetSelfEventRegistrationCheckout = (
       retry: false,
       retryOnMount: false,
       ...options,
-      enabled:
-        !!authenticated &&
-        !!eventId &&
-        !!registrationId &&
-        (options.enabled ?? true),
+      enabled: !!eventId && !!registrationId && (options.enabled ?? true),
     }
   );
 };

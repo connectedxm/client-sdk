@@ -20,7 +20,6 @@ export const DeleteSelf = async ({
 };
 
 export const useDeleteSelf = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteSelf>>,
@@ -32,5 +31,5 @@ export const useDeleteSelf = (
   return useConnectedMutation<
     DeleteSelfParams,
     Awaited<ReturnType<typeof DeleteSelf>>
-  >(DeleteSelf, params, options);
+  >(DeleteSelf, options);
 };

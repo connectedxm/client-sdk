@@ -36,7 +36,6 @@ export const CreateSubscription = async ({
 };
 
 export const useCreateSubscription = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSubscription>>,
@@ -48,5 +47,5 @@ export const useCreateSubscription = (
   return useConnectedMutation<
     CreateSubscriptionParams,
     Awaited<ReturnType<typeof CreateSubscription>>
-  >(CreateSubscription, params, options);
+  >(CreateSubscription, options);
 };

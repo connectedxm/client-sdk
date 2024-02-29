@@ -34,7 +34,6 @@ export const CancelSubscription = async ({
 };
 
 export const useCancelSubscription = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelSubscription>>,
@@ -46,5 +45,5 @@ export const useCancelSubscription = (
   return useConnectedMutation<
     CancelSubscriptionParams,
     Awaited<ReturnType<typeof CancelSubscription>>
-  >(CancelSubscription, params, options);
+  >(CancelSubscription, options);
 };

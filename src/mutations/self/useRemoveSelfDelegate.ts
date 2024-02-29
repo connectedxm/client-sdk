@@ -28,7 +28,6 @@ export const RemoveSelfDelegate = async ({
 };
 
 export const useRemoveSelfDelegate = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfDelegate>>,
@@ -40,5 +39,5 @@ export const useRemoveSelfDelegate = (
   return useConnectedMutation<
     RemoveSelfDelegateParams,
     Awaited<ReturnType<typeof RemoveSelfDelegate>>
-  >(RemoveSelfDelegate, params, options);
+  >(RemoveSelfDelegate, options);
 };

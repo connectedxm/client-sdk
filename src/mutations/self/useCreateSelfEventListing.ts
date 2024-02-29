@@ -53,7 +53,6 @@ export const CreateSelfEventListing = async ({
   sessions,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: CreateSelfEventListingParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -65,7 +64,7 @@ export const CreateSelfEventListing = async ({
         `/communityModerator/${communityId}/events`,
         {
           event,
-          image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+          image: base64 ? base64 : undefined,
           communityId: communityId || undefined,
           sponsorIds: sponsorIds || undefined,
           speakers,
@@ -79,7 +78,7 @@ export const CreateSelfEventListing = async ({
         `/self/events/listings`,
         {
           event,
-          image: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+          image: base64 ? base64 : undefined,
           sponsorIds: sponsorIds || undefined,
           speakers,
           sessions,
@@ -100,14 +99,16 @@ export const CreateSelfEventListing = async ({
         queryKey: COMMUNITY_EVENTS_QUERY_KEY(communityId),
       });
     }
-    queryClient.setQueryData([...EVENT_QUERY_KEY(data.data.id), locale], data);
+    queryClient.setQueryData(
+      [...EVENT_QUERY_KEY(data.data.id), clientApiParams.locale],
+      data
+    );
   }
 
   return data;
 };
 
 export const useCreateSelfEventListing = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CreateSelfEventListing>>,
@@ -119,5 +120,5 @@ export const useCreateSelfEventListing = (
   return useConnectedMutation<
     CreateSelfEventListingParams,
     Awaited<ReturnType<typeof CreateSelfEventListing>>
-  >(CreateSelfEventListing, params, options);
+  >(CreateSelfEventListing, options);
 };

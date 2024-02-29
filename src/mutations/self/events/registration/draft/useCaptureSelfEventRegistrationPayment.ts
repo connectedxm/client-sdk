@@ -17,7 +17,6 @@ export const CaptureSelfEventRegistrationPayment = async ({
   registrationId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: CaptureSelfEventRegistrationPaymentParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -28,7 +27,7 @@ export const CaptureSelfEventRegistrationPayment = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
   }
 
@@ -36,7 +35,6 @@ export const CaptureSelfEventRegistrationPayment = async ({
 };
 
 export const useCaptureSelfEventRegistrationPayment = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CaptureSelfEventRegistrationPayment>>,
@@ -51,5 +49,5 @@ export const useCaptureSelfEventRegistrationPayment = (
   return useConnectedMutation<
     CaptureSelfEventRegistrationPaymentParams,
     Awaited<ReturnType<typeof CaptureSelfEventRegistrationPayment>>
-  >(CaptureSelfEventRegistrationPayment, params, options);
+  >(CaptureSelfEventRegistrationPayment, options);
 };

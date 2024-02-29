@@ -25,7 +25,6 @@ export const UpdateCommunity = async ({
   base64,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateCommunityParams): Promise<ConnectedXMResponse<Community>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
@@ -33,12 +32,14 @@ export const UpdateCommunity = async ({
     {
       description: description || undefined,
       externalUrl: externalUrl || undefined,
-      buffer: base64 ? `data:image/jpeg;base64,${base64}` : undefined,
+      buffer: base64 ? base64 : undefined,
     }
   );
 
   if (queryClient && data.status === "ok") {
-    SET_COMMUNITY_QUERY_DATA(queryClient, [data.data.slug], data, [locale]);
+    SET_COMMUNITY_QUERY_DATA(queryClient, [data.data.slug], data, [
+      clientApiParams.locale,
+    ]);
     queryClient.invalidateQueries({
       queryKey: SELF_COMMUNITY_MEMBERSHIPS_QUERY_KEY(),
     });
@@ -49,7 +50,6 @@ export const UpdateCommunity = async ({
 };
 
 export const useUpdateCommunity = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateCommunity>>,
@@ -61,5 +61,5 @@ export const useUpdateCommunity = (
   return useConnectedMutation<
     UpdateCommunityParams,
     Awaited<ReturnType<typeof UpdateCommunity>>
-  >(UpdateCommunity, params, options);
+  >(UpdateCommunity, options);
 };

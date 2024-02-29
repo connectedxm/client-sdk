@@ -9,7 +9,6 @@ import { EVENT_SESSION_QUERY_KEY } from "../events/useGetEventSession";
 import { SELF_EVENTS_QUERY_KEY } from "./useGetSelfEvents";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_SESSIONS_QUERY_KEY = (eventId: string): QueryKey => [
   ...SELF_EVENTS_QUERY_KEY(false),
@@ -64,8 +63,6 @@ export const useGetSelfEventSessions = (
     Awaited<ReturnType<typeof GetSelfEventSessions>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
-
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventSessions>>
   >(
@@ -75,7 +72,7 @@ export const useGetSelfEventSessions = (
     params,
     {
       ...options,
-      enabled: !!authenticated && !!eventId && (options.enabled ?? true),
+      enabled: !!eventId && (options.enabled ?? true),
     }
   );
 };

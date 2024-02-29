@@ -21,7 +21,6 @@ export const CancelEventRegistration = async ({
   registrationId,
   clientApiParams,
   queryClient,
-  locale = "env",
 }: CancelEventRegistrationParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -32,7 +31,7 @@ export const CancelEventRegistration = async ({
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
     queryClient.invalidateQueries({
       queryKey: SELF_EVENTS_QUERY_KEY(false),
@@ -51,7 +50,6 @@ export const CancelEventRegistration = async ({
 };
 
 export const useCancelEventRegistration = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof CancelEventRegistration>>,
@@ -63,5 +61,5 @@ export const useCancelEventRegistration = (
   return useConnectedMutation<
     CancelEventRegistrationParams,
     Awaited<ReturnType<typeof CancelEventRegistration>>
-  >(CancelEventRegistration, params, options);
+  >(CancelEventRegistration, options);
 };

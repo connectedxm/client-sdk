@@ -30,7 +30,6 @@ export const RejectTransfer = async ({
 };
 
 export const useRejectTransfer = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RejectTransfer>>,
@@ -42,5 +41,5 @@ export const useRejectTransfer = (
   return useConnectedMutation<
     RejectTransferParams,
     Awaited<ReturnType<typeof RejectTransfer>>
-  >(RejectTransfer, params, options);
+  >(RejectTransfer, options);
 };

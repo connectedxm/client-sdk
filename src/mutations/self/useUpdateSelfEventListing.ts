@@ -16,7 +16,7 @@ export interface UpdateListing {
   eventType: keyof typeof EventType;
   name: string;
   shortDescription: string;
-  longDescription: string;
+  longDescription: string | null;
   eventStart: string;
   eventEnd: string;
   registration: boolean;
@@ -48,7 +48,6 @@ export const UpdateSelfEventListing = async ({
   base64,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: UpdateSelfEventListingParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -62,8 +61,12 @@ export const UpdateSelfEventListing = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_EVENT_QUERY_DATA(queryClient, [eventId], data, [locale]);
-    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data, [locale]);
+    SET_EVENT_QUERY_DATA(queryClient, [eventId], data, [
+      clientApiParams.locale,
+    ]);
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data, [
+      clientApiParams.locale,
+    ]);
 
     queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
     queryClient.invalidateQueries({
@@ -81,7 +84,6 @@ export const UpdateSelfEventListing = async ({
 };
 
 export const useUpdateSelfEventListing = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfEventListing>>,
@@ -93,5 +95,5 @@ export const useUpdateSelfEventListing = (
   return useConnectedMutation<
     UpdateSelfEventListingParams,
     Awaited<ConnectedXMResponse<EventListing>>
-  >(UpdateSelfEventListing, params, options);
+  >(UpdateSelfEventListing, options);
 };

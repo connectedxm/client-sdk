@@ -32,7 +32,6 @@ export const UpdateSelfLead = async ({
 };
 
 export const useUpdateSelfLead = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfLead>>,
@@ -44,5 +43,5 @@ export const useUpdateSelfLead = (
   return useConnectedMutation<
     UpdateSelfLeadParams,
     Awaited<ReturnType<typeof UpdateSelfLead>>
-  >(UpdateSelfLead, params, options);
+  >(UpdateSelfLead, options);
 };

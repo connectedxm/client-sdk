@@ -28,7 +28,6 @@ export const DeleteSelfPushDevice = async ({
 };
 
 export const useDeleteSelfPushDevice = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof DeleteSelfPushDevice>>,
@@ -40,5 +39,5 @@ export const useDeleteSelfPushDevice = (
   return useConnectedMutation<
     DeleteSelfPushDeviceParams,
     Awaited<ReturnType<typeof DeleteSelfPushDevice>>
-  >(DeleteSelfPushDevice, params, options);
+  >(DeleteSelfPushDevice, options);
 };

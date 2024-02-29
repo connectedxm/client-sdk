@@ -32,14 +32,14 @@ export interface UpdateSelfNotificationPreferencesParams
 export const UpdateSelfNotificationPreferences = async ({
   clientApiParams,
   queryClient,
-  locale = "en",
+
   ...params
 }: UpdateSelfNotificationPreferencesParams): Promise<
   ConnectedXMResponse<NotificationPreferences>
 > => {
   if (queryClient) {
     queryClient.setQueryData(
-      [...SELF_PREFERENCES_QUERY_KEY(), locale],
+      [...SELF_PREFERENCES_QUERY_KEY(), clientApiParams.locale],
       (oldData: any) => {
         if (oldData?.data) {
           oldData.data = { ...oldData.data, ...params };
@@ -60,7 +60,6 @@ export const UpdateSelfNotificationPreferences = async ({
 };
 
 export const useUpdateSelfNotificationPreferences = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>,
@@ -75,5 +74,5 @@ export const useUpdateSelfNotificationPreferences = (
   return useConnectedMutation<
     UpdateSelfNotificationPreferencesParams,
     Awaited<ReturnType<typeof UpdateSelfNotificationPreferences>>
-  >(UpdateSelfNotificationPreferences, params, options);
+  >(UpdateSelfNotificationPreferences, options);
 };

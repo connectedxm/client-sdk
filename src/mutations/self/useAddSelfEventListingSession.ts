@@ -31,7 +31,6 @@ export const AddSelfEventListingSession = async ({
   session,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: AddSelfEventListingSessionParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
@@ -46,7 +45,7 @@ export const AddSelfEventListingSession = async ({
   if (queryClient && data.status === "ok") {
     if (data.data && !!eventId) {
       queryClient.setQueryData(
-        [...EVENT_QUERY_KEY(eventId), locale],
+        [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
         (oldData: any) => {
           const event = oldData
             ? JSON.parse(JSON.stringify(oldData))
@@ -62,7 +61,7 @@ export const AddSelfEventListingSession = async ({
         }
       );
       queryClient.setQueryData(
-        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), locale],
+        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
         (oldData: any) => {
           const event = oldData
             ? JSON.parse(JSON.stringify(oldData))
@@ -84,7 +83,6 @@ export const AddSelfEventListingSession = async ({
 };
 
 export const useAddSelfEventListingSession = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddSelfEventListingSession>>,
@@ -96,5 +94,5 @@ export const useAddSelfEventListingSession = (
   return useConnectedMutation<
     AddSelfEventListingSessionParams,
     Awaited<ReturnType<typeof AddSelfEventListingSession>>
-  >(AddSelfEventListingSession, params, options);
+  >(AddSelfEventListingSession, options);
 };

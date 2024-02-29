@@ -23,7 +23,6 @@ export const RemoveSelfEventRegistrationTicket = async ({
   registrationId,
   clientApiParams,
   queryClient,
-  locale = "en",
 }: RemoveSelfEventRegistrationTicketParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
@@ -40,7 +39,7 @@ export const RemoveSelfEventRegistrationTicket = async ({
       ),
     });
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      locale,
+      clientApiParams.locale,
     ]);
 
     queryClient.invalidateQueries({
@@ -60,7 +59,6 @@ export const RemoveSelfEventRegistrationTicket = async ({
 };
 
 export const useRemoveSelfEventRegistrationTicket = (
-  params: Omit<MutationParams, "queryClient" | "clientApiParams"> = {},
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof RemoveSelfEventRegistrationTicket>>,
@@ -75,5 +73,5 @@ export const useRemoveSelfEventRegistrationTicket = (
   return useConnectedMutation<
     RemoveSelfEventRegistrationTicketParams,
     Awaited<ReturnType<typeof RemoveSelfEventRegistrationTicket>>
-  >(RemoveSelfEventRegistrationTicket, params, options);
+  >(RemoveSelfEventRegistrationTicket, options);
 };
