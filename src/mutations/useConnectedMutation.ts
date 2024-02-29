@@ -17,7 +17,7 @@ export interface MutationParams {
 export interface MutationOptions<TResponseData, TMutationParams>
   extends UseMutationOptions<
     TResponseData,
-    AxiosError<TResponseData> | Error,
+    AxiosError<TResponseData>,
     TMutationParams
   > {}
 
@@ -34,13 +34,19 @@ export const useConnectedMutation = <
     "mutationFn"
   >
 ) => {
-  const { locale, apiUrl, getToken, organizationId, getExecuteAs } =
-    useConnectedXM();
+  const {
+    locale,
+    apiUrl,
+    getToken,
+    organizationId,
+    getExecuteAs,
+    onMutationError,
+  } = useConnectedXM();
   const queryClient = useQueryClient();
 
   return useMutation<
     TResponseData,
-    AxiosError<TResponseData> | Error,
+    AxiosError<TResponseData>,
     Omit<TMutationParams, "queryClient" | "clientApiParams">
   >({
     mutationFn: (data) =>
@@ -56,6 +62,10 @@ export const useConnectedMutation = <
         ...data,
       } as TMutationParams),
     ...options,
+    onError: (error, variables, context) => {
+      if (onMutationError) onMutationError(error, variables, context);
+      if (options?.onError) options.onError(error, variables, context);
+    },
   });
 };
 

@@ -6,6 +6,7 @@ import {
   QueryClientProvider,
   QueryKey,
 } from "@tanstack/react-query";
+import { MutationParams } from ".";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -31,6 +32,11 @@ export interface ConnectedXMClientContextState {
     error: AxiosError<ConnectedXMResponse<any>>,
     key: QueryKey,
     shouldRedirect: boolean
+  ) => void;
+  onMutationError?: (
+    error: AxiosError<ConnectedXMResponse<null>>,
+    variables: Omit<MutationParams, "queryClient" | "clientApiParams">,
+    context: unknown
   ) => void;
 }
 
