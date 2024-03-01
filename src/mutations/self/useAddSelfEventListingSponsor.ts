@@ -3,7 +3,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import {
+  EVENT_SPONSORS_QUERY_KEY,
+  SET_SELF_EVENT_LISTING_QUERY_DATA,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface AddSelfEventListingSponsorParams extends MutationParams {
@@ -19,37 +22,6 @@ export const AddSelfEventListingSponsor = async ({
 }: AddSelfEventListingSponsorParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
-  if (queryClient) {
-    queryClient.setQueryData(
-      [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
-      (oldData: any) => {
-        const event = oldData ? JSON.parse(JSON.stringify(oldData)) : undefined;
-        if (event && event.data) {
-          if (event.data?.sponsors) {
-            event.data.sponsors.push(sponsor);
-          } else {
-            event.data.sponsors = [sponsor];
-          }
-        }
-        return event;
-      }
-    );
-    queryClient.setQueryData(
-      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
-      (oldData: any) => {
-        const event = oldData ? JSON.parse(JSON.stringify(oldData)) : undefined;
-        if (event && event.data) {
-          if (event.data?.sponsors) {
-            event.data.sponsors.push(sponsor);
-          } else {
-            event.data.sponsors = [sponsor];
-          }
-        }
-        return event;
-      }
-    );
-  }
-
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sponsors`,
@@ -57,6 +29,13 @@ export const AddSelfEventListingSponsor = async ({
       sponsorId: sponsor.id,
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SPONSORS_QUERY_KEY(eventId),
+    });
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+  }
 
   return data;
 };

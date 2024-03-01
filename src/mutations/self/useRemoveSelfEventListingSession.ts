@@ -3,7 +3,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import {
+  EVENT_SESSIONS_QUERY_KEY,
+  SET_SELF_EVENT_LISTING_QUERY_DATA,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface RemoveSelfEventListingSessionParams extends MutationParams {
@@ -19,41 +22,17 @@ export const RemoveSelfEventListingSession = async ({
 }: RemoveSelfEventListingSessionParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
-  if (queryClient) {
-    queryClient.setQueryData(
-      [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
-      (event: any) => {
-        if (event && event.data) {
-          const index = event?.data?.sessions?.findIndex(
-            (session: any) => session.id === sessionId
-          );
-          if (index !== -1 && event.data.sessions) {
-            event.data.sessions.splice(index, 1);
-          }
-        }
-        return event;
-      }
-    );
-    queryClient.setQueryData(
-      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
-      (event: any) => {
-        if (event && event.data) {
-          const index = event?.data?.sessions?.findIndex(
-            (session: any) => session.id === sessionId
-          );
-          if (index !== -1 && event.data.sessions) {
-            event.data.sessions.splice(index, 1);
-          }
-        }
-        return event;
-      }
-    );
-  }
-
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sessions/${sessionId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SESSIONS_QUERY_KEY(eventId),
+    });
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+  }
 
   return data;
 };
