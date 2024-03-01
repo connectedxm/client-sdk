@@ -1,28 +1,24 @@
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { Activity, ConnectedXMResponse } from "@src/interfaces";
+import { InfiniteData, QueryClient, QueryKey } from "@tanstack/react-query";
+import { produce } from "immer";
 
 export const UpdateLikesSingle = (
   increment: boolean,
   queryClient: QueryClient,
   KEY: QueryKey
 ) => {
-  queryClient.setQueryData(KEY, (data: any) => {
-    if (!data?.data) {
-      return data;
-    }
-    data = data.data;
-    if (typeof data?._count != "undefined") {
-      return {
-        data: {
-          ...data,
-          _count: {
-            ...data._count,
-            likes: increment ? data._count.likes + 1 : data._count.likes - 1,
-          },
-          likes: increment ? [{}] : undefined,
-        },
-      };
-    }
-  });
+  queryClient.setQueryData(KEY, (originalData: ConnectedXMResponse<Activity>) =>
+    produce(originalData, (draft) => {
+      if (!draft?.data) {
+        return;
+      }
+
+      draft.data._count.likes += increment ? 1 : -1;
+      draft.data.likes = increment
+        ? [{ createdAt: new Date().toISOString() }]
+        : [];
+    })
+  );
 };
 
 export const UpdateLikesInfinite = (
@@ -31,49 +27,24 @@ export const UpdateLikesInfinite = (
   KEY: QueryKey,
   activityId: string
 ) => {
-  queryClient.setQueriesData({ queryKey: KEY, exact: false }, (data: any) => {
-    if (!data?.pages || data?.pages?.length === 0) {
-      return data;
-    }
-    const pages = data.pages;
-    let activityIndex;
-    let pageIndex;
-    let reshareActivityIndex;
-    let resharePageIndex;
-    for (let x = 0; x < pages?.length; x++) {
-      for (let y = 0; y < pages?.[x]?.data?.length; y++) {
-        if (pages?.[x]?.data?.[y]?.id === activityId) {
-          pageIndex = x;
-          activityIndex = y;
+  queryClient.setQueriesData(
+    { queryKey: KEY, exact: false },
+    (originalData: InfiniteData<ConnectedXMResponse<Activity[]>> | undefined) =>
+      produce(originalData, (draft) => {
+        if (!draft?.pages || draft.pages.length === 0) {
+          return;
         }
-        if (pages?.[x]?.data?.[y]?.reshared?.id === activityId) {
-          resharePageIndex = x;
-          reshareActivityIndex = y;
+
+        for (const page of draft.pages) {
+          for (const activity of page.data) {
+            if (activity.id === activityId) {
+              activity._count.likes += increment ? 1 : -1;
+              activity.likes = increment
+                ? [{ createdAt: new Date().toISOString() }]
+                : [];
+            }
+          }
         }
-      }
-    }
-    if (
-      typeof pageIndex != "undefined" &&
-      typeof activityIndex != "undefined"
-    ) {
-      pages[pageIndex].data[activityIndex]._count.likes = increment
-        ? pages?.[pageIndex]?.data[activityIndex]._count.likes + 1
-        : pages?.[pageIndex]?.data[activityIndex]._count.likes - 1;
-      pages[pageIndex].data[activityIndex].likes = increment ? [{}] : undefined;
-    }
-    if (
-      typeof resharePageIndex != "undefined" &&
-      typeof reshareActivityIndex != "undefined"
-    ) {
-      pages[resharePageIndex].data[reshareActivityIndex].reshared._count.likes =
-        increment
-          ? pages?.[resharePageIndex]?.data[reshareActivityIndex].reshared
-              ._count.likes + 1
-          : pages?.[resharePageIndex]?.data[reshareActivityIndex].reshared
-              ._count.likes - 1;
-      pages[resharePageIndex].data[reshareActivityIndex].reshared.likes =
-        increment ? [{}] : undefined;
-    }
-    return { ...data, pages };
-  });
+      })
+  );
 };

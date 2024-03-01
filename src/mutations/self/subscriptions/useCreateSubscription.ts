@@ -6,7 +6,6 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 
 export interface CreateSubscriptionParams extends MutationParams {
-  subscriptionId: string;
   productId: string;
   priceId: string;
 }

@@ -1214,6 +1214,10 @@ export interface NotificationPreferences {
   chatPush: boolean;
   chatUnreadPush: boolean;
   chatUnreadEmail: boolean;
+  organizationAnnouncementEmail: boolean;
+  organizationAnnouncementPush: boolean;
+  communityAnnouncementEmail: boolean;
+  communityAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
   eventAnnouncementPush: boolean;
 }

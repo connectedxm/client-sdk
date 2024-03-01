@@ -5,6 +5,7 @@ import {
   COMMUNITY_ACTIVITIES_QUERY_KEY,
   CONTENT_ACTIVITIES_QUERY_KEY,
   EVENT_ACTIVITIES_QUERY_KEY,
+  GetBaseSingleQueryKeys,
 } from "@src/queries";
 import {
   UpdateCommentsInfinite,
@@ -44,7 +45,7 @@ export const SelfCreateActivity = async ({
     if (activity.commentedId) {
       UpdateCommentsSingle(true, queryClient, [
         ...ACTIVITY_QUERY_KEY(activity.commentedId),
-        clientApiParams.locale,
+        ...GetBaseSingleQueryKeys(clientApiParams.locale),
       ]);
       UpdateCommentsInfinite(
         true,
@@ -60,56 +61,56 @@ export const SelfCreateActivity = async ({
     `/self/activities`,
     {
       activity,
-      buffer: base64Image ? `data:image/jpeg;base64,${base64Image}` : undefined,
-      videoUri: videoUri || undefined,
+      imageUri: base64Image ?? undefined,
+      videoUri: videoUri ?? undefined,
     }
   );
 
   if (queryClient && data.status === "ok") {
     let nested = false;
 
-    if (data.data?.commented?.id) {
+    if (activity.commentedId) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
-          ...ACTIVITY_COMMENTS_QUERY_KEY(data.data.commented.id),
+          ...ACTIVITY_COMMENTS_QUERY_KEY(activity.commentedId),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
         data.data
       );
     }
 
-    if (data.data?.content?.id) {
+    if (activity.contentId) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
-          ...CONTENT_ACTIVITIES_QUERY_KEY(data.data.content.id),
+          ...CONTENT_ACTIVITIES_QUERY_KEY(activity.contentId),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
         data.data
       );
     }
 
-    if (data.data?.event?.id) {
+    if (activity.eventId) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
-          ...EVENT_ACTIVITIES_QUERY_KEY(data.data.event.id),
+          ...EVENT_ACTIVITIES_QUERY_KEY(activity.eventId),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
         data.data
       );
     }
 
-    if (data.data?.community?.id) {
+    if (activity.communityId) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
-          ...COMMUNITY_ACTIVITIES_QUERY_KEY(data.data.community.id),
+          ...COMMUNITY_ACTIVITIES_QUERY_KEY(activity.communityId),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
         data.data
