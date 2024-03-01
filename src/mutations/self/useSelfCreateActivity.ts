@@ -5,6 +5,7 @@ import {
   COMMUNITY_ACTIVITIES_QUERY_KEY,
   CONTENT_ACTIVITIES_QUERY_KEY,
   EVENT_ACTIVITIES_QUERY_KEY,
+  GetBaseSingleQueryKeys,
 } from "@src/queries";
 import {
   UpdateCommentsInfinite,
@@ -44,7 +45,7 @@ export const SelfCreateActivity = async ({
     if (activity.commentedId) {
       UpdateCommentsSingle(true, queryClient, [
         ...ACTIVITY_QUERY_KEY(activity.commentedId),
-        clientApiParams.locale,
+        ...GetBaseSingleQueryKeys(clientApiParams.locale),
       ]);
       UpdateCommentsInfinite(
         true,

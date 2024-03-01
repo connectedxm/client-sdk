@@ -1,4 +1,8 @@
-import { ACTIVITIES_QUERY_KEY, ACTIVITY_QUERY_KEY } from "@src/queries";
+import {
+  ACTIVITIES_QUERY_KEY,
+  ACTIVITY_QUERY_KEY,
+  GetBaseSingleQueryKeys,
+} from "@src/queries";
 import useConnectedMutation, {
   MutationParams,
   MutationOptions,
@@ -20,7 +24,10 @@ export const ReshareActivity = async ({
   clientApiParams,
 }: ReshareActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
-    UpdateResharesSingle(true, queryClient, ACTIVITY_QUERY_KEY(activityId));
+    UpdateResharesSingle(true, queryClient, [
+      ...ACTIVITY_QUERY_KEY(activityId),
+      ...GetBaseSingleQueryKeys(clientApiParams.locale),
+    ]);
     UpdateResharesInfinite(
       true,
       queryClient,

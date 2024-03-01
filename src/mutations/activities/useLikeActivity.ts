@@ -7,7 +7,11 @@ import {
   UpdateLikesInfinite,
   UpdateLikesSingle,
 } from "./optimistic/UpdateLikes";
-import { ACTIVITIES_QUERY_KEY, ACTIVITY_QUERY_KEY } from "@src/queries";
+import {
+  ACTIVITIES_QUERY_KEY,
+  ACTIVITY_QUERY_KEY,
+  GetBaseSingleQueryKeys,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface LikeActivityParams extends MutationParams {
@@ -20,7 +24,10 @@ export const LikeActivity = async ({
   queryClient,
 }: LikeActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
-    UpdateLikesSingle(true, queryClient, ACTIVITY_QUERY_KEY(activityId));
+    UpdateLikesSingle(true, queryClient, [
+      ...ACTIVITY_QUERY_KEY(activityId),
+      ...GetBaseSingleQueryKeys(clientApiParams.locale),
+    ]);
     UpdateLikesInfinite(true, queryClient, ACTIVITIES_QUERY_KEY(), activityId);
   }
 

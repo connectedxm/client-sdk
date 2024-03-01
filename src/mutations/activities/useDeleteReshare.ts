@@ -3,7 +3,11 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { ACTIVITIES_QUERY_KEY, ACTIVITY_QUERY_KEY } from "@src/queries";
+import {
+  ACTIVITIES_QUERY_KEY,
+  ACTIVITY_QUERY_KEY,
+  GetBaseSingleQueryKeys,
+} from "@src/queries";
 import {
   UpdateResharesInfinite,
   UpdateResharesSingle,
@@ -20,7 +24,10 @@ export const DeleteReshare = async ({
   queryClient,
 }: DeleteReshareParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
-    UpdateResharesSingle(false, queryClient, ACTIVITY_QUERY_KEY(activityId));
+    UpdateResharesSingle(false, queryClient, [
+      ...ACTIVITY_QUERY_KEY(activityId),
+      ...GetBaseSingleQueryKeys(clientApiParams.locale),
+    ]);
     UpdateResharesInfinite(
       false,
       queryClient,
