@@ -1,4 +1,7 @@
-import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import {
+  EVENT_SPONSORS_QUERY_KEY,
+  SET_SELF_EVENT_LISTING_QUERY_DATA,
+} from "@src/queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -19,41 +22,17 @@ export const RemoveSelfEventListingSponsor = async ({
 }: RemoveSelfEventListingSponsorParams): Promise<
   ConnectedXMResponse<EventListing>
 > => {
-  if (queryClient) {
-    queryClient.setQueryData(
-      [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
-      (event: any) => {
-        if (event && event.data) {
-          const index = event?.data?.sponsors?.findIndex(
-            (sponsor: any) => sponsor.id === sponsorId
-          );
-          if (index !== -1 && event.data.sponsors) {
-            event.data.sponsors.splice(index, 1);
-          }
-        }
-        return event;
-      }
-    );
-    queryClient.setQueryData(
-      [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
-      (event: any) => {
-        if (event && event.data) {
-          const index = event?.data?.sponsors?.findIndex(
-            (sponsor: any) => sponsor.id === sponsorId
-          );
-          if (index !== -1 && event.data.sponsors) {
-            event.data.sponsors.splice(index, 1);
-          }
-        }
-        return event;
-      }
-    );
-  }
-
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<EventListing>>(
     `/self/events/listings/${eventId}/sponsors/${sponsorId}`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SPONSORS_QUERY_KEY(eventId),
+    });
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+  }
 
   return data;
 };

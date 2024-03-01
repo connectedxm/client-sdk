@@ -1,4 +1,7 @@
-import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import {
+  EVENT_SESSIONS_QUERY_KEY,
+  SET_SELF_EVENT_LISTING_QUERY_DATA,
+} from "@src/queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -43,40 +46,10 @@ export const AddSelfEventListingSession = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    if (data.data && !!eventId) {
-      queryClient.setQueryData(
-        [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
-        (oldData: any) => {
-          const event = oldData
-            ? JSON.parse(JSON.stringify(oldData))
-            : undefined;
-          if (event && event.data) {
-            if (event.data?.sessions) {
-              event.data.sessions.push(data.data);
-            } else {
-              event.data.sessions = [data.data];
-            }
-          }
-          return event;
-        }
-      );
-      queryClient.setQueryData(
-        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
-        (oldData: any) => {
-          const event = oldData
-            ? JSON.parse(JSON.stringify(oldData))
-            : undefined;
-          if (event && event.data) {
-            if (event.data?.sessions) {
-              event.data.sessions.push(data.data);
-            } else {
-              event.data.sessions = [data.data];
-            }
-          }
-          return event;
-        }
-      );
-    }
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SESSIONS_QUERY_KEY(eventId),
+    });
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;

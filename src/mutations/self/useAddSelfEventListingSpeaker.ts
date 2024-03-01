@@ -3,7 +3,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_QUERY_KEY, SELF_EVENT_LISTING_QUERY_KEY } from "@src/queries";
+import {
+  EVENT_SPEAKERS_QUERY_KEY,
+  SET_SELF_EVENT_LISTING_QUERY_DATA,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface EventListingSpeaker {
@@ -36,40 +39,10 @@ export const AddSelfEventListingSpeaker = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    if (data.data) {
-      queryClient.setQueryData(
-        [...EVENT_QUERY_KEY(eventId), clientApiParams.locale],
-        (oldData: any) => {
-          const event = oldData
-            ? JSON.parse(JSON.stringify(oldData))
-            : undefined;
-          if (event && event.data) {
-            if (event.data?.speakers) {
-              event.data.speakers.push(data.data);
-            } else {
-              event.data.speakers = [data.data];
-            }
-          }
-          return event;
-        }
-      );
-      queryClient.setQueryData(
-        [...SELF_EVENT_LISTING_QUERY_KEY(eventId), clientApiParams.locale],
-        (oldData: any) => {
-          const event = oldData
-            ? JSON.parse(JSON.stringify(oldData))
-            : undefined;
-          if (event && event.data) {
-            if (event.data?.speakers) {
-              event.data.speakers.push(data.data);
-            } else {
-              event.data.speakers = [data.data];
-            }
-          }
-          return event;
-        }
-      );
-    }
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SPEAKERS_QUERY_KEY(eventId),
+    });
+    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;
