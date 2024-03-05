@@ -428,6 +428,7 @@ export interface RegistrationSectionQuestion {
 export interface BaseRegistrationQuestionChoice {
   id: number;
   value: string;
+  text: string | null;
   supply: number | null;
   description: string | null;
   sortOrder: number;
