@@ -9,6 +9,7 @@ export * from "./organization";
 export * from "./self";
 export * from "./series";
 export * from "./sponsors";
+export * from "./invoices";
 
 export * from "./useConnectedInfiniteQuery";
 export * from "./useConnectedSingleQuery";

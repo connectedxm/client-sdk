@@ -1514,3 +1514,32 @@ export interface SubscriptionProductPrice extends BaseSubscriptionProductPrice {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BaseInvoice {
+  id: string;
+  title: string;
+  description: string | null;
+  dueDate: string;
+}
+
+export interface Invoice extends BaseInvoice {
+  lineItems: BaseInvoiceLineItem[];
+  payments: BasePayment[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseInvoiceLineItem {
+  id: string;
+  name: string;
+  description: string | null;
+  quantity: number;
+  amount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InvoiceLineItem extends BaseInvoiceLineItem {
+  invoiceId: string;
+  invoice: BaseInvoice;
+}
