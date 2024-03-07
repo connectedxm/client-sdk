@@ -153,6 +153,11 @@ export interface BaseAccount {
   image: BaseImage | null;
   chatConnected: boolean;
   accountTiers: BaseAccountTier[];
+  subscriptions: {
+    subscriptionProduct: {
+      tiers: BaseAccountTier[];
+    };
+  }[];
 }
 
 export interface Account extends BaseAccount {
