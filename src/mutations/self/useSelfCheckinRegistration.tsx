@@ -6,27 +6,27 @@ import useConnectedMutation, {
 import { SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY } from "@src/queries";
 
 export interface SelfCheckinRegistrationParams extends MutationParams {
-  accountId: string;
   eventId: string;
+  registrationId: string;
 }
 
 export const SelfCheckinRegistration = async ({
-  accountId,
   eventId,
+  registrationId,
   clientApiParams,
   queryClient,
 }: SelfCheckinRegistrationParams) => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post(
-    `/self/events/listings/${eventId}/registrations/${accountId}`
+    `/self/events/listings/${eventId}/registrations/${registrationId}`
   );
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, true),
+      queryKey: SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, false),
+      queryKey: SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId),
     });
   }
   return data;

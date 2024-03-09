@@ -1,4 +1,8 @@
-import type { ConnectedXMResponse, Registration } from "@interfaces";
+import type {
+  ConnectedXMResponse,
+  Registration,
+  RegistrationStatus,
+} from "@interfaces";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -9,17 +13,17 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
-  checkedIn: boolean
+  status?: keyof typeof RegistrationStatus
 ) => [
   ...SELF_EVENT_LISTING_QUERY_KEY(eventId),
   "REGISTRATIONS",
-  checkedIn ? "CHECKED_IN" : "ALL",
+  status ?? "ALL",
 ];
 
 export interface GetSelfEventListingRegistrationsProps
   extends InfiniteQueryParams {
   eventId: string;
-  checkedIn?: boolean;
+  status?: keyof typeof RegistrationStatus;
 }
 
 export const GetSelfEventListingRegistrations = async ({
@@ -28,7 +32,7 @@ export const GetSelfEventListingRegistrations = async ({
   pageSize,
   orderBy,
   search,
-  checkedIn,
+  status,
   clientApiParams,
 }: GetSelfEventListingRegistrationsProps): Promise<
   ConnectedXMResponse<Registration[]>
@@ -42,7 +46,7 @@ export const GetSelfEventListingRegistrations = async ({
         pageSize: pageSize || undefined,
         orderBy: orderBy || undefined,
         search: search || undefined,
-        checkedIn: checkedIn ? "true" : undefined,
+        status: status || undefined,
       },
     }
   );
@@ -51,7 +55,7 @@ export const GetSelfEventListingRegistrations = async ({
 
 export const useGetSelfEventListingsRegistrations = (
   eventId: string,
-  checkedIn: boolean = false,
+  status?: keyof typeof RegistrationStatus,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -63,9 +67,9 @@ export const useGetSelfEventListingsRegistrations = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   >(
-    SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, checkedIn),
+    SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, status),
     (params: InfiniteQueryParams) =>
-      GetSelfEventListingRegistrations({ eventId, checkedIn, ...params }),
+      GetSelfEventListingRegistrations({ eventId, status, ...params }),
     params,
     {
       ...options,
