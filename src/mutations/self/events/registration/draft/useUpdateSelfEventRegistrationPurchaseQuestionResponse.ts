@@ -1,10 +1,20 @@
-import { ConnectedXMResponse, Registration } from "../../../../../interfaces";
-import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "../../../../../queries";
+import {
+  ConnectedXMResponse,
+  Registration,
+  RegistrationQuestion,
+  RegistrationSection,
+} from "../../../../../interfaces";
+import {
+  GetBaseSingleQueryKeys,
+  SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
+  SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
+} from "../../../../../queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../../../useConnectedMutation";
 import { GetClientAPI } from "../../../../../ClientAPI";
+import { produce } from "immer";
 
 export interface UpdateSelfEventRegistrationQuestionResponseParams
   extends MutationParams {
@@ -53,6 +63,48 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
+
+    queryClient.setQueryData(
+      [
+        ...SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+          eventId,
+          registrationId,
+          purchaseId
+        ),
+        ...GetBaseSingleQueryKeys(clientApiParams.locale),
+      ],
+      (oldData: ConnectedXMResponse<RegistrationSection[]>) => {
+        if (oldData.data) {
+          return produce(oldData, (draft) => {
+            draft.data.forEach((section) => {
+              section.questions.forEach((question) => {
+                // This is a recursive function that will fill the response of the question and its subquestions
+                const fillQuestionResponse = (
+                  question: RegistrationQuestion,
+                  questionId: number,
+                  value: string
+                ) => {
+                  if (question.id === questionId) {
+                    question.response = value;
+                  }
+                  if (question.choices.length > 0) {
+                    question.choices.forEach((choice) => {
+                      if (choice.subQuestions.length > 0) {
+                        choice.subQuestions.forEach((subQuestion) => {
+                          fillQuestionResponse(subQuestion, questionId, value);
+                        });
+                      }
+                    });
+                  }
+                };
+                fillQuestionResponse(question, questionId, value);
+              });
+            });
+          });
+        }
+        return oldData;
+      }
+    );
   }
 
   return data;
