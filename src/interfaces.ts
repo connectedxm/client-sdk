@@ -377,8 +377,6 @@ export interface RegistrationEventDetails {
   registrationLimit: number;
   registrationStart: string;
   registrationEnd: string;
-  tickets: BaseTicket[];
-  sections?: RegistrationSection[];
   _count: {
     sections: number;
     tickets: number;
@@ -416,18 +414,11 @@ export interface BaseRegistrationQuestion {
   max: string | null;
   validation: string | null;
   validationMessage: string | null;
-  primary: boolean;
-  guest: boolean;
-}
-
-export interface RegistrationQuestion extends BaseRegistrationQuestion {
   choices: BaseRegistrationQuestionChoice[];
 }
 
-export interface RegistrationSectionQuestion {
-  questionId: number;
-  question: RegistrationQuestion;
-  sortOrder: number;
+export interface RegistrationQuestion extends BaseRegistrationQuestion {
+  response?: string;
 }
 
 export interface BaseRegistrationQuestionChoice {
@@ -437,7 +428,6 @@ export interface BaseRegistrationQuestionChoice {
   supply: number | null;
   description: string | null;
   sortOrder: number;
-  question: RegistrationQuestion;
   subQuestions: RegistrationQuestion[];
 }
 
@@ -469,12 +459,13 @@ export interface BaseRegistrationSection {
   id: number;
   name: string;
   description: string | null;
-  guestDescription: string | null;
   sortOrder: number;
 }
 
 export interface RegistrationSection extends BaseRegistrationSection {
-  questions: RegistrationSectionQuestion[];
+  accountTiers: BaseAccountTier[];
+  eventTickets: BaseTicket[];
+  questions: RegistrationQuestion[];
 }
 
 export interface EventListing extends Event {
@@ -526,8 +517,6 @@ export interface BaseTicket {
   featuredImage: BaseImage | null;
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
-  minGuests: number;
-  maxGuests: number;
   supply: number | null;
 }
 
@@ -543,16 +532,13 @@ export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
 
 export interface BasePurchase {
   id: string;
-  orderId: string;
+  alternateId: number;
   location: string | null;
   usedAt: string | null;
-  alternateId: number;
-  transfer: {
-    id: string;
-    email: string;
-    createdAt: string;
-  };
-  ticket: Ticket;
+  transfer: { select: { id: string; email: string; createdAt: string } } | null;
+  ticketId: string | null;
+  ticket: BaseTicket | null;
+  responses: BaseRegistrationQuestionResponse[];
 }
 
 export interface Purchase extends BasePurchase {
@@ -1134,27 +1120,12 @@ export interface Registration {
   event: RegistrationEventDetails | undefined;
   account: BaseAccount;
   status: RegistrationStatus;
-  selectedTicketId: string | null;
-  selectedTicket: BaseTicket | null;
-  selectedQuantity: number;
   couponId: string | null;
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
   payments: Payment[];
-  responses: BaseRegistrationQuestionResponse[];
-  guests: BaseRegistrationGuest[];
   createdAt: string;
 }
-
-export interface BaseRegistrationGuest {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  responses: BaseRegistrationQuestionResponse[];
-}
-
-export interface RegistrationGuest extends BaseRegistrationGuest {}
 
 enum RegistrationPaymentType {
   charge = "charge",

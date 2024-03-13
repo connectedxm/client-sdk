@@ -29,37 +29,25 @@ export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
 
 export interface GetSelfEventRegistrationProps extends SingleQueryParams {
   eventId: string;
-  ticket?: string;
-  quantity?: number;
-  coupon?: string;
 }
 
 export const GetSelfEventRegistration = async ({
   eventId,
-  ticket,
-  quantity,
-  coupon,
   clientApiParams,
 }: GetSelfEventRegistrationProps): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/events/${eventId}/registration`, {
-    params: {
-      ticket: ticket || undefined,
-      quantity: quantity || undefined,
-      coupon: coupon || undefined,
-    },
-  });
+  const { data } = await clientApi.get(
+    `/self/events/${eventId}/registration`,
+    {}
+  );
 
   return data;
 };
 
 export const useGetSelfEventRegistration = (
   eventId: string,
-  ticket?: string,
-  quantity?: number,
-  coupon?: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventRegistration>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventRegistration>>(
@@ -67,9 +55,6 @@ export const useGetSelfEventRegistration = (
     (params: SingleQueryParams) =>
       GetSelfEventRegistration({
         eventId,
-        ticket,
-        quantity,
-        coupon,
         ...params,
       }),
     {

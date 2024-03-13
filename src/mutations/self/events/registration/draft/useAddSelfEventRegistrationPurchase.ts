@@ -12,28 +12,29 @@ import {
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface SelectSelfEventRegistrationTicketParams
-  extends MutationParams {
+export interface AddSelfEventRegistrationPurchaseParams extends MutationParams {
   eventId: string;
   registrationId: string;
   ticketId: string;
+  quantity: number;
 }
 
-export const SelectSelfEventRegistrationTicket = async ({
+export const AddSelfEventRegistrationPurchase = async ({
   eventId,
   registrationId,
   ticketId,
+  quantity,
   clientApiParams,
   queryClient,
-}: SelectSelfEventRegistrationTicketParams): Promise<
+}: AddSelfEventRegistrationPurchaseParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/ticket`,
+    `/self/events/${eventId}/registration/${registrationId}/draft/purchases`,
     {
       ticketId,
-      quantity: 1,
+      quantity,
     }
   );
 
@@ -57,12 +58,12 @@ export const SelectSelfEventRegistrationTicket = async ({
   return data;
 };
 
-export const useSelectSelfEventRegistrationTicket = (
+export const useAddSelfEventRegistrationPurchase = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelectSelfEventRegistrationTicket>>,
+      Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>,
       Omit<
-        SelectSelfEventRegistrationTicketParams,
+        AddSelfEventRegistrationPurchaseParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -70,7 +71,7 @@ export const useSelectSelfEventRegistrationTicket = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SelectSelfEventRegistrationTicketParams,
-    Awaited<ReturnType<typeof SelectSelfEventRegistrationTicket>>
-  >(SelectSelfEventRegistrationTicket, options);
+    AddSelfEventRegistrationPurchaseParams,
+    Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>
+  >(AddSelfEventRegistrationPurchase, options);
 };
