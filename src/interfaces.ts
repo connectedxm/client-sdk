@@ -1491,11 +1491,19 @@ export interface SubscriptionProductPrice extends BaseSubscriptionProductPrice {
   updatedAt: string;
 }
 
+export enum InvoiceStatus {
+  draft = "draft",
+  sent = "sent",
+  paid = "paid",
+  void = "void",
+}
+
 export interface BaseInvoice {
   id: string;
   title: string;
   description: string | null;
   dueDate: string;
+  status: InvoiceStatus;
 }
 
 export interface Invoice extends BaseInvoice {
@@ -1503,6 +1511,10 @@ export interface Invoice extends BaseInvoice {
   payments: BasePayment[];
   createdAt: string;
   updatedAt: string;
+  type?: string;
+  intentId?: string;
+  connectionId?: string;
+  secret?: string;
 }
 
 export interface BaseInvoiceLineItem {
