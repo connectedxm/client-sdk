@@ -42,7 +42,9 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
 
   let data;
   if (update) {
-    const response = await clientApi.put<ConnectedXMResponse<Registration>>(
+    const response = await clientApi.put<
+      ConnectedXMResponse<[Registration, string]>
+    >(
       `/self/events/${eventId}/registration/${registrationId}/registered/purchases/${purchaseId}/questions/${questionId}`,
       {
         value: value,
@@ -50,7 +52,9 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     );
     data = response.data;
   } else {
-    const response = await clientApi.put<ConnectedXMResponse<Registration>>(
+    const response = await clientApi.put<
+      ConnectedXMResponse<[Registration, string]>
+    >(
       `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/questions/${questionId}`,
       {
         value: value,
@@ -59,8 +63,13 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     data = response.data;
   }
 
+  const response = {
+    ...data,
+    data: data.data[0],
+  };
+
   if (queryClient && data.status === "ok") {
-    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], response, [
       clientApiParams.locale,
     ]);
 
@@ -91,13 +100,18 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
                     question.choices.forEach((choice) => {
                       if (choice.subQuestions.length > 0) {
                         choice.subQuestions.forEach((subQuestion) => {
-                          fillQuestionResponse(subQuestion, questionId, value);
+                          fillQuestionResponse(
+                            subQuestion,
+                            questionId,
+                            data.data[1]
+                          );
                         });
                       }
                     });
                   }
                 };
-                fillQuestionResponse(question, questionId, value);
+
+                fillQuestionResponse(question, questionId, data.data[1]);
               });
             });
           });
@@ -107,7 +121,7 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     );
   }
 
-  return data;
+  return response;
 };
 
 export const useUpdateSelfEventRegistrationQuestionResponse = (
