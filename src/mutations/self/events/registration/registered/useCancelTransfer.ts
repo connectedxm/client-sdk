@@ -4,18 +4,23 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
+import {
+  SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_QUERY_KEY,
+} from "@src/queries";
 
 export interface CancelTransferParams extends MutationParams {
   transferId: string;
   eventId: string;
   registrationId: string;
+  purchaseId: string;
 }
 
 export const CancelTransfer = async ({
   transferId,
   eventId,
   registrationId,
+  purchaseId,
   clientApiParams,
   queryClient,
 }: CancelTransferParams): Promise<ConnectedXMResponse<Transfer>> => {
@@ -25,6 +30,13 @@ export const CancelTransfer = async ({
   );
 
   if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY(
+        eventId,
+        registrationId,
+        purchaseId
+      ),
+    });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
     });

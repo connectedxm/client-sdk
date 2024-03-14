@@ -7,6 +7,7 @@ import {
 import {
   GetBaseSingleQueryKeys,
   SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "../../../../../queries";
 import useConnectedMutation, {
@@ -63,6 +64,18 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
+
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+        eventId,
+        registrationId,
+        purchaseId
+      ),
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
 
     queryClient.setQueryData(
       [
