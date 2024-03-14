@@ -366,12 +366,7 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>)._count !== undefined;
 };
 
-export interface RegistrationEventDetails {
-  id: string;
-  slug: string;
-  name: string;
-  eventStart: string;
-  eventEnd: string;
+export interface RegistrationEventDetails extends BaseEvent {
   registration: boolean;
   registrationCount: number;
   registrationLimit: number;
@@ -1117,7 +1112,7 @@ export interface Registration {
   id: string;
   alternateId: number;
   eventId: string;
-  event: RegistrationEventDetails | undefined;
+  event: RegistrationEventDetails;
   account: BaseAccount;
   status: RegistrationStatus;
   couponId: string | null;
