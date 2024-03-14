@@ -530,7 +530,7 @@ export interface BasePurchase {
   alternateId: number;
   location: string | null;
   usedAt: string | null;
-  transfer: { select: { id: string; email: string; createdAt: string } } | null;
+  transfer: { id: string; email: string; createdAt: string } | null;
   ticketId: string | null;
   ticket: BaseTicket | null;
   responses: BaseRegistrationQuestionResponse[];
