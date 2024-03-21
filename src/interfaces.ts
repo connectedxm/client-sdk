@@ -65,6 +65,15 @@ export interface BaseOrganization {
   id: string;
   slug: string;
   name: string;
+  email: string;
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  zip: string | null;
+  logo: BaseImage | null;
+  logoId: string | null;
 }
 
 export enum Currency {
@@ -72,21 +81,12 @@ export enum Currency {
 }
 
 export interface Organization extends BaseOrganization {
-  email: string;
   phone: string | null;
   website: string | null;
-  address1: string | null;
-  address2: string | null;
-  city: string | null;
-  state: string | null;
-  country: string | null;
-  zip: string | null;
   primaryColor: string | null;
   secondaryColor: string | null;
   userPoolId: string;
   userPoolClientId: string;
-  logo: BaseImage | null;
-  logoId: string | null;
   currency: Currency;
   facebook: string | null;
   twitter: string | null;
@@ -107,7 +107,7 @@ export const isTypeOrganization = (
   organization: BaseOrganization | Organization
 ): organization is Organization => {
   return (
-    (organization as Omit<Organization, keyof BaseOrganization>).email !==
+    (organization as Omit<Organization, keyof BaseOrganization>).createdAt !==
     undefined
   );
 };
