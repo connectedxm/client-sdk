@@ -423,7 +423,7 @@ export interface BaseRegistrationQuestionChoice {
   supply: number | null;
   description: string | null;
   sortOrder: number;
-  subQuestions: RegistrationQuestion[];
+  subQuestions: RegistrationQuestion[] | { questionId: number }[];
 }
 
 export interface RegistrationQuestionChoice
@@ -439,6 +439,7 @@ export interface RegistrationQuestionSearchValue
 
 export interface BaseRegistrationQuestionResponse {
   questionId: number;
+  question: BaseRegistrationQuestion;
   value: string;
 }
 
@@ -1498,7 +1499,6 @@ export interface BaseInvoice {
   id: string;
   alternateId: number;
   title: string;
-  description: string | null;
   sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
