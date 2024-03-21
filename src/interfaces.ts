@@ -1498,6 +1498,7 @@ export interface BaseInvoice {
   id: string;
   title: string;
   description: string | null;
+  sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
 }
@@ -1511,6 +1512,9 @@ export interface Invoice extends BaseInvoice {
   intentId?: string;
   connectionId?: string;
   secret?: string;
+  account: ({ email: string } & BaseAccount) | null;
+  organization: BaseOrganization;
+  notes: string | null;
 }
 
 export interface BaseInvoiceLineItem {
