@@ -1496,6 +1496,7 @@ export enum InvoiceStatus {
 
 export interface BaseInvoice {
   id: string;
+  alternateId: number;
   title: string;
   description: string | null;
   sentDate: string | null;
