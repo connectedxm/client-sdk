@@ -1513,7 +1513,7 @@ export interface Invoice extends BaseInvoice {
   intentId?: string;
   connectionId?: string;
   secret?: string;
-  account: ({ email: string } & BaseAccount) | null;
+  account: Self | null;
   organization: BaseOrganization;
   notes: string | null;
 }
