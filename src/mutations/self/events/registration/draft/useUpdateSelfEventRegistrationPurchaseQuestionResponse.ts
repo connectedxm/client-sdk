@@ -1,5 +1,6 @@
 import {
   ConnectedXMResponse,
+  isRegistrationQuestion,
   Registration,
   RegistrationQuestion,
   RegistrationSection,
@@ -113,11 +114,13 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
                     question.choices.forEach((choice) => {
                       if (choice.subQuestions.length > 0) {
                         choice.subQuestions.forEach((subQuestion) => {
-                          fillQuestionResponse(
-                            subQuestion,
-                            questionId,
-                            data.data[1]
-                          );
+                          if (isRegistrationQuestion(subQuestion)) {
+                            fillQuestionResponse(
+                              subQuestion,
+                              questionId,
+                              data.data[1]
+                            );
+                          }
                         });
                       }
                     });
