@@ -416,6 +416,14 @@ export interface RegistrationQuestion extends BaseRegistrationQuestion {
   response?: string; // THIS DOESNT MATCH THE BACKEND SELECT BUT IT IS POSSIBLE IT EXISTS WHEN YOU QUERY FOR PURCHASE SECTION/QUESTIONS
 }
 
+export const isRegistrationQuestion = (
+  question: RegistrationQuestion | { questionId: number }
+): question is RegistrationQuestion => {
+  return (
+    (question as Omit<RegistrationQuestion, "questionId">).name !== undefined
+  );
+};
+
 export interface BaseRegistrationQuestionChoice {
   id: number;
   value: string;
@@ -423,7 +431,7 @@ export interface BaseRegistrationQuestionChoice {
   supply: number | null;
   description: string | null;
   sortOrder: number;
-  subQuestions: RegistrationQuestion[];
+  subQuestions: RegistrationQuestion[] | { questionId: number }[];
 }
 
 export interface RegistrationQuestionChoice
@@ -439,6 +447,7 @@ export interface RegistrationQuestionSearchValue
 
 export interface BaseRegistrationQuestionResponse {
   questionId: number;
+  question: BaseRegistrationQuestion;
   value: string;
 }
 
@@ -1498,7 +1507,6 @@ export interface BaseInvoice {
   id: string;
   alternateId: number;
   title: string;
-  description: string | null;
   sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
