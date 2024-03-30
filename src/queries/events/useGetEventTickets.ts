@@ -10,10 +10,10 @@ import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const EVENT_TICKETS_QUERY_KEY = (eventId: string): QueryKey => [
-  ...EVENT_QUERY_KEY(eventId),
-  "TICKETS",
-];
+export const EVENT_TICKETS_QUERY_KEY = (
+  eventId: string,
+  ticketId: string = ""
+): QueryKey => [...EVENT_QUERY_KEY(eventId), "TICKETS", ticketId];
 
 export const SET_EVENT_TICKETS_QUERY_DATA = (
   client: QueryClient,
@@ -32,10 +32,12 @@ export const SET_EVENT_TICKETS_QUERY_DATA = (
 
 export interface GetEventTicketsProps extends InfiniteQueryParams {
   eventId: string;
+  ticketId?: string;
 }
 
 export const GetEventTickets = async ({
   eventId,
+  ticketId,
   pageParam,
   pageSize,
   orderBy,
@@ -49,6 +51,7 @@ export const GetEventTickets = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      ticketId: ticketId || undefined,
     },
   });
   return data;
@@ -56,6 +59,7 @@ export const GetEventTickets = async ({
 
 export const useGetEventTickets = (
   eventId: string = "",
+  ticketId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -66,7 +70,8 @@ export const useGetEventTickets = (
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventTickets>>>(
     EVENT_TICKETS_QUERY_KEY(eventId),
-    (params: InfiniteQueryParams) => GetEventTickets({ eventId, ...params }),
+    (params: InfiniteQueryParams) =>
+      GetEventTickets({ eventId, ticketId, ...params }),
     params,
     {
       ...options,
