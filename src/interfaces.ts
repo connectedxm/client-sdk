@@ -544,6 +544,7 @@ export interface BasePurchase {
   lastName: string;
   email: string;
   transfer: { id: string; email: string; createdAt: string } | null;
+  registrationId: string;
   ticketId: string | null;
   ticket: BaseTicket | null;
   responses: BaseRegistrationQuestionResponse[];
