@@ -12,6 +12,7 @@ import { Community, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateCommunityParams extends MutationParams {
+  name?: string;
   communityId: string;
   description?: string;
   externalUrl?: string;
@@ -20,6 +21,7 @@ export interface UpdateCommunityParams extends MutationParams {
 
 export const UpdateCommunity = async ({
   communityId,
+  name,
   description,
   externalUrl,
   base64,
@@ -30,6 +32,7 @@ export const UpdateCommunity = async ({
   const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
     `/communityModerator/${communityId}`,
     {
+      name: name || undefined,
       description: description || undefined,
       externalUrl: externalUrl || undefined,
       buffer: base64 ? base64 : undefined,
