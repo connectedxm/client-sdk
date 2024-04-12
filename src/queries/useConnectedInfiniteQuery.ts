@@ -60,13 +60,13 @@ export const useConnectedInfiniteQuery = <
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
-  > = {
-    pageSize: 10,
-  },
+  > = {},
   options: InfiniteQueryOptions<TQueryData> = {
     shouldRedirect: false,
   }
 ) => {
+  if (typeof params.pageSize === "undefined") params.pageSize = 10;
+
   const {
     locale,
     onModuleForbidden,
