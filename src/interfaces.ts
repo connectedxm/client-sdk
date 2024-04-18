@@ -1555,8 +1555,6 @@ export interface BaseEventAddOn {
   price: number;
   sortOrder: number;
   eventId: string;
-  allowedTickets: BaseTicket[];
-  allowedTiers: BaseAccountTier[];
   createdAt: string;
   updatedAt: string;
 }
