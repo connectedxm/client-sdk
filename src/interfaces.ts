@@ -1551,17 +1551,14 @@ export interface BaseEventAddOn {
   id: string;
   name: string;
   shortDescription: string;
-  supply: string;
-  price: string;
-  sortOrder: string;
+  supply: number;
+  price: number;
+  sortOrder: number;
   eventId: string;
   allowedTickets: BaseTicket[];
   allowedTiers: BaseAccountTier[];
   createdAt: string;
   updatedAt: string;
-  _count: {
-    purchases: number;
-  };
 }
 
 export interface EventAddOn extends BaseEventAddOn {
