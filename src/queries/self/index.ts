@@ -10,6 +10,7 @@ export * from "./useGetSelfCommunityMemberships";
 export * from "./useGetSelfDelegateOf";
 export * from "./useGetSelfDelegates";
 export * from "./useGetSelfEventListing";
+export * from "./useGetSelfEventListingRegistration";
 export * from "./useGetSelfEventListingRegistrations";
 export * from "./useGetSelfEventListings";
 export * from "./useGetSelfEvents";
