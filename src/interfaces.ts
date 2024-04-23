@@ -376,6 +376,7 @@ export interface RegistrationEventDetails extends BaseEvent {
     sections: number;
     tickets: number;
     coupons: number;
+    addOns: number;
   };
 }
 
@@ -547,6 +548,7 @@ export interface BasePurchase {
   registrationId: string;
   ticketId: string | null;
   ticket: BaseTicket | null;
+  addOns: BaseEventAddOn[];
   responses: BaseRegistrationQuestionResponse[];
 }
 
@@ -1543,4 +1545,20 @@ export interface BaseInvoiceLineItem {
 export interface InvoiceLineItem extends BaseInvoiceLineItem {
   invoiceId: string;
   invoice: BaseInvoice;
+}
+
+export interface BaseEventAddOn {
+  id: string;
+  name: string;
+  shortDescription: string;
+  supply: number;
+  price: number;
+  sortOrder: number;
+  eventId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventAddOn extends BaseEventAddOn {
+  event: BaseEvent;
 }

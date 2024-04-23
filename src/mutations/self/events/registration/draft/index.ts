@@ -5,3 +5,5 @@ export * from "./useRemoveSelfEventRegistrationTicket";
 export * from "./useAddSelfEventRegistrationPurchase";
 export * from "./useSubmitSelfEventRegistration";
 export * from "./useUpdateSelfEventRegistrationPurchaseQuestionResponse";
+export * from "./useAddSelfEventRegistrationPurchaseAddOn";
+export * from "./useRemoveSelfEventRegistrationPurchaseAddOn";
