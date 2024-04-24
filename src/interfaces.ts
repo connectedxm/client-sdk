@@ -1562,3 +1562,33 @@ export interface BaseEventAddOn {
 export interface EventAddOn extends BaseEventAddOn {
   event: BaseEvent;
 }
+
+export interface BaseReservationSection {
+  id: true;
+  eventId: true;
+  name: true;
+  price: true;
+  shortDescription: true;
+  createdAt: true;
+  updatedAt: true;
+}
+
+export interface ReservationSection extends BaseReservationSection {
+  event: BaseEvent;
+}
+
+export interface BaseReservationSectionLocation {
+  id: true;
+  eventId: true;
+  reservationSectionId: true;
+  name: true;
+  shortDescription: true;
+  supply: true;
+  createdAt: true;
+  updatedAt: true;
+}
+
+export interface ReservationSectionLocation
+  extends BaseReservationSectionLocation {
+  reservationSection: BaseReservationSection;
+}
