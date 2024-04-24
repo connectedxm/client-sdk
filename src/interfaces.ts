@@ -377,6 +377,7 @@ export interface RegistrationEventDetails extends BaseEvent {
     tickets: number;
     coupons: number;
     addOns: number;
+    reservationSections: number;
   };
 }
 
@@ -1563,7 +1564,7 @@ export interface EventAddOn extends BaseEventAddOn {
   event: BaseEvent;
 }
 
-export interface BaseReservationSection {
+export interface BaseEventReservationSection {
   id: true;
   eventId: true;
   name: true;
@@ -1573,11 +1574,11 @@ export interface BaseReservationSection {
   updatedAt: true;
 }
 
-export interface ReservationSection extends BaseReservationSection {
+export interface EventReservationSection extends BaseEventReservationSection {
   event: BaseEvent;
 }
 
-export interface BaseReservationSectionLocation {
+export interface BaseEventReservationSectionLocation {
   id: true;
   eventId: true;
   reservationSectionId: true;
@@ -1588,7 +1589,7 @@ export interface BaseReservationSectionLocation {
   updatedAt: true;
 }
 
-export interface ReservationSectionLocation
-  extends BaseReservationSectionLocation {
-  reservationSection: BaseReservationSection;
+export interface EventReservationSectionLocation
+  extends BaseEventReservationSectionLocation {
+  reservationSection: BaseEventReservationSection;
 }
