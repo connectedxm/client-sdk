@@ -1594,7 +1594,11 @@ export interface BaseEventReservationSectionLocation {
   premium: number;
   createdAt: string;
   updatedAt: string;
-  reservationSection: BaseEventReservationSection;
+  reservationSection: {
+    name: string;
+    pricePerDay: boolean;
+    price: number;
+  };
   _count: {
     purchases: number;
   };
