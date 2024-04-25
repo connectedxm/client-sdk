@@ -1598,6 +1598,7 @@ export interface BaseEventReservationSectionLocation {
     name: string;
     pricePerDay: boolean;
     price: number;
+    image: BaseImage | null;
   };
   _count: {
     purchases: number;
