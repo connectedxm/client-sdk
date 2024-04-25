@@ -9,25 +9,25 @@ import {
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface RemoveSelfEventRegistrationTicketParams
+export interface RemoveSelfEventRegistrationPurchaseParams
   extends MutationParams {
   eventId: string;
   registrationId: string;
-  ticketId: string;
+  purchaseId: string;
 }
 
-export const RemoveSelfEventRegistrationTicket = async ({
+export const RemoveSelfEventRegistrationPurchase = async ({
   eventId,
   registrationId,
-  ticketId,
+  purchaseId,
   clientApiParams,
   queryClient,
-}: RemoveSelfEventRegistrationTicketParams): Promise<
+}: RemoveSelfEventRegistrationPurchaseParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/ticket/${ticketId}`
+    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}`
   );
 
   if (queryClient && data.status === "ok") {
@@ -44,12 +44,12 @@ export const RemoveSelfEventRegistrationTicket = async ({
   return data;
 };
 
-export const useRemoveSelfEventRegistrationTicket = (
+export const useRemoveSelfEventRegistrationPurchase = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof RemoveSelfEventRegistrationTicket>>,
+      Awaited<ReturnType<typeof RemoveSelfEventRegistrationPurchase>>,
       Omit<
-        RemoveSelfEventRegistrationTicketParams,
+        RemoveSelfEventRegistrationPurchaseParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -57,7 +57,7 @@ export const useRemoveSelfEventRegistrationTicket = (
   > = {}
 ) => {
   return useConnectedMutation<
-    RemoveSelfEventRegistrationTicketParams,
-    Awaited<ReturnType<typeof RemoveSelfEventRegistrationTicket>>
-  >(RemoveSelfEventRegistrationTicket, options);
+    RemoveSelfEventRegistrationPurchaseParams,
+    Awaited<ReturnType<typeof RemoveSelfEventRegistrationPurchase>>
+  >(RemoveSelfEventRegistrationPurchase, options);
 };

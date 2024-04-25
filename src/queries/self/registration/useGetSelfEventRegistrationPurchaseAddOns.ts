@@ -88,9 +88,6 @@ export const useGetSelfEventRegistrationPurchaseAddOns = (
         ...params,
       }),
     {
-      retry: false,
-      staleTime: Infinity,
-      refetchOnMount: false,
       ...options,
       enabled:
         !!eventId &&
