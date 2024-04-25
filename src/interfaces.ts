@@ -1591,8 +1591,10 @@ export interface BaseEventReservationSectionLocation {
   name: string;
   shortDescription: string;
   supply: number;
+  premium: number;
   createdAt: string;
   updatedAt: string;
+  reservationSection: BaseEventReservationSection;
   _count: {
     purchases: number;
   };
