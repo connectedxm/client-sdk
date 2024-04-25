@@ -1,8 +1,4 @@
-import {
-  ConnectedXMResponse,
-  EventAddOn,
-  EventReservationSection,
-} from "@src/interfaces";
+import { ConnectedXMResponse, EventReservationSection } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,

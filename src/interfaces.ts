@@ -524,6 +524,7 @@ export interface BaseTicket {
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
   supply: number | null;
+  reservationDays: number;
 }
 
 export interface Ticket extends BaseTicket {
@@ -550,6 +551,7 @@ export interface BasePurchase {
   ticketId: string | null;
   ticket: BaseTicket | null;
   addOns: BaseEventAddOn[];
+  reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
 }
 
@@ -1556,6 +1558,7 @@ export interface BaseEventAddOn {
   price: number;
   sortOrder: number;
   eventId: string;
+  reservationDays: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -1565,28 +1568,34 @@ export interface EventAddOn extends BaseEventAddOn {
 }
 
 export interface BaseEventReservationSection {
-  id: true;
-  eventId: true;
-  name: true;
-  price: true;
-  shortDescription: true;
-  createdAt: true;
-  updatedAt: true;
+  id: string;
+  eventId: string;
+  name: string;
+  price: number;
+  pricePerDay: boolean;
+  shortDescription: string;
+  image: BaseImage | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface EventReservationSection extends BaseEventReservationSection {
   event: BaseEvent;
+  locations: BaseEventReservationSectionLocation[];
 }
 
 export interface BaseEventReservationSectionLocation {
-  id: true;
-  eventId: true;
-  reservationSectionId: true;
-  name: true;
-  shortDescription: true;
-  supply: true;
-  createdAt: true;
-  updatedAt: true;
+  id: string;
+  eventId: string;
+  reservationSectionId: string;
+  name: string;
+  shortDescription: string;
+  supply: number;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    purchases: number;
+  };
 }
 
 export interface EventReservationSectionLocation
