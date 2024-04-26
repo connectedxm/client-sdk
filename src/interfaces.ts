@@ -1559,11 +1559,13 @@ export interface BaseEventAddOn {
   sortOrder: number;
   eventId: string;
   reservationDays: number;
+  image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface EventAddOn extends BaseEventAddOn {
+  longDescription: string | null;
   event: BaseEvent;
 }
 
