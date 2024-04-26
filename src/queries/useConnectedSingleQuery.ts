@@ -41,6 +41,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     getExecuteAs,
   } = useConnectedXM();
 
+  // prettier-ignore
   return useQuery<
     TQueryData,
     AxiosError<ConnectedXMResponse<any>>,
@@ -51,22 +52,19 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     retry: (failureCount, error) => {
       // RESOURCE NOT FOUND
       if (error.response?.status === 404) {
-        if (onNotFound)
-          onNotFound(error, queryKeys, options.shouldRedirect || false);
+        if (onNotFound) onNotFound(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 
       // MODULE FORBIDDEN FOR USER
       if (error.response?.status === 403) {
-        if (onModuleForbidden)
-          onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
+        if (onModuleForbidden) onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 
       // TOKEN IS POSSIBLY EXPIRED TRIGGER A REFRESH
       if (error.response?.status === 401) {
-        if (onNotAuthorized)
-          onNotAuthorized(error, queryKeys, options.shouldRedirect || false);
+        if (onNotAuthorized) onNotAuthorized(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
 

@@ -58,9 +58,6 @@ export const useGetSelfEventRegistration = (
         ...params,
       }),
     {
-      retry: false,
-      staleTime: Infinity,
-      refetchOnMount: false,
       ...options,
       enabled: !!eventId && (options?.enabled ?? true),
     }
