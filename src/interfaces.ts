@@ -1554,6 +1554,7 @@ export interface BaseEventAddOn {
   id: string;
   name: string;
   shortDescription: string;
+  longDescription: string | null;
   supply: number;
   price: number;
   sortOrder: number;
@@ -1565,7 +1566,6 @@ export interface BaseEventAddOn {
 }
 
 export interface EventAddOn extends BaseEventAddOn {
-  longDescription: string | null;
   event: BaseEvent;
 }
 
