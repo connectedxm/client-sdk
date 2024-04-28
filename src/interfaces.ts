@@ -524,7 +524,12 @@ export interface BaseTicket {
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
   supply: number | null;
-  reservationDays: number;
+  minReservationStart: string | null;
+  reservationStart: string | null;
+  maxReservationStart: string | null;
+  minReservationEnd: string | null;
+  reservationEnd: string | null;
+  maxReservationEnd: string | null;
 }
 
 export interface Ticket extends BaseTicket {
@@ -551,6 +556,8 @@ export interface BasePurchase {
   ticketId: string | null;
   ticket: BaseTicket | null;
   addOns: BaseEventAddOn[];
+  reservationStart: string | null;
+  reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
 }
@@ -1559,7 +1566,12 @@ export interface BaseEventAddOn {
   price: number;
   sortOrder: number;
   eventId: string;
-  reservationDays: number;
+  minReservationStart: string | null;
+  reservationStart: string | null;
+  maxReservationStart: string | null;
+  minReservationEnd: string | null;
+  reservationEnd: string | null;
+  maxReservationEnd: string | null;
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;

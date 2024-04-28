@@ -16,6 +16,8 @@ export interface SelectSelfEventRegistrationPurchaseReservationParams
   registrationId: string;
   purchaseId: string;
   locationId: string;
+  reservationStart?: string;
+  reservationEnd?: string;
 }
 
 export const SelectSelfEventRegistrationPurchaseReservation = async ({
@@ -23,6 +25,8 @@ export const SelectSelfEventRegistrationPurchaseReservation = async ({
   registrationId,
   purchaseId,
   locationId,
+  reservationStart,
+  reservationEnd,
   clientApiParams,
   queryClient,
 }: SelectSelfEventRegistrationPurchaseReservationParams): Promise<
@@ -30,7 +34,11 @@ export const SelectSelfEventRegistrationPurchaseReservation = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/reservations/${locationId}`
+    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/reservations/${locationId}`,
+    {
+      reservationStart: reservationStart,
+      reservationEnd: reservationEnd,
+    }
   );
 
   if (queryClient && data.status === "ok") {
