@@ -11,10 +11,10 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const COMMUNITY_MEDIA_QUERY_KEY = (communityId: string): QueryKey => [
-  ...COMMUNITY_QUERY_KEY(communityId),
-  "MEDIA",
-];
+export const COMMUNITY_MEDIA_QUERY_KEY = (
+  communityId: string,
+  type?: "images" | "videos"
+): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "MEDIA", type || "all"];
 
 export const SET_COMMUNITY_MEDIA_QUERY_DATA = (
   client: QueryClient,
@@ -60,6 +60,7 @@ export const GetCommunityMedia = async ({
 
 export const useGetCommunityMedia = (
   communityId: string = "",
+  type?: "images" | "videos",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -71,9 +72,9 @@ export const useGetCommunityMedia = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetCommunityMedia>>
   >(
-    COMMUNITY_MEDIA_QUERY_KEY(communityId),
+    COMMUNITY_MEDIA_QUERY_KEY(communityId, type),
     (params: InfiniteQueryParams) =>
-      GetCommunityMedia({ communityId, ...params }),
+      GetCommunityMedia({ communityId, type, ...params }),
     params,
     {
       ...options,
