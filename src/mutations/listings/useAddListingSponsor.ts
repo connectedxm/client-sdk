@@ -3,28 +3,23 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import {
-  EVENT_SPONSORS_QUERY_KEY,
-  SET_SELF_EVENT_LISTING_QUERY_DATA,
-} from "@src/queries";
+import { EVENT_SPONSORS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface AddSelfEventListingSponsorParams extends MutationParams {
+export interface AddListingSponsorParams extends MutationParams {
   eventId: string;
   sponsor: Account;
 }
 
-export const AddSelfEventListingSponsor = async ({
+export const AddListingSponsor = async ({
   eventId,
   sponsor,
   clientApiParams,
   queryClient,
-}: AddSelfEventListingSponsorParams): Promise<
-  ConnectedXMResponse<EventListing>
-> => {
+}: AddListingSponsorParams): Promise<ConnectedXMResponse<EventListing>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<EventListing>>(
-    `/self/events/listings/${eventId}/sponsors`,
+    `/listings/${eventId}/sponsors`,
     {
       sponsorId: sponsor.id,
     }
@@ -34,23 +29,23 @@ export const AddSelfEventListingSponsor = async ({
     queryClient.invalidateQueries({
       queryKey: EVENT_SPONSORS_QUERY_KEY(eventId),
     });
-    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;
 };
 
-export const useAddSelfEventListingSponsor = (
+export const useAddListingSponsor = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof AddSelfEventListingSponsor>>,
-      Omit<AddSelfEventListingSponsorParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof AddListingSponsor>>,
+      Omit<AddListingSponsorParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    AddSelfEventListingSponsorParams,
-    Awaited<ReturnType<typeof AddSelfEventListingSponsor>>
-  >(AddSelfEventListingSponsor, options);
+    AddListingSponsorParams,
+    Awaited<ReturnType<typeof AddListingSponsor>>
+  >(AddListingSponsor, options);
 };

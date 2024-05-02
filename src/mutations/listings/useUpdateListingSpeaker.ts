@@ -3,32 +3,27 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import {
-  EVENT_SPEAKERS_QUERY_KEY,
-  SET_SELF_EVENT_LISTING_QUERY_DATA,
-} from "@src/queries";
+import { EVENT_SPEAKERS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface UpdateSelfEventListingSpeakerParams extends MutationParams {
+export interface UpdateListingSpeakerParams extends MutationParams {
   eventId: string;
   speaker: any;
   speakerId: string;
   buffer?: string;
 }
 
-export const UpdateSelfEventListingSpeaker = async ({
+export const UpdateListingSpeaker = async ({
   eventId,
   speaker,
   speakerId,
   buffer,
   clientApiParams,
   queryClient,
-}: UpdateSelfEventListingSpeakerParams): Promise<
-  ConnectedXMResponse<EventListing>
-> => {
+}: UpdateListingSpeakerParams): Promise<ConnectedXMResponse<EventListing>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
-    `/self/events/listings/${eventId}/speakers/${speakerId}`,
+    `/listings/${eventId}/speakers/${speakerId}`,
     {
       speaker,
       buffer: buffer || undefined,
@@ -39,26 +34,23 @@ export const UpdateSelfEventListingSpeaker = async ({
     queryClient.invalidateQueries({
       queryKey: EVENT_SPEAKERS_QUERY_KEY(eventId),
     });
-    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;
 };
 
-export const useUpdateSelfEventListingSpeaker = (
+export const useUpdateListingSpeaker = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateSelfEventListingSpeaker>>,
-      Omit<
-        UpdateSelfEventListingSpeakerParams,
-        "queryClient" | "clientApiParams"
-      >
+      Awaited<ReturnType<typeof UpdateListingSpeaker>>,
+      Omit<UpdateListingSpeakerParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateSelfEventListingSpeakerParams,
+    UpdateListingSpeakerParams,
     Awaited<ConnectedXMResponse<EventListing>>
-  >(UpdateSelfEventListingSpeaker, options);
+  >(UpdateListingSpeaker, options);
 };

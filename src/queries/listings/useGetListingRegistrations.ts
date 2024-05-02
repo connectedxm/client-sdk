@@ -8,17 +8,13 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
+import { LISTING_QUERY_KEY } from "./useGetListing";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY = (
+export const LISTING_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
   status?: keyof typeof RegistrationStatus
-) => [
-  ...SELF_EVENT_LISTING_QUERY_KEY(eventId),
-  "REGISTRATIONS",
-  status ?? "ALL",
-];
+) => [...LISTING_QUERY_KEY(eventId), "REGISTRATIONS", status ?? "ALL"];
 
 export interface GetSelfEventListingRegistrationsProps
   extends InfiniteQueryParams {
@@ -38,18 +34,15 @@ export const GetSelfEventListingRegistrations = async ({
   ConnectedXMResponse<Registration[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(
-    `/self/events/listings/${eventId}/registrations`,
-    {
-      params: {
-        page: pageParam || undefined,
-        pageSize: pageSize || undefined,
-        orderBy: orderBy || undefined,
-        search: search || undefined,
-        status: status || undefined,
-      },
-    }
-  );
+  const { data } = await clientApi.get(`/listings/${eventId}/registrations`, {
+    params: {
+      page: pageParam || undefined,
+      pageSize: pageSize || undefined,
+      orderBy: orderBy || undefined,
+      search: search || undefined,
+      status: status || undefined,
+    },
+  });
   return data;
 };
 
@@ -67,7 +60,7 @@ export const useGetSelfEventListingsRegistrations = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
   >(
-    SELF_EVENT_LISTING_REGISTRATIONS_QUERY_KEY(eventId, status),
+    LISTING_REGISTRATIONS_QUERY_KEY(eventId, status),
     (params: InfiniteQueryParams) =>
       GetSelfEventListingRegistrations({ eventId, status, ...params }),
     params,
