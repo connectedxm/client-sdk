@@ -20,8 +20,6 @@ export * from "./useRemoveSelfEventSession";
 export * from "./useSelfCheckinRegistration";
 export * from "./useSelfCreateActivity";
 export * from "./useSelfDeleteActivity";
-export * from "./useSelfJoinCommunity";
-export * from "./useSelfLeaveCommunity";
 export * from "./useSelfUpdateCommunityMembership";
 export * from "./useUpdateSelf";
 export * from "./useUpdateSelfEventListing";
