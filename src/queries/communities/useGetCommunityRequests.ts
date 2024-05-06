@@ -5,7 +5,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Account } from "@interfaces";
+import { CommunityRequest, CommunityRequestStatus } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
@@ -13,10 +13,10 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { COMMUNITY_REQUEST_QUERY_KEY } from "./useGetCommunityRequest";
 
-export const COMMUNITY_REQUESTS_QUERY_KEY = (communityId: string): QueryKey => [
-  ...COMMUNITY_QUERY_KEY(communityId),
-  "REQUESTS",
-];
+export const COMMUNITY_REQUESTS_QUERY_KEY = (
+  communityId: string,
+  status?: keyof typeof CommunityRequestStatus
+): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "REQUESTS", status];
 
 export const SET_COMMUNITY_REQUESTS_QUERY_DATA = (
   client: QueryClient,
@@ -35,6 +35,7 @@ export const SET_COMMUNITY_REQUESTS_QUERY_DATA = (
 
 export interface GetCommunityRequestsProps extends InfiniteQueryParams {
   communityId: string;
+  status?: keyof typeof CommunityRequestStatus;
 }
 
 export const GetCommunityRequests = async ({
@@ -42,11 +43,14 @@ export const GetCommunityRequests = async ({
   pageSize,
   orderBy,
   search,
+  status,
   communityId,
   queryClient,
   clientApiParams,
   locale,
-}: GetCommunityRequestsProps): Promise<ConnectedXMResponse<Account[]>> => {
+}: GetCommunityRequestsProps): Promise<
+  ConnectedXMResponse<CommunityRequest[]>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/communities/${communityId}/requests`, {
     params: {
@@ -54,13 +58,14 @@ export const GetCommunityRequests = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      status: status || undefined,
     },
   });
   if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,
       queryClient,
-      (communityId) => COMMUNITY_REQUEST_QUERY_KEY(communityId),
+      (communityId) => COMMUNITY_REQUEST_QUERY_KEY(communityId, data.data.id),
       locale
     );
   }
@@ -70,6 +75,7 @@ export const GetCommunityRequests = async ({
 
 export const useGetCommunityRequests = (
   communityId: string = "",
+  status?: keyof typeof CommunityRequestStatus,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -81,9 +87,9 @@ export const useGetCommunityRequests = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetCommunityRequests>>
   >(
-    COMMUNITY_REQUESTS_QUERY_KEY(communityId),
+    COMMUNITY_REQUESTS_QUERY_KEY(communityId, status),
     (params: InfiniteQueryParams) =>
-      GetCommunityRequests({ communityId, ...params }),
+      GetCommunityRequests({ communityId, status, ...params }),
     params,
     {
       ...options,

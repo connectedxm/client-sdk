@@ -6,14 +6,18 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { Community } from "@interfaces";
-import { COMMUNITIES_QUERY_KEY } from "./useGetCommunities";
 import { QueryClient, SetDataOptions, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { COMMUNITY_REQUESTS_QUERY_KEY } from "./useGetCommunityRequests";
 
-export const COMMUNITY_REQUEST_QUERY_KEY = (communityId: string): QueryKey => [
-  ...COMMUNITIES_QUERY_KEY(),
-  communityId,
+export const COMMUNITY_REQUEST_QUERY_KEY = (
+  communityId: string,
+  requestId: string
+): QueryKey => [
+  ...COMMUNITY_REQUESTS_QUERY_KEY(communityId),
+  "REQUESTS",
+  requestId,
 ];
 
 export const SET_COMMUNITY_REQUEST_QUERY_DATA = (
@@ -56,7 +60,7 @@ export const useGetCommunityRequest = (
   options: SingleQueryOptions<ReturnType<typeof GetCommunityRequest>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetCommunityRequest>>(
-    COMMUNITY_REQUEST_QUERY_KEY(communityId),
+    COMMUNITY_REQUEST_QUERY_KEY(communityId, requestId),
     (params) => GetCommunityRequest({ communityId, requestId, ...params }),
     {
       ...options,

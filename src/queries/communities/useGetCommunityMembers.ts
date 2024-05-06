@@ -5,16 +5,16 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CommunityMembership } from "@interfaces";
+import { CommunityMembership, CommunityMembershipRole } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const COMMUNITY_MEMBERS_QUERY_KEY = (communityId: string): QueryKey => [
-  ...COMMUNITY_QUERY_KEY(communityId),
-  "MEMBERS",
-];
+export const COMMUNITY_MEMBERS_QUERY_KEY = (
+  communityId: string,
+  role?: keyof typeof CommunityMembershipRole
+): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "MEMBERS", role];
 
 export const SET_COMMUNITY_MEMBERS_QUERY_DATA = (
   client: QueryClient,
@@ -33,6 +33,7 @@ export const SET_COMMUNITY_MEMBERS_QUERY_DATA = (
 
 export interface GetCommunityMembersProps extends InfiniteQueryParams {
   communityId: string;
+  role?: keyof typeof CommunityMembershipRole;
 }
 
 export const GetCommunityMembers = async ({
@@ -40,6 +41,7 @@ export const GetCommunityMembers = async ({
   pageSize,
   orderBy,
   search,
+  role,
   communityId,
   clientApiParams,
 }: GetCommunityMembersProps): Promise<
@@ -52,6 +54,7 @@ export const GetCommunityMembers = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      role: role || undefined,
     },
   });
   return data;
@@ -59,6 +62,7 @@ export const GetCommunityMembers = async ({
 
 export const useGetCommunityMembers = (
   communityId: string = "",
+  role?: keyof typeof CommunityMembershipRole,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -70,9 +74,9 @@ export const useGetCommunityMembers = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetCommunityMembers>>
   >(
-    COMMUNITY_MEMBERS_QUERY_KEY(communityId),
+    COMMUNITY_MEMBERS_QUERY_KEY(communityId, role),
     (params: InfiniteQueryParams) =>
-      GetCommunityMembers({ communityId, ...params }),
+      GetCommunityMembers({ communityId, role, ...params }),
     params,
     {
       ...options,

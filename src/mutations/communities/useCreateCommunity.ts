@@ -1,4 +1,8 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import {
+  Community,
+  CommunityAccess,
+  ConnectedXMResponse,
+} from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -7,8 +11,15 @@ import useConnectedMutation, {
 import { COMMUNITIES_QUERY_KEY, SET_COMMUNITY_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
+interface CreateCommunity {
+  name: string;
+  description: string;
+  access: keyof typeof CommunityAccess;
+  externalUrl?: string;
+}
+
 export interface CreateCommunityParams extends MutationParams {
-  community: Community;
+  community: CreateCommunity;
   imageDataUri?: string;
 }
 

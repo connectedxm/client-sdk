@@ -26,7 +26,7 @@ export const UpdateCommunity = async ({
   queryClient,
 }: UpdateCommunityParams): Promise<ConnectedXMResponse<Community>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Community>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
     `/communities/${communityId}`,
     {
       community,

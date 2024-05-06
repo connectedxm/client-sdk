@@ -1623,3 +1623,23 @@ export interface EventReservationSectionLocation
   extends BaseEventReservationSectionLocation {
   reservationSection: BaseEventReservationSection;
 }
+
+export enum CommunityRequestStatus {
+  requested = "requested",
+  invited = "invited",
+  rejected = "rejected",
+}
+
+export interface BaseCommunityRequest {
+  id: string;
+  status: CommunityRequestStatus;
+  communityId: string;
+  account: BaseAccount;
+  inviter: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommunityRequest extends BaseCommunityRequest {
+  community: BaseCommunity;
+}
