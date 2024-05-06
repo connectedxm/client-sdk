@@ -620,8 +620,8 @@ export enum NotificationType {
   RESHARE = "RESHARE",
   EVENT = "EVENT",
   ACTIVITY = "ACTIVITY",
-  COMMUNITY_INVITATION = "COMMUNITY_INVITATION",
-  COMMUNITY_REQUEST_ACCEPTED = "COMMUNITY_REQUEST_ACCEPTED",
+  GROUP_INVITATION = "GROUP_INVITATION",
+  GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
 }
 
 export interface BaseNotification {
@@ -637,6 +637,7 @@ export interface Notification extends BaseNotification {
   activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
+  community: BaseCommunity | null;
   createdAt: string;
   updatedAt: string;
 }
