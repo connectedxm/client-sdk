@@ -677,7 +677,6 @@ export interface ManagedCoupon extends Coupon {
   type: CouponType;
   startDate: string | null;
   endDate: string | null;
-
   quantityMin: number;
   quantityMax: number | null;
   amountMin: number;
