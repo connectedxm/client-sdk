@@ -20,7 +20,7 @@ export const CreateCommunityInvitations = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Community>>(
-    `/communities/${communityId}/invite`,
+    `/communities/${communityId}/invites`,
     {
       accountIds,
     }
