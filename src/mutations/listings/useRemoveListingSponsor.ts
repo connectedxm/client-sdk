@@ -1,7 +1,4 @@
-import {
-  EVENT_SPONSORS_QUERY_KEY,
-  SET_SELF_EVENT_LISTING_QUERY_DATA,
-} from "@src/queries";
+import { EVENT_SPONSORS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -24,14 +21,14 @@ export const RemoveSelfEventListingSponsor = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<EventListing>>(
-    `/self/events/listings/${eventId}/sponsors/${sponsorId}`
+    `/listings/${eventId}/sponsors/${sponsorId}`
   );
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
       queryKey: EVENT_SPONSORS_QUERY_KEY(eventId),
     });
-    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;

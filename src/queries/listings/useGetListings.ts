@@ -5,12 +5,12 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { SELF_QUERY_KEY } from "./useGetSelf";
-import { SELF_EVENT_LISTING_QUERY_KEY } from "./useGetSelfEventListing";
+import { SELF_QUERY_KEY } from "../self/useGetSelf";
+import { LISTING_QUERY_KEY } from "./useGetListing";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SELF_EVENT_LISTINGS_QUERY_KEY = (past: boolean): QueryKey => [
+export const LISTINGS_QUERY_KEY = (past: boolean): QueryKey => [
   ...SELF_QUERY_KEY(),
   "EVENT_LISTINGS",
   past ? "PAST" : "UPCOMING",
@@ -31,7 +31,7 @@ export const GetSelfEventListings = async ({
   locale,
 }: GetSelfEventListingsProps): Promise<ConnectedXMResponse<EventListing[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/events/listings`, {
+  const { data } = await clientApi.get(`/listings`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -45,7 +45,7 @@ export const GetSelfEventListings = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (eventId) => SELF_EVENT_LISTING_QUERY_KEY(eventId),
+      (eventId) => LISTING_QUERY_KEY(eventId),
       locale
     );
   }
@@ -66,7 +66,7 @@ export const useGetSelfEventListings = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventListings>>
   >(
-    SELF_EVENT_LISTINGS_QUERY_KEY(past),
+    LISTINGS_QUERY_KEY(past),
     (params: InfiniteQueryParams) => GetSelfEventListings({ past, ...params }),
     params,
     {
