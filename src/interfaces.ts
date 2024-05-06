@@ -620,7 +620,10 @@ export enum NotificationType {
   RESHARE = "RESHARE",
   EVENT = "EVENT",
   ACTIVITY = "ACTIVITY",
+  COMMUNITY_INVITATION = "COMMUNITY_INVITATION",
+  COMMUNITY_REQUEST_ACCEPTED = "COMMUNITY_REQUEST_ACCEPTED",
 }
+
 export interface BaseNotification {
   id: string;
   type: NotificationType;
@@ -1218,6 +1221,10 @@ export interface NotificationPreferences {
   communityAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
   eventAnnouncementPush: boolean;
+  communityInvitationEmail: boolean;
+  communityInvitationPush: boolean;
+  communityRequestAcceptedEmail: boolean;
+  communityRequestAcceptedPush: boolean;
 }
 
 export enum PushDeviceAppType {

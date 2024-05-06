@@ -8,3 +8,4 @@ export * from "./useGetCommunityMembers";
 export * from "./useGetCommunitySponsors";
 export * from "./useGetCommunityRequest";
 export * from "./useGetCommunityRequests";
+export * from "./useGetCommunityInvitableAccounts";

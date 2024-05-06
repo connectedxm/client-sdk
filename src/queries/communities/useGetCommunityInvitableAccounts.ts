@@ -26,18 +26,19 @@ export const COMMUNITY_INVITABLE_ACCOUNTS_QUERY_KEY = (
   communityId: string
 ): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "INVITABLE_ACCOUNTS"];
 
-export interface GetCommunityInvitableAccountProps extends InfiniteQueryParams {
+export interface GetCommunityInvitableAccountsProps
+  extends InfiniteQueryParams {
   communityId: string;
 }
 
-export const GetCommunityInvitableAccount = async ({
+export const GetCommunityInvitableAccounts = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
   communityId,
   clientApiParams,
-}: GetCommunityInvitableAccountProps): Promise<
+}: GetCommunityInvitableAccountsProps): Promise<
   ConnectedXMResponse<InvitableAccount[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -52,22 +53,22 @@ export const GetCommunityInvitableAccount = async ({
   return data;
 };
 
-export const useGetCommunityInvitableAccount = (
+export const useGetCommunityInvitableAccounts = (
   communityId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetCommunityInvitableAccount>>
+    Awaited<ReturnType<typeof GetCommunityInvitableAccounts>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetCommunityInvitableAccount>>
+    Awaited<ReturnType<typeof GetCommunityInvitableAccounts>>
   >(
     COMMUNITY_INVITABLE_ACCOUNTS_QUERY_KEY(communityId),
     (params: InfiniteQueryParams) =>
-      GetCommunityInvitableAccount({ communityId, ...params }),
+      GetCommunityInvitableAccounts({ communityId, ...params }),
     params,
     {
       ...options,
