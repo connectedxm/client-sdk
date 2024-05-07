@@ -6,22 +6,22 @@ import useConnectedMutation, {
 import { EVENT_SPEAKERS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface EventListingSpeaker {
-  firstName: string | null;
-  lastName: string | null;
-  title: string | null;
-  company: string | null;
-  bio: string | null;
-}
-
 export interface CreateListingSpeakerParams extends MutationParams {
   eventId: string;
-  speaker: EventListingSpeaker;
+  speaker: {
+    firstName: string | null;
+    lastName: string | null;
+    title: string | null;
+    company: string | null;
+    bio: string | null;
+  };
+  imageDataUri?: string;
 }
 
 export const CreateListingSpeaker = async ({
   eventId,
   speaker,
+  imageDataUri,
   clientApiParams,
   queryClient,
 }: CreateListingSpeakerParams): Promise<ConnectedXMResponse<EventListing>> => {
@@ -30,6 +30,7 @@ export const CreateListingSpeaker = async ({
     `/listings/${eventId}/speakers`,
     {
       speaker,
+      imageDataUri,
     }
   );
 
