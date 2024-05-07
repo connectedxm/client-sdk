@@ -16,7 +16,15 @@ import { COMMUNITY_REQUEST_QUERY_KEY } from "./useGetCommunityRequest";
 export const COMMUNITY_REQUESTS_QUERY_KEY = (
   communityId: string,
   status?: keyof typeof CommunityRequestStatus
-): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "REQUESTS", status];
+): QueryKey => {
+  const keys = [...COMMUNITY_QUERY_KEY(communityId), "REQUESTS"];
+
+  if (status) {
+    keys.push(status);
+  }
+
+  return keys;
+};
 
 export const SET_COMMUNITY_REQUESTS_QUERY_DATA = (
   client: QueryClient,
