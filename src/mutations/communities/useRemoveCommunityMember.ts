@@ -7,17 +7,17 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import { COMMUNITY_MEMBERS_QUERY_KEY } from "@src/queries";
 
-export interface RemoveCommunityMememberParams extends MutationParams {
+export interface RemoveCommunityMemberParams extends MutationParams {
   communityId: string;
   accountId: string;
 }
 
-export const RemoveCommunityMemember = async ({
+export const RemoveCommunityMember = async ({
   communityId,
   accountId,
   clientApiParams,
   queryClient,
-}: RemoveCommunityMememberParams): Promise<ConnectedXMResponse<null>> => {
+}: RemoveCommunityMemberParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/communities/${communityId}/members/${accountId}`
@@ -32,17 +32,17 @@ export const RemoveCommunityMemember = async ({
   return data;
 };
 
-export const useRemoveCommunityMemember = (
+export const useRemoveCommunityMember = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof RemoveCommunityMemember>>,
-      Omit<RemoveCommunityMememberParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof RemoveCommunityMember>>,
+      Omit<RemoveCommunityMemberParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    RemoveCommunityMememberParams,
-    Awaited<ReturnType<typeof RemoveCommunityMemember>>
-  >(RemoveCommunityMemember, options);
+    RemoveCommunityMemberParams,
+    Awaited<ReturnType<typeof RemoveCommunityMember>>
+  >(RemoveCommunityMember, options);
 };
