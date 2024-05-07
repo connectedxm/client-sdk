@@ -1642,6 +1642,7 @@ export interface BaseCommunityRequest {
   id: string;
   status: CommunityRequestStatus;
   communityId: string;
+  community: BaseCommunity;
   account: BaseAccount;
   inviter: BaseAccount;
   createdAt: string;
