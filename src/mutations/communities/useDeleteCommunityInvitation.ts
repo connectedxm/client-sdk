@@ -1,14 +1,11 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import {
-  COMMUNITY_REQUESTS_QUERY_KEY,
-  SET_COMMUNITY_REQUEST_QUERY_DATA,
-} from "@src/queries";
+import { COMMUNITY_REQUESTS_QUERY_KEY } from "@src/queries";
 
 export interface DeleteCommunityInvitationParams extends MutationParams {
   communityId: string;
@@ -20,21 +17,13 @@ export const DeleteCommunityInvitation = async ({
   requestId,
   clientApiParams,
   queryClient,
-}: DeleteCommunityInvitationParams): Promise<
-  ConnectedXMResponse<Community>
-> => {
+}: DeleteCommunityInvitationParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<Community>>(
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/communities/${communityId}/invites/${requestId}`
   );
 
   if (queryClient && data.status === "ok") {
-    SET_COMMUNITY_REQUEST_QUERY_DATA(
-      queryClient,
-      [communityId, data.data.id],
-      data
-    );
-
     queryClient.invalidateQueries({
       queryKey: COMMUNITY_REQUESTS_QUERY_KEY(communityId),
     });
