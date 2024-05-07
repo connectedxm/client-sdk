@@ -14,7 +14,15 @@ import { GetClientAPI } from "@src/ClientAPI";
 export const COMMUNITY_MEMBERS_QUERY_KEY = (
   communityId: string,
   role?: keyof typeof CommunityMembershipRole
-): QueryKey => [...COMMUNITY_QUERY_KEY(communityId), "MEMBERS", role];
+): QueryKey => {
+  const keys = [...COMMUNITY_QUERY_KEY(communityId), "MEMBERS"];
+
+  if (role) {
+    keys.push(role);
+  }
+
+  return keys;
+};
 
 export const SET_COMMUNITY_MEMBERS_QUERY_DATA = (
   client: QueryClient,
