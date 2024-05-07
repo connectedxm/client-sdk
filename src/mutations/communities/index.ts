@@ -8,6 +8,7 @@ export * from "./useDeleteCommunityInvitation";
 export * from "./useJoinCommunity";
 export * from "./useLeaveCommunity";
 export * from "./useRejectCommunityRequest";
+export * from "./useRemoveCommunityMember";
 export * from "./useUpdateCommunity";
 export * from "./useDemoteCommunityModerator";
 export * from "./usePromoteCommunityMember";
