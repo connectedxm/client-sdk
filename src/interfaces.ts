@@ -638,6 +638,7 @@ export interface Notification extends BaseNotification {
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
   community: BaseCommunity | null;
+  request: BaseCommunityRequest | null;
   createdAt: string;
   updatedAt: string;
 }
