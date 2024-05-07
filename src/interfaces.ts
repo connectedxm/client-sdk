@@ -620,8 +620,8 @@ export enum NotificationType {
   RESHARE = "RESHARE",
   EVENT = "EVENT",
   ACTIVITY = "ACTIVITY",
-  COMMUNITY_INVITATION = "COMMUNITY_INVITATION",
-  COMMUNITY_REQUEST_ACCEPTED = "COMMUNITY_REQUEST_ACCEPTED",
+  GROUP_INVITATION = "GROUP_INVITATION",
+  GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
 }
 
 export interface BaseNotification {
@@ -637,6 +637,8 @@ export interface Notification extends BaseNotification {
   activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
+  community: BaseCommunity | null;
+  request: BaseCommunityRequest | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -676,7 +678,6 @@ export interface ManagedCoupon extends Coupon {
   type: CouponType;
   startDate: string | null;
   endDate: string | null;
-
   quantityMin: number;
   quantityMax: number | null;
   amountMin: number;
@@ -1641,6 +1642,7 @@ export interface BaseCommunityRequest {
   id: string;
   status: CommunityRequestStatus;
   communityId: string;
+  community: BaseCommunity;
   account: BaseAccount;
   inviter: BaseAccount;
   createdAt: string;
