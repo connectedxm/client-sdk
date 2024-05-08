@@ -475,6 +475,7 @@ export interface RegistrationSection extends BaseRegistrationSection {
 }
 
 export interface EventListing extends Event {
+  visible: boolean;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   registrationLimit: number;

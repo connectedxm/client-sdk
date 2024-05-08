@@ -8,16 +8,22 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateListingSpeakerParams extends MutationParams {
   eventId: string;
-  speaker: any;
   speakerId: string;
-  buffer?: string;
+  speaker: {
+    firstName: string | null;
+    lastName: string | null;
+    title: string | null;
+    company: string | null;
+    bio: string | null;
+  };
+  imageDataUri?: string;
 }
 
 export const UpdateListingSpeaker = async ({
   eventId,
   speaker,
   speakerId,
-  buffer,
+  imageDataUri,
   clientApiParams,
   queryClient,
 }: UpdateListingSpeakerParams): Promise<ConnectedXMResponse<EventListing>> => {
@@ -26,7 +32,7 @@ export const UpdateListingSpeaker = async ({
     `/listings/${eventId}/speakers/${speakerId}`,
     {
       speaker,
-      buffer: buffer || undefined,
+      imageDataUri,
     }
   );
 
