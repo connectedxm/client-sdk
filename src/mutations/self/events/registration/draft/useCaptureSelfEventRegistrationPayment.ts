@@ -3,7 +3,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../../../useConnectedMutation";
-import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "@src/queries";
+import {
+  SELF_EVENT_REGISTRATION_STATUS_QUERY_KEY,
+  SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CaptureSelfEventRegistrationPaymentParams
@@ -29,6 +32,9 @@ export const CaptureSelfEventRegistrationPayment = async ({
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_STATUS_QUERY_KEY(eventId),
+    });
   }
 
   return data;
