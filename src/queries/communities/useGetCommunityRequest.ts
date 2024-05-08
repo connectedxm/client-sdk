@@ -5,7 +5,7 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
-import type { Community } from "@interfaces";
+import type { CommunityRequest } from "@interfaces";
 import { QueryClient, SetDataOptions, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -46,7 +46,9 @@ export const GetCommunityRequest = async ({
   communityId,
   requestId,
   clientApiParams,
-}: GetCommunityRequestProps): Promise<ConnectedXMResponse<Community>> => {
+}: GetCommunityRequestProps): Promise<
+  ConnectedXMResponse<CommunityRequest>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/communities/${communityId}/requests/${requestId}`

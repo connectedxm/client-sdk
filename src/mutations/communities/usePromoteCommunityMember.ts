@@ -1,4 +1,4 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import { CommunityMembership, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -17,11 +17,13 @@ export const PromoteCommunityMember = async ({
   accountId,
   clientApiParams,
   queryClient,
-}: PromoteCommunityMemberParams): Promise<ConnectedXMResponse<Community>> => {
+}: PromoteCommunityMemberParams): Promise<
+  ConnectedXMResponse<CommunityMembership>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Community>>(
-    `/communities/${communityId}/members/${accountId}/promote`
-  );
+  const { data } = await clientApi.post<
+    ConnectedXMResponse<CommunityMembership>
+  >(`/communities/${communityId}/members/${accountId}/promote`);
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({

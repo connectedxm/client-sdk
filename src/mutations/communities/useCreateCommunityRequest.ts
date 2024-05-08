@@ -1,4 +1,4 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -13,9 +13,9 @@ export interface CreateCommunityRequestParams extends MutationParams {
 export const CreateCommunityRequest = async ({
   communityId,
   clientApiParams,
-}: CreateCommunityRequestParams): Promise<ConnectedXMResponse<Community>> => {
+}: CreateCommunityRequestParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Community>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/communities/${communityId}/requests`
   );
 

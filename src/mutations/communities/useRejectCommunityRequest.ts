@@ -1,4 +1,8 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import {
+  Community,
+  CommunityRequest,
+  ConnectedXMResponse,
+} from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -20,11 +24,13 @@ export const RejectCommunityRequest = async ({
   requestId,
   clientApiParams,
   queryClient,
-}: RejectCommunityRequestParams): Promise<ConnectedXMResponse<Community>> => {
+}: RejectCommunityRequestParams): Promise<
+  ConnectedXMResponse<CommunityRequest>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<Community>>(
-    `/communities/${communityId}/requests/${requestId}`
-  );
+  const { data } = await clientApi.delete<
+    ConnectedXMResponse<CommunityRequest>
+  >(`/communities/${communityId}/requests/${requestId}`);
 
   if (queryClient && data.status === "ok") {
     SET_COMMUNITY_REQUEST_QUERY_DATA(

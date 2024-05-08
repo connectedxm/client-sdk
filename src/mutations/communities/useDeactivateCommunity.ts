@@ -1,8 +1,4 @@
-import {
-  Community,
-  CommunityMembership,
-  ConnectedXMResponse,
-} from "@src/interfaces";
+import { Community, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -23,16 +19,15 @@ export const DeactivateCommunity = async ({
   imageDataUri,
   clientApiParams,
   queryClient,
-}: DeactivateCommunityParams): Promise<
-  ConnectedXMResponse<CommunityMembership>
-> => {
+}: DeactivateCommunityParams): Promise<ConnectedXMResponse<Community>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<
-    ConnectedXMResponse<CommunityMembership>
-  >(`/communities/${communityId}`, {
-    community,
-    imageDataUri,
-  });
+  const { data } = await clientApi.post<ConnectedXMResponse<Community>>(
+    `/communities/${communityId}`,
+    {
+      community,
+      imageDataUri,
+    }
+  );
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({

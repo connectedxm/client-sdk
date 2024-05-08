@@ -1,4 +1,4 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import { CommunityMembership, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -17,11 +17,13 @@ export const DemoteCommunityModerator = async ({
   accountId,
   clientApiParams,
   queryClient,
-}: DemoteCommunityModeratorParams): Promise<ConnectedXMResponse<Community>> => {
+}: DemoteCommunityModeratorParams): Promise<
+  ConnectedXMResponse<CommunityMembership>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Community>>(
-    `/communities/${communityId}/members/${accountId}/demote`
-  );
+  const { data } = await clientApi.post<
+    ConnectedXMResponse<CommunityMembership>
+  >(`/communities/${communityId}/members/${accountId}/demote`);
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({

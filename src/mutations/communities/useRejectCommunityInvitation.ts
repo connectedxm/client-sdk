@@ -1,4 +1,4 @@
-import { Community, ConnectedXMResponse } from "@src/interfaces";
+import { CommunityRequest, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -22,10 +22,10 @@ export const RejectCommunityInvitation = async ({
   clientApiParams,
   queryClient,
 }: RejectCommunityInvitationParams): Promise<
-  ConnectedXMResponse<Community>
+  ConnectedXMResponse<CommunityRequest>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<Community>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<CommunityRequest>>(
     `/communities/${communityId}/invites/${requestId}`
   );
 
