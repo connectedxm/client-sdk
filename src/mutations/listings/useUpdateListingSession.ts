@@ -8,14 +8,22 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateListingSessionParams extends MutationParams {
   eventId: string;
-  session: any;
   sessionId: string;
+  session: {
+    name: string;
+    description: string;
+    location: string | null;
+    startTime: Date;
+    endTime: Date;
+  };
+  imageDataUri?: string;
 }
 
 export const UpdateListingSession = async ({
   eventId,
   session,
   sessionId,
+  imageDataUri,
   clientApiParams,
   queryClient,
 }: UpdateListingSessionParams): Promise<ConnectedXMResponse<EventListing>> => {
@@ -24,6 +32,7 @@ export const UpdateListingSession = async ({
     `/listings/${eventId}/sessions/${sessionId}`,
     {
       session,
+      imageDataUri,
     }
   );
 

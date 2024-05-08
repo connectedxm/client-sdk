@@ -3,32 +3,25 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { ConnectedXMResponse, EventListing, Session } from "@src/interfaces";
+import { ConnectedXMResponse, EventListing } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateListingSessionParams extends MutationParams {
   eventId: string;
-  session: Omit<
-    Session,
-    | "id"
-    | "slug"
-    | "event"
-    | "sortOrder"
-    | "tracks"
-    | "nonSession"
-    | "createdAt"
-    | "updatedAt"
-    | "speakers"
-    | "sponsors"
-    | "longDescription"
-    | "image"
-    | "streamInput"
-  >;
+  session: {
+    name: string;
+    description: string;
+    location: string | null;
+    startTime: Date;
+    endTime: Date;
+  };
+  imageDataUri?: string;
 }
 
 export const CreateListingSession = async ({
   eventId,
   session,
+  imageDataUri,
   clientApiParams,
   queryClient,
 }: CreateListingSessionParams): Promise<ConnectedXMResponse<EventListing>> => {
@@ -37,6 +30,7 @@ export const CreateListingSession = async ({
     `/listings/${eventId}/sessions`,
     {
       session,
+      imageDataUri,
     }
   );
 

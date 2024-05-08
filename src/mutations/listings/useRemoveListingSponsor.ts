@@ -6,19 +6,17 @@ import useConnectedMutation, {
 import { ConnectedXMResponse, EventListing } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface RemoveSelfEventListingSponsorParams extends MutationParams {
+export interface RemoveListingSponsorParams extends MutationParams {
   eventId: string;
   sponsorId: string;
 }
 
-export const RemoveSelfEventListingSponsor = async ({
+export const RemoveListingSponsor = async ({
   eventId,
   sponsorId,
   clientApiParams,
   queryClient,
-}: RemoveSelfEventListingSponsorParams): Promise<
-  ConnectedXMResponse<EventListing>
-> => {
+}: RemoveListingSponsorParams): Promise<ConnectedXMResponse<EventListing>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<EventListing>>(
     `/listings/${eventId}/sponsors/${sponsorId}`
@@ -34,20 +32,17 @@ export const RemoveSelfEventListingSponsor = async ({
   return data;
 };
 
-export const useRemoveSelfEventListingSponsor = (
+export const useRemoveListingSponsor = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof RemoveSelfEventListingSponsor>>,
-      Omit<
-        RemoveSelfEventListingSponsorParams,
-        "queryClient" | "clientApiParams"
-      >
+      Awaited<ReturnType<typeof RemoveListingSponsor>>,
+      Omit<RemoveListingSponsorParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    RemoveSelfEventListingSponsorParams,
-    Awaited<ReturnType<typeof RemoveSelfEventListingSponsor>>
-  >(RemoveSelfEventListingSponsor, options);
+    RemoveListingSponsorParams,
+    Awaited<ReturnType<typeof RemoveListingSponsor>>
+  >(RemoveListingSponsor, options);
 };
