@@ -1,4 +1,4 @@
-import { ConnectedXMResponse } from "@src/interfaces";
+import { CommunityMembership, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -12,19 +12,19 @@ import {
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface SelfLeaveCommunityParams extends MutationParams {
+export interface JoinCommunityParams extends MutationParams {
   communityId: string;
 }
 
-export const SelfLeaveCommunity = async ({
+export const JoinCommunity = async ({
   communityId,
   clientApiParams,
   queryClient,
-}: SelfLeaveCommunityParams): Promise<ConnectedXMResponse<null>> => {
+}: JoinCommunityParams): Promise<ConnectedXMResponse<CommunityMembership>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
-    `/self/communities/${communityId}`
-  );
+  const { data } = await clientApi.post<
+    ConnectedXMResponse<CommunityMembership>
+  >(`/communities/${communityId}/join`);
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
@@ -44,17 +44,17 @@ export const SelfLeaveCommunity = async ({
   return data;
 };
 
-export const useSelfLeaveCommunity = (
+export const useJoinCommunity = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelfLeaveCommunity>>,
-      Omit<SelfLeaveCommunityParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof JoinCommunity>>,
+      Omit<JoinCommunityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    SelfLeaveCommunityParams,
-    Awaited<ReturnType<typeof SelfLeaveCommunity>>
-  >(SelfLeaveCommunity, options);
+    JoinCommunityParams,
+    Awaited<ReturnType<typeof JoinCommunity>>
+  >(JoinCommunity, options);
 };

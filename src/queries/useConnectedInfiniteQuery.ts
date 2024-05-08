@@ -102,7 +102,7 @@ export const useConnectedInfiniteQuery = <
       }
 
       // MODULE FORBIDDEN FOR USER
-      if (error.response?.status === 403) {
+      if (error.response?.status === 403 || error.response?.status === 453) {
         if (onModuleForbidden) onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
         return false;
       }

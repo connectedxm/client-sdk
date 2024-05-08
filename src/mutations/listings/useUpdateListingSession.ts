@@ -3,32 +3,36 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import {
-  EVENT_SESSIONS_QUERY_KEY,
-  SET_SELF_EVENT_LISTING_QUERY_DATA,
-} from "@src/queries";
+import { EVENT_SESSIONS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface UpdateSelfEventListingSessionParams extends MutationParams {
+export interface UpdateListingSessionParams extends MutationParams {
   eventId: string;
-  session: any;
   sessionId: string;
+  session: {
+    name: string;
+    description: string;
+    location: string | null;
+    startTime: Date;
+    endTime: Date;
+  };
+  imageDataUri?: string;
 }
 
-export const UpdateSelfEventListingSession = async ({
+export const UpdateListingSession = async ({
   eventId,
   session,
   sessionId,
+  imageDataUri,
   clientApiParams,
   queryClient,
-}: UpdateSelfEventListingSessionParams): Promise<
-  ConnectedXMResponse<EventListing>
-> => {
+}: UpdateListingSessionParams): Promise<ConnectedXMResponse<EventListing>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
-    `/self/events/listings/${eventId}/sessions/${sessionId}`,
+    `/listings/${eventId}/sessions/${sessionId}`,
     {
       session,
+      imageDataUri,
     }
   );
 
@@ -36,26 +40,23 @@ export const UpdateSelfEventListingSession = async ({
     queryClient.invalidateQueries({
       queryKey: EVENT_SESSIONS_QUERY_KEY(eventId),
     });
-    SET_SELF_EVENT_LISTING_QUERY_DATA(queryClient, [eventId], data);
+    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;
 };
 
-export const useUpdateSelfEventListingSession = (
+export const useUpdateListingSession = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateSelfEventListingSession>>,
-      Omit<
-        UpdateSelfEventListingSessionParams,
-        "queryClient" | "clientApiParams"
-      >
+      Awaited<ReturnType<typeof UpdateListingSession>>,
+      Omit<UpdateListingSessionParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateSelfEventListingSessionParams,
+    UpdateListingSessionParams,
     Awaited<ConnectedXMResponse<EventListing>>
-  >(UpdateSelfEventListingSession, options);
+  >(UpdateListingSession, options);
 };

@@ -1,16 +1,11 @@
-// import { QUERY_KEY as COMMUNITY_EVENTS } from "@context/queries/communities/useGetCommunityEvents";
-// import { QUERY_KEY as SELF_LISTINGS } from "@context/queries/self/useGetSelfEventListings";
-
 import { Announcement, ConnectedXMResponse } from "@src/interfaces";
-import {
-  MutationParams,
+import useConnectedMutation, {
   MutationOptions,
-  useConnectedMutation,
+  MutationParams,
 } from "../useConnectedMutation";
-import { AppendInfiniteQuery } from "@src/utilities";
+
 import { COMMUNITY_ANNOUNCEMENTS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 
 export interface CreateCommunityAnnouncementParams extends MutationParams {
   communityId: string;
@@ -32,8 +27,9 @@ export const CreateCommunityAnnouncement = async ({
   ConnectedXMResponse<Announcement>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
+
   const { data } = await clientApi.post<ConnectedXMResponse<Announcement>>(
-    `/communityModerator/${communityId}/announcements`,
+    `/communities/${communityId}/announcements`,
     {
       title,
       html,
@@ -43,14 +39,9 @@ export const CreateCommunityAnnouncement = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    AppendInfiniteQuery<Announcement>(
-      queryClient,
-      [
-        ...COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
-        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-      ],
-      data.data
-    );
+    queryClient.invalidateQueries({
+      queryKey: COMMUNITY_ANNOUNCEMENTS_QUERY_KEY(communityId),
+    });
   }
 
   return data;

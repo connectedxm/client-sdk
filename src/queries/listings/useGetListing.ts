@@ -6,24 +6,24 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { ConnectedXMResponse, EventListing } from "@interfaces";
-import { SELF_EVENT_LISTINGS_QUERY_KEY } from "./useGetSelfEventListings";
+import { LISTINGS_QUERY_KEY } from "./useGetListings";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SELF_EVENT_LISTING_QUERY_KEY = (eventId: string): QueryKey => [
-  ...SELF_EVENT_LISTINGS_QUERY_KEY(false),
+export const LISTING_QUERY_KEY = (eventId: string): QueryKey => [
+  ...LISTINGS_QUERY_KEY(false),
   eventId,
 ];
 
-export const SET_SELF_EVENT_LISTING_QUERY_DATA = (
+export const SET_LISTING_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_LISTING_QUERY_KEY>,
+  keyParams: Parameters<typeof LISTING_QUERY_KEY>,
   response: Awaited<ReturnType<typeof GetSelfEventListing>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_LISTING_QUERY_KEY(...keyParams),
+      ...LISTING_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
@@ -39,7 +39,7 @@ export const GetSelfEventListing = async ({
   clientApiParams,
 }: GetSelfEventListingProps): Promise<ConnectedXMResponse<EventListing>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`self/events/listings/${eventId}`);
+  const { data } = await clientApi.get(`/listings/${eventId}`);
   return data;
 };
 
@@ -48,7 +48,7 @@ export const useGetSelfEventListing = (
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventListing>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventListing>>(
-    SELF_EVENT_LISTING_QUERY_KEY(eventId),
+    LISTING_QUERY_KEY(eventId),
     (params) => GetSelfEventListing({ eventId, ...params }),
     {
       ...options,

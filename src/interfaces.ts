@@ -475,6 +475,7 @@ export interface RegistrationSection extends BaseRegistrationSection {
 }
 
 export interface EventListing extends Event {
+  visible: boolean;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   registrationLimit: number;
@@ -620,7 +621,10 @@ export enum NotificationType {
   RESHARE = "RESHARE",
   EVENT = "EVENT",
   ACTIVITY = "ACTIVITY",
+  GROUP_INVITATION = "GROUP_INVITATION",
+  GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
 }
+
 export interface BaseNotification {
   id: string;
   type: NotificationType;
@@ -634,6 +638,8 @@ export interface Notification extends BaseNotification {
   activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
+  community: BaseCommunity | null;
+  request: BaseCommunityRequest | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -673,7 +679,6 @@ export interface ManagedCoupon extends Coupon {
   type: CouponType;
   startDate: string | null;
   endDate: string | null;
-
   quantityMin: number;
   quantityMax: number | null;
   amountMin: number;
@@ -1218,6 +1223,10 @@ export interface NotificationPreferences {
   communityAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
   eventAnnouncementPush: boolean;
+  communityInvitationEmail: boolean;
+  communityInvitationPush: boolean;
+  communityRequestAcceptedEmail: boolean;
+  communityRequestAcceptedPush: boolean;
 }
 
 export enum PushDeviceAppType {
@@ -1622,4 +1631,25 @@ export interface BaseEventReservationSectionLocation {
 export interface EventReservationSectionLocation
   extends BaseEventReservationSectionLocation {
   reservationSection: BaseEventReservationSection;
+}
+
+export enum CommunityRequestStatus {
+  requested = "requested",
+  invited = "invited",
+  rejected = "rejected",
+}
+
+export interface BaseCommunityRequest {
+  id: string;
+  status: CommunityRequestStatus;
+  communityId: string;
+  community: BaseCommunity;
+  account: BaseAccount;
+  inviter: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommunityRequest extends BaseCommunityRequest {
+  community: BaseCommunity;
 }
