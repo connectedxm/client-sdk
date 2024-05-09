@@ -228,6 +228,7 @@ export interface Activity extends BaseActivity {
   text: string;
   community: BaseCommunity | null;
   event: BaseEvent | null;
+  interests: BaseInterest[] | null;
   content: BaseContent | null;
   commented: BaseActivity | null;
   reshared: BaseActivity | null;
@@ -500,7 +501,18 @@ export interface BaseInterest {
   name: string;
 }
 
-export interface Interest extends BaseInterest {}
+export interface Interest extends BaseInterest {
+  image: BaseImage | null;
+  imageId: string | null;
+  featured: boolean;
+  organizationId: string;
+  organization: Organization;
+  accounts: Account[];
+  communities: Community[];
+  events: Event[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export enum TicketVisibility {
   public = "public",
