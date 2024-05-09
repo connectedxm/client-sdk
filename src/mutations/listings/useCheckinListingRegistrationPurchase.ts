@@ -7,6 +7,7 @@ import {
   LISTING_REGISTRATIONS_QUERY_KEY,
   LISTING_REGISTRATION_QUERY_KEY,
 } from "@src/queries";
+import { ConnectedXMResponse, Purchase } from "@src/interfaces";
 
 export interface CheckinListingRegistrationPurchaseParams
   extends MutationParams {
@@ -21,9 +22,11 @@ export const CheckinListingRegistrationPurchase = async ({
   purchaseId,
   clientApiParams,
   queryClient,
-}: CheckinListingRegistrationPurchaseParams) => {
+}: CheckinListingRegistrationPurchaseParams): Promise<
+  ConnectedXMResponse<Purchase>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post(
+  const { data } = await clientApi.post<ConnectedXMResponse<Purchase>>(
     `/listings/${eventId}/registrations/${registrationId}/purchases/${purchaseId}`
   );
 
