@@ -28,16 +28,24 @@ export interface CreateActivity {
   commentedId?: string;
 }
 
+export interface CreateInterest {
+  name: string;
+  featured: boolean;
+  imageId?: string;
+}
+
 export interface SelfCreateActivityParams extends MutationParams {
   activity: CreateActivity;
   base64Image?: any;
   videoUri?: string;
+  interests?: CreateInterest[];
 }
 
 export const SelfCreateActivity = async ({
   activity,
   base64Image,
   videoUri,
+  interests,
   clientApiParams,
   queryClient,
 }: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
@@ -63,6 +71,7 @@ export const SelfCreateActivity = async ({
       activity,
       imageUri: base64Image ?? undefined,
       videoUri: videoUri ?? undefined,
+      interests: interests ?? undefined,
     }
   );
 
