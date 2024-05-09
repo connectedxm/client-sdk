@@ -376,6 +376,8 @@ export interface RegistrationEventDetails extends BaseEvent {
     sections: number;
     tickets: number;
     coupons: number;
+    addOns: number;
+    reservationSections: number;
   };
 }
 
@@ -473,6 +475,7 @@ export interface RegistrationSection extends BaseRegistrationSection {
 }
 
 export interface EventListing extends Event {
+  visible: boolean;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   registrationLimit: number;
@@ -522,6 +525,12 @@ export interface BaseTicket {
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
   supply: number | null;
+  minReservationStart: string | null;
+  reservationStart: string | null;
+  maxReservationStart: string | null;
+  minReservationEnd: string | null;
+  reservationEnd: string | null;
+  maxReservationEnd: string | null;
 }
 
 export interface Ticket extends BaseTicket {
@@ -547,6 +556,10 @@ export interface BasePurchase {
   registrationId: string;
   ticketId: string | null;
   ticket: BaseTicket | null;
+  addOns: BaseEventAddOn[];
+  reservationStart: string | null;
+  reservationEnd: string | null;
+  reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
 }
 
@@ -608,7 +621,10 @@ export enum NotificationType {
   RESHARE = "RESHARE",
   EVENT = "EVENT",
   ACTIVITY = "ACTIVITY",
+  GROUP_INVITATION = "GROUP_INVITATION",
+  GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
 }
+
 export interface BaseNotification {
   id: string;
   type: NotificationType;
@@ -622,6 +638,8 @@ export interface Notification extends BaseNotification {
   activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
+  community: BaseCommunity | null;
+  request: BaseCommunityRequest | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -661,7 +679,6 @@ export interface ManagedCoupon extends Coupon {
   type: CouponType;
   startDate: string | null;
   endDate: string | null;
-
   quantityMin: number;
   quantityMax: number | null;
   amountMin: number;
@@ -1206,6 +1223,10 @@ export interface NotificationPreferences {
   communityAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
   eventAnnouncementPush: boolean;
+  communityInvitationEmail: boolean;
+  communityInvitationPush: boolean;
+  communityRequestAcceptedEmail: boolean;
+  communityRequestAcceptedPush: boolean;
 }
 
 export enum PushDeviceAppType {
@@ -1543,4 +1564,92 @@ export interface BaseInvoiceLineItem {
 export interface InvoiceLineItem extends BaseInvoiceLineItem {
   invoiceId: string;
   invoice: BaseInvoice;
+}
+
+export interface BaseEventAddOn {
+  id: string;
+  name: string;
+  shortDescription: string;
+  longDescription: string | null;
+  supply: number;
+  price: number;
+  sortOrder: number;
+  eventId: string;
+  minReservationStart: string | null;
+  reservationStart: string | null;
+  maxReservationStart: string | null;
+  minReservationEnd: string | null;
+  reservationEnd: string | null;
+  maxReservationEnd: string | null;
+  image: BaseImage | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventAddOn extends BaseEventAddOn {
+  event: BaseEvent;
+}
+
+export interface BaseEventReservationSection {
+  id: string;
+  eventId: string;
+  name: string;
+  price: number;
+  pricePerDay: boolean;
+  shortDescription: string;
+  image: BaseImage | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventReservationSection extends BaseEventReservationSection {
+  event: BaseEvent;
+  locations: BaseEventReservationSectionLocation[];
+}
+
+export interface BaseEventReservationSectionLocation {
+  id: string;
+  eventId: string;
+  reservationSectionId: string;
+  name: string;
+  shortDescription: string;
+  supply: number;
+  premium: number;
+  createdAt: string;
+  updatedAt: string;
+  reservationSection: {
+    name: string;
+    pricePerDay: boolean;
+    price: number;
+    image: BaseImage | null;
+  };
+  _count: {
+    purchases: number;
+  };
+}
+
+export interface EventReservationSectionLocation
+  extends BaseEventReservationSectionLocation {
+  reservationSection: BaseEventReservationSection;
+}
+
+export enum CommunityRequestStatus {
+  requested = "requested",
+  invited = "invited",
+  rejected = "rejected",
+}
+
+export interface BaseCommunityRequest {
+  id: string;
+  status: CommunityRequestStatus;
+  communityId: string;
+  community: BaseCommunity;
+  account: BaseAccount;
+  inviter: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommunityRequest extends BaseCommunityRequest {
+  community: BaseCommunity;
 }
