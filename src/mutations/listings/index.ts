@@ -2,6 +2,7 @@ export * from "./useCreateListingSession";
 export * from "./useCreateListingSpeaker";
 export * from "./useAddListingSponsor";
 export * from "./useCreateListing";
+export * from "./useCreateListingAnnouncement";
 export * from "./useDeleteListingSession";
 export * from "./useDeleteListingSpeaker";
 export * from "./useRemoveListingSponsor";
