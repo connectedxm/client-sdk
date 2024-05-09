@@ -5,7 +5,7 @@ export * from "./useCreateListing";
 export * from "./useDeleteListingSession";
 export * from "./useDeleteListingSpeaker";
 export * from "./useRemoveListingSponsor";
-export * from "./useCheckinListingRegistration";
+export * from "./useCheckinListingRegistrationPurchase";
 export * from "./useUpdateListing";
 export * from "./useUpdateListingSession";
 export * from "./useUpdateListingSpeaker";
