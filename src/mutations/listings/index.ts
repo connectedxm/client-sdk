@@ -1,5 +1,6 @@
 export * from "./useCreateListingSession";
 export * from "./useCreateListingSpeaker";
+export * from "./useDeleteListing";
 export * from "./useAddListingSponsor";
 export * from "./useCreateListing";
 export * from "./useDeleteListingSession";
