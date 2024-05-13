@@ -505,11 +505,9 @@ export interface Interest extends BaseInterest {
   image: BaseImage | null;
   imageId: string | null;
   featured: boolean;
-  organizationId: string;
-  organization: Organization;
-  accounts: Account[];
-  communities: Community[];
-  events: Event[];
+  accounts: BaseAccount[];
+  communities: BaseCommunity[];
+  events: BaseEvent[];
   createdAt: string;
   updatedAt: string;
 }
