@@ -30,7 +30,6 @@ export interface CreateActivity {
 
 export interface CreateInterest {
   name: string;
-  featured: boolean;
   imageId?: string;
 }
 
