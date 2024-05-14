@@ -1,4 +1,10 @@
-import type { ConnectedXMResponse, Event } from "@interfaces";
+import type {
+  ConnectedXMResponse,
+  Event,
+  EventWithSessions,
+  EventWithSpeakers,
+  EventWithSponsors,
+} from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -12,13 +18,19 @@ import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 import { GetClientAPI } from "@src/ClientAPI";
 
+type Include = "sessions" | "speakers" | "sponsors";
+
 export const SERIES_EVENTS_QUERY_KEY = (
   seriesId: string,
-  past?: boolean
+  past?: boolean,
+  include?: Include
 ): QueryKey => {
   const keys = [...SERIES_QUERY_KEY(seriesId), "EVENTS"];
   if (typeof past !== "undefined") {
     keys.push(past ? "PAST" : "UPCOMING");
+  }
+  if (include) {
+    keys.push(include);
   }
   return keys;
 };
@@ -41,6 +53,7 @@ export const SET_SERIES_EVENTS_QUERY_DATA = (
 export interface GetSeriesEventsProps extends InfiniteQueryParams {
   seriesId: string;
   past?: boolean;
+  include?: Include;
 }
 
 export const GetSeriesEvents = async ({
@@ -50,10 +63,15 @@ export const GetSeriesEvents = async ({
   orderBy,
   search,
   past,
+  include,
   queryClient,
   clientApiParams,
   locale,
-}: GetSeriesEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
+}: GetSeriesEventsProps): Promise<
+  ConnectedXMResponse<
+    (Event | EventWithSessions | EventWithSpeakers | EventWithSponsors)[]
+  >
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/series/${seriesId}/events`, {
     params: {
@@ -62,6 +80,7 @@ export const GetSeriesEvents = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
       past: past !== undefined ? past : undefined,
+      include: include || undefined,
     },
   });
 
@@ -74,11 +93,21 @@ export const GetSeriesEvents = async ({
     );
   }
 
-  return data;
+  if (include === "sessions") {
+    return data as ConnectedXMResponse<EventWithSessions[]>;
+  } else if (include === "speakers") {
+    return data as ConnectedXMResponse<EventWithSpeakers[]>;
+  } else if (include === "sponsors") {
+    return data as ConnectedXMResponse<EventWithSponsors[]>;
+  } else {
+    return data as ConnectedXMResponse<Event[]>;
+  }
 };
 
 export const useGetSeriesEvents = (
   seriesId: string = "",
+  past?: boolean,
+  include?: Include,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -88,8 +117,9 @@ export const useGetSeriesEvents = (
   > = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesEvents>>>(
-    SERIES_EVENTS_QUERY_KEY(seriesId),
-    (params: InfiniteQueryParams) => GetSeriesEvents({ seriesId, ...params }),
+    SERIES_EVENTS_QUERY_KEY(seriesId, past, include),
+    (params: InfiniteQueryParams) =>
+      GetSeriesEvents({ seriesId, past, ...params }),
     params,
     {
       ...options,
