@@ -767,9 +767,10 @@ export interface BaseSpeaker {
   slug: string;
   firstName: string;
   lastName: string | null;
+  bio: string | null;
   title: string | null;
   company: string | null;
-  bio: string | null;
+  companyBio: string | null;
   image: BaseImage | null;
   priority: number;
   isHost: boolean;
