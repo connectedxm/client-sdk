@@ -119,7 +119,7 @@ export const useGetSeriesEvents = (
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesEvents>>>(
     SERIES_EVENTS_QUERY_KEY(seriesId, past, include),
     (params: InfiniteQueryParams) =>
-      GetSeriesEvents({ seriesId, past, ...params }),
+      GetSeriesEvents({ seriesId, past, include, ...params }),
     params,
     {
       ...options,
