@@ -353,6 +353,7 @@ export interface Event extends BaseEvent {
   androidAppLink: string | null;
   pages: BaseEventPage[];
   streamInput: StreamInput | null;
+  streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
   _count: {
@@ -362,6 +363,18 @@ export interface Event extends BaseEvent {
     faqSections: number;
   };
 }
+
+export type EventWithSessions = Event & {
+  sessions: BaseSession[];
+};
+
+export type EventWithSpeakers = Event & {
+  speakers: BaseSpeaker[];
+};
+
+export type EventWithSponsors = Event & {
+  sponsors: BaseAccount[];
+};
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>)._count !== undefined;
@@ -754,9 +767,10 @@ export interface BaseSpeaker {
   slug: string;
   firstName: string;
   lastName: string | null;
+  bio: string | null;
   title: string | null;
   company: string | null;
-  bio: string | null;
+  companyBio: string | null;
   image: BaseImage | null;
   priority: number;
   isHost: boolean;
