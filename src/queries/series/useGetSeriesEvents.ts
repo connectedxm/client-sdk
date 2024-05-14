@@ -12,10 +12,16 @@ import { EVENT_QUERY_KEY } from "../events/useGetEvent";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SERIES_EVENTS_QUERY_KEY = (seriesId: string): QueryKey => [
-  ...SERIES_QUERY_KEY(seriesId),
-  "EVENTS",
-];
+export const SERIES_EVENTS_QUERY_KEY = (
+  seriesId: string,
+  past?: boolean
+): QueryKey => {
+  const keys = [...SERIES_QUERY_KEY(seriesId), "EVENTS"];
+  if (typeof past !== "undefined") {
+    keys.push(past ? "PAST" : "UPCOMING");
+  }
+  return keys;
+};
 
 export const SET_SERIES_EVENTS_QUERY_DATA = (
   client: QueryClient,
@@ -34,6 +40,7 @@ export const SET_SERIES_EVENTS_QUERY_DATA = (
 
 export interface GetSeriesEventsProps extends InfiniteQueryParams {
   seriesId: string;
+  past?: boolean;
 }
 
 export const GetSeriesEvents = async ({
@@ -42,6 +49,7 @@ export const GetSeriesEvents = async ({
   pageSize,
   orderBy,
   search,
+  past,
   queryClient,
   clientApiParams,
   locale,
@@ -53,6 +61,7 @@ export const GetSeriesEvents = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      past: past !== undefined ? past : undefined,
     },
   });
 
