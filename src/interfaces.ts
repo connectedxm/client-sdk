@@ -353,6 +353,7 @@ export interface Event extends BaseEvent {
   androidAppLink: string | null;
   pages: BaseEventPage[];
   streamInput: StreamInput | null;
+  streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
   _count: {
