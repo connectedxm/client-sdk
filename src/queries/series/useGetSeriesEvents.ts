@@ -79,6 +79,7 @@ export const GetSeriesEvents = async ({
 
 export const useGetSeriesEvents = (
   seriesId: string = "",
+  past?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -89,7 +90,8 @@ export const useGetSeriesEvents = (
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSeriesEvents>>>(
     SERIES_EVENTS_QUERY_KEY(seriesId),
-    (params: InfiniteQueryParams) => GetSeriesEvents({ seriesId, ...params }),
+    (params: InfiniteQueryParams) =>
+      GetSeriesEvents({ seriesId, past, ...params }),
     params,
     {
       ...options,
