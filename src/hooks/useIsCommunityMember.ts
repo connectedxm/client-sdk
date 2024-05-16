@@ -1,18 +1,7 @@
-import {
-  ConnectedXMResponse,
-  GetBaseSingleQueryKeys,
-  SELF_RELATIONSHIPS_QUERY_KEY,
-  SelfRelationships,
-  useConnectedXM,
-} from "..";
+import { useGetSelfRelationships } from "..";
 
 export const useIsCommunityMember = (communityId: string) => {
-  const { queryClient, locale } = useConnectedXM();
-
-  const relationships = queryClient.getQueryData<
-    ConnectedXMResponse<SelfRelationships>
-  >([...SELF_RELATIONSHIPS_QUERY_KEY(), GetBaseSingleQueryKeys(locale)]);
-
+  const { data: relationships } = useGetSelfRelationships();
   return relationships?.data.communities[communityId] || false;
 };
 

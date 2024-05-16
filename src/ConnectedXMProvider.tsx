@@ -15,6 +15,8 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com"
     | "http://localhost:4001";
+  authenticated: boolean;
+  setAuthenticated: (authenticated: boolean) => void;
   getToken: () => Promise<string | undefined>;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
   locale: string;
@@ -56,9 +58,21 @@ export interface ConnectedXMProviderProps
 export const ConnectedXMProvider = ({
   queryClient,
   children,
+  getToken,
   ...state
 }: ConnectedXMProviderProps) => {
+  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
   const [ssr, setSSR] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    if (!authenticated) {
+      getToken().then((token) => {
+        if (token) {
+          setAuthenticated(true);
+        }
+      });
+    }
+  }, [authenticated, getToken]);
 
   React.useEffect(() => {
     setSSR(false);
@@ -70,6 +84,9 @@ export const ConnectedXMProvider = ({
         <ConnectedXMClientContext.Provider
           value={{
             ...state,
+            getToken,
+            authenticated,
+            setAuthenticated,
             queryClient,
           }}
         >
@@ -83,6 +100,9 @@ export const ConnectedXMProvider = ({
     <ConnectedXMClientContext.Provider
       value={{
         ...state,
+        getToken,
+        authenticated,
+        setAuthenticated,
         queryClient,
       }}
     >

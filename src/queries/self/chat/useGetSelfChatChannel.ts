@@ -10,6 +10,7 @@ import { QueryClient, Updater } from "@tanstack/react-query";
 import { SELF_CHAT_CHANNELS_QUERY_KEY } from "./useGetSelfChatChannels";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_CHAT_CHANNEL_QUERY_KEY = (channelId: string): QueryKey => [
   ...SELF_CHAT_CHANNELS_QUERY_KEY(),
@@ -50,6 +51,8 @@ export const useGetSelfChatChannel = (
   channelId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfChatChannel>> = {}
 ) => {
+  const { authenticated } = useConnectedXM();
+
   return useConnectedSingleQuery<ReturnType<typeof GetSelfChatChannel>>(
     SELF_CHAT_CHANNEL_QUERY_KEY(channelId),
     (params: any) =>
@@ -60,7 +63,7 @@ export const useGetSelfChatChannel = (
     {
       staleTime: Infinity,
       ...options,
-      enabled: !!channelId && (options?.enabled ?? true),
+      enabled: !!authenticated && !!channelId && (options?.enabled ?? true),
     }
   );
 };

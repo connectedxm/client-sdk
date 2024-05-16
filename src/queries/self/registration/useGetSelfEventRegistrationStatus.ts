@@ -1,8 +1,4 @@
-import {
-  ConnectedXMResponse,
-  Registration,
-  RegistrationStatus,
-} from "@src/interfaces";
+import { ConnectedXMResponse, RegistrationStatus } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -11,6 +7,7 @@ import useConnectedSingleQuery, {
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_STATUS_QUERY_KEY = (
   eventId: string
@@ -65,6 +62,8 @@ export const useGetSelfEventRegistrationStatus = (
     ReturnType<typeof GetSelfEventRegistrationStatus>
   > = {}
 ) => {
+  const { authenticated } = useConnectedXM();
+
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationStatus>
   >(
@@ -76,7 +75,8 @@ export const useGetSelfEventRegistrationStatus = (
       }),
     {
       ...options,
-      enabled: !!eventId && !!selfId && (options?.enabled ?? true),
+      enabled:
+        !!authenticated && !!eventId && !!selfId && (options?.enabled ?? true),
     }
   );
 };

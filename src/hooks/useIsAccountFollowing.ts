@@ -6,7 +6,7 @@ import {
   useConnectedXM,
 } from "..";
 
-export const useIsFollowingAccount = (accountId: string) => {
+export const useIsAccountFollowing = (accountId: string) => {
   const { queryClient, locale } = useConnectedXM();
 
   const relationships = queryClient.getQueryData<
@@ -16,4 +16,4 @@ export const useIsFollowingAccount = (accountId: string) => {
   return relationships?.data.accounts[accountId] || false;
 };
 
-export default useIsFollowingAccount;
+export default useIsAccountFollowing;
