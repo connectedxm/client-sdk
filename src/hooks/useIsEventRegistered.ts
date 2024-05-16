@@ -1,17 +1,12 @@
-import {
-  ConnectedXMResponse,
-  GetBaseSingleQueryKeys,
-  SELF_RELATIONSHIPS_QUERY_KEY,
-  SelfRelationships,
-  useConnectedXM,
-} from "..";
+import { isUUID, useGetSelfRelationships } from "..";
 
 export const useIsEventRegistered = (eventId: string) => {
-  const { queryClient, locale } = useConnectedXM();
+  const { data: relationships } = useGetSelfRelationships();
 
-  const relationships = queryClient.getQueryData<
-    ConnectedXMResponse<SelfRelationships>
-  >([...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(locale)]);
+  if (!eventId) return false;
+  if (!isUUID(eventId)) {
+    throw new Error("Invalid eventId. Did you pass in the slug?");
+  }
 
   return relationships?.data.events[eventId] || false;
 };

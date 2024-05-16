@@ -189,7 +189,7 @@ export const isTypeAccount = (
 
 export interface SelfRelationships {
   accounts: Record<string, boolean>;
-  communities: Record<string, boolean>;
+  communities: Record<string, "moderator" | "member" | false>;
   events: Record<string, boolean>;
   channels: Record<string, boolean>;
 }
@@ -293,6 +293,7 @@ export interface Community extends BaseCommunity {
   description: string;
   externalUrl: string | null;
   active: boolean;
+  createdAt: string;
   _count: {
     members: number;
   };

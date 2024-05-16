@@ -1,17 +1,12 @@
-import {
-  ConnectedXMResponse,
-  GetBaseSingleQueryKeys,
-  SELF_RELATIONSHIPS_QUERY_KEY,
-  SelfRelationships,
-  useConnectedXM,
-} from "..";
+import { isUUID, useGetSelfRelationships } from "..";
 
-export const useIsChannelSubscribed = (channelId: string) => {
-  const { queryClient, locale } = useConnectedXM();
+export const useIsChannelSubscribed = (channelId?: string) => {
+  const { data: relationships } = useGetSelfRelationships();
 
-  const relationships = queryClient.getQueryData<
-    ConnectedXMResponse<SelfRelationships>
-  >([...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(locale)]);
+  if (!channelId) return false;
+  if (!isUUID(channelId)) {
+    throw new Error("Invalid channelId. Did you pass in the slug?");
+  }
 
   return relationships?.data.channels[channelId] || false;
 };

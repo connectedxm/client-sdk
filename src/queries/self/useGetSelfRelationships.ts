@@ -20,7 +20,8 @@ export const ADD_SELF_RELATIONSHIP = (
   client: QueryClient,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
   type: "communities" | "accounts" | "events",
-  id: string
+  id: string,
+  value: boolean | string = true
 ) => {
   client.setQueryData(
     [...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(...baseKeys)],
@@ -28,7 +29,7 @@ export const ADD_SELF_RELATIONSHIP = (
       ...prev,
       [type]: {
         ...prev[type],
-        [id]: true,
+        [id]: value,
       },
     })
   );
@@ -38,7 +39,8 @@ export const REMOVE_SELF_RELATIONSHIP = (
   client: QueryClient,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
   type: "communities" | "accounts" | "events",
-  id: string
+  id: string,
+  value: boolean | string = false
 ) => {
   client.setQueryData(
     [...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(...baseKeys)],
@@ -46,7 +48,7 @@ export const REMOVE_SELF_RELATIONSHIP = (
       ...prev,
       [type]: {
         ...prev[type],
-        [id]: false,
+        [id]: value,
       },
     })
   );

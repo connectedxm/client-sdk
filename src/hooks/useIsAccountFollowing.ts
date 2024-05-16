@@ -1,17 +1,12 @@
-import {
-  ConnectedXMResponse,
-  GetBaseSingleQueryKeys,
-  SELF_RELATIONSHIPS_QUERY_KEY,
-  SelfRelationships,
-  useConnectedXM,
-} from "..";
+import { isUUID, useGetSelfRelationships } from "..";
 
-export const useIsAccountFollowing = (accountId: string) => {
-  const { queryClient, locale } = useConnectedXM();
+export const useIsAccountFollowing = (accountId?: string) => {
+  const { data: relationships } = useGetSelfRelationships();
 
-  const relationships = queryClient.getQueryData<
-    ConnectedXMResponse<SelfRelationships>
-  >([...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(locale)]);
+  if (!accountId) return false;
+  if (!isUUID(accountId)) {
+    throw new Error("Invalid accountId. Did you pass in the username?");
+  }
 
   return relationships?.data.accounts[accountId] || false;
 };

@@ -44,7 +44,8 @@ export const JoinCommunity = async ({
       queryClient,
       [clientApiParams.locale],
       "communities",
-      communityId
+      communityId,
+      "member"
     );
   }
 

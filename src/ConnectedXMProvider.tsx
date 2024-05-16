@@ -50,7 +50,13 @@ export const ConnectedXMClientContext =
 export interface ConnectedXMProviderProps
   extends Omit<
     ConnectedXMClientContextState,
-    "token" | "setToken" | "executeAs" | "setExecuteAs" | "websocket"
+    | "token"
+    | "setToken"
+    | "executeAs"
+    | "setExecuteAs"
+    | "websocket"
+    | "authenticated"
+    | "setAuthenticated"
   > {
   children: React.ReactNode;
 }
