@@ -86,7 +86,7 @@ export const useGetEventSpeakers = (
     params,
     {
       ...options,
-      enabled: !!eventId && (options.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };

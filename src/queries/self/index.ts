@@ -3,6 +3,7 @@ export * from "./registration";
 export * from "./subscriptions";
 
 export * from "./useGetSelf";
+export * from "./useGetSelfRelationships";
 export * from "./useGetSelfActivities";
 export * from "./useGetSelfAnnouncement";
 export * from "./useGetSelfCommunityMembership";

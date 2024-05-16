@@ -8,7 +8,11 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
-import { COMMUNITIES_QUERY_KEY, SET_COMMUNITY_QUERY_DATA } from "@src/queries";
+import {
+  ADD_SELF_RELATIONSHIP,
+  COMMUNITIES_QUERY_KEY,
+  SET_COMMUNITY_QUERY_DATA,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 interface CreateCommunity {
@@ -43,6 +47,13 @@ export const CreateCommunity = async ({
     queryClient.invalidateQueries({
       queryKey: COMMUNITIES_QUERY_KEY(),
     });
+    ADD_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "communities",
+      data.data.id,
+      "moderator"
+    );
   }
 
   return data;
