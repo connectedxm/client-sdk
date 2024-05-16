@@ -11,6 +11,7 @@ import {
   SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { REMOVE_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
 export interface LeaveCommunityParams extends MutationParams {
   communityId: string;
@@ -39,6 +40,12 @@ export const LeaveCommunity = async ({
     queryClient.invalidateQueries({
       queryKey: SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
     });
+    REMOVE_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "communities",
+      communityId
+    );
   }
 
   return data;
