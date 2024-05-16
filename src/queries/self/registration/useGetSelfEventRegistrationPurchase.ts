@@ -12,6 +12,7 @@ import useConnectedSingleQuery, {
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 
 interface ResponseWithQuestion extends RegistrationQuestionResponse {
   question: RegistrationQuestion;
@@ -82,6 +83,8 @@ export const useGetSelfEventRegistrationPurchase = (
     ReturnType<typeof GetSelfEventRegistrationPurchase>
   > = {}
 ) => {
+  const { authenticated } = useConnectedXM();
+
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationPurchase>
   >(
@@ -100,6 +103,7 @@ export const useGetSelfEventRegistrationPurchase = (
     {
       ...options,
       enabled:
+        !!authenticated &&
         !!eventId &&
         !!registrationId &&
         !!purchaseId &&

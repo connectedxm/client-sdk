@@ -8,6 +8,7 @@ import {
 } from "@src/queries";
 import { Account, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
 export interface FollowAccountParams extends MutationParams {
   accountId: string;
@@ -33,6 +34,12 @@ export const FollowAccount = async ({
     queryClient.invalidateQueries({
       queryKey: ACCOUNT_FOLLOWERS_QUERY_KEY(data.data.id),
     });
+    ADD_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "accounts",
+      accountId
+    );
   }
 
   return data;
