@@ -8,6 +8,7 @@ import {
 
 export const useIsEventRegistered = (eventId: string) => {
   const { queryClient, locale } = useConnectedXM();
+
   const relationships = queryClient.getQueryData<
     ConnectedXMResponse<SelfRelationships>
   >([...SELF_RELATIONSHIPS_QUERY_KEY(), GetBaseSingleQueryKeys(locale)]);
