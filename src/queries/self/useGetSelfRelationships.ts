@@ -25,11 +25,14 @@ export const ADD_SELF_RELATIONSHIP = (
 ) => {
   client.setQueryData(
     [...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(...baseKeys)],
-    (prev: SelfRelationships) => ({
+    (prev: ConnectedXMResponse<SelfRelationships>) => ({
       ...prev,
-      [type]: {
-        ...prev?.[type],
-        [id]: value,
+      data: {
+        ...prev?.data,
+        [type]: {
+          ...prev?.data?.[type],
+          [id]: value,
+        },
       },
     })
   );
@@ -44,11 +47,14 @@ export const REMOVE_SELF_RELATIONSHIP = (
 ) => {
   client.setQueryData(
     [...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(...baseKeys)],
-    (prev: SelfRelationships) => ({
+    (prev: ConnectedXMResponse<SelfRelationships>) => ({
       ...prev,
-      [type]: {
-        ...prev?.[type],
-        [id]: value,
+      data: {
+        ...prev?.data,
+        [type]: {
+          ...prev?.data?.[type],
+          [id]: value,
+        },
       },
     })
   );
