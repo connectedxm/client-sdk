@@ -28,7 +28,7 @@ export const ADD_SELF_RELATIONSHIP = (
     (prev: SelfRelationships) => ({
       ...prev,
       [type]: {
-        ...prev[type],
+        ...prev?.[type],
         [id]: value,
       },
     })
@@ -47,7 +47,7 @@ export const REMOVE_SELF_RELATIONSHIP = (
     (prev: SelfRelationships) => ({
       ...prev,
       [type]: {
-        ...prev[type],
+        ...prev?.[type],
         [id]: value,
       },
     })

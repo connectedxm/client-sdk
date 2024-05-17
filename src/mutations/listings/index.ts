@@ -11,6 +11,7 @@ export * from "./useDeleteListingSpeaker";
 export * from "./useRemoveListingSponsor";
 export * from "./useCheckinListingRegistrationPurchase";
 export * from "./useUpdateListing";
+export * from "./useUpdateListingEmail";
 export * from "./useUpdateListingQuestion";
 export * from "./useUpdateListingSession";
 export * from "./useUpdateListingSpeaker";
