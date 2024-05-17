@@ -6,15 +6,15 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { SELF_INTERESTS_QUERY_KEY } from "@src/queries";
 
-export interface AddInterestsParams extends MutationParams {
+export interface AddSelfInterestsParams extends MutationParams {
   interestIds: string[];
 }
 
-export const AddInterests = async ({
+export const AddSelfInterests = async ({
   interestIds,
   clientApiParams,
   queryClient,
-}: AddInterestsParams): Promise<ConnectedXMResponse<Account>> => {
+}: AddSelfInterestsParams): Promise<ConnectedXMResponse<Account>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     "/self/interests",
@@ -30,17 +30,17 @@ export const AddInterests = async ({
   return data;
 };
 
-export const useAddInterests = (
+export const useAddSelfInterests = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof AddInterests>>,
-      Omit<AddInterestsParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof AddSelfInterests>>,
+      Omit<AddSelfInterestsParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    AddInterestsParams,
-    Awaited<ReturnType<typeof AddInterests>>
-  >(AddInterests, options);
+    AddSelfInterestsParams,
+    Awaited<ReturnType<typeof AddSelfInterests>>
+  >(AddSelfInterests, options);
 };
