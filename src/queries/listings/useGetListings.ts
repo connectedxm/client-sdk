@@ -71,7 +71,7 @@ export const useGetSelfEventListings = (
     params,
     {
       ...options,
-      enabled: options.enabled ?? true,
+      enabled: options?.enabled ?? true,
     }
   );
 };

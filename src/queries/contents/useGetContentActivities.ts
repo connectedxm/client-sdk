@@ -87,7 +87,7 @@ export const useGetContentActivities = (
     params,
     {
       ...options,
-      enabled: !!contentId && (options.enabled ?? true),
+      enabled: !!contentId && (options?.enabled ?? true),
     }
   );
 };

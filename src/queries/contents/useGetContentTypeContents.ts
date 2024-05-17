@@ -89,7 +89,7 @@ export const useGetContentTypeContents = (
     params,
     {
       ...options,
-      enabled: !!contentTypeId && (options.enabled ?? true),
+      enabled: !!contentTypeId && (options?.enabled ?? true),
     }
   );
 };

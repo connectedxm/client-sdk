@@ -175,8 +175,6 @@ export interface Account extends BaseAccount {
   country: string | null;
   timezone: string | null;
   createdAt: string;
-  followers?: Account[]; // if you are a follower = Array > 0
-  following?: Account[]; // if you are a following Array > 0
   _count: {
     followers: number;
     following: number;
@@ -188,6 +186,13 @@ export const isTypeAccount = (
 ): account is Account => {
   return (account as Omit<Account, keyof BaseAccount>)._count !== undefined;
 };
+
+export interface SelfRelationships {
+  accounts: Record<string, boolean>;
+  communities: Record<string, "moderator" | "member" | false>;
+  events: Record<string, boolean>;
+  channels: Record<string, boolean>;
+}
 
 export interface Self extends Account {
   email: string | null;
@@ -288,7 +293,7 @@ export interface Community extends BaseCommunity {
   description: string;
   externalUrl: string | null;
   active: boolean;
-  members?: BaseCommunityMembership[]; // if you are a member = Array > 0
+  createdAt: string;
   _count: {
     members: number;
   };
@@ -353,6 +358,7 @@ export interface Event extends BaseEvent {
   androidAppLink: string | null;
   pages: BaseEventPage[];
   streamInput: StreamInput | null;
+  streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
   _count: {
@@ -362,6 +368,18 @@ export interface Event extends BaseEvent {
     faqSections: number;
   };
 }
+
+export type EventWithSessions = Event & {
+  sessions: BaseSession[];
+};
+
+export type EventWithSpeakers = Event & {
+  speakers: BaseSpeaker[];
+};
+
+export type EventWithSponsors = Event & {
+  sponsors: BaseAccount[];
+};
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>)._count !== undefined;
@@ -754,9 +772,10 @@ export interface BaseSpeaker {
   slug: string;
   firstName: string;
   lastName: string | null;
+  bio: string | null;
   title: string | null;
   company: string | null;
-  bio: string | null;
+  companyBio: string | null;
   image: BaseImage | null;
   priority: number;
   isHost: boolean;
@@ -1102,9 +1121,6 @@ export interface ContentType extends BaseContentType {
   googleUrl: string | null;
   youtubeUrl: string | null;
   hosts: BaseAccount[];
-  subscribers?: {
-    id: string;
-  }[]; // if you are a subscriber = Array > 0
 }
 
 export const isTypeContentType = (

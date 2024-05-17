@@ -55,7 +55,7 @@ export const useGetOrganizationPage = (
     (params) => GetOrganizationPage({ type, ...params }),
     {
       ...options,
-      enabled: !!type && (options.enabled ?? true),
+      enabled: !!type && (options?.enabled ?? true),
     }
   );
 };

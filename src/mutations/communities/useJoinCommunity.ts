@@ -11,6 +11,7 @@ import {
   SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
 export interface JoinCommunityParams extends MutationParams {
   communityId: string;
@@ -39,6 +40,13 @@ export const JoinCommunity = async ({
     queryClient.invalidateQueries({
       queryKey: SELF_COMMUNITY_MEMBERSHIP_QUERY_KEY(communityId),
     });
+    ADD_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "communities",
+      communityId,
+      "member"
+    );
   }
 
   return data;
