@@ -1679,3 +1679,20 @@ export interface BaseCommunityRequest {
 export interface CommunityRequest extends BaseCommunityRequest {
   community: BaseCommunity;
 }
+
+export enum EventEmailType {
+  confirmation = "confirmation",
+  cancellation = "cancellation",
+  reminder = "reminder",
+}
+
+export interface BaseEventEmail {
+  type: EventEmailType;
+  eventId: string;
+  body: string;
+  replyTo: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventEmail extends BaseEventEmail {}
