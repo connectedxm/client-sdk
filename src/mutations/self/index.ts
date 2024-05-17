@@ -18,4 +18,4 @@ export * from "./useUpdateSelfImage";
 export * from "./useUpdateSelfLead";
 export * from "./useUpdateSelfNotificationPreferences";
 export * from "./useUpdateSelfPushDevice";
-export * from "./useAddInterests";
+export * from "./useAddSelfInterests";
