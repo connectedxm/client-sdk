@@ -19,17 +19,20 @@ export const SELF_RELATIONSHIPS_QUERY_KEY = (): QueryKey => {
 export const ADD_SELF_RELATIONSHIP = (
   client: QueryClient,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
-  type: "communities" | "accounts" | "events",
+  type: "groups" | "accounts" | "events",
   id: string,
   value: boolean | string = true
 ) => {
   client.setQueryData(
     [...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(...baseKeys)],
-    (prev: SelfRelationships) => ({
+    (prev: ConnectedXMResponse<SelfRelationships>) => ({
       ...prev,
-      [type]: {
-        ...prev?.[type],
-        [id]: value,
+      data: {
+        ...prev?.data,
+        [type]: {
+          ...prev?.data?.[type],
+          [id]: value,
+        },
       },
     })
   );
@@ -38,17 +41,20 @@ export const ADD_SELF_RELATIONSHIP = (
 export const REMOVE_SELF_RELATIONSHIP = (
   client: QueryClient,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
-  type: "communities" | "accounts" | "events",
+  type: "groups" | "accounts" | "events",
   id: string,
   value: boolean | string = false
 ) => {
   client.setQueryData(
     [...SELF_RELATIONSHIPS_QUERY_KEY(), ...GetBaseSingleQueryKeys(...baseKeys)],
-    (prev: SelfRelationships) => ({
+    (prev: ConnectedXMResponse<SelfRelationships>) => ({
       ...prev,
-      [type]: {
-        ...prev?.[type],
-        [id]: value,
+      data: {
+        ...prev?.data,
+        [type]: {
+          ...prev?.data?.[type],
+          [id]: value,
+        },
       },
     })
   );

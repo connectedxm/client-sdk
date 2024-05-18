@@ -1,4 +1,3 @@
-import type { Account, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -6,48 +5,50 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { LEVEL_QUERY_KEY } from "./useGetLevel";
+import { Group } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
+import { GROUP_QUERY_KEY } from "../groups/useGetGroup";
+import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACCOUNT_QUERY_KEY } from "../accounts";
 
-export const LEVEL_SPONSORS_QUERY_KEY = (levelId: string): QueryKey => [
-  ...LEVEL_QUERY_KEY(levelId),
-  "SPONSORS",
+export const ACCOUNT_GROUPS_QUERY_KEY = (accountId: string): QueryKey => [
+  ...ACCOUNT_QUERY_KEY(accountId),
+  "GROUPS",
 ];
 
-export const SET_LEVEL_SPONSORS_QUERY_DATA = (
+export const SET_ACCOUNT_GROUPS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof LEVEL_SPONSORS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetLevelSponsors>>,
+  keyParams: Parameters<typeof ACCOUNT_GROUPS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetAccountGroups>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...LEVEL_SPONSORS_QUERY_KEY(...keyParams),
+      ...ACCOUNT_GROUPS_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetLevelSponsorsProps extends InfiniteQueryParams {
-  levelId: string;
+export interface GetAccountGroupsProps extends InfiniteQueryParams {
+  accountId: string;
 }
 
-export const GetLevelSponsors = async ({
-  levelId,
+export const GetAccountGroups = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
+  accountId,
   queryClient,
   clientApiParams,
   locale,
-}: GetLevelSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
+}: GetAccountGroupsProps): Promise<ConnectedXMResponse<Group[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/levels/${levelId}/accounts`, {
+  const { data } = await clientApi.get(`/accounts/${accountId}/groups`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -55,12 +56,11 @@ export const GetLevelSponsors = async ({
       search: search || undefined,
     },
   });
-
   if (queryClient && data.status === "ok") {
     CacheIndividualQueries(
       data,
       queryClient,
-      (sponsorId) => ACCOUNT_QUERY_KEY(sponsorId),
+      (groupId) => GROUP_QUERY_KEY(groupId),
       locale
     );
   }
@@ -68,25 +68,25 @@ export const GetLevelSponsors = async ({
   return data;
 };
 
-export const useGetLevelSponsors = (
-  levelId: string = "",
+export const useGetAccountGroups = (
+  accountId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetLevelSponsors>>
+    Awaited<ReturnType<typeof GetAccountGroups>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetLevelSponsors>>
+    Awaited<ReturnType<typeof GetAccountGroups>>
   >(
-    LEVEL_SPONSORS_QUERY_KEY(levelId),
-    (params: InfiniteQueryParams) => GetLevelSponsors({ levelId, ...params }),
+    ACCOUNT_GROUPS_QUERY_KEY(accountId),
+    (params: InfiniteQueryParams) => GetAccountGroups({ accountId, ...params }),
     params,
     {
       ...options,
-      enabled: !!levelId && (options?.enabled ?? true),
+      enabled: !!accountId && (options?.enabled ?? true),
     }
   );
 };
