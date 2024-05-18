@@ -10,7 +10,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import {
-  COMMUNITY_EVENTS_QUERY_KEY,
+  GROUP_EVENTS_QUERY_KEY,
   EVENT_QUERY_KEY,
   LISTINGS_QUERY_KEY,
 } from "@src/queries";
@@ -41,7 +41,7 @@ export interface CreateListing {
 export interface CreateListingParams extends MutationParams {
   event: CreateListing;
   imageDataUri?: any;
-  communityId?: string;
+  groupId?: string;
   sponsorIds?: string[];
   speakers?: Speaker[];
   sessions?: Session[];
@@ -50,7 +50,7 @@ export interface CreateListingParams extends MutationParams {
 export const CreateListing = async ({
   event,
   imageDataUri,
-  communityId,
+  groupId,
   sponsorIds,
   speakers,
   sessions,
@@ -63,7 +63,7 @@ export const CreateListing = async ({
     {
       event,
       image: imageDataUri ? imageDataUri : undefined,
-      communityId: communityId || undefined,
+      groupId: groupId || undefined,
       sponsorIds: sponsorIds || undefined,
       speakers,
       sessions,
@@ -77,9 +77,9 @@ export const CreateListing = async ({
     queryClient.invalidateQueries({
       queryKey: LISTINGS_QUERY_KEY(true),
     });
-    if (communityId) {
+    if (groupId) {
       queryClient.invalidateQueries({
-        queryKey: COMMUNITY_EVENTS_QUERY_KEY(communityId),
+        queryKey: GROUP_EVENTS_QUERY_KEY(groupId),
       });
     }
     queryClient.setQueryData(

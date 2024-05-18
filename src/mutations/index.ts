@@ -5,7 +5,7 @@ export * from "./invoices";
 export * from "./self";
 export * from "./supportTicket";
 export * from "./team";
-export * from "./communities";
+export * from "./groups";
 export * from "./listings";
 
 export * from "./useConnectedMutation";
