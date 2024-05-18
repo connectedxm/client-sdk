@@ -9,9 +9,9 @@ import { Account } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { COMMUNITY_QUERY_KEY } from "./useGetCommunity";
-import { SPONSOR_QUERY_KEY } from "../sponsors/useGetSponsor";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACCOUNT_QUERY_KEY } from "../accounts";
 
 export const COMMUNITY_SPONSORS_QUERY_KEY = (communityId: string): QueryKey => [
   ...COMMUNITY_QUERY_KEY(communityId),
@@ -60,7 +60,7 @@ export const GetCommunitySponsors = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (eventId) => SPONSOR_QUERY_KEY(eventId),
+      (accountId) => ACCOUNT_QUERY_KEY(accountId),
       locale
     );
   }
