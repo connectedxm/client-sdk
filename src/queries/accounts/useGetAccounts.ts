@@ -1,4 +1,4 @@
-import type { Account } from "@interfaces";
+import type { Account, AccountType } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -12,7 +12,15 @@ import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const ACCOUNTS_QUERY_KEY = (): QueryKey => ["ACCOUNTS"];
+export const ACCOUNTS_QUERY_KEY = (
+  accountType?: keyof typeof AccountType
+): QueryKey => {
+  const keys = ["ACCOUNTS"];
+  if (accountType) {
+    keys.push(accountType);
+  }
+  return keys;
+};
 
 export const SET_ACCOUNTS_QUERY_DATA = (
   client: QueryClient,
@@ -29,12 +37,15 @@ export const SET_ACCOUNTS_QUERY_DATA = (
   );
 };
 
-export interface GetAccountsProps extends InfiniteQueryParams {}
+export interface GetAccountsProps extends InfiniteQueryParams {
+  accountType?: keyof typeof AccountType;
+}
 
 export const GetAccounts = async ({
   pageSize,
   orderBy,
   search,
+  accountType,
   queryClient,
   clientApiParams,
   locale,
@@ -42,6 +53,7 @@ export const GetAccounts = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts`, {
     params: {
+      accountType: accountType || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
@@ -60,6 +72,7 @@ export const GetAccounts = async ({
 };
 
 export const useGetAccounts = (
+  accountType?: keyof typeof AccountType,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -67,8 +80,8 @@ export const useGetAccounts = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetAccounts>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetAccounts>>>(
-    ACCOUNTS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetAccounts({ ...params }),
+    ACCOUNTS_QUERY_KEY(accountType),
+    (params: InfiniteQueryParams) => GetAccounts({ ...params, accountType }),
     params,
     {
       ...options,

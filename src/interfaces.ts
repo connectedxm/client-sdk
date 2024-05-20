@@ -189,7 +189,7 @@ export const isTypeAccount = (
 
 export interface SelfRelationships {
   accounts: Record<string, boolean>;
-  communities: Record<string, "moderator" | "member" | false>;
+  groups: Record<string, "moderator" | "member" | false>;
   events: Record<string, boolean>;
   channels: Record<string, boolean>;
 }
@@ -231,7 +231,7 @@ export interface BaseActivity {
 export interface Activity extends BaseActivity {
   html: string;
   text: string;
-  community: BaseCommunity | null;
+  group: BaseGroup | null;
   event: BaseEvent | null;
   interests: BaseInterest[] | null;
   content: BaseContent | null;
@@ -276,20 +276,20 @@ export interface Like extends BaseLike {}
 //   return (like as Omit<Like, keyof BaseLike>).createdAt !== undefined;
 // };
 
-export enum CommunityAccess {
+export enum GroupAccess {
   public = "public",
   private = "private",
 }
 
-export interface BaseCommunity {
+export interface BaseGroup {
   id: string;
   slug: string;
   name: string;
   image: BaseImage | null;
-  access: CommunityAccess;
+  access: GroupAccess;
 }
 
-export interface Community extends BaseCommunity {
+export interface Group extends BaseGroup {
   description: string;
   externalUrl: string | null;
   active: boolean;
@@ -299,12 +299,8 @@ export interface Community extends BaseCommunity {
   };
 }
 
-export const isTypeCommunity = (
-  community: BaseCommunity | Community
-): community is Community => {
-  return (
-    (community as Omit<Community, keyof BaseCommunity>)._count !== undefined
-  );
+export const isTypeGroup = (group: BaseGroup | Group): group is Group => {
+  return (group as Omit<Group, keyof BaseGroup>)._count !== undefined;
 };
 
 export interface BaseEvent {
@@ -346,7 +342,7 @@ export interface Event extends BaseEvent {
   state: string | null;
   country: string | null;
   zip: string | null;
-  communities: BaseCommunity[];
+  groups: BaseGroup[];
   creatorId: string | null;
   creator: BaseAccount;
   registration: boolean;
@@ -524,7 +520,7 @@ export interface Interest extends BaseInterest {
   imageId: string | null;
   featured: boolean;
   accounts: BaseAccount[];
-  communities: BaseCommunity[];
+  groups: BaseGroup[];
   events: BaseEvent[];
   createdAt: string;
   updatedAt: string;
@@ -666,8 +662,8 @@ export interface Notification extends BaseNotification {
   activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
-  community: BaseCommunity | null;
-  request: BaseCommunityRequest | null;
+  group: BaseGroup | null;
+  request: BaseGroupRequest | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -1060,18 +1056,18 @@ export const isTypeTeamMember = (
   );
 };
 
-export enum CommunityMembershipRole {
+export enum GroupMembershipRole {
   member = "member",
   moderator = "moderator",
 }
 
-export interface BaseCommunityMembership {
+export interface BaseGroupMembership {
   accountId: string;
-  community: BaseCommunity;
-  role: CommunityMembershipRole;
+  group: BaseGroup;
+  role: GroupMembershipRole;
 }
 
-export interface CommunityMembership extends BaseCommunityMembership {
+export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
   following: boolean;
   activityEmailNotification: boolean;
@@ -1085,16 +1081,12 @@ export interface CommunityMembership extends BaseCommunityMembership {
   updatedAt: string;
 }
 
-export const isTypeCommunityMembership = (
-  communityMembership: BaseCommunityMembership | CommunityMembership
-): communityMembership is CommunityMembership => {
+export const isTypeGroupMembership = (
+  groupMembership: BaseGroupMembership | GroupMembership
+): groupMembership is GroupMembership => {
   return (
-    (
-      communityMembership as Omit<
-        CommunityMembership,
-        keyof BaseCommunityMembership
-      >
-    ).createdAt !== undefined
+    (groupMembership as Omit<GroupMembership, keyof BaseGroupMembership>)
+      .createdAt !== undefined
   );
 };
 
@@ -1245,14 +1237,14 @@ export interface NotificationPreferences {
   chatUnreadEmail: boolean;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
-  communityAnnouncementEmail: boolean;
-  communityAnnouncementPush: boolean;
+  groupAnnouncementEmail: boolean;
+  groupAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
   eventAnnouncementPush: boolean;
-  communityInvitationEmail: boolean;
-  communityInvitationPush: boolean;
-  communityRequestAcceptedEmail: boolean;
-  communityRequestAcceptedPush: boolean;
+  groupInvitationEmail: boolean;
+  groupInvitationPush: boolean;
+  groupRequestAcceptedEmail: boolean;
+  groupRequestAcceptedPush: boolean;
 }
 
 export enum PushDeviceAppType {
@@ -1288,7 +1280,7 @@ export interface BaseAnnouncement {
   message: string | null;
   html: string | null;
   event: BaseEvent | null;
-  community: BaseCommunity | null;
+  group: BaseGroup | null;
   creator: BaseAccount | null;
   createdAt: string;
 }
@@ -1659,25 +1651,25 @@ export interface EventReservationSectionLocation
   reservationSection: BaseEventReservationSection;
 }
 
-export enum CommunityRequestStatus {
+export enum GroupRequestStatus {
   requested = "requested",
   invited = "invited",
   rejected = "rejected",
 }
 
-export interface BaseCommunityRequest {
+export interface BaseGroupRequest {
   id: string;
-  status: CommunityRequestStatus;
-  communityId: string;
-  community: BaseCommunity;
+  status: GroupRequestStatus;
+  groupId: string;
+  group: BaseGroup;
   account: BaseAccount;
   inviter: BaseAccount;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface CommunityRequest extends BaseCommunityRequest {
-  community: BaseCommunity;
+export interface GroupRequest extends BaseGroupRequest {
+  group: BaseGroup;
 }
 
 export enum EventEmailType {

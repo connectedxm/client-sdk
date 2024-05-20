@@ -1,6 +1,6 @@
 import type {
   BaseAccount,
-  BaseCommunity,
+  BaseGroup,
   BaseEvent,
   ConnectedXMResponse,
   Content,
@@ -22,7 +22,7 @@ export const ORGANIZATION_EXPLORE_QUERY_KEY = (): QueryKey => [
 interface Explore {
   contents: Content[];
   events: BaseEvent[];
-  communities: BaseCommunity[];
+  groups: BaseGroup[];
   recommendations: BaseAccount[];
 }
 

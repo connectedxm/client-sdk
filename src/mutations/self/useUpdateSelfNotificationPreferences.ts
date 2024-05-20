@@ -25,8 +25,8 @@ export interface UpdateSelfNotificationPreferencesParams
   eventAnnouncementEmail?: boolean;
   organizationAnnouncementPush?: boolean;
   organizationAnnouncementEmail?: boolean;
-  communityAnnouncementPush?: boolean;
-  communityAnnouncementEmail?: boolean;
+  groupAnnouncementPush?: boolean;
+  groupAnnouncementEmail?: boolean;
 }
 
 export const UpdateSelfNotificationPreferences = async ({
