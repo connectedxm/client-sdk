@@ -60,7 +60,7 @@ export const GetSelfChatChannelMembers = async ({
 };
 
 export const useGetSelfChatChannelMembers = (
-  channelId: string,
+  channelId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"

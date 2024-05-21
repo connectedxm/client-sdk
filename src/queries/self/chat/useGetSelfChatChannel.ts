@@ -48,7 +48,7 @@ export const GetSelfChatChannel = async ({
 };
 
 export const useGetSelfChatChannel = (
-  channelId: string,
+  channelId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfChatChannel>> = {}
 ) => {
   const { authenticated } = useConnectedXM();

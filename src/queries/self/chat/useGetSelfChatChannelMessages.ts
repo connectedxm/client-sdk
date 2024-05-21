@@ -75,7 +75,7 @@ export const GetSelfChatChannelMessages = async ({
 };
 
 export const useGetSelfChatChannelMessages = (
-  channelId: string,
+  channelId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
