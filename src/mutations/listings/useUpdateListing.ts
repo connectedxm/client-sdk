@@ -33,6 +33,7 @@ export interface UpdateListing {
   registrationLimit?: number | null;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
+  slug?: string;
 }
 
 export interface UpdateListingParams extends MutationParams {
