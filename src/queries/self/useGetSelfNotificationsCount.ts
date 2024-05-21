@@ -16,18 +16,26 @@ export interface GetSelfNewNotificationsCountProps extends SingleQueryParams {
   filters?: string;
 }
 
+interface NotifcationCounts {
+  notifications: number;
+  messages: number;
+}
+
 export const GetSelfNewNotificationsCount = async ({
   filters,
   clientApiParams,
 }: GetSelfNewNotificationsCountProps): Promise<
-  ConnectedXMResponse<Notification[]>
+  ConnectedXMResponse<NotifcationCounts>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/notifications/count`, {
-    params: {
-      filters,
-    },
-  });
+  const { data } = await clientApi.get<ConnectedXMResponse<NotifcationCounts>>(
+    `/self/notifications/count`,
+    {
+      params: {
+        filters,
+      },
+    }
+  );
   return data;
 };
 
