@@ -9,8 +9,8 @@ import {
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { SPONSOR_QUERY_KEY } from "./useGetSponsor";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACCOUNT_QUERY_KEY } from "../accounts";
 
 export const LEVEL_SPONSORS_QUERY_KEY = (levelId: string): QueryKey => [
   ...LEVEL_QUERY_KEY(levelId),
@@ -60,7 +60,7 @@ export const GetLevelSponsors = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (sponsorId) => SPONSOR_QUERY_KEY(sponsorId),
+      (sponsorId) => ACCOUNT_QUERY_KEY(sponsorId),
       locale
     );
   }

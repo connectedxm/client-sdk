@@ -94,7 +94,7 @@ export const useGetEventFaqs = (
     params,
     {
       ...options,
-      enabled: !!eventId && !!sectionId && (options.enabled ?? true),
+      enabled: !!eventId && !!sectionId && (options?.enabled ?? true),
     }
   );
 };

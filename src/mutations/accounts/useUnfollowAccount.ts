@@ -8,6 +8,7 @@ import {
 } from "@src/queries";
 import { ConnectedXMResponse, Account } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { REMOVE_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
 export interface UnfollowAccountParams extends MutationParams {
   accountId: string;
@@ -33,6 +34,12 @@ export const UnfollowAccount = async ({
     queryClient.invalidateQueries({
       queryKey: ACCOUNT_FOLLOWERS_QUERY_KEY(data.data.id),
     });
+    REMOVE_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "accounts",
+      accountId
+    );
   }
 
   return data;

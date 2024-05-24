@@ -2,7 +2,7 @@ import {
   ACTIVITIES_QUERY_KEY,
   ACTIVITY_COMMENTS_QUERY_KEY,
   ACTIVITY_QUERY_KEY,
-  COMMUNITY_ACTIVITIES_QUERY_KEY,
+  GROUP_ACTIVITIES_QUERY_KEY,
   CONTENT_ACTIVITIES_QUERY_KEY,
   EVENT_ACTIVITIES_QUERY_KEY,
   GetBaseSingleQueryKeys,
@@ -24,20 +24,27 @@ export interface CreateActivity {
   message: string;
   contentId?: string;
   eventId?: string;
-  communityId?: string;
+  groupId?: string;
   commentedId?: string;
+}
+
+export interface CreateInterest {
+  name: string;
+  imageId?: string;
 }
 
 export interface SelfCreateActivityParams extends MutationParams {
   activity: CreateActivity;
   base64Image?: any;
   videoUri?: string;
+  interests?: CreateInterest[];
 }
 
 export const SelfCreateActivity = async ({
   activity,
   base64Image,
   videoUri,
+  interests,
   clientApiParams,
   queryClient,
 }: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
@@ -63,6 +70,7 @@ export const SelfCreateActivity = async ({
       activity,
       imageUri: base64Image ?? undefined,
       videoUri: videoUri ?? undefined,
+      interests: interests ?? undefined,
     }
   );
 
@@ -105,12 +113,12 @@ export const SelfCreateActivity = async ({
       );
     }
 
-    if (activity.communityId) {
+    if (activity.groupId) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
-          ...COMMUNITY_ACTIVITIES_QUERY_KEY(activity.communityId),
+          ...GROUP_ACTIVITIES_QUERY_KEY(activity.groupId),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
         data.data

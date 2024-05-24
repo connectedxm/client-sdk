@@ -3,15 +3,13 @@ export * from "./registration";
 export * from "./subscriptions";
 
 export * from "./useGetSelf";
+export * from "./useGetSelfRelationships";
 export * from "./useGetSelfActivities";
 export * from "./useGetSelfAnnouncement";
-export * from "./useGetSelfCommunityMembership";
-export * from "./useGetSelfCommunityMemberships";
+export * from "./useGetSelfGroupMembership";
+export * from "./useGetSelfGroupMemberships";
 export * from "./useGetSelfDelegateOf";
 export * from "./useGetSelfDelegates";
-export * from "./useGetSelfEventListing";
-export * from "./useGetSelfEventListingRegistrations";
-export * from "./useGetSelfEventListings";
 export * from "./useGetSelfEvents";
 export * from "./useGetSelfEventSessions";
 export * from "./useGetSelfFeed";

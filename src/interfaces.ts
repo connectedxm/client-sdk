@@ -175,8 +175,6 @@ export interface Account extends BaseAccount {
   country: string | null;
   timezone: string | null;
   createdAt: string;
-  followers?: Account[]; // if you are a follower = Array > 0
-  following?: Account[]; // if you are a following Array > 0
   _count: {
     followers: number;
     following: number;
@@ -188,6 +186,13 @@ export const isTypeAccount = (
 ): account is Account => {
   return (account as Omit<Account, keyof BaseAccount>)._count !== undefined;
 };
+
+export interface SelfRelationships {
+  accounts: Record<string, boolean>;
+  groups: Record<string, "moderator" | "member" | false>;
+  events: Record<string, boolean>;
+  channels: Record<string, boolean>;
+}
 
 export interface Self extends Account {
   email: string | null;
@@ -226,8 +231,9 @@ export interface BaseActivity {
 export interface Activity extends BaseActivity {
   html: string;
   text: string;
-  community: BaseCommunity | null;
+  group: BaseGroup | null;
   event: BaseEvent | null;
+  interests: BaseInterest[] | null;
   content: BaseContent | null;
   commented: BaseActivity | null;
   reshared: BaseActivity | null;
@@ -270,35 +276,31 @@ export interface Like extends BaseLike {}
 //   return (like as Omit<Like, keyof BaseLike>).createdAt !== undefined;
 // };
 
-export enum CommunityAccess {
+export enum GroupAccess {
   public = "public",
   private = "private",
 }
 
-export interface BaseCommunity {
+export interface BaseGroup {
   id: string;
   slug: string;
   name: string;
   image: BaseImage | null;
-  access: CommunityAccess;
+  access: GroupAccess;
 }
 
-export interface Community extends BaseCommunity {
+export interface Group extends BaseGroup {
   description: string;
   externalUrl: string | null;
   active: boolean;
-  members?: BaseCommunityMembership[]; // if you are a member = Array > 0
+  createdAt: string;
   _count: {
     members: number;
   };
 }
 
-export const isTypeCommunity = (
-  community: BaseCommunity | Community
-): community is Community => {
-  return (
-    (community as Omit<Community, keyof BaseCommunity>)._count !== undefined
-  );
+export const isTypeGroup = (group: BaseGroup | Group): group is Group => {
+  return (group as Omit<Group, keyof BaseGroup>)._count !== undefined;
 };
 
 export interface BaseEvent {
@@ -340,7 +342,7 @@ export interface Event extends BaseEvent {
   state: string | null;
   country: string | null;
   zip: string | null;
-  communities: BaseCommunity[];
+  groups: BaseGroup[];
   creatorId: string | null;
   creator: BaseAccount;
   registration: boolean;
@@ -352,6 +354,7 @@ export interface Event extends BaseEvent {
   androidAppLink: string | null;
   pages: BaseEventPage[];
   streamInput: StreamInput | null;
+  streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
   _count: {
@@ -361,6 +364,18 @@ export interface Event extends BaseEvent {
     faqSections: number;
   };
 }
+
+export type EventWithSessions = Event & {
+  sessions: BaseSession[];
+};
+
+export type EventWithSpeakers = Event & {
+  speakers: BaseSpeaker[];
+};
+
+export type EventWithSponsors = Event & {
+  sponsors: BaseAccount[];
+};
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>)._count !== undefined;
@@ -376,6 +391,8 @@ export interface RegistrationEventDetails extends BaseEvent {
     sections: number;
     tickets: number;
     coupons: number;
+    addOns: number;
+    reservationSections: number;
   };
 }
 
@@ -473,6 +490,7 @@ export interface RegistrationSection extends BaseRegistrationSection {
 }
 
 export interface EventListing extends Event {
+  visible: boolean;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   registrationLimit: number;
@@ -497,7 +515,16 @@ export interface BaseInterest {
   name: string;
 }
 
-export interface Interest extends BaseInterest {}
+export interface Interest extends BaseInterest {
+  image: BaseImage | null;
+  imageId: string | null;
+  featured: boolean;
+  accounts: BaseAccount[];
+  groups: BaseGroup[];
+  events: BaseEvent[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export enum TicketVisibility {
   public = "public",
@@ -522,6 +549,12 @@ export interface BaseTicket {
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
   supply: number | null;
+  minReservationStart: string | null;
+  reservationStart: string | null;
+  maxReservationStart: string | null;
+  minReservationEnd: string | null;
+  reservationEnd: string | null;
+  maxReservationEnd: string | null;
 }
 
 export interface Ticket extends BaseTicket {
@@ -547,6 +580,10 @@ export interface BasePurchase {
   registrationId: string;
   ticketId: string | null;
   ticket: BaseTicket | null;
+  addOns: BaseEventAddOn[];
+  reservationStart: string | null;
+  reservationEnd: string | null;
+  reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
 }
 
@@ -608,7 +645,10 @@ export enum NotificationType {
   RESHARE = "RESHARE",
   EVENT = "EVENT",
   ACTIVITY = "ACTIVITY",
+  GROUP_INVITATION = "GROUP_INVITATION",
+  GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
 }
+
 export interface BaseNotification {
   id: string;
   type: NotificationType;
@@ -622,6 +662,8 @@ export interface Notification extends BaseNotification {
   activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
+  group: BaseGroup | null;
+  request: BaseGroupRequest | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -661,7 +703,6 @@ export interface ManagedCoupon extends Coupon {
   type: CouponType;
   startDate: string | null;
   endDate: string | null;
-
   quantityMin: number;
   quantityMax: number | null;
   amountMin: number;
@@ -727,9 +768,10 @@ export interface BaseSpeaker {
   slug: string;
   firstName: string;
   lastName: string | null;
+  bio: string | null;
   title: string | null;
   company: string | null;
-  bio: string | null;
+  companyBio: string | null;
   image: BaseImage | null;
   priority: number;
   isHost: boolean;
@@ -1014,18 +1056,18 @@ export const isTypeTeamMember = (
   );
 };
 
-export enum CommunityMembershipRole {
+export enum GroupMembershipRole {
   member = "member",
   moderator = "moderator",
 }
 
-export interface BaseCommunityMembership {
+export interface BaseGroupMembership {
   accountId: string;
-  community: BaseCommunity;
-  role: CommunityMembershipRole;
+  group: BaseGroup;
+  role: GroupMembershipRole;
 }
 
-export interface CommunityMembership extends BaseCommunityMembership {
+export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
   following: boolean;
   activityEmailNotification: boolean;
@@ -1039,16 +1081,12 @@ export interface CommunityMembership extends BaseCommunityMembership {
   updatedAt: string;
 }
 
-export const isTypeCommunityMembership = (
-  communityMembership: BaseCommunityMembership | CommunityMembership
-): communityMembership is CommunityMembership => {
+export const isTypeGroupMembership = (
+  groupMembership: BaseGroupMembership | GroupMembership
+): groupMembership is GroupMembership => {
   return (
-    (
-      communityMembership as Omit<
-        CommunityMembership,
-        keyof BaseCommunityMembership
-      >
-    ).createdAt !== undefined
+    (groupMembership as Omit<GroupMembership, keyof BaseGroupMembership>)
+      .createdAt !== undefined
   );
 };
 
@@ -1075,9 +1113,6 @@ export interface ContentType extends BaseContentType {
   googleUrl: string | null;
   youtubeUrl: string | null;
   hosts: BaseAccount[];
-  subscribers?: {
-    id: string;
-  }[]; // if you are a subscriber = Array > 0
 }
 
 export const isTypeContentType = (
@@ -1202,10 +1237,14 @@ export interface NotificationPreferences {
   chatUnreadEmail: boolean;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
-  communityAnnouncementEmail: boolean;
-  communityAnnouncementPush: boolean;
+  groupAnnouncementEmail: boolean;
+  groupAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
   eventAnnouncementPush: boolean;
+  groupInvitationEmail: boolean;
+  groupInvitationPush: boolean;
+  groupRequestAcceptedEmail: boolean;
+  groupRequestAcceptedPush: boolean;
 }
 
 export enum PushDeviceAppType {
@@ -1241,7 +1280,7 @@ export interface BaseAnnouncement {
   message: string | null;
   html: string | null;
   event: BaseEvent | null;
-  community: BaseCommunity | null;
+  group: BaseGroup | null;
   creator: BaseAccount | null;
   createdAt: string;
 }
@@ -1544,3 +1583,108 @@ export interface InvoiceLineItem extends BaseInvoiceLineItem {
   invoiceId: string;
   invoice: BaseInvoice;
 }
+
+export interface BaseEventAddOn {
+  id: string;
+  name: string;
+  shortDescription: string;
+  longDescription: string | null;
+  supply: number;
+  price: number;
+  sortOrder: number;
+  eventId: string;
+  minReservationStart: string | null;
+  reservationStart: string | null;
+  maxReservationStart: string | null;
+  minReservationEnd: string | null;
+  reservationEnd: string | null;
+  maxReservationEnd: string | null;
+  image: BaseImage | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventAddOn extends BaseEventAddOn {
+  event: BaseEvent;
+}
+
+export interface BaseEventReservationSection {
+  id: string;
+  eventId: string;
+  name: string;
+  price: number;
+  pricePerDay: boolean;
+  shortDescription: string;
+  image: BaseImage | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventReservationSection extends BaseEventReservationSection {
+  event: BaseEvent;
+  locations: BaseEventReservationSectionLocation[];
+}
+
+export interface BaseEventReservationSectionLocation {
+  id: string;
+  eventId: string;
+  reservationSectionId: string;
+  name: string;
+  shortDescription: string;
+  supply: number;
+  premium: number;
+  createdAt: string;
+  updatedAt: string;
+  reservationSection: {
+    name: string;
+    pricePerDay: boolean;
+    price: number;
+    image: BaseImage | null;
+  };
+  _count: {
+    purchases: number;
+  };
+}
+
+export interface EventReservationSectionLocation
+  extends BaseEventReservationSectionLocation {
+  reservationSection: BaseEventReservationSection;
+}
+
+export enum GroupRequestStatus {
+  requested = "requested",
+  invited = "invited",
+  rejected = "rejected",
+}
+
+export interface BaseGroupRequest {
+  id: string;
+  status: GroupRequestStatus;
+  groupId: string;
+  group: BaseGroup;
+  account: BaseAccount;
+  inviter: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GroupRequest extends BaseGroupRequest {
+  group: BaseGroup;
+}
+
+export enum EventEmailType {
+  confirmation = "confirmation",
+  cancellation = "cancellation",
+  reminder = "reminder",
+}
+
+export interface BaseEventEmail {
+  type: EventEmailType;
+  eventId: string;
+  body: string;
+  replyTo: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventEmail extends BaseEventEmail {}
