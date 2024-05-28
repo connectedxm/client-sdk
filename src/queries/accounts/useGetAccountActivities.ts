@@ -11,9 +11,10 @@ import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACTIVITIES_QUERY_KEY } from "../activities";
 
 export const ACCOUNT_ACTIVITIES_QUERY_KEY = (accountId: string): QueryKey => [
-  "ACTIVITIES",
+  ...ACTIVITIES_QUERY_KEY(),
   ...ACCOUNT_QUERY_KEY(accountId),
 ];
 
