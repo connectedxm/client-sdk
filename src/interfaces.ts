@@ -578,6 +578,7 @@ export interface BasePurchase {
   email: string;
   transfer: { id: string; email: string; createdAt: string } | null;
   registrationId: string;
+  registration: BaseRegistration;
   ticketId: string | null;
   ticket: BaseTicket | null;
   addOns: BaseEventAddOn[];
@@ -1157,10 +1158,13 @@ export const isTypeContent = (
   return (content as Omit<Content, keyof BaseContent>).body !== undefined;
 };
 
-export interface Registration {
+interface BaseRegistration {
   id: string;
   alternateId: number;
   eventId: string;
+}
+
+export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   status: RegistrationStatus;
