@@ -1666,7 +1666,6 @@ export interface BaseGroupRequest {
   groupId: string;
   group: BaseGroup;
   account: BaseAccount;
-  inviter: BaseAccount;
   createdAt: string;
   updatedAt: string;
 }
