@@ -5,7 +5,10 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { GROUP_REQUESTS_QUERY_KEY } from "@src/queries";
+import {
+  GROUP_INVITABLE_ACCOUNTS_QUERY_KEY,
+  GROUP_REQUESTS_QUERY_KEY,
+} from "@src/queries";
 
 export interface AcceptGroupRequestParams extends MutationParams {
   groupId: string;
@@ -26,6 +29,9 @@ export const AcceptGroupRequest = async ({
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
       queryKey: GROUP_REQUESTS_QUERY_KEY(groupId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: GROUP_INVITABLE_ACCOUNTS_QUERY_KEY(groupId),
     });
   }
 
