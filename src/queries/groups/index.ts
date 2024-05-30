@@ -9,3 +9,4 @@ export * from "./useGetGroupSponsors";
 export * from "./useGetGroupRequest";
 export * from "./useGetGroupRequests";
 export * from "./useGetGroupInvitableAccounts";
+export * from "./useGetGroupInvitations";

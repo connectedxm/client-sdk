@@ -5,7 +5,10 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { GROUP_INVITABLE_ACCOUNTS_QUERY_KEY } from "@src/queries";
+import {
+  GROUP_INVITABLE_ACCOUNTS_QUERY_KEY,
+  GROUP_INVITATIONS_QUERY_KEY,
+} from "@src/queries";
 
 export interface CreateGroupInvitationsParams extends MutationParams {
   groupId: string;
@@ -20,7 +23,7 @@ export const CreateGroupInvitations = async ({
 }: CreateGroupInvitationsParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/groups/${groupId}/invites`,
+    `/groups/${groupId}/invitations`,
     {
       accountIds,
     }
@@ -29,6 +32,9 @@ export const CreateGroupInvitations = async ({
   if (queryClient && data.message === "ok") {
     queryClient.invalidateQueries({
       queryKey: GROUP_INVITABLE_ACCOUNTS_QUERY_KEY(groupId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: GROUP_INVITATIONS_QUERY_KEY(groupId),
     });
   }
 

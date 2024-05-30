@@ -3,20 +3,10 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Account, GroupMembershipRole, GroupRequestStatus } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
-import { ConnectedXMResponse } from "@interfaces";
+import { ConnectedXMResponse, InvitableAccount } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface InvitableAccount extends Account {
-  groupRequests: {
-    status: GroupRequestStatus;
-  }[];
-  groups: {
-    role: GroupMembershipRole;
-  }[];
-}
 
 export const GROUP_INVITABLE_ACCOUNTS_QUERY_KEY = (
   groupId: string
@@ -37,14 +27,17 @@ export const GetGroupInvitableAccounts = async ({
   ConnectedXMResponse<InvitableAccount[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/groups/${groupId}/invites`, {
-    params: {
-      page: pageParam || undefined,
-      pageSize: pageSize || undefined,
-      orderBy: orderBy || undefined,
-      search: search || undefined,
-    },
-  });
+  const { data } = await clientApi.get(
+    `/groups/${groupId}/invitations/accounts`,
+    {
+      params: {
+        page: pageParam || undefined,
+        pageSize: pageSize || undefined,
+        orderBy: orderBy || undefined,
+        search: search || undefined,
+      },
+    }
+  );
   return data;
 };
 

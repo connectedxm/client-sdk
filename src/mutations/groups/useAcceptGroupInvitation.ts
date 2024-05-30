@@ -1,4 +1,4 @@
-import { Group, ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -12,18 +12,18 @@ import {
 
 export interface AcceptGroupInviteParitation extends MutationParams {
   groupId: string;
-  requestId: string;
+  invitationId: string;
 }
 
 export const AcceptGroupInvitation = async ({
   groupId,
-  requestId,
+  invitationId,
   clientApiParams,
   queryClient,
-}: AcceptGroupInviteParitation): Promise<ConnectedXMResponse<Group>> => {
+}: AcceptGroupInviteParitation): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Group>>(
-    `/groups/${groupId}/invites/${requestId}`
+  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
+    `/groups/${groupId}/invitations/${invitationId}`
   );
 
   if (queryClient && data.status === "ok") {
