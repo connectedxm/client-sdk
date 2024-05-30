@@ -6,51 +6,51 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
-  SELF_NOTIFICATIONS_QUERY_KEY,
-  SELF_NOTIFICATION_COUNT_QUERY_KEY,
+  GROUP_INVITATIONS_QUERY_KEY,
+  GROUP_REQUESTS_QUERY_KEY,
 } from "@src/queries";
 
-export interface RejectGroupInvitationParams extends MutationParams {
+export interface CancelGroupInvitationParams extends MutationParams {
   groupId: string;
   invitationId: string;
 }
 
-export const RejectGroupInvitation = async ({
+export const CancelGroupInvitation = async ({
   groupId,
   invitationId,
   clientApiParams,
   queryClient,
-}: RejectGroupInvitationParams): Promise<
+}: CancelGroupInvitationParams): Promise<
   ConnectedXMResponse<GroupInvitation>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<GroupInvitation>>(
+  const { data } = await clientApi.delete<ConnectedXMResponse<GroupInvitation>>(
     `/groups/${groupId}/invitations/${invitationId}`
   );
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: SELF_NOTIFICATIONS_QUERY_KEY(""),
+      queryKey: GROUP_REQUESTS_QUERY_KEY(groupId),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_NOTIFICATION_COUNT_QUERY_KEY(""),
+      queryKey: GROUP_INVITATIONS_QUERY_KEY(groupId),
     });
   }
 
   return data;
 };
 
-export const useRejectGroupInvitation = (
+export const useCancelGroupInvitation = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof RejectGroupInvitation>>,
-      Omit<RejectGroupInvitationParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof CancelGroupInvitation>>,
+      Omit<CancelGroupInvitationParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    RejectGroupInvitationParams,
-    Awaited<ReturnType<typeof RejectGroupInvitation>>
-  >(RejectGroupInvitation, options);
+    CancelGroupInvitationParams,
+    Awaited<ReturnType<typeof CancelGroupInvitation>>
+  >(CancelGroupInvitation, options);
 };
