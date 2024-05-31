@@ -413,6 +413,7 @@ export enum RegistrationQuestionType {
 export interface BaseRegistrationQuestion {
   id: number;
   eventId: string;
+  featured: boolean;
   type: RegistrationQuestionType;
   name: string;
   required: boolean;
