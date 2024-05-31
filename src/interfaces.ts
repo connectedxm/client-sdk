@@ -665,7 +665,7 @@ export interface Notification extends BaseNotification {
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
   group: BaseGroup | null;
-  request: BaseGroupRequest | null;
+  invitation: BaseGroupInvitation | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -1658,7 +1658,6 @@ export interface EventReservationSectionLocation
 
 export enum GroupRequestStatus {
   requested = "requested",
-  invited = "invited",
   rejected = "rejected",
 }
 
@@ -1668,12 +1667,32 @@ export interface BaseGroupRequest {
   groupId: string;
   group: BaseGroup;
   account: BaseAccount;
-  inviter: BaseAccount;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface GroupRequest extends BaseGroupRequest {
+  group: BaseGroup;
+}
+
+export enum GroupInvitationStatus {
+  invited = "invited",
+  rejected = "rejected",
+  canceled = "canceled",
+}
+
+export interface BaseGroupInvitation {
+  id: string;
+  status: GroupInvitationStatus;
+  groupId: string;
+  group: BaseGroup;
+  account: BaseAccount;
+  inviter: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GroupInvitation extends BaseGroupInvitation {
   group: BaseGroup;
 }
 
@@ -1693,3 +1712,17 @@ export interface BaseEventEmail {
 }
 
 export interface EventEmail extends BaseEventEmail {}
+
+export interface InvitableAccount extends Account {
+  groupRequests: {
+    id: string;
+    status: GroupRequestStatus;
+  }[];
+  groupInvitations: {
+    id: string;
+    status: GroupInvitationStatus;
+  }[];
+  groups: {
+    role: GroupMembershipRole;
+  }[];
+}

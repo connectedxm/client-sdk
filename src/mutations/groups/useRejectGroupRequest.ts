@@ -1,4 +1,4 @@
-import { Group, GroupRequest, ConnectedXMResponse } from "@src/interfaces";
+import { GroupRequest, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -22,7 +22,7 @@ export const RejectGroupRequest = async ({
   queryClient,
 }: RejectGroupRequestParams): Promise<ConnectedXMResponse<GroupRequest>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<GroupRequest>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<GroupRequest>>(
     `/groups/${groupId}/requests/${requestId}`
   );
 
