@@ -342,7 +342,7 @@ export interface Event extends BaseEvent {
   state: string | null;
   country: string | null;
   zip: string | null;
-  groups: BaseGroup[];
+  group?: BaseGroup;
   creatorId: string | null;
   creator: BaseAccount;
   registration: boolean;
