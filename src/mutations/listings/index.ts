@@ -15,3 +15,5 @@ export * from "./useUpdateListingEmail";
 export * from "./useUpdateListingQuestion";
 export * from "./useUpdateListingSession";
 export * from "./useUpdateListingSpeaker";
+export * from "./useAddListingCoHost";
+export * from "./useRemoveListingCoHost";
