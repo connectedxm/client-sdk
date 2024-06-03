@@ -15,6 +15,7 @@ interface CreateGroup {
   name: string;
   description: string;
   access: keyof typeof GroupAccess;
+  active: boolean;
   externalUrl?: string;
 }
 

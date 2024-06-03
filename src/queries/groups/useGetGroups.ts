@@ -12,7 +12,11 @@ import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const GROUPS_QUERY_KEY = (): QueryKey => ["GROUPS"];
+export const GROUPS_QUERY_KEY = (access?: "public" | "private"): QueryKey => {
+  const keys = ["GROUPS"];
+  if (access) keys.push(access);
+  return keys;
+};
 
 export const SET_GROUPS_QUERY_DATA = (
   client: QueryClient,
@@ -30,7 +34,7 @@ export const SET_GROUPS_QUERY_DATA = (
 };
 
 export interface GetGroupsProps extends InfiniteQueryParams {
-  privateGroups?: boolean;
+  access?: "public" | "private";
 }
 
 export const GetGroups = async ({
@@ -38,19 +42,11 @@ export const GetGroups = async ({
   pageSize,
   orderBy,
   search,
-  privateGroups,
+  access,
   queryClient,
   clientApiParams,
   locale,
 }: GetGroupsProps): Promise<ConnectedXMResponse<Group[]>> => {
-  if (privateGroups) {
-    return {
-      status: "ok",
-      message: "Groups retreived",
-      data: [],
-    };
-  }
-
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/groups`, {
     params: {
@@ -58,7 +54,7 @@ export const GetGroups = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      privateGroups: privateGroups || undefined,
+      access: access || undefined,
     },
   });
   if (queryClient && data.status === "ok") {
@@ -74,6 +70,7 @@ export const GetGroups = async ({
 };
 
 export const useGetGroups = (
+  access?: "public" | "private",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -81,8 +78,8 @@ export const useGetGroups = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetGroups>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetGroups>>>(
-    GROUPS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetGroups({ ...params }),
+    GROUPS_QUERY_KEY(access),
+    (params: InfiniteQueryParams) => GetGroups({ access, ...params }),
     params,
     options
   );

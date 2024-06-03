@@ -6,18 +6,17 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  REMOVE_SELF_RELATIONSHIP,
   SELF_NOTIFICATIONS_QUERY_KEY,
   SELF_NOTIFICATION_COUNT_QUERY_KEY,
 } from "@src/queries";
 
 export interface RejectGroupInvitationParams extends MutationParams {
   groupId: string;
-  invitationId: string;
 }
 
 export const RejectGroupInvitation = async ({
   groupId,
-  invitationId,
   clientApiParams,
   queryClient,
 }: RejectGroupInvitationParams): Promise<
@@ -25,7 +24,7 @@ export const RejectGroupInvitation = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<GroupInvitation>>(
-    `/groups/${groupId}/invitations/${invitationId}`
+    `/groups/${groupId}/invitations/reject`
   );
 
   if (queryClient && data.status === "ok") {
@@ -35,6 +34,12 @@ export const RejectGroupInvitation = async ({
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATION_COUNT_QUERY_KEY(""),
     });
+    REMOVE_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "groups",
+      groupId
+    );
   }
 
   return data;
