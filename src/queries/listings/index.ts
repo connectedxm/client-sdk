@@ -7,3 +7,4 @@ export * from "./useGetListingRegistration";
 export * from "./useGetListingRegistrations";
 export * from "./useGetListings";
 export * from "./useGetListingCoHosts";
+export * from "./useGetListingReport";
