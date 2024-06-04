@@ -22,8 +22,8 @@ export const AcceptGroupRequest = async ({
   queryClient,
 }: AcceptGroupRequestParams): Promise<ConnectedXMResponse<Group>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Group>>(
-    `/groups/${groupId}/requests/${requestId}`
+  const { data } = await clientApi.put<ConnectedXMResponse<Group>>(
+    `/groups/${groupId}/requests/${requestId}/accept`
   );
 
   if (queryClient && data.status === "ok") {

@@ -10,3 +10,6 @@ export * from "./useGetGroupRequest";
 export * from "./useGetGroupRequests";
 export * from "./useGetGroupInvitableAccounts";
 export * from "./useGetGroupInvitations";
+export * from "./useGetGroupsFeatured";
+export * from "./useGetGroupsInvited";
+export * from "./useGetGroupsRequested";
