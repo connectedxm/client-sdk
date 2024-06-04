@@ -36,6 +36,7 @@ export interface CreateListing {
   meetingUrl?: string;
   registration?: boolean;
   registrationLimit?: string;
+  groupOnly?: boolean;
 }
 
 export interface CreateListingParams extends MutationParams {
