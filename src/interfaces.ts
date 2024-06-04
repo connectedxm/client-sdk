@@ -189,7 +189,10 @@ export const isTypeAccount = (
 
 export interface SelfRelationships {
   accounts: Record<string, boolean>;
-  groups: Record<string, "moderator" | "member" | false>;
+  groups: Record<
+    string,
+    "moderator" | "member" | "requested" | "invited" | false
+  >;
   events: Record<string, boolean>;
   channels: Record<string, boolean>;
 }
@@ -342,7 +345,9 @@ export interface Event extends BaseEvent {
   state: string | null;
   country: string | null;
   zip: string | null;
-  group?: BaseGroup;
+  groupId: string | null;
+  group: Group | null;
+  groupOnly: boolean;
   creatorId: string | null;
   creator: BaseAccount;
   registration: boolean;

@@ -1,5 +1,6 @@
 export * from "./useAcceptGroupInvitation";
 export * from "./useAcceptGroupRequest";
+export * from "./useCancelGroupRequest";
 export * from "./useCreateGroup";
 export * from "./useCreateGroupInvitations";
 export * from "./useCreateGroupRequest";

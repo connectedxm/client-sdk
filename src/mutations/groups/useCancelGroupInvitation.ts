@@ -25,7 +25,7 @@ export const CancelGroupInvitation = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<GroupInvitation>>(
-    `/groups/${groupId}/invitations/${invitationId}`
+    `/groups/${groupId}/invitations/${invitationId}/cancel`
   );
 
   if (queryClient && data.status === "ok") {

@@ -24,7 +24,7 @@ export const ReinviteGroupInvitation = async ({
   ConnectedXMResponse<GroupInvitation>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<GroupInvitation>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<GroupInvitation>>(
     `/groups/${groupId}/invitations/${invitationId}/reinvite`
   );
 
