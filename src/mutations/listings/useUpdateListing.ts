@@ -34,6 +34,7 @@ export interface UpdateListing {
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   slug?: string;
+  groupOnly?: boolean;
 }
 
 export interface UpdateListingParams extends MutationParams {
