@@ -21,7 +21,7 @@ export const AcceptGroupInvitation = async ({
   queryClient,
 }: AcceptGroupInviteParitation): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<null>>(
     `/groups/${groupId}/invitations/accept`
   );
 
