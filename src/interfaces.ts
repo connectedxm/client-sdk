@@ -592,10 +592,17 @@ export interface BasePurchase {
   reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
+  createdAt: string;
 }
 
 export interface Purchase extends BasePurchase {
-  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListingPurchase extends BasePurchase {
+  registration: BaseRegistration & {
+    account: BaseAccount & { email: string | null; phone: string | null };
+  };
   updatedAt: string;
 }
 
@@ -603,7 +610,7 @@ export const isTypePurchase = (
   purchase: BasePurchase | Purchase
 ): purchase is Purchase => {
   return (
-    (purchase as Omit<Purchase, keyof BasePurchase>).createdAt !== undefined
+    (purchase as Omit<Purchase, keyof BasePurchase>).updatedAt !== undefined
   );
 };
 
@@ -1173,6 +1180,17 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
+  status: RegistrationStatus;
+  couponId: string | null;
+  coupon: BaseCoupon | null;
+  purchases: BasePurchase[];
+  payments: Payment[];
+  createdAt: string;
+}
+
+export interface ListingRegistration extends BaseRegistration {
+  event: RegistrationEventDetails;
+  account: BaseAccount & { email: string | null; phone: string | null };
   status: RegistrationStatus;
   couponId: string | null;
   coupon: BaseCoupon | null;
