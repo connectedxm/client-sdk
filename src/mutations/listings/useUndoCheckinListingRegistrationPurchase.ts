@@ -11,24 +11,24 @@ import {
 } from "@src/queries";
 import { ConnectedXMResponse, Purchase } from "@src/interfaces";
 
-export interface CheckinListingRegistrationPurchaseParams
+export interface UndoCheckinListingRegistrationPurchaseParams
   extends MutationParams {
   eventId: string;
   registrationId: string;
   purchaseId: string;
 }
 
-export const CheckinListingRegistrationPurchase = async ({
+export const UndoCheckinListingRegistrationPurchase = async ({
   eventId,
   registrationId,
   purchaseId,
   clientApiParams,
   queryClient,
-}: CheckinListingRegistrationPurchaseParams): Promise<
+}: UndoCheckinListingRegistrationPurchaseParams): Promise<
   ConnectedXMResponse<Purchase>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Purchase>>(
+  const { data } = await clientApi.delete<ConnectedXMResponse<Purchase>>(
     `/listings/${eventId}/registrations/${registrationId}/purchases/${purchaseId}`
   );
 
@@ -50,12 +50,12 @@ export const CheckinListingRegistrationPurchase = async ({
   return data;
 };
 
-export const useCheckinListingRegistrationPurchase = (
+export const useUndoCheckinListingRegistrationPurchase = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof CheckinListingRegistrationPurchase>>,
+      Awaited<ReturnType<typeof UndoCheckinListingRegistrationPurchase>>,
       Omit<
-        CheckinListingRegistrationPurchaseParams,
+        UndoCheckinListingRegistrationPurchaseParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -63,7 +63,7 @@ export const useCheckinListingRegistrationPurchase = (
   > = {}
 ) => {
   return useConnectedMutation<
-    CheckinListingRegistrationPurchaseParams,
-    Awaited<ReturnType<typeof CheckinListingRegistrationPurchase>>
-  >(CheckinListingRegistrationPurchase, options);
+    UndoCheckinListingRegistrationPurchaseParams,
+    Awaited<ReturnType<typeof UndoCheckinListingRegistrationPurchase>>
+  >(UndoCheckinListingRegistrationPurchase, options);
 };

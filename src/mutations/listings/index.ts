@@ -10,6 +10,7 @@ export * from "./useDeleteListingSession";
 export * from "./useDeleteListingSpeaker";
 export * from "./useRemoveListingSponsor";
 export * from "./useCheckinListingRegistrationPurchase";
+export * from "./useUndoCheckinListingRegistrationPurchase";
 export * from "./useUpdateListing";
 export * from "./useUpdateListingEmail";
 export * from "./useUpdateListingQuestion";

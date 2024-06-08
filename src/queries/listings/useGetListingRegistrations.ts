@@ -1,6 +1,6 @@
 import type {
   ConnectedXMResponse,
-  Registration,
+  ListingRegistration,
   RegistrationStatus,
 } from "@interfaces";
 import {
@@ -31,7 +31,7 @@ export const GetSelfEventListingRegistrations = async ({
   status,
   clientApiParams,
 }: GetSelfEventListingRegistrationsProps): Promise<
-  ConnectedXMResponse<Registration[]>
+  ConnectedXMResponse<ListingRegistration[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/listings/${eventId}/registrations`, {
