@@ -5,7 +5,7 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
-import type { Registration } from "@interfaces";
+import type { ListingRegistration } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -14,7 +14,7 @@ import { LISTING_REGISTRATIONS_QUERY_KEY } from "./useGetListingRegistrations";
 export const LISTING_REGISTRATION_QUERY_KEY = (
   eventId: string,
   registrationId: string
-): QueryKey => [LISTING_REGISTRATIONS_QUERY_KEY(eventId), registrationId];
+): QueryKey => [...LISTING_REGISTRATIONS_QUERY_KEY(eventId), registrationId];
 
 export const SET_LISTING_REGISTRATION_QUERY_KEY = (
   client: QueryClient,
@@ -42,7 +42,7 @@ export const GetSelfEventListingRegistration = async ({
   registrationId,
   clientApiParams,
 }: GetSelfEventListingRegistrationProps): Promise<
-  ConnectedXMResponse<Registration>
+  ConnectedXMResponse<ListingRegistration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
