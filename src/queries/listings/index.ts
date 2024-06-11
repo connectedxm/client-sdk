@@ -10,3 +10,4 @@ export * from "./useGetListingPurchases";
 export * from "./useGetListings";
 export * from "./useGetListingCoHosts";
 export * from "./useGetListingReport";
+export * from "./useGetListingRegistrationPurchaseSections";
