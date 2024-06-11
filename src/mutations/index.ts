@@ -7,5 +7,6 @@ export * from "./supportTicket";
 export * from "./team";
 export * from "./groups";
 export * from "./listings";
+export * from "./storage";
 
 export * from "./useConnectedMutation";

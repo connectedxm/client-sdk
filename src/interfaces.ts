@@ -1749,3 +1749,14 @@ export interface InvitableAccount extends Account {
     role: GroupMembershipRole;
   }[];
 }
+
+export interface BaseFile {
+  id: number;
+  name: string;
+  r2Path: string;
+  url?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface File extends BaseFile {}
