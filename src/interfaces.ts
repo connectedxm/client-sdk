@@ -1754,7 +1754,6 @@ export interface BaseFile {
   id: number;
   name: string;
   r2Path: string;
-  source: "admin" | "response";
   url?: string;
   createdAt: string;
   updatedAt: string;
