@@ -14,13 +14,16 @@ export const SELF_GROUP_MEMBERSHIPS_QUERY_KEY = (): QueryKey => [
   "GROUP_MEMBERSHIPS",
 ];
 
-export interface GetSelfGroupMembershipsProps extends InfiniteQueryParams {}
+export interface GetSelfGroupMembershipsProps extends InfiniteQueryParams {
+  role?: "member" | "moderator";
+}
 
 export const GetSelfGroupMemberships = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
+  role,
   clientApiParams,
 }: GetSelfGroupMembershipsProps): Promise<
   ConnectedXMResponse<GroupMembership[]>
@@ -32,12 +35,14 @@ export const GetSelfGroupMemberships = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      role: role || undefined,
     },
   });
   return data;
 };
 
 export const useGetSelfGroupMemberships = (
+  role?: "member" | "moderator",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -52,7 +57,8 @@ export const useGetSelfGroupMemberships = (
     Awaited<ReturnType<typeof GetSelfGroupMemberships>>
   >(
     SELF_GROUP_MEMBERSHIPS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetSelfGroupMemberships({ ...params }),
+    (params: InfiniteQueryParams) =>
+      GetSelfGroupMemberships({ role, ...params }),
     params,
     {
       ...options,
