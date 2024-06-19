@@ -12,9 +12,10 @@ import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACTIVITIES_QUERY_KEY } from "../activities";
 
 export const EVENT_ACTIVITIES_QUERY_KEY = (eventId: string): QueryKey => [
-  "ACTIVITIES",
+  ...ACTIVITIES_QUERY_KEY(),
   ...EVENT_QUERY_KEY(eventId),
 ];
 

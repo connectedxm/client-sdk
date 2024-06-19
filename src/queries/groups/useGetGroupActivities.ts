@@ -12,10 +12,11 @@ import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACTIVITIES_QUERY_KEY } from "../activities";
 
 export const GROUP_ACTIVITIES_QUERY_KEY = (groupId: string): QueryKey => [
+  ...ACTIVITIES_QUERY_KEY(),
   ...GROUP_QUERY_KEY(groupId),
-  "ACTIVITIES",
 ];
 
 export const SET_GROUP_ACTIVITIES_QUERY_DATA = (

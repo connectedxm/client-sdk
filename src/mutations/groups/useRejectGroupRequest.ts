@@ -1,4 +1,4 @@
-import { Group, GroupRequest, ConnectedXMResponse } from "@src/interfaces";
+import { GroupRequest, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -7,6 +7,7 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import {
   GROUP_REQUESTS_QUERY_KEY,
+  REMOVE_SELF_RELATIONSHIP,
   SET_GROUP_REQUEST_QUERY_DATA,
 } from "@src/queries";
 
@@ -22,8 +23,8 @@ export const RejectGroupRequest = async ({
   queryClient,
 }: RejectGroupRequestParams): Promise<ConnectedXMResponse<GroupRequest>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<GroupRequest>>(
-    `/groups/${groupId}/requests/${requestId}`
+  const { data } = await clientApi.put<ConnectedXMResponse<GroupRequest>>(
+    `/groups/${groupId}/requests/${requestId}/reject`
   );
 
   if (queryClient && data.status === "ok") {
@@ -32,6 +33,13 @@ export const RejectGroupRequest = async ({
     queryClient.invalidateQueries({
       queryKey: GROUP_REQUESTS_QUERY_KEY(groupId),
     });
+
+    REMOVE_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "groups",
+      groupId
+    );
   }
 
   return data;

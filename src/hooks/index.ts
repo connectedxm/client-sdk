@@ -1,5 +1,5 @@
 export * from "./useConnectedXM";
 export * from "./useIsAccountFollowing";
-export * from "./useIsGroupMember";
+export * from "./useGroupStatus";
 export * from "./useIsEventRegistered";
 export * from "./useIsChannelSubscribed";

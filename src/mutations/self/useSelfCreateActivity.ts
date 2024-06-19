@@ -26,6 +26,7 @@ export interface CreateActivity {
   eventId?: string;
   groupId?: string;
   commentedId?: string;
+  videoId?: string;
 }
 
 export interface CreateInterest {
@@ -36,14 +37,12 @@ export interface CreateInterest {
 export interface SelfCreateActivityParams extends MutationParams {
   activity: CreateActivity;
   base64Image?: any;
-  videoUri?: string;
   interests?: CreateInterest[];
 }
 
 export const SelfCreateActivity = async ({
   activity,
   base64Image,
-  videoUri,
   interests,
   clientApiParams,
   queryClient,
@@ -69,7 +68,6 @@ export const SelfCreateActivity = async ({
     {
       activity,
       imageUri: base64Image ?? undefined,
-      videoUri: videoUri ?? undefined,
       interests: interests ?? undefined,
     }
   );

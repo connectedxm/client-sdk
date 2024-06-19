@@ -189,7 +189,10 @@ export const isTypeAccount = (
 
 export interface SelfRelationships {
   accounts: Record<string, boolean>;
-  groups: Record<string, "moderator" | "member" | false>;
+  groups: Record<
+    string,
+    "moderator" | "member" | "requested" | "invited" | false
+  >;
   events: Record<string, boolean>;
   channels: Record<string, boolean>;
 }
@@ -342,7 +345,9 @@ export interface Event extends BaseEvent {
   state: string | null;
   country: string | null;
   zip: string | null;
-  groups: BaseGroup[];
+  groupId: string | null;
+  group: Group | null;
+  groupOnly: boolean;
   creatorId: string | null;
   creator: BaseAccount;
   registration: boolean;
@@ -413,6 +418,7 @@ export enum RegistrationQuestionType {
 export interface BaseRegistrationQuestion {
   id: number;
   eventId: string;
+  featured: boolean;
   type: RegistrationQuestionType;
   name: string;
   required: boolean;
@@ -578,6 +584,7 @@ export interface BasePurchase {
   email: string;
   transfer: { id: string; email: string; createdAt: string } | null;
   registrationId: string;
+  registration: BaseRegistration;
   ticketId: string | null;
   ticket: BaseTicket | null;
   addOns: BaseEventAddOn[];
@@ -585,10 +592,17 @@ export interface BasePurchase {
   reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
+  createdAt: string;
 }
 
 export interface Purchase extends BasePurchase {
-  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListingPurchase extends BasePurchase {
+  registration: BaseRegistration & {
+    account: BaseAccount & { email: string | null; phone: string | null };
+  };
   updatedAt: string;
 }
 
@@ -596,7 +610,7 @@ export const isTypePurchase = (
   purchase: BasePurchase | Purchase
 ): purchase is Purchase => {
   return (
-    (purchase as Omit<Purchase, keyof BasePurchase>).createdAt !== undefined
+    (purchase as Omit<Purchase, keyof BasePurchase>).updatedAt !== undefined
   );
 };
 
@@ -663,7 +677,7 @@ export interface Notification extends BaseNotification {
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
   group: BaseGroup | null;
-  request: BaseGroupRequest | null;
+  invitation: BaseGroupInvitation | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -1157,12 +1171,26 @@ export const isTypeContent = (
   return (content as Omit<Content, keyof BaseContent>).body !== undefined;
 };
 
-export interface Registration {
+interface BaseRegistration {
   id: string;
   alternateId: number;
   eventId: string;
+}
+
+export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
+  status: RegistrationStatus;
+  couponId: string | null;
+  coupon: BaseCoupon | null;
+  purchases: BasePurchase[];
+  payments: Payment[];
+  createdAt: string;
+}
+
+export interface ListingRegistration extends BaseRegistration {
+  event: RegistrationEventDetails;
+  account: BaseAccount & { email: string | null; phone: string | null };
   status: RegistrationStatus;
   couponId: string | null;
   coupon: BaseCoupon | null;
@@ -1653,7 +1681,6 @@ export interface EventReservationSectionLocation
 
 export enum GroupRequestStatus {
   requested = "requested",
-  invited = "invited",
   rejected = "rejected",
 }
 
@@ -1663,12 +1690,32 @@ export interface BaseGroupRequest {
   groupId: string;
   group: BaseGroup;
   account: BaseAccount;
-  inviter: BaseAccount;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface GroupRequest extends BaseGroupRequest {
+  group: BaseGroup;
+}
+
+export enum GroupInvitationStatus {
+  invited = "invited",
+  rejected = "rejected",
+  canceled = "canceled",
+}
+
+export interface BaseGroupInvitation {
+  id: string;
+  status: GroupInvitationStatus;
+  groupId: string;
+  group: BaseGroup;
+  account: BaseAccount;
+  inviter: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GroupInvitation extends BaseGroupInvitation {
   group: BaseGroup;
 }
 
@@ -1688,3 +1735,28 @@ export interface BaseEventEmail {
 }
 
 export interface EventEmail extends BaseEventEmail {}
+
+export interface InvitableAccount extends Account {
+  groupRequests: {
+    id: string;
+    status: GroupRequestStatus;
+  }[];
+  groupInvitations: {
+    id: string;
+    status: GroupInvitationStatus;
+  }[];
+  groups: {
+    role: GroupMembershipRole;
+  }[];
+}
+
+export interface BaseFile {
+  id: number;
+  name: string;
+  r2Path: string;
+  url?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface File extends BaseFile {}

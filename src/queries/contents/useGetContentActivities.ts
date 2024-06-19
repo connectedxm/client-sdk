@@ -12,9 +12,10 @@ import { CONTENT_QUERY_KEY } from "./useGetContent";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACTIVITIES_QUERY_KEY } from "../activities";
 
 export const CONTENT_ACTIVITIES_QUERY_KEY = (contentId: string): QueryKey => [
-  "ACTIVITIES",
+  ...ACTIVITIES_QUERY_KEY(),
   ...CONTENT_QUERY_KEY(contentId),
 ];
 

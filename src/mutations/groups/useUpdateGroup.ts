@@ -11,6 +11,7 @@ export interface UpdateGroupParams extends MutationParams {
   groupId: string;
   group: {
     name?: string;
+    active?: boolean;
     description?: string;
     externalUrl?: string;
     access?: "public" | "private";

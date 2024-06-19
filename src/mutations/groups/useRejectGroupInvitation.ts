@@ -1,4 +1,4 @@
-import { GroupRequest, ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse, GroupInvitation } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -6,36 +6,40 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  REMOVE_SELF_RELATIONSHIP,
   SELF_NOTIFICATIONS_QUERY_KEY,
   SELF_NOTIFICATION_COUNT_QUERY_KEY,
-  SET_GROUP_REQUEST_QUERY_DATA,
 } from "@src/queries";
 
 export interface RejectGroupInvitationParams extends MutationParams {
   groupId: string;
-  requestId: string;
 }
 
 export const RejectGroupInvitation = async ({
   groupId,
-  requestId,
   clientApiParams,
   queryClient,
-}: RejectGroupInvitationParams): Promise<ConnectedXMResponse<GroupRequest>> => {
+}: RejectGroupInvitationParams): Promise<
+  ConnectedXMResponse<GroupInvitation>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<GroupRequest>>(
-    `/groups/${groupId}/invites/${requestId}`
+  const { data } = await clientApi.put<ConnectedXMResponse<GroupInvitation>>(
+    `/groups/${groupId}/invitations/reject`
   );
 
   if (queryClient && data.status === "ok") {
-    SET_GROUP_REQUEST_QUERY_DATA(queryClient, [groupId, data.data.id], data);
-
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATIONS_QUERY_KEY(""),
     });
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATION_COUNT_QUERY_KEY(""),
     });
+    REMOVE_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "groups",
+      groupId
+    );
   }
 
   return data;
