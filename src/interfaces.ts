@@ -1159,8 +1159,7 @@ export interface Content extends BaseContent {
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
-  authors: BaseAccount[];
-  mentions: BaseAccount[];
+  guests: BaseContentGuest[];
   createdAt: string;
   updatedAt: string;
 }
@@ -1170,6 +1169,41 @@ export const isTypeContent = (
 ): content is Content => {
   return (content as Omit<Content, keyof BaseContent>).body !== undefined;
 };
+
+export enum ContentGuestType {
+  guest = "guest",
+  host = "host",
+  author = "author",
+}
+
+export interface BaseContentGuest {
+  id: string;
+  slug: string;
+  contentId: string;
+  accountId: string | null;
+  account: BaseAccount | null;
+  type: ContentGuestType;
+  name: string;
+  title: string | null;
+  bio: string | null;
+  company: string | null;
+  companyLink: string | null;
+  companyBio: string | null;
+  imageId: string | null;
+  image: BaseImage | null;
+  website: string | null;
+  facebook: string | null;
+  twitter: string | null;
+  instagram: string | null;
+  linkedIn: string | null;
+  tikTok: string | null;
+  youtube: string | null;
+  discord: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface ContentGuest extends BaseContentGuest {}
 
 interface BaseRegistration {
   id: string;
