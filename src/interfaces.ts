@@ -1104,22 +1104,22 @@ export const isTypeGroupMembership = (
   );
 };
 
-export enum ContentTypeFormat {
+export enum ChannelFormat {
   article = "article",
   podcast = "podcast",
   video = "video",
 }
 
-export interface BaseContentType {
+export interface BaseChannel {
   id: string;
   slug: string;
   name: string;
   description: string | null;
-  format: ContentTypeFormat;
+  format: ChannelFormat;
   image: BaseImage;
 }
 
-export interface ContentType extends BaseContentType {
+export interface Channel extends BaseChannel {
   priority: number;
   externalUrl: string | null;
   appleUrl: string | null;
@@ -1129,13 +1129,10 @@ export interface ContentType extends BaseContentType {
   hosts: BaseAccount[];
 }
 
-export const isTypeContentType = (
-  contentType: BaseContentType | ContentType
-): contentType is ContentType => {
-  return (
-    (contentType as Omit<ContentType, keyof BaseContentType>).priority !==
-    undefined
-  );
+export const isTypeChannel = (
+  channel: BaseChannel | Channel
+): channel is Channel => {
+  return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
 
 export interface BaseContent {
@@ -1148,7 +1145,7 @@ export interface BaseContent {
   audioUrl: string | null;
   videoUrl: string | null;
   duration: string | null;
-  contentType: BaseContentType;
+  channel: BaseChannel;
   published: string | null;
 }
 
@@ -1427,7 +1424,7 @@ export interface LinkPreview {
   siteName: string | null;
   description: string | null;
   mediaType: string | null;
-  contentType: string | null;
+  channel: string | null;
   image: string | null;
   imageWidth: number | null;
   imageHeight: number | null;
