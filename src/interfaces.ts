@@ -1104,22 +1104,22 @@ export const isTypeGroupMembership = (
   );
 };
 
-export enum ContentTypeFormat {
+export enum ChannelFormat {
   article = "article",
   podcast = "podcast",
   video = "video",
 }
 
-export interface BaseContentType {
+export interface BaseChannel {
   id: string;
   slug: string;
   name: string;
   description: string | null;
-  format: ContentTypeFormat;
+  format: ChannelFormat;
   image: BaseImage;
 }
 
-export interface ContentType extends BaseContentType {
+export interface Channel extends BaseChannel {
   priority: number;
   externalUrl: string | null;
   appleUrl: string | null;
@@ -1129,13 +1129,10 @@ export interface ContentType extends BaseContentType {
   hosts: BaseAccount[];
 }
 
-export const isTypeContentType = (
-  contentType: BaseContentType | ContentType
-): contentType is ContentType => {
-  return (
-    (contentType as Omit<ContentType, keyof BaseContentType>).priority !==
-    undefined
-  );
+export const isTypeChannel = (
+  channel: BaseChannel | Channel
+): channel is Channel => {
+  return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
 
 export interface BaseContent {
@@ -1148,7 +1145,7 @@ export interface BaseContent {
   audioUrl: string | null;
   videoUrl: string | null;
   duration: string | null;
-  contentType: BaseContentType;
+  channel: BaseChannel;
   published: string | null;
 }
 
@@ -1159,8 +1156,7 @@ export interface Content extends BaseContent {
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
-  authors: BaseAccount[];
-  mentions: BaseAccount[];
+  guests: BaseContentGuest[];
   createdAt: string;
   updatedAt: string;
 }
@@ -1170,6 +1166,41 @@ export const isTypeContent = (
 ): content is Content => {
   return (content as Omit<Content, keyof BaseContent>).body !== undefined;
 };
+
+export enum ContentGuestType {
+  guest = "guest",
+  host = "host",
+  author = "author",
+}
+
+export interface BaseContentGuest {
+  id: string;
+  slug: string;
+  contentId: string;
+  accountId: string | null;
+  account: BaseAccount | null;
+  type: ContentGuestType;
+  name: string;
+  title: string | null;
+  bio: string | null;
+  company: string | null;
+  companyLink: string | null;
+  companyBio: string | null;
+  imageId: string | null;
+  image: BaseImage | null;
+  website: string | null;
+  facebook: string | null;
+  twitter: string | null;
+  instagram: string | null;
+  linkedIn: string | null;
+  tikTok: string | null;
+  youtube: string | null;
+  discord: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface ContentGuest extends BaseContentGuest {}
 
 interface BaseRegistration {
   id: string;
@@ -1427,7 +1458,7 @@ export interface LinkPreview {
   siteName: string | null;
   description: string | null;
   mediaType: string | null;
-  contentType: string | null;
+  channel: string | null;
   image: string | null;
   imageWidth: number | null;
   imageHeight: number | null;
