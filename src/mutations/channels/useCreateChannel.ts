@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, ContentType } from "@src/interfaces";
+import { ConnectedXMResponse, Channel } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -21,9 +21,9 @@ export const CreateChannel = async ({
   channel,
   imageDataUri,
   clientApiParams,
-}: CreateChannelParams): Promise<ConnectedXMResponse<ContentType>> => {
+}: CreateChannelParams): Promise<ConnectedXMResponse<Channel>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<ContentType>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<Channel>>(
     `/channels`,
     {
       channel,

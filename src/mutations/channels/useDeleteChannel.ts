@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, ContentType } from "@src/interfaces";
+import { ConnectedXMResponse, Channel } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -14,9 +14,9 @@ export const DeleteChannel = async ({
   channelId,
 
   clientApiParams,
-}: DeleteChannelParams): Promise<ConnectedXMResponse<ContentType>> => {
+}: DeleteChannelParams): Promise<ConnectedXMResponse<Channel>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<ContentType>>(
+  const { data } = await clientApi.delete<ConnectedXMResponse<Channel>>(
     `/channels/${channelId}`
   );
 
