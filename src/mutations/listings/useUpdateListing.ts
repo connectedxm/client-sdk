@@ -31,8 +31,8 @@ export interface UpdateListing {
   registration?: boolean;
   publicRegistrants?: boolean;
   registrationLimit?: number | null;
-  newActivityCreatorEmailNotification: boolean;
-  newActivityCreatorPushNotification: boolean;
+  newActivityCreatorEmailNotification?: boolean;
+  newActivityCreatorPushNotification?: boolean;
   slug?: string;
   groupOnly?: boolean;
 }
