@@ -19,7 +19,7 @@ export const SELF_RELATIONSHIPS_QUERY_KEY = (): QueryKey => {
 export const ADD_SELF_RELATIONSHIP = (
   client: QueryClient,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
-  type: "groups" | "accounts" | "events",
+  type: "groups" | "accounts" | "events" | "threads",
   id: string,
   value: boolean | string = true
 ) => {
