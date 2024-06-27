@@ -8,7 +8,7 @@ import {
   EVENT_QUERY_KEY,
   EVENT_REGISTRANTS_QUERY_KEY,
   SELF_EVENTS_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
@@ -40,7 +40,7 @@ export const AddSelfEventRegistrationPurchaseAddOn = async ({
       clientApiParams.locale,
     ]);
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(
+      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
         eventId,
         registrationId
       ),

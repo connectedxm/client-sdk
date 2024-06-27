@@ -1,5 +1,4 @@
 export * from "./useApplySelfEventRegistrationCoupon";
-export * from "./useCaptureSelfEventRegistrationPayment";
 export * from "./useRemoveSelfEventRegistrationCoupon";
 export * from "./useRemoveSelfEventRegistrationPurchase";
 export * from "./useAddSelfEventRegistrationPurchase";

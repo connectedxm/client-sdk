@@ -1781,6 +1781,29 @@ export interface InvitableAccount extends Account {
   }[];
 }
 
+export interface BasePaymentIntent {
+  id: string;
+  integrationId: string;
+  accountId: string;
+  description: string | null;
+  secret: string;
+  referenceId: string;
+  amount: number;
+  metadata: string;
+  eventId: string | null;
+  registrationId: string | null;
+  invoiceId: string | null;
+  createdAt: string;
+}
+export interface PaymentIntent extends BasePaymentIntent {
+  integration: {
+    connectionId: string;
+    type: string;
+  };
+  account: BaseAccount;
+  registration: BaseRegistration;
+  invoice: BaseInvoice;
+}
 export interface BaseFile {
   id: number;
   name: string;
