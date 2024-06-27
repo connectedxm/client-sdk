@@ -1790,6 +1790,7 @@ export interface BasePaymentIntent {
   referenceId: string;
   amount: number;
   metadata: string;
+  eventId: string | null;
   registrationId: string | null;
   invoiceId: string | null;
   createdAt: string;
