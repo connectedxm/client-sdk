@@ -592,10 +592,17 @@ export interface BasePurchase {
   reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
+  createdAt: string;
 }
 
 export interface Purchase extends BasePurchase {
-  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListingPurchase extends BasePurchase {
+  registration: BaseRegistration & {
+    account: BaseAccount & { email: string | null; phone: string | null };
+  };
   updatedAt: string;
 }
 
@@ -603,7 +610,7 @@ export const isTypePurchase = (
   purchase: BasePurchase | Purchase
 ): purchase is Purchase => {
   return (
-    (purchase as Omit<Purchase, keyof BasePurchase>).createdAt !== undefined
+    (purchase as Omit<Purchase, keyof BasePurchase>).updatedAt !== undefined
   );
 };
 
@@ -1097,22 +1104,22 @@ export const isTypeGroupMembership = (
   );
 };
 
-export enum ContentTypeFormat {
+export enum ChannelFormat {
   article = "article",
   podcast = "podcast",
   video = "video",
 }
 
-export interface BaseContentType {
+export interface BaseChannel {
   id: string;
   slug: string;
   name: string;
   description: string | null;
-  format: ContentTypeFormat;
+  format: ChannelFormat;
   image: BaseImage;
 }
 
-export interface ContentType extends BaseContentType {
+export interface Channel extends BaseChannel {
   priority: number;
   externalUrl: string | null;
   appleUrl: string | null;
@@ -1122,13 +1129,10 @@ export interface ContentType extends BaseContentType {
   hosts: BaseAccount[];
 }
 
-export const isTypeContentType = (
-  contentType: BaseContentType | ContentType
-): contentType is ContentType => {
-  return (
-    (contentType as Omit<ContentType, keyof BaseContentType>).priority !==
-    undefined
-  );
+export const isTypeChannel = (
+  channel: BaseChannel | Channel
+): channel is Channel => {
+  return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
 
 export interface BaseContent {
@@ -1141,7 +1145,7 @@ export interface BaseContent {
   audioUrl: string | null;
   videoUrl: string | null;
   duration: string | null;
-  contentType: BaseContentType;
+  channel: BaseChannel;
   published: string | null;
 }
 
@@ -1152,8 +1156,7 @@ export interface Content extends BaseContent {
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
-  authors: BaseAccount[];
-  mentions: BaseAccount[];
+  guests: BaseContentGuest[];
   createdAt: string;
   updatedAt: string;
 }
@@ -1164,6 +1167,41 @@ export const isTypeContent = (
   return (content as Omit<Content, keyof BaseContent>).body !== undefined;
 };
 
+export enum ContentGuestType {
+  guest = "guest",
+  host = "host",
+  author = "author",
+}
+
+export interface BaseContentGuest {
+  id: string;
+  slug: string;
+  contentId: string;
+  accountId: string | null;
+  account: BaseAccount | null;
+  type: ContentGuestType;
+  name: string;
+  title: string | null;
+  bio: string | null;
+  company: string | null;
+  companyLink: string | null;
+  companyBio: string | null;
+  imageId: string | null;
+  image: BaseImage | null;
+  website: string | null;
+  facebook: string | null;
+  twitter: string | null;
+  instagram: string | null;
+  linkedIn: string | null;
+  tikTok: string | null;
+  youtube: string | null;
+  discord: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface ContentGuest extends BaseContentGuest {}
+
 interface BaseRegistration {
   id: string;
   alternateId: number;
@@ -1173,6 +1211,17 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
+  status: RegistrationStatus;
+  couponId: string | null;
+  coupon: BaseCoupon | null;
+  purchases: BasePurchase[];
+  payments: Payment[];
+  createdAt: string;
+}
+
+export interface ListingRegistration extends BaseRegistration {
+  event: RegistrationEventDetails;
+  account: BaseAccount & { email: string | null; phone: string | null };
   status: RegistrationStatus;
   couponId: string | null;
   coupon: BaseCoupon | null;
@@ -1409,7 +1458,7 @@ export interface LinkPreview {
   siteName: string | null;
   description: string | null;
   mediaType: string | null;
-  contentType: string | null;
+  channel: string | null;
   image: string | null;
   imageWidth: number | null;
   imageHeight: number | null;
@@ -1754,3 +1803,13 @@ export interface PaymentIntent extends BasePaymentIntent {
   registration: BaseRegistration;
   invoice: BaseInvoice;
 }
+export interface BaseFile {
+  id: number;
+  name: string;
+  r2Path: string;
+  url?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface File extends BaseFile {}
