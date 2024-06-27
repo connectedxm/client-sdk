@@ -4,10 +4,7 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import {
-  INVOICE_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_QUERY_KEY,
-} from "@src/queries";
+import { INVOICE_QUERY_KEY } from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
   intent: PaymentIntent;
@@ -26,27 +23,18 @@ export const CapturePaymentIntent = async ({
   if (queryClient && data.status === "ok") {
     if (intent.eventId && intent.registrationId) {
       queryClient.invalidateQueries({
-        queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(intent.eventId),
+        predicate: ({ queryKey }) => {
+          if (
+            (queryKey[0] === "SELF" && queryKey[1] === "EVENT_REGISTRATION") ||
+            (queryKey[0] === "SELF" &&
+              queryKey[1] === "EVENT" &&
+              queryKey[3] === "REGISTRATION")
+          ) {
+            return true;
+          }
+          return false;
+        },
       });
-
-      queryClient.invalidateQueries({
-        queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(intent.eventId),
-      });
-
-      if (intent.metadata?.purchaseId) {
-        queryClient.invalidateQueries({
-          // WE DONT HAVE THE EVENT SLUG SO WE MUST INVALIDATE BASED ON A PREDICATE
-          predicate: ({ queryKey }) => {
-            if (
-              queryKey[queryKey.length - 3] === "PURCHASE" &&
-              queryKey[queryKey.length - 2] === intent.metadata.purchaseId
-            ) {
-              return true;
-            }
-            return false;
-          },
-        });
-      }
     }
 
     if (intent.invoiceId) {
