@@ -1789,7 +1789,7 @@ export interface BasePaymentIntent {
   secret: string;
   referenceId: string;
   amount: number;
-  metadata: string;
+  metadata: Record<string, any>;
   eventId: string | null;
   registrationId: string | null;
   invoiceId: string | null;

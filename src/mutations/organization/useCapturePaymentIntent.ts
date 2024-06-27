@@ -23,13 +23,30 @@ export const CapturePaymentIntent = async ({
     `/organization/intents/${intent.id}/capture`
   );
 
-  console.log(!!queryClient, data.status === "ok", intent);
-
   if (queryClient && data.status === "ok") {
     if (intent.eventId && intent.registrationId) {
       queryClient.invalidateQueries({
         queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(intent.eventId),
       });
+
+      queryClient.invalidateQueries({
+        queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(intent.eventId),
+      });
+
+      if (intent.metadata?.purchaseId) {
+        queryClient.invalidateQueries({
+          // WE DONT HAVE THE EVENT SLUG SO WE MUST INVALIDATE BASED ON A PREDICATE
+          predicate: ({ queryKey }) => {
+            if (
+              queryKey[queryKey.length - 3] === "PURCHASE" &&
+              queryKey[queryKey.length - 2] === intent.metadata.purchaseId
+            ) {
+              return true;
+            }
+            return false;
+          },
+        });
+      }
     }
 
     if (intent.invoiceId) {
