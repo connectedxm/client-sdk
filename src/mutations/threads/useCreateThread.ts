@@ -17,7 +17,6 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 interface CreateThread {
   name: string;
-  members: string[];
   description?: string;
   imageId?: string;
   eventId?: string;
@@ -28,10 +27,12 @@ interface CreateThread {
 export interface CreateThreadParams extends MutationParams {
   thread: CreateThread;
   imageDataUri?: string;
+  accountIds: string[];
 }
 
 export const CreateThread = async ({
   thread,
+  accountIds,
   imageDataUri,
   clientApiParams,
   queryClient,
@@ -41,6 +42,7 @@ export const CreateThread = async ({
     `/threads`,
     {
       thread,
+      accountIds,
       imageDataUri,
     }
   );
