@@ -65,6 +65,7 @@ export interface BaseOrganization {
   id: string;
   slug: string;
   name: string;
+  description: string;
   email: string;
   address1: string | null;
   address2: string | null;
@@ -74,6 +75,12 @@ export interface BaseOrganization {
   zip: string | null;
   logo: BaseImage | null;
   logoId: string | null;
+  darkLogo: BaseImage | null;
+  darkLogoId: string | null;
+  icon: BaseImage | null;
+  iconId: string | null;
+  darkIcon: BaseImage | null;
+  darkIconId: string | null;
 }
 
 export enum Currency {
@@ -1814,3 +1821,123 @@ export interface BaseFile {
 }
 
 export interface File extends BaseFile {}
+
+export enum SupportedLocale {
+  en = "en",
+  es = "es",
+  fr = "fr",
+  ja = "ja",
+}
+
+export enum DefaultAuthAction {
+  signIn = "signIn",
+  signUp = "signUp",
+}
+
+export enum PrimaryModule {
+  activities = "activities",
+  events = "events",
+  channels = "channels",
+  groups = "groups",
+  threads = "threads",
+}
+
+export enum OrganizationModuleType {
+  accounts = "accounts",
+  events = "events",
+  listings = "listings",
+  activities = "activities",
+  groups = "groups",
+  contents = "contents",
+  chat = "chat",
+  support = "support",
+  sponsors = "sponsors",
+  benefits = "benefits",
+  advertisements = "advertisements",
+  announcements = "announcements",
+  subscriptions = "subscriptions",
+  threads = "threads",
+}
+
+export enum OrganizationActionType {
+  create = "create",
+  read = "read",
+  update = "update",
+  delete = "delete",
+}
+
+export interface OrganizationConfig {
+  ORGANIZATION_ID: string;
+  SLUG: string;
+  WEBSITE_URL: string;
+  COGNITO_USERPOOL_ID: string;
+  COGNITO_CLIENT_ID: string;
+  COGNITO_HOSTED_URL: string;
+  API_URL:
+    | "https://client-api.connectedxm.com"
+    | "https://staging-client-api.connectedxm.com";
+  OPENGRAPH_URL:
+    | "https://opengraph-api.connectedxm.com"
+    | "https://staging-opengraph-api.connectedxm.com";
+  CHAT_URL: "wss://chat.connectedxm.com" | "wss://staging-chat.connectedxm.com";
+  APPLE_APPSTORE_LINK: string | null;
+  GOOGLE_PLAYSTORE_LINK: string | null;
+  NAME: string;
+  DESCRIPTION: string;
+  PRIMARY_MODULE: PrimaryModule;
+  PRIMARY_COLOR: string;
+  SECONDARY_COLOR: string;
+  LOGO: {
+    LIGHT: string;
+    DARK?: string;
+  };
+  ICON: {
+    LIGHT: string;
+    DARK?: string;
+  };
+  DEFAULT_LOCALE: SupportedLocale;
+  LANGUAGES: Record<SupportedLocale, Record<string, string>>;
+  AUTH: {
+    DEFAULT_ACTION: DefaultAuthAction;
+    FACEBOOK: boolean;
+    GOOGLE: boolean;
+    APPLE: boolean;
+    CUSTOM: OrganizationOAuth[];
+    FIELDS: {
+      PHONE: boolean;
+      TITLE: boolean;
+      COMPANY: boolean;
+    };
+  };
+  MODULES: Record<keyof typeof OrganizationModuleType, OrganizationModule>;
+  SOCIAL: {
+    facebook: string | null;
+    instagram: string | null;
+    twitter: string | null;
+    linkedIn: string | null;
+    tikTok: string | null;
+    youtube: string | null;
+    discord: string | null;
+  };
+}
+
+export interface OrganizationModule {
+  enabled: boolean;
+  requireAuth: boolean;
+  actions: Record<keyof typeof OrganizationActionType, OrganizationAction>;
+}
+
+export interface OrganizationAction {
+  enabled: boolean;
+  requireAuth: boolean;
+  tiers: string[];
+}
+
+export interface OrganizationOAuth {
+  name: string;
+  text?: string;
+  icon?: string;
+  color: string;
+  textColor: string;
+  borderColor?: string;
+}
