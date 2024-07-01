@@ -5,12 +5,12 @@ import {
   GetBaseInfiniteQueryKeys,
   setFirstPageData,
   InfiniteQueryOptions,
-} from "../useConnectedInfiniteQuery";
+} from "../../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CONTENT_QUERY_KEY } from "./useGetContent";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
 export const CONTENTS_QUERY_KEY = (): QueryKey => ["CONTENTS"];
 
