@@ -10,6 +10,7 @@ export interface CreateChannel {
   name: string;
   description?: string;
   visible: boolean;
+  groupId?: string;
 }
 
 export interface CreateChannelParams extends MutationParams {

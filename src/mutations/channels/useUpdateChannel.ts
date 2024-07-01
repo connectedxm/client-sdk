@@ -11,6 +11,7 @@ export interface UpdateChannel {
   description?: string;
   visible?: boolean;
   slug?: string;
+  groupId?: string;
 }
 
 export interface UpdateChannelParams extends MutationParams {
