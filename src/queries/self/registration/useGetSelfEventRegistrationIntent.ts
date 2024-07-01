@@ -3,61 +3,49 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../../useConnectedSingleQuery";
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
-import { ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
-export interface CheckoutResponse {
-  type: "stripe" | "paypal";
-  connectionId: string;
-  intentId: string;
-  secret: string;
-}
-
-export const SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY = (
+export const SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY = (
   eventId: string,
   registrationId: string
-) => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
-  registrationId,
-  "CHECKOUT",
-];
+) => [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), registrationId, "INTENT"];
 
-export interface GetSelfEventRegistrationCheckoutProps
-  extends SingleQueryParams {
+export interface GetSelfEventRegistrationIntentProps extends SingleQueryParams {
   eventId: string;
   registrationId: string;
 }
 
-export const GetSelfEventRegistrationCheckout = async ({
+export const GetSelfEventRegistrationIntent = async ({
   eventId,
   registrationId,
   clientApiParams,
-}: GetSelfEventRegistrationCheckoutProps): Promise<
-  Awaited<ConnectedXMResponse<CheckoutResponse>>
+}: GetSelfEventRegistrationIntentProps): Promise<
+  Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/draft/checkout`
+    `/self/events/${eventId}/registration/${registrationId}/draft/intent`
   );
   return data;
 };
 
-export const useGetSelfEventRegistrationCheckout = (
+export const useGetSelfEventRegistrationIntent = (
   eventId: string,
   registrationId: string = "",
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationCheckout>
+    ReturnType<typeof GetSelfEventRegistrationIntent>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationCheckout>
+    ReturnType<typeof GetSelfEventRegistrationIntent>
   >(
-    SELF_EVENT_REGISTRATION_CHECKOUT_QUERY_KEY(eventId, registrationId),
+    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, registrationId),
     (params) =>
-      GetSelfEventRegistrationCheckout({ eventId, registrationId, ...params }),
+      GetSelfEventRegistrationIntent({ eventId, registrationId, ...params }),
     {
       staleTime: Infinity,
       retry: false,
