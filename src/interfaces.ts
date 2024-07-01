@@ -499,6 +499,7 @@ export interface BaseRegistrationSection {
 export interface RegistrationSection extends BaseRegistrationSection {
   accountTiers: BaseAccountTier[];
   eventTickets: BaseTicket[];
+  eventAddOns: BaseEventAddOn[];
   questions: RegistrationQuestion[];
 }
 
@@ -1111,18 +1112,11 @@ export const isTypeGroupMembership = (
   );
 };
 
-export enum ChannelFormat {
-  article = "article",
-  podcast = "podcast",
-  video = "video",
-}
-
 export interface BaseChannel {
   id: string;
   slug: string;
   name: string;
   description: string | null;
-  format: ChannelFormat;
   image: BaseImage;
 }
 
@@ -1142,11 +1136,44 @@ export const isTypeChannel = (
   return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
 
+export interface BaseChannelSubscription {
+  channelId: string;
+  accountId: string;
+  contentEmailNotification: boolean;
+  contentPushNotification: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface ChannelSubscription extends BaseChannelSubscription {
+  channel: BaseChannel;
+  account: BaseAccount;
+}
+
+export interface BaseChannelCollection {
+  id: string;
+  slug: string;
+  channelId: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChannelCollection extends BaseChannelCollection {}
+
+export enum ContentType {
+  article = "article",
+  podcast = "podcast",
+  video = "video",
+}
+
 export interface BaseContent {
   id: string;
   featured: boolean;
   slug: string;
   title: string | null;
+  type: ContentType;
   description: string | null;
   imageUrl: string | null;
   audioUrl: string | null;
