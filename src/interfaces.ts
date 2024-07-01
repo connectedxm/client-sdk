@@ -499,6 +499,7 @@ export interface BaseRegistrationSection {
 export interface RegistrationSection extends BaseRegistrationSection {
   accountTiers: BaseAccountTier[];
   eventTickets: BaseTicket[];
+  eventAddOns: BaseEventAddOn[];
   questions: RegistrationQuestion[];
 }
 
