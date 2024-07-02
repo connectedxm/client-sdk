@@ -5,12 +5,10 @@ import {
   GetBaseInfiniteQueryKeys,
   setFirstPageData,
   InfiniteQueryOptions,
-} from "../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
+} from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
 export const CONTENTS_QUERY_KEY = (): QueryKey => ["CONTENTS"];
 
@@ -36,9 +34,7 @@ export const GetContents = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetContentsParams): Promise<ConnectedXMResponse<Content[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/contents`, {
@@ -49,15 +45,6 @@ export const GetContents = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (contentId) => CONTENT_QUERY_KEY(contentId),
-      locale
-    );
-  }
 
   return data;
 };

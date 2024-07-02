@@ -2,7 +2,7 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "../useConnectedSingleQuery";
 import { Content } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
@@ -17,7 +17,7 @@ export const CONTENT_QUERY_KEY = (contentId: string): QueryKey => [
 export const SET_CONTENT_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof CONTENT_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannelContent>>,
+  response: Awaited<ReturnType<typeof GetContent>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
@@ -29,36 +29,30 @@ export const SET_CONTENT_QUERY_DATA = (
   );
 };
 
-export interface GetChannelContentParams extends SingleQueryParams {
-  channelId: string;
+export interface GetContentParams extends SingleQueryParams {
   contentId: string;
 }
 
-export const GetChannelContent = async ({
+export const GetContent = async ({
   contentId,
-  channelId,
   clientApiParams,
-}: GetChannelContentParams): Promise<ConnectedXMResponse<Content>> => {
+}: GetContentParams): Promise<ConnectedXMResponse<Content>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(
-    `/channels/${channelId}/contents/${contentId}`
-  );
+  const { data } = await clientApi.get(`/contents/${contentId}`);
 
   return data;
 };
 
-export const useGetChannelContent = (
-  channelId: string = "",
+export const useGetContent = (
   contentId: string = "",
-  options: SingleQueryOptions<ReturnType<typeof GetChannelContent>> = {}
+  options: SingleQueryOptions<ReturnType<typeof GetContent>> = {}
 ) => {
-  return useConnectedSingleQuery<ReturnType<typeof GetChannelContent>>(
+  return useConnectedSingleQuery<ReturnType<typeof GetContent>>(
     CONTENT_QUERY_KEY(contentId),
-    (params: SingleQueryParams) =>
-      GetChannelContent({ contentId, channelId, ...params }),
+    (params: SingleQueryParams) => GetContent({ contentId, ...params }),
     {
       ...options,
-      enabled: !!channelId && !!contentId && options.enabled,
+      enabled: !!contentId && options.enabled,
     }
   );
 };

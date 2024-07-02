@@ -1,4 +1,4 @@
-import { ContentGuest } from "@interfaces";
+import { Interest } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
@@ -7,19 +7,22 @@ import {
 import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CONTENT_QUERY_KEY } from "./useGetChannelContent";
+import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
-export const CONTENT_GUESTS_QUERY_KEY = (contentId: string): QueryKey => [
-  CONTENT_QUERY_KEY(contentId),
-  "CONTENTS",
+export const CHANNEL_CONTENT_INTERESTS_QUERY_KEY = (
+  channelId: string,
+  contentId: string
+): QueryKey => [
+  ...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+  "INTERESTS",
 ];
 
-export interface GetChannelContentGuestsParams extends InfiniteQueryParams {
+export interface GetChannelContentInterestsParams extends InfiniteQueryParams {
   channelId: string;
   contentId: string;
 }
 
-export const GetChannelContentGuests = async ({
+export const GetChannelContentInterests = async ({
   channelId,
   contentId,
   pageParam,
@@ -27,12 +30,12 @@ export const GetChannelContentGuests = async ({
   orderBy,
   search,
   clientApiParams,
-}: GetChannelContentGuestsParams): Promise<
-  ConnectedXMResponse<ContentGuest[]>
+}: GetChannelContentInterestsParams): Promise<
+  ConnectedXMResponse<Interest[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/channels/${channelId}/contents/${contentId}/guests`,
+    `/channels/${channelId}/contents/${contentId}/interests`,
     {
       params: {
         page: pageParam || undefined,
@@ -46,7 +49,7 @@ export const GetChannelContentGuests = async ({
   return data;
 };
 
-export const useGetChannelContentGuests = (
+export const useGetChannelContentInterests = (
   channelId: string,
   contentId: string,
   params: Omit<
@@ -54,15 +57,15 @@ export const useGetChannelContentGuests = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetChannelContentGuests>>
+    Awaited<ReturnType<typeof GetChannelContentInterests>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetChannelContentGuests>>
+    Awaited<ReturnType<typeof GetChannelContentInterests>>
   >(
-    CONTENT_GUESTS_QUERY_KEY(contentId),
+    CHANNEL_CONTENT_INTERESTS_QUERY_KEY(channelId, contentId),
     (params: InfiniteQueryParams) =>
-      GetChannelContentGuests({ channelId, contentId, ...params }),
+      GetChannelContentInterests({ channelId, contentId, ...params }),
     params,
     {
       ...options,
