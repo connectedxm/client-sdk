@@ -35,7 +35,6 @@ export const SET_THREADS_QUERY_DATA = (
 
 export interface GetThreadsProps extends InfiniteQueryParams {
   access?: "public" | "private";
-  accountId?: string;
   groupId?: string;
   eventId?: string;
 }
@@ -48,7 +47,6 @@ export const GetThreads = async ({
   access,
   groupId,
   eventId,
-  accountId,
   search,
   locale,
   clientApiParams,
@@ -63,7 +61,6 @@ export const GetThreads = async ({
       access: access || undefined,
       groupId: groupId || undefined,
       eventId: eventId || undefined,
-      accountId: accountId || undefined,
     },
   });
 
@@ -81,6 +78,8 @@ export const GetThreads = async ({
 
 export const useGetThreads = (
   access: "public" | "private" = "public",
+  groupId?: string,
+  eventId?: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -89,7 +88,8 @@ export const useGetThreads = (
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreads>>>(
     THREADS_QUERY_KEY(access),
-    (params: InfiniteQueryParams) => GetThreads({ access, ...params }),
+    (params: InfiniteQueryParams) =>
+      GetThreads({ access, groupId, eventId, ...params }),
     params,
     {
       ...options,
