@@ -11,7 +11,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CHANNEL_QUERY_KEY } from "../useGetChannel";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CONTENT_QUERY_KEY } from "./useGetChannelContent";
+import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
 export const CHANNEL_CONTENTS_QUERY_KEY = (channelId: string): QueryKey => [
   ...CHANNEL_QUERY_KEY(channelId),
@@ -60,7 +60,7 @@ export const GetChannelContents = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (contentId) => CONTENT_QUERY_KEY(contentId),
+      (contentId) => CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
       locale
     );
   }
