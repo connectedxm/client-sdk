@@ -21,19 +21,20 @@ interface CreateThread {
   imageId?: string;
   eventId?: string;
   groupId?: string;
+  featured?: boolean;
   access: keyof typeof ThreadAccessLevel;
 }
 
 export interface CreateThreadParams extends MutationParams {
   thread: CreateThread;
-  imageDataUri?: string;
   accountIds: string[];
+  firstMessage: string;
 }
 
 export const CreateThread = async ({
   thread,
   accountIds,
-  imageDataUri,
+  firstMessage,
   clientApiParams,
   queryClient,
 }: CreateThreadParams): Promise<ConnectedXMResponse<Thread>> => {
@@ -43,7 +44,7 @@ export const CreateThread = async ({
     {
       thread,
       accountIds,
-      imageDataUri,
+      firstMessage,
     }
   );
 
