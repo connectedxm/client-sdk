@@ -87,7 +87,7 @@ export const SelfCreateActivity = async ({
       );
     }
 
-    if (data.data.content?.channel.id) {
+    if (data.data.content) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
