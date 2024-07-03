@@ -1968,3 +1968,8 @@ export interface OrganizationOAuth {
   textColor: string;
   borderColor?: string;
 }
+
+export enum ThreadAccessLevel {
+  public = "public",
+  private = "private",
+}
