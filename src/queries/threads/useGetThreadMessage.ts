@@ -60,6 +60,7 @@ export const useGetThreadMessage = (
     THREAD_MESSAGE_QUERY_KEY(threadId, messageId),
     (params) => GetThreadMessage({ threadId, messageId, ...params }),
     {
+      staleTime: Infinity,
       ...options,
       enabled: !!threadId && (options?.enabled ?? true),
     }

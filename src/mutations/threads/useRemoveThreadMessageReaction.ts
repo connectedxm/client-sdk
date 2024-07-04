@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries";
+import { THREAD_MESSAGE_QUERY_KEY } from "@src/queries";
 
 export interface RemoveThreadMessageReactionParams extends MutationParams {
   threadId: string;
@@ -29,7 +29,7 @@ export const RemoveThreadMessageReaction = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: THREAD_MESSAGES_QUERY_KEY(threadId),
+      queryKey: THREAD_MESSAGE_QUERY_KEY(threadId, messageId),
     });
   }
 

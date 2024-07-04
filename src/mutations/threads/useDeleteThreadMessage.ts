@@ -1,10 +1,15 @@
 import { GetClientAPI } from "@src/ClientAPI";
-import { ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse, ThreadMessage } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries";
+import {
+  GetBaseInfiniteQueryKeys,
+  THREAD_MESSAGES_QUERY_KEY,
+} from "@src/queries";
+import { InfiniteData } from "@tanstack/react-query";
+import { produce } from "immer";
 
 export interface DeleteThreadMessageParams extends MutationParams {
   threadId: string;
@@ -30,9 +35,23 @@ export const DeleteThreadMessage = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.invalidateQueries({
-      queryKey: THREAD_MESSAGES_QUERY_KEY(threadId),
-    });
+    queryClient.setQueryData(
+      [
+        ...THREAD_MESSAGES_QUERY_KEY(threadId),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ],
+      (oldData: InfiniteData<ConnectedXMResponse<ThreadMessage[]>>) => {
+        if (!oldData) return oldData;
+        return produce(oldData, (draft) => {
+          draft.pages.forEach((page) => {
+            const index = page.data.findIndex((m) => m.id === messageId);
+            if (index !== -1) {
+              page.data.splice(index, 1);
+            }
+          });
+        });
+      }
+    );
   }
 
   return data;
