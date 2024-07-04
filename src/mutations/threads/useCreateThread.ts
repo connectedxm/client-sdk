@@ -8,11 +8,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
-import {
-  THREADS_QUERY_KEY,
-  SET_THREAD_QUERY_DATA,
-  ADD_SELF_RELATIONSHIP,
-} from "@src/queries";
+import { THREADS_QUERY_KEY, SET_THREAD_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 interface CreateThread {
@@ -53,13 +49,6 @@ export const CreateThread = async ({
     queryClient.invalidateQueries({
       queryKey: THREADS_QUERY_KEY(),
     });
-    ADD_SELF_RELATIONSHIP(
-      queryClient,
-      [clientApiParams.locale],
-      "threads",
-      data.data.id,
-      "moderator"
-    );
   }
 
   return data;
