@@ -10,6 +10,8 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { THREAD_QUERY_KEY, SET_THREAD_QUERY_DATA } from "./useGetThread";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
+import { CacheIndividualQueries } from "@src/utilities";
+import { THREAD_MESSAGE_QUERY_KEY } from "./useGetThreadMessage";
 
 export const THREAD_MESSAGES_QUERY_KEY = (
   threadId: string,
@@ -43,6 +45,7 @@ export const GetThreadMessages = async ({
   search,
   queryClient,
   clientApiParams,
+  locale,
 }: GetThreadMessagesProps): Promise<ConnectedXMResponse<ThreadMessage[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/threads/${threadId}/messages`, {
@@ -55,6 +58,12 @@ export const GetThreadMessages = async ({
   });
 
   if (queryClient && data.status === "ok") {
+    CacheIndividualQueries(
+      data,
+      queryClient,
+      (messageId) => THREAD_MESSAGE_QUERY_KEY(threadId, messageId),
+      locale
+    );
     SET_THREAD_QUERY_DATA(queryClient, [threadId], (old) => ({
       ...old,
       data: {
@@ -87,6 +96,7 @@ export const useGetThreadMessages = (
       GetThreadMessages({ ...params, threadId }),
     params,
     {
+      refetchInterval: 5 * 1000,
       ...options,
       enabled: !!authenticated && !!threadId && (options?.enabled ?? true),
     }
