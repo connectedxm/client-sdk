@@ -9,17 +9,22 @@ import { THREAD_MEMBERS_QUERY_KEY } from "@src/queries";
 export interface AddThreadMemberParams extends MutationParams {
   threadId: string;
   accountId: string;
+  role: "moderator" | "member";
 }
 
 export const AddThreadMember = async ({
   threadId,
   accountId,
+  role,
   clientApiParams,
   queryClient,
 }: AddThreadMemberParams): Promise<ConnectedXMResponse<ThreadMember>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<ThreadMember>>(
-    `/threads/${threadId}/members/${accountId}`
+    `/threads/${threadId}/members/${accountId}`,
+    {
+      role,
+    }
   );
 
   if (queryClient && data.status === "ok") {
