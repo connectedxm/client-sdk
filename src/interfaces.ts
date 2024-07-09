@@ -1175,9 +1175,10 @@ export interface BaseContent {
   title: string | null;
   type: ContentType;
   description: string | null;
-  imageUrl: string | null;
+  image: BaseImage | null;
   audioUrl: string | null;
-  videoUrl: string | null;
+  audio: BaseFile | null;
+  video: BaseVideo | null;
   duration: string | null;
   channel: BaseChannel;
   published: string | null;
