@@ -704,6 +704,7 @@ export interface BaseCoupon {
   code: string;
   discountAmount: number;
   discountPercent: number;
+  ticket: BaseTicket | null;
 }
 
 export enum CouponType {
@@ -713,7 +714,6 @@ export enum CouponType {
 
 export interface Coupon extends BaseCoupon {
   description: string | null;
-  ticket: BaseTicket | null;
 }
 
 export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
