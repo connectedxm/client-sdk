@@ -11,7 +11,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { CHANNEL_QUERY_KEY } from "./useGetChannel";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
+import { CHANNEL_CONTENT_QUERY_KEY } from "./contents";
 
 export const CHANNEL_SUBSCRIBERS_QUERY_KEY = (channelId: string): QueryKey => [
   ...CHANNEL_QUERY_KEY(channelId),

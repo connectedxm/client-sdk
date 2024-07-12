@@ -7,12 +7,12 @@ import {
 import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
+import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
-export const CONTENT_GUESTS_QUERY_KEY = (contentId: string): QueryKey => [
-  CONTENT_QUERY_KEY(contentId),
-  "CONTENTS",
-];
+export const CHANNEL_CONTENT_GUESTS_QUERY_KEY = (
+  channelId: string,
+  contentId: string
+): QueryKey => [CHANNEL_CONTENT_QUERY_KEY(channelId, contentId), "CONTENTS"];
 
 export interface GetChannelContentGuestsParams extends InfiniteQueryParams {
   channelId: string;
@@ -60,7 +60,7 @@ export const useGetChannelContentGuests = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetChannelContentGuests>>
   >(
-    CONTENT_GUESTS_QUERY_KEY(contentId),
+    CHANNEL_CONTENT_GUESTS_QUERY_KEY(channelId, contentId),
     (params: InfiniteQueryParams) =>
       GetChannelContentGuests({ channelId, contentId, ...params }),
     params,

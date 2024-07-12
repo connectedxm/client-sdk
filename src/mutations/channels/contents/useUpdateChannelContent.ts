@@ -7,13 +7,14 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import {
   CHANNEL_CONTENTS_QUERY_KEY,
-  CONTENTS_QUERY_KEY,
   MANAGED_CHANNEL_CONTENTS_QUERY_KEY,
-  SET_CONTENT_QUERY_DATA,
+  SET_CHANNEL_CONTENT_QUERY_DATA,
   SET_MANAGED_CHANNEL_CONTENT_QUERY_DATA,
 } from "@src/queries";
+import { SET_CONTENT_QUERY_DATA } from "@src/queries/contents/useGetContent";
+import { CONTENTS_QUERY_KEY } from "@src/queries/contents/useGetContents";
 
-export interface UpdateContent {
+export interface UpdateChannelContent {
   type?: ContentType;
   visible?: boolean;
   title?: string;
@@ -30,21 +31,21 @@ export interface UpdateContent {
   slug?: string;
 }
 
-export interface UpdateContentParams extends MutationParams {
+export interface UpdateChannelContentParams extends MutationParams {
   channelId: string;
   contentId: string;
-  content: UpdateContent;
+  content: UpdateChannelContent;
   imageDataUri?: string;
 }
 
-export const UpdateContent = async ({
+export const UpdateChannelContent = async ({
   channelId,
   contentId,
   content,
   imageDataUri,
   clientApiParams,
   queryClient,
-}: UpdateContentParams): Promise<ConnectedXMResponse<Content>> => {
+}: UpdateChannelContentParams): Promise<ConnectedXMResponse<Content>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Content>>(
     `/channels/${channelId}/contents/${contentId}`,
@@ -55,15 +56,18 @@ export const UpdateContent = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_CONTENT_QUERY_DATA(queryClient, [contentId], data, [
-      clientApiParams.locale,
-    ]);
     SET_MANAGED_CHANNEL_CONTENT_QUERY_DATA(
       queryClient,
       [channelId, contentId],
       data,
       [clientApiParams.locale]
     );
+    SET_CHANNEL_CONTENT_QUERY_DATA(queryClient, [channelId, contentId], data, [
+      clientApiParams.locale,
+    ]);
+    SET_CONTENT_QUERY_DATA(queryClient, [contentId], data, [
+      clientApiParams.locale,
+    ]);
     queryClient.invalidateQueries({
       queryKey: MANAGED_CHANNEL_CONTENTS_QUERY_KEY(channelId),
     });
@@ -78,17 +82,17 @@ export const UpdateContent = async ({
   return data;
 };
 
-export const useUpdateContent = (
+export const useUpdateChannelContent = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateContent>>,
-      Omit<UpdateContentParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof UpdateChannelContent>>,
+      Omit<UpdateChannelContentParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateContentParams,
-    Awaited<ReturnType<typeof UpdateContent>>
-  >(UpdateContent, options);
+    UpdateChannelContentParams,
+    Awaited<ReturnType<typeof UpdateChannelContent>>
+  >(UpdateChannelContent, options);
 };

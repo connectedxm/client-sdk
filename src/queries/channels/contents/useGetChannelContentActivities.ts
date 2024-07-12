@@ -12,11 +12,15 @@ import { ACTIVITY_QUERY_KEY } from "../../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACTIVITIES_QUERY_KEY } from "../../activities";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
+import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
 export const CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
+  channelId: string,
   contentId: string
-): QueryKey => [...ACTIVITIES_QUERY_KEY(), ...CONTENT_QUERY_KEY(contentId)];
+): QueryKey => [
+  ...ACTIVITIES_QUERY_KEY(),
+  ...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+];
 
 export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (
   client: QueryClient,
@@ -89,7 +93,7 @@ export const useGetChannelContentActivities = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetChannelContentActivities>>
   >(
-    CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(contentId),
+    CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(channelId, contentId),
     (params: InfiniteQueryParams) =>
       GetChannelContentActivities({ channelId, contentId, ...params }),
     params,

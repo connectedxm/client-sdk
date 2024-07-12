@@ -3,6 +3,6 @@ export * from "./interests";
 export * from "./likes";
 export * from "./schedule";
 
-export * from "./useCreateContent";
-export * from "./useUpdateContent";
-export * from "./useDeleteContent";
+export * from "./useCreateChannelContent";
+export * from "./useUpdateChannelContent";
+export * from "./useDeleteChannelContent";

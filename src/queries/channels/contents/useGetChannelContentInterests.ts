@@ -7,11 +7,15 @@ import {
 import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
+import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
 export const CHANNEL_CONTENT_INTERESTS_QUERY_KEY = (
+  channelId: string,
   contentId: string
-): QueryKey => [...CONTENT_QUERY_KEY(contentId), "INTERESTS"];
+): QueryKey => [
+  ...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+  "INTERESTS",
+];
 
 export interface GetChannelContentInterestsParams extends InfiniteQueryParams {
   channelId: string;
@@ -59,7 +63,7 @@ export const useGetChannelContentInterests = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetChannelContentInterests>>
   >(
-    CHANNEL_CONTENT_INTERESTS_QUERY_KEY(contentId),
+    CHANNEL_CONTENT_INTERESTS_QUERY_KEY(channelId, contentId),
     (params: InfiniteQueryParams) =>
       GetChannelContentInterests({ channelId, contentId, ...params }),
     params,
