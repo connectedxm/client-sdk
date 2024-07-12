@@ -569,6 +569,7 @@ export interface BaseTicket {
   minReservationEnd: string | null;
   reservationEnd: string | null;
   maxReservationEnd: string | null;
+  priceSchedules: BaseTicketPriceSchedule[];
 }
 
 export interface Ticket extends BaseTicket {
@@ -576,6 +577,18 @@ export interface Ticket extends BaseTicket {
   active: boolean;
   event: BaseEvent;
 }
+
+export interface BaseTicketPriceSchedule {
+  id: string;
+  ticketId: string;
+  price: number;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TicketPriceSchedule extends BaseTicketPriceSchedule {}
 
 export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
