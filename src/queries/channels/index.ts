@@ -3,5 +3,5 @@ export * from "./contents";
 
 export * from "./useGetChannel";
 export * from "./useGetChannels";
-export * from "./useGetChannelSubscriptions";
+export * from "./useGetChannelSubscribers";
 export * from "./useGetChannelInterests";

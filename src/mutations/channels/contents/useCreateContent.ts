@@ -5,6 +5,7 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import { MANAGED_CHANNEL_CONTENTS_QUERY_KEY } from "@src/queries";
 
 export interface CreateContent {
   type: ContentType;
@@ -29,12 +30,19 @@ export const CreateContent = async ({
   channelId,
   content,
   clientApiParams,
+  queryClient,
 }: CreateContentParams): Promise<ConnectedXMResponse<Content>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Content>>(
     `/channels/${channelId}/contents`,
     content
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: MANAGED_CHANNEL_CONTENTS_QUERY_KEY(channelId),
+    });
+  }
 
   return data;
 };

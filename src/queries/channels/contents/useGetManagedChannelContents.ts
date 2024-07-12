@@ -1,4 +1,4 @@
-import { Activity } from "@interfaces";
+import { Content } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
@@ -8,52 +8,49 @@ import {
 } from "../../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { ACTIVITY_QUERY_KEY } from "../../activities/useGetActivity";
+import { CHANNEL_QUERY_KEY } from "../useGetChannel";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACTIVITIES_QUERY_KEY } from "../../activities";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
+import { MANAGED_CHANNEL_CONTENT_QUERY_KEY } from "./useGetManagedChannelContent";
 
-export const CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
-  contentId: string
-): QueryKey => [...ACTIVITIES_QUERY_KEY(), ...CONTENT_QUERY_KEY(contentId)];
+export const MANAGED_CHANNEL_CONTENTS_QUERY_KEY = (
+  channelId: string
+): QueryKey => [...CHANNEL_QUERY_KEY(channelId), "CONTENTS", "MANAGED"];
 
-export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (
+export const SET_MANAGED_CHANNEL_CONTENTS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannelContentActivities>>,
+  keyParams: Parameters<typeof MANAGED_CHANNEL_CONTENTS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetManagedChannelContents>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(...keyParams),
+      ...MANAGED_CHANNEL_CONTENTS_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetChannelContentActivitiesParams extends InfiniteQueryParams {
+export interface GetManagedChannelContentsParams extends InfiniteQueryParams {
   channelId: string;
-  contentId: string;
 }
 
-export const GetChannelContentActivities = async ({
-  channelId,
-  contentId,
+export const GetManagedChannelContents = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
+  channelId,
   queryClient,
   clientApiParams,
   locale,
-}: GetChannelContentActivitiesParams): Promise<
-  ConnectedXMResponse<Activity[]>
+}: GetManagedChannelContentsParams): Promise<
+  ConnectedXMResponse<Content[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/channels/${channelId}/contents/${contentId}/activities`,
+    `/channels/${channelId}/manage/contents`,
     {
       params: {
         page: pageParam || undefined,
@@ -67,7 +64,7 @@ export const GetChannelContentActivities = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
+      (contentId) => MANAGED_CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
       locale
     );
   }
@@ -75,27 +72,26 @@ export const GetChannelContentActivities = async ({
   return data;
 };
 
-export const useGetChannelContentActivities = (
+export const useGetManagedChannelContents = (
   channelId: string = "",
-  contentId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetChannelContentActivities>>
+    Awaited<ReturnType<typeof GetManagedChannelContents>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetChannelContentActivities>>
+    Awaited<ReturnType<typeof GetManagedChannelContents>>
   >(
-    CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(contentId),
+    MANAGED_CHANNEL_CONTENTS_QUERY_KEY(channelId),
     (params: InfiniteQueryParams) =>
-      GetChannelContentActivities({ channelId, contentId, ...params }),
+      GetManagedChannelContents({ ...params, channelId: channelId || "" }),
     params,
     {
       ...options,
-      enabled: !!channelId && !!contentId && (options?.enabled ?? true),
+      enabled: !!channelId && (options?.enabled ?? true),
     }
   );
 };

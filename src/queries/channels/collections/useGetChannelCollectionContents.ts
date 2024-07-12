@@ -9,7 +9,7 @@ import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_COLLECTION_QUERY_KEY } from "./useGetChannelCollection";
-import { CONTENT_QUERY_KEY } from "../contents";
+import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
 
 export const CHANNEL_COLLECTION_CONTENTS_QUERY_KEY = (
   channelId: string,

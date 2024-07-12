@@ -1128,6 +1128,7 @@ export interface Channel extends BaseChannel {
   googleUrl: string | null;
   youtubeUrl: string | null;
   hosts: BaseAccount[];
+  group: BaseGroup | null;
 }
 
 export const isTypeChannel = (
@@ -1136,7 +1137,7 @@ export const isTypeChannel = (
   return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
 
-export interface BaseChannelSubscription {
+export interface BaseChannelSubscriber {
   channelId: string;
   accountId: string;
   contentEmailNotification: boolean;
@@ -1145,7 +1146,7 @@ export interface BaseChannelSubscription {
   createdAt: string;
 }
 
-export interface ChannelSubscription extends BaseChannelSubscription {
+export interface ChannelSubscriber extends BaseChannelSubscriber {
   channel: BaseChannel;
   account: BaseAccount;
 }
@@ -1175,12 +1176,13 @@ export interface BaseContent {
   title: string | null;
   type: ContentType;
   description: string | null;
-  imageUrl: string | null;
-  audioUrl: string | null;
-  videoUrl: string | null;
+  image: BaseImage | null;
+  audio: BaseFile | null;
+  video: BaseVideo | null;
   duration: string | null;
   channel: BaseChannel;
   published: string | null;
+  visible: boolean;
 }
 
 export interface Content extends BaseContent {

@@ -1,43 +1,43 @@
-import { Content } from "@interfaces";
+import { ChannelSubscriber } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
   GetBaseInfiniteQueryKeys,
   setFirstPageData,
   InfiniteQueryOptions,
-} from "../../useConnectedInfiniteQuery";
+} from "../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CHANNEL_QUERY_KEY } from "../useGetChannel";
+import { CHANNEL_QUERY_KEY } from "./useGetChannel";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
 
-export const CHANNEL_CONTENTS_QUERY_KEY = (channelId: string): QueryKey => [
+export const CHANNEL_SUBSCRIBERS_QUERY_KEY = (channelId: string): QueryKey => [
   ...CHANNEL_QUERY_KEY(channelId),
-  "CONTENTS",
+  "SUBSCRIBERS",
 ];
 
-export const SET_CHANNEL_CONTENTS_QUERY_DATA = (
+export const SET_CHANNEL_SUBSCRIBERS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof CHANNEL_CONTENTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannelContents>>,
+  keyParams: Parameters<typeof CHANNEL_SUBSCRIBERS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetChannelSubscribers>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...CHANNEL_CONTENTS_QUERY_KEY(...keyParams),
+      ...CHANNEL_SUBSCRIBERS_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetChannelContentsParams extends InfiniteQueryParams {
+export interface GetChannelSubscribersParams extends InfiniteQueryParams {
   channelId: string;
 }
 
-export const GetChannelContents = async ({
+export const GetChannelSubscribers = async ({
   pageParam,
   pageSize,
   orderBy,
@@ -46,9 +46,11 @@ export const GetChannelContents = async ({
   queryClient,
   clientApiParams,
   locale,
-}: GetChannelContentsParams): Promise<ConnectedXMResponse<Content[]>> => {
+}: GetChannelSubscribersParams): Promise<
+  ConnectedXMResponse<ChannelSubscriber[]>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/channels/${channelId}/contents`, {
+  const { data } = await clientApi.get(`/channels/${channelId}/subscribers`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -60,7 +62,7 @@ export const GetChannelContents = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (contentId) => CONTENT_QUERY_KEY(contentId),
+      (contentId) => CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
       locale
     );
   }
@@ -68,22 +70,22 @@ export const GetChannelContents = async ({
   return data;
 };
 
-export const useGetChannelContents = (
+export const useGetChannelSubscribers = (
   channelId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetChannelContents>>
+    Awaited<ReturnType<typeof GetChannelSubscribers>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetChannelContents>>
+    Awaited<ReturnType<typeof GetChannelSubscribers>>
   >(
-    CHANNEL_CONTENTS_QUERY_KEY(channelId),
+    CHANNEL_SUBSCRIBERS_QUERY_KEY(channelId),
     (params: InfiniteQueryParams) =>
-      GetChannelContents({ ...params, channelId: channelId || "" }),
+      GetChannelSubscribers({ ...params, channelId: channelId || "" }),
     params,
     {
       ...options,

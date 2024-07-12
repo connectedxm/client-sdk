@@ -9,8 +9,8 @@ import useConnectedMutation, {
 } from "../../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { CONTENT_QUERY_KEY } from "@src/queries/channels";
-import { CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/contents/useGetChannelContentGuests";
+import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContent";
+import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
 
 export interface UpdateContentGuest {
   id: string;
