@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "20.x"
-      - run: npm ci
+      - run: npm install
       - run: npm run release
 
   publish-npm:
@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - run: npm publish
         env:
@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: https://npm.pkg.github.com/
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - run: npm publish
         env:

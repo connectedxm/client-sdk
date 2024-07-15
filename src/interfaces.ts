@@ -395,14 +395,17 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
+  externalUrl: string | null;
   registration: boolean;
   registrationCount: number;
   registrationLimit: number;
   registrationStart: string;
   registrationEnd: string;
+  tickets: {
+    enableCoupons: boolean;
+  }[];
   _count: {
     sections: number;
-    tickets: number;
     coupons: number;
     addOns: number;
     reservationSections: number;
@@ -570,6 +573,10 @@ export interface BaseTicket {
   minReservationEnd: string | null;
   reservationEnd: string | null;
   maxReservationEnd: string | null;
+  priceSchedules: BaseTicketPriceSchedule[];
+  enableCoupons: boolean;
+  minCouponQuantity: number | null;
+  maxCouponQuantity: number | null;
 }
 
 export interface Ticket extends BaseTicket {
@@ -577,6 +584,18 @@ export interface Ticket extends BaseTicket {
   active: boolean;
   event: BaseEvent;
 }
+
+export interface BaseTicketPriceSchedule {
+  id: string;
+  ticketId: string;
+  price: number;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TicketPriceSchedule extends BaseTicketPriceSchedule {}
 
 export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
@@ -705,6 +724,7 @@ export interface BaseCoupon {
   code: string;
   discountAmount: number;
   discountPercent: number;
+  ticket: BaseTicket | null;
 }
 
 export enum CouponType {
@@ -714,7 +734,6 @@ export enum CouponType {
 
 export interface Coupon extends BaseCoupon {
   description: string | null;
-  ticket: BaseTicket | null;
 }
 
 export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
@@ -723,7 +742,6 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 
 export interface ManagedCoupon extends Coupon {
   active: boolean;
-  type: CouponType;
   startDate: string | null;
   endDate: string | null;
   quantityMin: number;
@@ -731,11 +749,10 @@ export interface ManagedCoupon extends Coupon {
   amountMin: number;
   amountMax: number | null;
   useLimit: number | null;
-  limitOnePerAccount: boolean;
-  studentDiscount: boolean;
+  emailDomains: string | null;
+  createdAt: string;
   _count: {
-    instances: number;
-    uses: number;
+    registrations: number;
   };
 }
 
@@ -1251,6 +1268,7 @@ export interface Registration extends BaseRegistration {
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
   payments: Payment[];
+  coupons: ManagedCoupon[];
   createdAt: string;
 }
 
