@@ -1,5 +1,6 @@
 export * from "./useGetSelfEventRegistration";
 export * from "./useGetSelfEventRegistrationIntent";
+export * from "./useGetSelfEventRegistrationPayment";
 export * from "./useGetSelfEventRegistrationPurchase";
 export * from "./useGetSelfEventRegistrationPurchaseSections";
 export * from "./useGetSelfEventRegistrationPurchaseAddOns";
