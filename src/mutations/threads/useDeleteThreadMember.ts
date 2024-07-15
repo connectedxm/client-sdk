@@ -4,7 +4,11 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { THREAD_MEMBERS_QUERY_KEY } from "@src/queries";
+import {
+  THREAD_MEMBERS_QUERY_KEY,
+  THREAD_QUERY_KEY,
+  THREADS_QUERY_KEY,
+} from "@src/queries";
 
 export interface DeleteThreadMemberParams extends MutationParams {
   threadId: string;
@@ -25,6 +29,12 @@ export const DeleteThreadMember = async ({
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
       queryKey: THREAD_MEMBERS_QUERY_KEY(threadId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: THREADS_QUERY_KEY(),
+    });
+    queryClient.invalidateQueries({
+      queryKey: THREAD_QUERY_KEY(threadId),
     });
   }
 
