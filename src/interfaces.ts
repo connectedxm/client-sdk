@@ -394,14 +394,17 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
+  externalUrl: string | null;
   registration: boolean;
   registrationCount: number;
   registrationLimit: number;
   registrationStart: string;
   registrationEnd: string;
+  tickets: {
+    enableCoupons: boolean;
+  }[];
   _count: {
     sections: number;
-    tickets: number;
     coupons: number;
     addOns: number;
     reservationSections: number;
@@ -570,6 +573,9 @@ export interface BaseTicket {
   reservationEnd: string | null;
   maxReservationEnd: string | null;
   priceSchedules: BaseTicketPriceSchedule[];
+  enableCoupons: boolean;
+  minCouponQuantity: number | null;
+  maxCouponQuantity: number | null;
 }
 
 export interface Ticket extends BaseTicket {
@@ -735,7 +741,6 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 
 export interface ManagedCoupon extends Coupon {
   active: boolean;
-  type: CouponType;
   startDate: string | null;
   endDate: string | null;
   quantityMin: number;
@@ -743,11 +748,10 @@ export interface ManagedCoupon extends Coupon {
   amountMin: number;
   amountMax: number | null;
   useLimit: number | null;
-  limitOnePerAccount: boolean;
-  studentDiscount: boolean;
+  emailDomains: string | null;
+  createdAt: string;
   _count: {
-    instances: number;
-    uses: number;
+    registrations: number;
   };
 }
 
@@ -1263,6 +1267,7 @@ export interface Registration extends BaseRegistration {
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
   payments: Payment[];
+  coupons: ManagedCoupon[];
   createdAt: string;
 }
 
