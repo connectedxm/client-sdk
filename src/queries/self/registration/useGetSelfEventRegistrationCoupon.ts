@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, Registration } from "@src/interfaces";
+import { ConnectedXMResponse, ManagedCoupon } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -45,7 +45,7 @@ export const GetSelfEventRegistrationCoupon = async ({
   couponId,
   clientApiParams,
 }: GetSelfEventRegistrationCouponProps): Promise<
-  ConnectedXMResponse<Registration>
+  ConnectedXMResponse<ManagedCoupon>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(

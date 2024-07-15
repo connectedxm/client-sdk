@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, Coupon } from "@src/interfaces";
+import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
@@ -30,7 +30,7 @@ export const GetSelfEventRegistrationCouponRegistrations = async ({
   couponId,
   clientApiParams,
 }: GetSelfEventRegistrationCouponRegistrationsProps): Promise<
-  ConnectedXMResponse<Coupon[]>
+  ConnectedXMResponse<Registration[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
