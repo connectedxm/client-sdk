@@ -50,7 +50,7 @@ export const GetSelfEventTicketCouponIntent = async ({
 };
 
 export const useGetSelfEventTicketCouponIntent = (
-  eventId: string,
+  eventId: string = "",
   registrationId: string = "",
   ticketId: string = "",
   quantity: number = 0,
@@ -86,6 +86,8 @@ export const useGetSelfEventTicketCouponIntent = (
         !!authenticated &&
         !!eventId &&
         !!registrationId &&
+        !!ticketId &&
+        !!quantity &&
         (options?.enabled ?? true),
     }
   );
