@@ -7,3 +7,5 @@ export * from "./useGetSelfEventRegistrationPurchaseReservationSections";
 export * from "./useGetSelfEventRegistrationStatus";
 export * from "./useGetSelfEventRegistrationPurchaseAddOnsIntent";
 export * from "./useGetSelfEventTicketCouponIntent";
+export * from "./useGetSelfEventRegistrationCoupon";
+export * from "./useGetSelfEventRegistrationCoupons";
