@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { THREAD_MEMBERS_QUERY_KEY } from "@src/queries";
+import { THREAD_MEMBERS_QUERY_KEY, THREAD_QUERY_KEY } from "@src/queries";
 
 export interface UpdateThreadMemberParams extends MutationParams {
   threadId: string;
@@ -30,6 +30,9 @@ export const UpdateThreadMember = async ({
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
       queryKey: THREAD_MEMBERS_QUERY_KEY(threadId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: THREAD_QUERY_KEY(threadId),
     });
   }
 
