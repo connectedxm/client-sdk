@@ -4,21 +4,16 @@ import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
 } from "../../useConnectedSingleQuery";
-import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 
 export const SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY = (
   eventId: string,
-  registrationId: string,
   paymentId: string
 ): QueryKey => [
-  ...SELF_QUERY_KEY(),
-  "EVENT",
-  eventId,
-  "REGISTRATION",
-  registrationId,
+  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
   "PAYMENT",
   paymentId,
 ];
@@ -75,11 +70,7 @@ export const useGetSelfEventRegistrationPayment = (
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationPayment>
   >(
-    SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY(
-      eventId,
-      registrationId,
-      paymentId
-    ),
+    SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY(eventId, paymentId),
     (params: SingleQueryParams) =>
       GetSelfEventRegistrationPayment({
         eventId,
