@@ -721,9 +721,24 @@ export const isTypeNotification = (
 export interface BaseCoupon {
   id: string;
   code: string;
-  discountAmount: number;
-  discountPercent: number;
+  eventId: string;
+  ticketId: string | null;
   ticket: BaseTicket | null;
+  prePaid: boolean;
+  description: string | null;
+  active: boolean;
+  startDate: string | null;
+  endDate: string | null;
+  discountAmount: number | null;
+  discountPercent: number | null;
+  quantityMin: number | null;
+  quantityMax: number | null;
+  amountMin: number | null;
+  amountMax: number | null;
+  useLimit: number | null;
+  emailDomains: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum CouponType {
@@ -731,9 +746,7 @@ export enum CouponType {
   ticket = "ticket",
 }
 
-export interface Coupon extends BaseCoupon {
-  description: string | null;
-}
+export interface Coupon extends BaseCoupon {}
 
 export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
   return (coupon as Omit<Coupon, keyof BaseCoupon>).description !== undefined;
