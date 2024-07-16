@@ -28,7 +28,7 @@ export const RemoveSelfEventRegistrationCoupon = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/coupon`
+    `/self/events/${eventId}/registration/${registrationId}/cart/coupons`
   );
 
   if (queryClient && data.status === "ok") {

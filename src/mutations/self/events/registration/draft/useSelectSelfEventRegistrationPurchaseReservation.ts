@@ -34,7 +34,7 @@ export const SelectSelfEventRegistrationPurchaseReservation = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/reservations/${locationId}`,
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/reservations/${locationId}`,
     {
       reservationStart: reservationStart,
       reservationEnd: reservationEnd,
