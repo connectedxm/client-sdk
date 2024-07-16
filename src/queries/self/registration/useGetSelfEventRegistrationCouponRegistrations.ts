@@ -2,19 +2,24 @@ import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../../useConnectedInfiniteQuery";
+import { SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY } from "./useGetSelfEventRegistrationCoupon";
 
 export const SELF_EVENT_REGISTRATION_COUPON_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
-  registrationId: string
+  registrationId: string,
+  couponId: string
 ): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, registrationId),
-  "COUPONS",
+  ...SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(
+    eventId,
+    registrationId,
+    couponId
+  ),
+  "REGISTRATIONS",
 ];
 
 export interface GetSelfEventRegistrationCouponRegistrationsProps
@@ -60,7 +65,8 @@ export const useGetSelfEventRegistrationCouponRegistrations = (
   >(
     SELF_EVENT_REGISTRATION_COUPON_REGISTRATIONS_QUERY_KEY(
       eventId,
-      registrationId
+      registrationId,
+      couponId
     ),
     (params: InfiniteQueryParams) =>
       GetSelfEventRegistrationCouponRegistrations({
