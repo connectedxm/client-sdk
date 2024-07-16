@@ -620,6 +620,8 @@ export interface BasePurchase {
   reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
+  couponId: string | null;
+  coupon: BaseCoupon | null;
   createdAt: string;
 }
 
@@ -733,8 +735,6 @@ export interface BaseCoupon {
   discountPercent: number | null;
   quantityMin: number | null;
   quantityMax: number | null;
-  amountMin: number | null;
-  amountMax: number | null;
   useLimit: number | null;
   emailDomains: string | null;
   createdAt: string;
@@ -756,7 +756,7 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 
 export interface ManagedCoupon extends Coupon {
   _count: {
-    registrations: number;
+    purchases: number;
   };
 }
 
@@ -1268,8 +1268,6 @@ export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   status: RegistrationStatus;
-  couponId: string | null;
-  coupon: BaseCoupon | null;
   purchases: BasePurchase[];
   payments: Payment[];
   coupons: ManagedCoupon[];
