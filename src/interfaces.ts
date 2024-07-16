@@ -1294,14 +1294,16 @@ export interface BasePayment {
   id: string;
   type: RegistrationPaymentType;
   chargedAmt: number;
-  ticketId: string | null;
-  ticket: BaseTicket | null;
   last4: string | null;
   stripeId: string | null;
   createdAt: string;
 }
 
-export interface Payment extends BasePayment {}
+export interface Payment extends BasePayment {
+  addOns: BaseEventAddOn[];
+  purchases: BasePurchase[];
+  coupons: BaseCoupon[];
+}
 export interface BaseLead {
   id: string;
   firstName: string | null;
