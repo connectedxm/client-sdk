@@ -589,6 +589,7 @@ export interface BaseTicketPriceSchedule {
   id: string;
   ticketId: string;
   price: number;
+  name: string | null;
   startDate: string;
   endDate: string;
   createdAt: string;
@@ -722,9 +723,23 @@ export const isTypeNotification = (
 export interface BaseCoupon {
   id: string;
   code: string;
-  discountAmount: number;
-  discountPercent: number;
+  eventId: string;
+  ticketId: string | null;
   ticket: BaseTicket | null;
+  prePaid: boolean;
+  active: boolean;
+  startDate: string | null;
+  endDate: string | null;
+  discountAmount: number | null;
+  discountPercent: number | null;
+  quantityMin: number | null;
+  quantityMax: number | null;
+  amountMin: number | null;
+  amountMax: number | null;
+  useLimit: number | null;
+  emailDomains: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum CouponType {
@@ -733,7 +748,7 @@ export enum CouponType {
 }
 
 export interface Coupon extends BaseCoupon {
-  description: string | null;
+  description: string;
 }
 
 export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
@@ -741,16 +756,6 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 };
 
 export interface ManagedCoupon extends Coupon {
-  active: boolean;
-  startDate: string | null;
-  endDate: string | null;
-  quantityMin: number;
-  quantityMax: number | null;
-  amountMin: number;
-  amountMax: number | null;
-  useLimit: number | null;
-  emailDomains: string | null;
-  createdAt: string;
   _count: {
     registrations: number;
   };
@@ -759,7 +764,7 @@ export interface ManagedCoupon extends Coupon {
 export const isManagedCoupon = (
   coupon: BaseCoupon | Coupon | ManagedCoupon
 ): coupon is ManagedCoupon => {
-  return (coupon as Omit<ManagedCoupon, keyof Coupon>).active !== undefined;
+  return (coupon as Omit<ManagedCoupon, keyof Coupon>)._count !== undefined;
 };
 
 export interface ManagedCouponOrder {
