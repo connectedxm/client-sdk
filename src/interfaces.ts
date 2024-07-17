@@ -736,6 +736,7 @@ export interface BaseCoupon {
   quantityMin: number | null;
   quantityMax: number | null;
   useLimit: number | null;
+  purchaseLimit: number | null;
   emailDomains: string | null;
   createdAt: string;
   updatedAt: string;
@@ -772,6 +773,15 @@ export interface ManagedCouponOrder {
   createdAt: string;
   coupon: BaseCoupon | null;
   account: BaseAccount;
+}
+
+export interface ManagedCouponPurchase {
+  id: string;
+  coupon: BaseCoupon;
+  registration: {
+    account: BaseAccount;
+  };
+  createdAt: string;
 }
 
 export interface BaseInstance {
