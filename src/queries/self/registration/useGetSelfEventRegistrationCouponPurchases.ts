@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, Registration } from "@src/interfaces";
+import { ConnectedXMResponse, ManagedCouponPurchase } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
@@ -19,34 +19,34 @@ export const SELF_EVENT_REGISTRATION_COUPON_REGISTRATIONS_QUERY_KEY = (
     registrationId,
     couponId
   ),
-  "REGISTRATIONS",
+  "PURCHASES",
 ];
 
-export interface GetSelfEventRegistrationCouponRegistrationsProps
+export interface GetSelfEventRegistrationCouponPurchasesProps
   extends InfiniteQueryParams {
   eventId: string;
   registrationId: string;
   couponId: string;
 }
 
-export const GetSelfEventRegistrationCouponRegistrations = async ({
+export const GetSelfEventRegistrationCouponPurchases = async ({
   eventId,
   registrationId,
   couponId,
   clientApiParams,
-}: GetSelfEventRegistrationCouponRegistrationsProps): Promise<
-  ConnectedXMResponse<Registration[]>
+}: GetSelfEventRegistrationCouponPurchasesProps): Promise<
+  ConnectedXMResponse<ManagedCouponPurchase[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/coupons/${couponId}/registrations`,
+    `/self/events/${eventId}/registration/${registrationId}/coupons/${couponId}/purchases`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventRegistrationCouponRegistrations = (
+export const useGetSelfEventRegistrationCouponPurchases = (
   eventId: string = "",
   registrationId: string = "",
   couponId: string = "",
@@ -55,13 +55,13 @@ export const useGetSelfEventRegistrationCouponRegistrations = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventRegistrationCouponRegistrations>>
+    Awaited<ReturnType<typeof GetSelfEventRegistrationCouponPurchases>>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventRegistrationCouponRegistrations>>
+    Awaited<ReturnType<typeof GetSelfEventRegistrationCouponPurchases>>
   >(
     SELF_EVENT_REGISTRATION_COUPON_REGISTRATIONS_QUERY_KEY(
       eventId,
@@ -69,7 +69,7 @@ export const useGetSelfEventRegistrationCouponRegistrations = (
       couponId
     ),
     (params: InfiniteQueryParams) =>
-      GetSelfEventRegistrationCouponRegistrations({
+      GetSelfEventRegistrationCouponPurchases({
         eventId,
         registrationId,
         couponId,

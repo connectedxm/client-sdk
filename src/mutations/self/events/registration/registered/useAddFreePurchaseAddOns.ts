@@ -22,7 +22,7 @@ export const AddFreePurchaseAddOns = async ({
 }: AddFreePurchaseAddOnsParams): Promise<ConnectedXMResponse<Transfer>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
-    `/self/events/${eventId}/registration/${registrationId}/registered/purchases/${purchaseId}/addOns/free`,
+    `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/addOns/free`,
     {
       addOnIds,
     }

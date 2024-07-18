@@ -50,7 +50,7 @@ export const GetSelfEventRegistrationPayment = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/registered/payments/${paymentId}`,
+    `/self/events/${eventId}/registration/${registrationId}/payments/${paymentId}`,
     {}
   );
 
