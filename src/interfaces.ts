@@ -588,6 +588,7 @@ export interface BaseTicketPriceSchedule {
   id: string;
   ticketId: string;
   price: number;
+  name: string | null;
   startDate: string;
   endDate: string;
   createdAt: string;
