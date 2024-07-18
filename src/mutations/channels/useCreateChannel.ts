@@ -28,7 +28,7 @@ export const CreateChannel = async ({
     `/channels`,
     {
       channel,
-      image: imageDataUri || undefined,
+      imageDataUri: imageDataUri || undefined,
     }
   );
 

@@ -5,13 +5,19 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import { SET_CHANNEL_QUERY_DATA } from "@src/queries";
 
 export interface UpdateChannel {
   name?: string;
   description?: string;
   visible?: boolean;
   slug?: string;
-  groupId?: string;
+  groupId?: string | null;
+  externalUrl?: string | null;
+  appleUrl?: string | null;
+  spotifyUrl?: string | null;
+  googleUrl?: string | null;
+  youtubeUrl?: string | null;
 }
 
 export interface UpdateChannelParams extends MutationParams {
@@ -25,15 +31,20 @@ export const UpdateChannel = async ({
   channel,
   imageDataUri,
   clientApiParams,
+  queryClient,
 }: UpdateChannelParams): Promise<ConnectedXMResponse<Channel>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Channel>>(
     `/channels/${channelId}`,
     {
       channel,
-      image: imageDataUri || undefined,
+      imageDataUri: imageDataUri || undefined,
     }
   );
+
+  if (queryClient && data.status === "ok") {
+    SET_CHANNEL_QUERY_DATA(queryClient, [channelId], data);
+  }
 
   return data;
 };

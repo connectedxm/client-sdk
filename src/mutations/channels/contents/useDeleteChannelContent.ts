@@ -6,16 +6,16 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface DeleteContentParams extends MutationParams {
+export interface DeleteChannelContentParams extends MutationParams {
   channelId: string;
   contentId: string;
 }
 
-export const DeleteContent = async ({
+export const DeleteChannelContent = async ({
   channelId,
   contentId,
   clientApiParams,
-}: DeleteContentParams): Promise<ConnectedXMResponse<null>> => {
+}: DeleteChannelContentParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/channels/${channelId}/contents/${contentId}`
@@ -24,17 +24,17 @@ export const DeleteContent = async ({
   return data;
 };
 
-export const useDeleteContent = (
+export const useDeleteChannelContent = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof DeleteContent>>,
-      Omit<DeleteContentParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof DeleteChannelContent>>,
+      Omit<DeleteChannelContentParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    DeleteContentParams,
-    Awaited<ReturnType<typeof DeleteContent>>
-  >(DeleteContent, options);
+    DeleteChannelContentParams,
+    Awaited<ReturnType<typeof DeleteChannelContent>>
+  >(DeleteChannelContent, options);
 };

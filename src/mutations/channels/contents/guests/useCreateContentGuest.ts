@@ -9,7 +9,8 @@ import useConnectedMutation, {
 } from "../../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries/channels";
+import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries";
+import { CONTENT_QUERY_KEY } from "@src/queries/contents/useGetContent";
 import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
 
 export interface CreateContentGuest {
@@ -56,6 +57,9 @@ export const CreateContentGuest = async ({
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
       queryKey: CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: CONTENT_QUERY_KEY(contentId),
     });
     queryClient.invalidateQueries({
       queryKey: CHANNEL_CONTENT_GUESTS_QUERY_KEY(channelId, contentId),
