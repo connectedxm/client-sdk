@@ -12,27 +12,29 @@ import {
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface SelectSelfEventRegistrationCouponParams
-  extends MutationParams {
+export interface AddSelfEventRegistrationPurchaseParams extends MutationParams {
   eventId: string;
   registrationId: string;
-  couponId: string;
+  ticketId: string;
+  quantity: number;
 }
 
-export const SelectSelfEventRegistrationCoupon = async ({
+export const AddSelfEventRegistrationPurchase = async ({
   eventId,
   registrationId,
-  couponId,
+  ticketId,
+  quantity,
   clientApiParams,
   queryClient,
-}: SelectSelfEventRegistrationCouponParams): Promise<
+}: AddSelfEventRegistrationPurchaseParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/coupon`,
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases`,
     {
-      couponId,
+      ticketId,
+      quantity,
     }
   );
 
@@ -46,15 +48,9 @@ export const SelectSelfEventRegistrationCoupon = async ({
         registrationId
       ),
     });
-    queryClient.invalidateQueries({
-      queryKey: SELF_EVENTS_QUERY_KEY(false),
-    });
-    queryClient.invalidateQueries({
-      queryKey: SELF_EVENTS_QUERY_KEY(true),
-    });
-    queryClient.invalidateQueries({
-      queryKey: EVENT_QUERY_KEY(eventId),
-    });
+    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(false) });
+    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(true) });
+    queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
     queryClient.invalidateQueries({
       queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
     });
@@ -62,12 +58,12 @@ export const SelectSelfEventRegistrationCoupon = async ({
   return data;
 };
 
-export const useSelectSelfEventRegistrationCoupon = (
+export const useAddSelfEventRegistrationPurchase = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>,
+      Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>,
       Omit<
-        SelectSelfEventRegistrationCouponParams,
+        AddSelfEventRegistrationPurchaseParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -75,7 +71,7 @@ export const useSelectSelfEventRegistrationCoupon = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SelectSelfEventRegistrationCouponParams,
-    Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>
-  >(SelectSelfEventRegistrationCoupon, options);
+    AddSelfEventRegistrationPurchaseParams,
+    Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>
+  >(AddSelfEventRegistrationPurchase, options);
 };

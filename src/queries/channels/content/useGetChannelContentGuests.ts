@@ -12,7 +12,7 @@ import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 export const CHANNEL_CONTENT_GUESTS_QUERY_KEY = (
   channelId: string,
   contentId: string
-): QueryKey => [CHANNEL_CONTENT_QUERY_KEY(channelId, contentId), "CONTENTS"];
+): QueryKey => [...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId), "GUESTS"];
 
 export interface GetChannelContentGuestsParams extends InfiniteQueryParams {
   channelId: string;

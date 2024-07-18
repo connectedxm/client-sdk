@@ -47,7 +47,7 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     const response = await clientApi.put<
       ConnectedXMResponse<[Registration, string]>
     >(
-      `/self/events/${eventId}/registration/${registrationId}/registered/purchases/${purchaseId}/questions/${questionId}`,
+      `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/questions/${questionId}`,
       {
         value: value,
       }
@@ -57,7 +57,7 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     const response = await clientApi.put<
       ConnectedXMResponse<[Registration, string]>
     >(
-      `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/questions/${questionId}`,
+      `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/questions/${questionId}`,
       {
         value: value,
       }

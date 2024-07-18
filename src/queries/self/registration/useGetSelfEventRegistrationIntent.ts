@@ -26,7 +26,7 @@ export const GetSelfEventRegistrationIntent = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/draft/intent`
+    `/self/events/${eventId}/registration/${registrationId}/cart/intent`
   );
   return data;
 };

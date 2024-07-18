@@ -6,6 +6,7 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 import {
   SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
@@ -29,7 +30,7 @@ export const RemoveSelfEventRegistrationPurchaseAddOn = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/addOns/${addOnId}`
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/addOns/${addOnId}`
   );
 
   if (queryClient && data.status === "ok") {
@@ -37,6 +38,13 @@ export const RemoveSelfEventRegistrationPurchaseAddOn = async ({
       queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
         eventId,
         registrationId
+      ),
+    });
+    queryClient.removeQueries({
+      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+        eventId,
+        registrationId,
+        purchaseId
       ),
     });
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [

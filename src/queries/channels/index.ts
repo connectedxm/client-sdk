@@ -1,5 +1,5 @@
 export * from "./collections";
-export * from "./contents";
+export * from "./content";
 
 export * from "./useGetChannel";
 export * from "./useGetChannels";

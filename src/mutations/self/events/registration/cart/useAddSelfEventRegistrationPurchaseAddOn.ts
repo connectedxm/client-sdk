@@ -5,40 +5,35 @@ import useConnectedMutation, {
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
 import {
+  EVENT_QUERY_KEY,
+  EVENT_REGISTRANTS_QUERY_KEY,
+  SELF_EVENTS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_PURCHASE_RESERVATION_SECTIONS_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface SelectSelfEventRegistrationPurchaseReservationParams
+export interface AddSelfEventRegistrationPurchaseAddOnParams
   extends MutationParams {
   eventId: string;
   registrationId: string;
   purchaseId: string;
-  locationId: string;
-  reservationStart?: string;
-  reservationEnd?: string;
+  addOnId: string;
 }
 
-export const SelectSelfEventRegistrationPurchaseReservation = async ({
+export const AddSelfEventRegistrationPurchaseAddOn = async ({
   eventId,
   registrationId,
   purchaseId,
-  locationId,
-  reservationStart,
-  reservationEnd,
+  addOnId,
   clientApiParams,
   queryClient,
-}: SelectSelfEventRegistrationPurchaseReservationParams): Promise<
+}: AddSelfEventRegistrationPurchaseAddOnParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/reservations/${locationId}`,
-    {
-      reservationStart: reservationStart,
-      reservationEnd: reservationEnd,
-    }
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/addOns/${addOnId}`
   );
 
   if (queryClient && data.status === "ok") {
@@ -51,26 +46,29 @@ export const SelectSelfEventRegistrationPurchaseReservation = async ({
         registrationId
       ),
     });
-    queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_RESERVATION_SECTIONS_QUERY_KEY(
+    queryClient.removeQueries({
+      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
         eventId,
         registrationId,
         purchaseId
       ),
     });
+    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(false) });
+    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(true) });
+    queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
+    });
   }
-
   return data;
 };
 
-export const useSelectSelfEventRegistrationPurchaseReservation = (
+export const useAddSelfEventRegistrationPurchaseAddOn = (
   options: Omit<
     MutationOptions<
-      Awaited<
-        ReturnType<typeof SelectSelfEventRegistrationPurchaseReservation>
-      >,
+      Awaited<ReturnType<typeof AddSelfEventRegistrationPurchaseAddOn>>,
       Omit<
-        SelectSelfEventRegistrationPurchaseReservationParams,
+        AddSelfEventRegistrationPurchaseAddOnParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -78,7 +76,7 @@ export const useSelectSelfEventRegistrationPurchaseReservation = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SelectSelfEventRegistrationPurchaseReservationParams,
-    Awaited<ReturnType<typeof SelectSelfEventRegistrationPurchaseReservation>>
-  >(SelectSelfEventRegistrationPurchaseReservation, options);
+    AddSelfEventRegistrationPurchaseAddOnParams,
+    Awaited<ReturnType<typeof AddSelfEventRegistrationPurchaseAddOn>>
+  >(AddSelfEventRegistrationPurchaseAddOn, options);
 };

@@ -12,58 +12,59 @@ import {
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface AddSelfEventRegistrationPurchaseParams extends MutationParams {
+export interface RemoveSelfEventRegistrationCouponParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
-  ticketId: string;
-  quantity: number;
 }
 
-export const AddSelfEventRegistrationPurchase = async ({
+export const RemoveSelfEventRegistrationCoupon = async ({
   eventId,
   registrationId,
-  ticketId,
-  quantity,
   clientApiParams,
   queryClient,
-}: AddSelfEventRegistrationPurchaseParams): Promise<
+}: RemoveSelfEventRegistrationCouponParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases`,
-    {
-      ticketId,
-      quantity,
-    }
+  const { data } = await clientApi.delete<ConnectedXMResponse<Registration>>(
+    `/self/events/${eventId}/registration/${registrationId}/cart/coupons`
   );
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      clientApiParams.locale,
-    ]);
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
         eventId,
         registrationId
       ),
     });
-    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(false) });
-    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(true) });
-    queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
+      clientApiParams.locale,
+    ]);
+
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(false),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(true),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_QUERY_KEY(eventId),
+    });
     queryClient.invalidateQueries({
       queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
     });
   }
+
   return data;
 };
 
-export const useAddSelfEventRegistrationPurchase = (
+export const useRemoveSelfEventRegistrationCoupon = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>,
+      Awaited<ReturnType<typeof RemoveSelfEventRegistrationCoupon>>,
       Omit<
-        AddSelfEventRegistrationPurchaseParams,
+        RemoveSelfEventRegistrationCouponParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -71,7 +72,7 @@ export const useAddSelfEventRegistrationPurchase = (
   > = {}
 ) => {
   return useConnectedMutation<
-    AddSelfEventRegistrationPurchaseParams,
-    Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>
-  >(AddSelfEventRegistrationPurchase, options);
+    RemoveSelfEventRegistrationCouponParams,
+    Awaited<ReturnType<typeof RemoveSelfEventRegistrationCoupon>>
+  >(RemoveSelfEventRegistrationCoupon, options);
 };

@@ -1,6 +1,6 @@
 {
   "name": "@connectedxm/client",
-  "version": "0.5.24-beta.18",
+  "version": "0.5.30",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "repository": {
@@ -14,11 +14,11 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vitest",
-    "lint": "yarn tsc && eslint src/**/*.ts",
+    "lint": "npx tsc && eslint src/**/*.ts",
     "test": "vitest run",
     "build": "tsup src/index.ts --format cjs,esm --dts",
-    "release": "yarn run lint && yarn run test && yarn run build",
-    "local": "yarn run release && yarn pack"
+    "release": "npm run lint && npm run test && npm run build",
+    "local": "npm run release && npm pack"
   },
   "dependencies": {
     "axios": "^1.6.5",
@@ -41,5 +41,8 @@
     "tsup": "^8.0.1",
     "typescript": "^5.4.2",
     "vitest": "^1.3.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }

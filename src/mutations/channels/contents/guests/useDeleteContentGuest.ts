@@ -7,7 +7,7 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries";
 import { CONTENT_QUERY_KEY } from "@src/queries/contents/useGetContent";
-import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/contents/useGetChannelContentGuests";
+import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
 
 export interface DeleteContentGuestParams extends MutationParams {
   channelId: string;
