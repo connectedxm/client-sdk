@@ -25,7 +25,7 @@ export const UpdateChannelSubscriber = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<ChannelSubscriber>>(
-    `/channels/${channelId}/subscriptions`,
+    `/channels/${channelId}/subscribers`,
     channelSubscriber
   );
 

@@ -1150,9 +1150,14 @@ export interface BaseChannel {
   name: string;
   description: string | null;
   image: BaseImage;
+  subscriberCount: number;
+  _count: {
+    contents: number;
+  };
 }
 
 export interface Channel extends BaseChannel {
+  banner: BaseImage | null;
   priority: number;
   externalUrl: string | null;
   appleUrl: string | null;
@@ -1228,6 +1233,9 @@ export interface Content extends BaseContent {
   guests: BaseContentGuest[];
   createdAt: string;
   updatedAt: string;
+  _count: {
+    likes: number; // if you have liked = number > 0
+  };
 }
 
 export const isTypeContent = (

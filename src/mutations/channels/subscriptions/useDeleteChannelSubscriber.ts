@@ -5,6 +5,11 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import {
+  CHANNEL_QUERY_KEY,
+  CHANNEL_SUBSCRIBERS_QUERY_KEY,
+  REMOVE_SELF_RELATIONSHIP,
+} from "@src/queries";
 
 export interface DeleteChannelSubscriberParams extends MutationParams {
   channelId: string;
@@ -13,13 +18,30 @@ export interface DeleteChannelSubscriberParams extends MutationParams {
 export const DeleteChannelSubscriber = async ({
   channelId,
   clientApiParams,
+  queryClient,
 }: DeleteChannelSubscriberParams): Promise<
   ConnectedXMResponse<ChannelSubscriber>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<
     ConnectedXMResponse<ChannelSubscriber>
-  >(`/channels/${channelId}/subscriptions`);
+  >(`/channels/${channelId}/subscribers`);
+
+  if (data.status === "ok" && queryClient) {
+    queryClient.invalidateQueries({
+      queryKey: CHANNEL_SUBSCRIBERS_QUERY_KEY(channelId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: CHANNEL_QUERY_KEY(channelId),
+    });
+
+    REMOVE_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "channels",
+      channelId
+    );
+  }
 
   return data;
 };

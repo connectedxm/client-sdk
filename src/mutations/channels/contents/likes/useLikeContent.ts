@@ -5,6 +5,7 @@ import useConnectedMutation, {
 } from "../../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries";
 
 export interface LikeContentParams extends MutationParams {
   channelId: string;
@@ -15,11 +16,18 @@ export const LikeContent = async ({
   channelId,
   contentId,
   clientApiParams,
+  queryClient,
 }: LikeContentParams): Promise<ConnectedXMResponse<Content>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Content>>(
     `/channels/${channelId}/contents/${contentId}/like`
   );
+
+  if (data.status === "ok" && queryClient) {
+    queryClient.invalidateQueries({
+      queryKey: CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+    });
+  }
 
   return data;
 };

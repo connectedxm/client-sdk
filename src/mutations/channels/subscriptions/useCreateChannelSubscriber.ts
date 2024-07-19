@@ -5,6 +5,11 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import {
+  ADD_SELF_RELATIONSHIP,
+  CHANNEL_QUERY_KEY,
+  CHANNEL_SUBSCRIBERS_QUERY_KEY,
+} from "@src/queries";
 
 export interface CreateChannelSubscriberParams extends MutationParams {
   channelId: string;
@@ -13,13 +18,30 @@ export interface CreateChannelSubscriberParams extends MutationParams {
 export const CreateChannelSubscriber = async ({
   channelId,
   clientApiParams,
+  queryClient,
 }: CreateChannelSubscriberParams): Promise<
   ConnectedXMResponse<ChannelSubscriber>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<ChannelSubscriber>>(
-    `/channels/${channelId}/subscriptions`
+    `/channels/${channelId}/subscribers`
   );
+
+  if (data.status === "ok" && queryClient) {
+    queryClient.invalidateQueries({
+      queryKey: CHANNEL_SUBSCRIBERS_QUERY_KEY(channelId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: CHANNEL_QUERY_KEY(channelId),
+    });
+
+    ADD_SELF_RELATIONSHIP(
+      queryClient,
+      [clientApiParams.locale],
+      "channels",
+      channelId
+    );
+  }
 
   return data;
 };
