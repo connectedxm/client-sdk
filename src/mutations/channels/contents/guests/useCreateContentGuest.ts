@@ -14,8 +14,6 @@ import { CONTENT_QUERY_KEY } from "@src/queries/contents/useGetContent";
 import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
 
 export interface CreateContentGuest {
-  id: string;
-  contentId: string;
   accountId: string;
   type: ContentGuestType;
   name: string;
@@ -24,7 +22,6 @@ export interface CreateContentGuest {
   company: string | null;
   companyLink: string | null;
   companyBio: string | null;
-  imageId: string | null;
   website: string | null;
   facebook: string | null;
   twitter: string | null;
@@ -39,19 +36,21 @@ export interface CreateContentGuestParams extends MutationParams {
   channelId: string;
   contentId: string;
   guest: CreateContentGuest;
+  imageDataUri?: string;
 }
 
 export const CreateContentGuest = async ({
   channelId,
   contentId,
   guest,
+  imageDataUri,
   clientApiParams,
   queryClient,
 }: CreateContentGuestParams): Promise<ConnectedXMResponse<ContentGuest>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<ContentGuest>>(
     `/channels/${channelId}/contents/${contentId}/guests`,
-    guest
+    { contentGuest: guest, imageDataUri }
   );
 
   if (queryClient && data.status === "ok") {
