@@ -1231,6 +1231,9 @@ export interface Content extends BaseContent {
   googleUrl: string | null;
   youtubeUrl: string | null;
   guests: BaseContentGuest[];
+  publishSchedule: BaseSchedule | null;
+  email: boolean;
+  push: boolean;
   createdAt: string;
   updatedAt: string;
   _count: {
@@ -2012,3 +2015,12 @@ export interface OrganizationOAuth {
   textColor: string;
   borderColor?: string;
 }
+
+export interface BaseSchedule {
+  name: string;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Schedule extends BaseSchedule {}

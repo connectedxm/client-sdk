@@ -29,6 +29,8 @@ export interface UpdateChannelContent {
   videoId?: string | null;
   audioId?: number | null;
   slug?: string;
+  email?: boolean;
+  push?: boolean;
 }
 
 export interface UpdateChannelContentParams extends MutationParams {
