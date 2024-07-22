@@ -49,7 +49,7 @@ export const GetSelfEventRegistrationPurchaseAddOnsIntent = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/registered/purchases/${purchaseId}/addOns/intent`,
+    `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/addOns/intent`,
     {
       params: {
         addOnIds: addOnIds ? addOnIds.join(",") : "",

@@ -31,7 +31,7 @@ export const AddSelfEventRegistrationPurchase = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases`,
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases`,
     {
       ticketId,
       quantity,

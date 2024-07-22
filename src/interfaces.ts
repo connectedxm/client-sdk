@@ -621,6 +621,8 @@ export interface BasePurchase {
   reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
+  couponId: string | null;
+  coupon: BaseCoupon | null;
   createdAt: string;
 }
 
@@ -734,9 +736,8 @@ export interface BaseCoupon {
   discountPercent: number | null;
   quantityMin: number | null;
   quantityMax: number | null;
-  amountMin: number | null;
-  amountMax: number | null;
   useLimit: number | null;
+  purchaseLimit: number | null;
   emailDomains: string | null;
   createdAt: string;
   updatedAt: string;
@@ -757,7 +758,7 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 
 export interface ManagedCoupon extends Coupon {
   _count: {
-    registrations: number;
+    purchases: number;
   };
 }
 
@@ -773,6 +774,15 @@ export interface ManagedCouponOrder {
   createdAt: string;
   coupon: BaseCoupon | null;
   account: BaseAccount;
+}
+
+export interface ManagedCouponPurchase {
+  id: string;
+  coupon: BaseCoupon;
+  registration: {
+    account: BaseAccount;
+  };
+  createdAt: string;
 }
 
 export interface BaseInstance {
@@ -1269,8 +1279,6 @@ export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   status: RegistrationStatus;
-  couponId: string | null;
-  coupon: BaseCoupon | null;
   purchases: BasePurchase[];
   payments: Payment[];
   coupons: ManagedCoupon[];
@@ -1297,14 +1305,16 @@ export interface BasePayment {
   id: string;
   type: RegistrationPaymentType;
   chargedAmt: number;
-  ticketId: string | null;
-  ticket: BaseTicket | null;
   last4: string | null;
   stripeId: string | null;
   createdAt: string;
 }
 
-export interface Payment extends BasePayment {}
+export interface Payment extends BasePayment {
+  addOns: BaseEventAddOn[];
+  purchases: BasePurchase[];
+  coupons: BaseCoupon[];
+}
 export interface BaseLead {
   id: string;
   firstName: string | null;

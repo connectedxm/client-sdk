@@ -8,33 +8,44 @@ import {
   EVENT_QUERY_KEY,
   EVENT_REGISTRANTS_QUERY_KEY,
   SELF_EVENTS_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface RegisterCancelledEventRegistrationParams
+export interface SelectSelfEventRegistrationCouponParams
   extends MutationParams {
   eventId: string;
   registrationId: string;
+  couponId: string;
 }
 
-export const RegisterCancelledEventRegistration = async ({
+export const SelectSelfEventRegistrationCoupon = async ({
   eventId,
   registrationId,
+  couponId,
   clientApiParams,
   queryClient,
-}: RegisterCancelledEventRegistrationParams): Promise<
+}: SelectSelfEventRegistrationCouponParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/cancelled/register`
+    `/self/events/${eventId}/registration/${registrationId}/cart/coupon`,
+    {
+      couponId,
+    }
   );
 
   if (queryClient && data.status === "ok") {
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
-
+    queryClient.removeQueries({
+      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
+        eventId,
+        registrationId
+      ),
+    });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENTS_QUERY_KEY(false),
     });
@@ -48,16 +59,15 @@ export const RegisterCancelledEventRegistration = async ({
       queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
     });
   }
-
   return data;
 };
 
-export const useRegisterCancelledEventRegistration = (
+export const useSelectSelfEventRegistrationCoupon = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof RegisterCancelledEventRegistration>>,
+      Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>,
       Omit<
-        RegisterCancelledEventRegistrationParams,
+        SelectSelfEventRegistrationCouponParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -65,7 +75,7 @@ export const useRegisterCancelledEventRegistration = (
   > = {}
 ) => {
   return useConnectedMutation<
-    RegisterCancelledEventRegistrationParams,
-    Awaited<ReturnType<typeof RegisterCancelledEventRegistration>>
-  >(RegisterCancelledEventRegistration, options);
+    SelectSelfEventRegistrationCouponParams,
+    Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>
+  >(SelectSelfEventRegistrationCoupon, options);
 };
