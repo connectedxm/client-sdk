@@ -6,3 +6,4 @@ export * from "./useGetChannelContentInterests";
 export * from "./useGetChannelContentInterests";
 export * from "./useGetManagedChannelContents";
 export * from "./useGetManagedChannelContent";
+export * from "./useGetChannelContentGuests";
