@@ -17,7 +17,7 @@ import { CONTENT_QUERY_KEY } from "@src/queries/contents/useGetContent";
 import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
 
 export interface CreateContentGuest {
-  accountId: string;
+  accountId?: string | null;
   type: ContentGuestType;
   name: string;
   title: string | null;
