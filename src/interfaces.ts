@@ -1937,7 +1937,16 @@ export interface ThreadMessageReaction {
   updatedAt: string;
 }
 
-export interface BaseThreadMessage {}
+export interface BaseThreadMessage {
+  id: string;
+  organizationId: string;
+  threadId: string;
+  body: string;
+  createdAt: string;
+  replyToId: string | null;
+  reactions: ThreadMessageReaction[];
+  account: BaseAccount;
+}
 
 export interface ThreadMessage {
   id: string;
