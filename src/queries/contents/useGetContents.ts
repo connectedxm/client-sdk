@@ -11,12 +11,16 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const CONTENTS_QUERY_KEY = (
+  type?: "video" | "audio" | "article",
   featured?: boolean,
-  interest?: string
+  interest?: string,
+  past?: boolean
 ): QueryKey => {
   const key = ["CONTENTS"];
+  if (type) key.push(type);
   if (featured) key.push("FEATURED");
   if (interest) key.push(interest);
+  if (typeof past !== "undefined") key.push(past ? "PAST" : "UPCOMING");
   return key;
 };
 
@@ -36,13 +40,17 @@ export const SET_CONTENTS_QUERY_DATA = (
 };
 
 export interface GetContentsParams extends InfiniteQueryParams {
+  type?: "video" | "audio" | "article";
   featured?: boolean;
   interest?: string;
+  past?: boolean;
 }
 
 export const GetContents = async ({
+  type,
   featured,
   interest,
+  past,
   pageParam,
   pageSize,
   orderBy,
@@ -52,6 +60,7 @@ export const GetContents = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/contents`, {
     params: {
+      type: type || undefined,
       featured:
         typeof featured !== "undefined"
           ? featured
@@ -59,6 +68,7 @@ export const GetContents = async ({
             : "false"
           : undefined,
       interest: interest || undefined,
+      past,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
@@ -70,8 +80,10 @@ export const GetContents = async ({
 };
 
 export const useGetContents = (
+  type?: "video" | "audio" | "article",
   featured?: boolean,
   interest?: string,
+  past?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -79,9 +91,9 @@ export const useGetContents = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetContents>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetContents>>>(
-    CONTENTS_QUERY_KEY(featured, interest),
+    CONTENTS_QUERY_KEY(type, featured, interest, past),
     (params: InfiniteQueryParams) =>
-      GetContents({ featured, interest, ...params }),
+      GetContents({ type, featured, interest, past, ...params }),
     params,
     options
   );

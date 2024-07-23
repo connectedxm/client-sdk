@@ -5,7 +5,10 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { SET_MANAGED_CHANNEL_QUERY_DATA } from "@src/queries";
+import {
+  SET_CHANNEL_QUERY_DATA,
+  SET_MANAGED_CHANNEL_QUERY_DATA,
+} from "@src/queries";
 
 export interface UpdateChannel {
   name?: string;
@@ -44,6 +47,7 @@ export const UpdateChannel = async ({
 
   if (queryClient && data.status === "ok") {
     SET_MANAGED_CHANNEL_QUERY_DATA(queryClient, [channelId], data);
+    if (data.data) SET_CHANNEL_QUERY_DATA(queryClient, [channelId], data);
   }
 
   return data;

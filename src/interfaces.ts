@@ -1165,6 +1165,7 @@ export interface Channel extends BaseChannel {
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
+  visilble: boolean;
   hosts: BaseAccount[];
   group: BaseGroup | null;
 }
