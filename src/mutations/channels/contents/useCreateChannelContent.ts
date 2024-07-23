@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, ContentType, Content } from "@src/interfaces";
+import { ConnectedXMResponse, Content } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -8,9 +8,8 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { MANAGED_CHANNEL_CONTENTS_QUERY_KEY } from "@src/queries";
 
 export interface CreateChannelContent {
-  type: ContentType;
-  visible: boolean;
-  title?: string;
+  title: string;
+  visible?: boolean;
   description?: string | null;
   duration?: string | null;
   body?: string | null;

@@ -1201,18 +1201,11 @@ export interface BaseChannelCollection {
 
 export interface ChannelCollection extends BaseChannelCollection {}
 
-export enum ContentType {
-  article = "article",
-  podcast = "podcast",
-  video = "video",
-}
-
 export interface BaseContent {
   id: string;
   featured: boolean;
   slug: string;
   title: string | null;
-  type: ContentType;
   description: string | null;
   image: BaseImage | null;
   audioUrl: string | null;
@@ -1226,6 +1219,7 @@ export interface BaseContent {
 
 export interface Content extends BaseContent {
   body: string | null;
+  editor: string | null;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;

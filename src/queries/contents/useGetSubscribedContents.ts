@@ -1,4 +1,4 @@
-import { Content, ContentType } from "@interfaces";
+import { Content } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
@@ -8,23 +8,17 @@ import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SUBSCRIBED_CONTENTS_QUERY_KEY = (
-  type?: keyof typeof ContentType,
-  interest?: string
-): QueryKey => {
+export const SUBSCRIBED_CONTENTS_QUERY_KEY = (interest?: string): QueryKey => {
   const key = ["SUBSCRIBED_CONTENTS"];
-  if (type) key.push(type);
   if (interest) key.push(interest);
   return key;
 };
 
 export interface GetSubscribedContentsParams extends InfiniteQueryParams {
-  type?: keyof typeof ContentType;
   interest?: string;
 }
 
 export const GetSubscribedContents = async ({
-  type,
   interest,
   pageParam,
   pageSize,
@@ -35,7 +29,6 @@ export const GetSubscribedContents = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/contents/subscribed`, {
     params: {
-      type: type || undefined,
       interest: interest || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -48,7 +41,6 @@ export const GetSubscribedContents = async ({
 };
 
 export const useGetSubscribedContents = (
-  type?: keyof typeof ContentType,
   interest?: string,
   params: Omit<
     InfiniteQueryParams,
@@ -61,9 +53,9 @@ export const useGetSubscribedContents = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSubscribedContents>>
   >(
-    SUBSCRIBED_CONTENTS_QUERY_KEY(type, interest),
+    SUBSCRIBED_CONTENTS_QUERY_KEY(interest),
     (params: InfiniteQueryParams) =>
-      GetSubscribedContents({ type, interest, ...params }),
+      GetSubscribedContents({ interest, ...params }),
     params,
     options
   );

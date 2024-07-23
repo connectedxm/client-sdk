@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, ContentType, Content } from "@src/interfaces";
+import { ConnectedXMResponse, Content } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -15,12 +15,12 @@ import { SET_CONTENT_QUERY_DATA } from "@src/queries/contents/useGetContent";
 import { CONTENTS_QUERY_KEY } from "@src/queries/contents/useGetContents";
 
 export interface UpdateChannelContent {
-  type?: ContentType;
   visible?: boolean;
   title?: string;
   description?: string | null;
   duration?: string | null;
   body?: string | null;
+  editor?: string | null;
   externalUrl?: string | null;
   appleUrl?: string | null;
   spotifyUrl?: string | null;

@@ -1,4 +1,4 @@
-import { Content, ContentType } from "@interfaces";
+import { Content } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
@@ -11,12 +11,10 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const CONTENTS_QUERY_KEY = (
-  type?: keyof typeof ContentType,
   featured?: boolean,
   interest?: string
 ): QueryKey => {
   const key = ["CONTENTS"];
-  if (type) key.push(type);
   if (featured) key.push("FEATURED");
   if (interest) key.push(interest);
   return key;
@@ -39,12 +37,10 @@ export const SET_CONTENTS_QUERY_DATA = (
 
 export interface GetContentsParams extends InfiniteQueryParams {
   featured?: boolean;
-  type?: keyof typeof ContentType;
   interest?: string;
 }
 
 export const GetContents = async ({
-  type,
   featured,
   interest,
   pageParam,
@@ -62,7 +58,6 @@ export const GetContents = async ({
             ? "true"
             : "false"
           : undefined,
-      type: type || undefined,
       interest: interest || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -75,7 +70,6 @@ export const GetContents = async ({
 };
 
 export const useGetContents = (
-  type?: keyof typeof ContentType,
   featured?: boolean,
   interest?: string,
   params: Omit<
@@ -85,9 +79,9 @@ export const useGetContents = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetContents>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetContents>>>(
-    CONTENTS_QUERY_KEY(type, featured, interest),
+    CONTENTS_QUERY_KEY(featured, interest),
     (params: InfiniteQueryParams) =>
-      GetContents({ type, featured, interest, ...params }),
+      GetContents({ featured, interest, ...params }),
     params,
     options
   );
