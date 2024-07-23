@@ -13,8 +13,12 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
-export const CHANNEL_CONTENTS_QUERY_KEY = (channelId: string): QueryKey => {
+export const CHANNEL_CONTENTS_QUERY_KEY = (
+  channelId: string,
+  type?: "video" | "audio" | "article"
+): QueryKey => {
   const key = [...CHANNEL_QUERY_KEY(channelId), "CONTENTS"];
+  if (type) key.push(type);
   return key;
 };
 
@@ -35,10 +39,12 @@ export const SET_CHANNEL_CONTENTS_QUERY_DATA = (
 
 export interface GetChannelContentsParams extends InfiniteQueryParams {
   channelId: string;
+  type?: "video" | "audio" | "article";
 }
 
 export const GetChannelContents = async ({
   channelId,
+  type,
   pageParam,
   pageSize,
   orderBy,
@@ -50,6 +56,7 @@ export const GetChannelContents = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/channels/${channelId}/contents`, {
     params: {
+      type: type || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
@@ -70,6 +77,7 @@ export const GetChannelContents = async ({
 
 export const useGetChannelContents = (
   channelId: string = "",
+  type?: "video" | "audio" | "article",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -81,9 +89,9 @@ export const useGetChannelContents = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetChannelContents>>
   >(
-    CHANNEL_CONTENTS_QUERY_KEY(channelId),
+    CHANNEL_CONTENTS_QUERY_KEY(channelId, type),
     (params: InfiniteQueryParams) =>
-      GetChannelContents({ ...params, channelId: channelId || "" }),
+      GetChannelContents({ ...params, channelId: channelId || "", type }),
     params,
     {
       ...options,

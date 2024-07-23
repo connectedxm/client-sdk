@@ -691,6 +691,7 @@ export enum NotificationType {
   ACTIVITY = "ACTIVITY",
   GROUP_INVITATION = "GROUP_INVITATION",
   GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
+  CONTENT = "CONTENT",
 }
 
 export interface BaseNotification {
@@ -1209,8 +1210,8 @@ export interface BaseContent {
   slug: string;
   title: string | null;
   description: string | null;
+  imageUrl: string | null;
   image: BaseImage | null;
-  audioUrl: string | null;
   audio: BaseFile | null;
   video: BaseVideo | null;
   duration: string | null;
