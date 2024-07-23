@@ -1226,7 +1226,7 @@ export interface BaseContent {
 
 export interface Content extends BaseContent {
   body: string | null;
-  editor: object | null;
+  editor: string | null;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;
