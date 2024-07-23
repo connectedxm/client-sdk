@@ -8,17 +8,23 @@ import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SUBSCRIBED_CONTENTS_QUERY_KEY = (interest?: string): QueryKey => {
+export const SUBSCRIBED_CONTENTS_QUERY_KEY = (
+  type?: string,
+  interest?: string
+): QueryKey => {
   const key = ["SUBSCRIBED_CONTENTS"];
+  if (type) key.push(type);
   if (interest) key.push(interest);
   return key;
 };
 
 export interface GetSubscribedContentsParams extends InfiniteQueryParams {
+  type?: "video" | "audio" | "article";
   interest?: string;
 }
 
 export const GetSubscribedContents = async ({
+  type,
   interest,
   pageParam,
   pageSize,
@@ -29,6 +35,7 @@ export const GetSubscribedContents = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/contents/subscribed`, {
     params: {
+      type: type || undefined,
       interest: interest || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -41,6 +48,7 @@ export const GetSubscribedContents = async ({
 };
 
 export const useGetSubscribedContents = (
+  type?: "video" | "audio" | "article",
   interest?: string,
   params: Omit<
     InfiniteQueryParams,
