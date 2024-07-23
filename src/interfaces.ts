@@ -708,6 +708,7 @@ export interface Notification extends BaseNotification {
   announcement: BaseAnnouncement | null;
   group: BaseGroup | null;
   invitation: BaseGroupInvitation | null;
+  content: BaseContent | null;
   createdAt: string;
   updatedAt: string;
 }
