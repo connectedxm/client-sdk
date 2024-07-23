@@ -3,30 +3,30 @@ import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
   InfiniteQueryOptions,
-} from "../../useConnectedInfiniteQuery";
+} from "../../../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_COLLECTION_QUERY_KEY } from "./useGetChannelCollection";
 import { CONTENT_QUERY_KEY } from "@src/queries/contents";
-import { CHANNEL_CONTENT_QUERY_KEY } from "../content";
+import { MANAGED_CHANNEL_COLLECTION_QUERY_KEY } from "./useGetManagedChannelCollection";
+import { MANAGED_CHANNEL_CONTENT_QUERY_KEY } from "../content";
 
-export const CHANNEL_COLLECTION_CONTENTS_QUERY_KEY = (
+export const MANAGED_CHANNEL_COLLECTION_CONTENTS_QUERY_KEY = (
   channelId: string,
   collectionId: string
 ): QueryKey => [
-  ...CHANNEL_COLLECTION_QUERY_KEY(channelId, collectionId),
+  ...MANAGED_CHANNEL_COLLECTION_QUERY_KEY(channelId, collectionId),
   "CONTENTS",
 ];
 
-export interface GetChannelCollectionContentsParams
+export interface GetManagedChannelCollectionContentsParams
   extends InfiniteQueryParams {
   channelId: string;
   collectionId: string;
 }
 
-export const GetChannelCollectionContents = async ({
+export const GetManagedChannelCollectionContents = async ({
   channelId,
   collectionId,
   pageParam,
@@ -36,12 +36,12 @@ export const GetChannelCollectionContents = async ({
   queryClient,
   clientApiParams,
   locale,
-}: GetChannelCollectionContentsParams): Promise<
+}: GetManagedChannelCollectionContentsParams): Promise<
   ConnectedXMResponse<Content[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/channels/${channelId}/collections/${collectionId}/contents`,
+    `/channels/managed/${channelId}/collections/${collectionId}/contents`,
     {
       params: {
         page: pageParam || undefined,
@@ -55,7 +55,7 @@ export const GetChannelCollectionContents = async ({
     CacheIndividualQueries(
       data,
       queryClient,
-      (contentId) => CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+      (contentId) => MANAGED_CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
       locale
     );
     CacheIndividualQueries(
@@ -69,7 +69,7 @@ export const GetChannelCollectionContents = async ({
   return data;
 };
 
-export const useGetChannelCollectionContents = (
+export const useGetManagedChannelCollectionContents = (
   channelId: string,
   collectionId: string,
   params: Omit<
@@ -77,15 +77,19 @@ export const useGetChannelCollectionContents = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetChannelCollectionContents>>
+    Awaited<ReturnType<typeof GetManagedChannelCollectionContents>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetChannelCollectionContents>>
+    Awaited<ReturnType<typeof GetManagedChannelCollectionContents>>
   >(
-    CHANNEL_COLLECTION_CONTENTS_QUERY_KEY(channelId, collectionId),
+    MANAGED_CHANNEL_COLLECTION_CONTENTS_QUERY_KEY(channelId, collectionId),
     (params: InfiniteQueryParams) =>
-      GetChannelCollectionContents({ channelId, collectionId, ...params }),
+      GetManagedChannelCollectionContents({
+        channelId,
+        collectionId,
+        ...params,
+      }),
     params,
     options
   );
