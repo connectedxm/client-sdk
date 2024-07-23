@@ -5,11 +5,7 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import {
-  ADD_SELF_RELATIONSHIP,
-  CHANNEL_QUERY_KEY,
-  CHANNEL_SUBSCRIBERS_QUERY_KEY,
-} from "@src/queries";
+import { ADD_SELF_RELATIONSHIP, CHANNEL_QUERY_KEY } from "@src/queries";
 
 export interface CreateChannelSubscriberParams extends MutationParams {
   channelId: string;
@@ -28,9 +24,6 @@ export const CreateChannelSubscriber = async ({
   );
 
   if (data.status === "ok" && queryClient) {
-    queryClient.invalidateQueries({
-      queryKey: CHANNEL_SUBSCRIBERS_QUERY_KEY(channelId),
-    });
     queryClient.invalidateQueries({
       queryKey: CHANNEL_QUERY_KEY(channelId),
     });
