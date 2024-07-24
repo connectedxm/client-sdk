@@ -692,6 +692,7 @@ export enum NotificationType {
   ACTIVITY = "ACTIVITY",
   GROUP_INVITATION = "GROUP_INVITATION",
   GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
+  CONTENT = "CONTENT",
 }
 
 export interface BaseNotification {
@@ -709,6 +710,7 @@ export interface Notification extends BaseNotification {
   announcement: BaseAnnouncement | null;
   group: BaseGroup | null;
   invitation: BaseGroupInvitation | null;
+  content: BaseContent | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -749,7 +751,7 @@ export enum CouponType {
 }
 
 export interface Coupon extends BaseCoupon {
-  description: string;
+  description: string | null;
 }
 
 export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
@@ -1151,16 +1153,24 @@ export interface BaseChannel {
   name: string;
   description: string | null;
   image: BaseImage;
+  subscriberCount: number;
+  creatorId: string | null;
+  _count: {
+    contents: number;
+  };
 }
 
 export interface Channel extends BaseChannel {
+  banner: BaseImage | null;
   priority: number;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
+  visilble: boolean;
   hosts: BaseAccount[];
+  group: BaseGroup | null;
 }
 
 export const isTypeChannel = (
@@ -1169,7 +1179,7 @@ export const isTypeChannel = (
   return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
 
-export interface BaseChannelSubscription {
+export interface BaseChannelSubscriber {
   channelId: string;
   accountId: string;
   contentEmailNotification: boolean;
@@ -1178,7 +1188,7 @@ export interface BaseChannelSubscription {
   createdAt: string;
 }
 
-export interface ChannelSubscription extends BaseChannelSubscription {
+export interface ChannelSubscriber extends BaseChannelSubscriber {
   channel: BaseChannel;
   account: BaseAccount;
 }
@@ -1195,37 +1205,39 @@ export interface BaseChannelCollection {
 
 export interface ChannelCollection extends BaseChannelCollection {}
 
-export enum ContentType {
-  article = "article",
-  podcast = "podcast",
-  video = "video",
-}
-
 export interface BaseContent {
   id: string;
   featured: boolean;
   slug: string;
   title: string | null;
-  type: ContentType;
   description: string | null;
   imageUrl: string | null;
-  audioUrl: string | null;
-  videoUrl: string | null;
+  image: BaseImage | null;
+  audio: BaseFile | null;
+  video: BaseVideo | null;
   duration: string | null;
   channel: BaseChannel;
   published: string | null;
+  visible: boolean;
 }
 
 export interface Content extends BaseContent {
   body: string | null;
+  editor: string | null;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
   guests: BaseContentGuest[];
+  publishSchedule: BaseSchedule | null;
+  email: boolean;
+  push: boolean;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    likes: number; // if you have liked = number > 0
+  };
 }
 
 export const isTypeContent = (
@@ -2129,3 +2141,12 @@ export interface OrganizationOAuth {
   textColor: string;
   borderColor?: string;
 }
+
+export interface BaseSchedule {
+  name: string;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Schedule extends BaseSchedule {}
