@@ -5,44 +5,47 @@ import {
   GetBaseInfiniteQueryKeys,
   setFirstPageData,
   InfiniteQueryOptions,
-} from "../../useConnectedInfiniteQuery";
+} from "../../../useConnectedInfiniteQuery";
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { ACTIVITY_QUERY_KEY } from "../../activities/useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACTIVITIES_QUERY_KEY } from "../../activities";
-import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
+import {
+  ACTIVITIES_QUERY_KEY,
+  ACTIVITY_QUERY_KEY,
+} from "@src/queries/activities";
+import { MANAGED_CHANNEL_CONTENT_QUERY_KEY } from "./useGetManagedChannelContent";
 
-export const CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
+export const MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
   channelId: string,
   contentId: string
 ): QueryKey => [
   ...ACTIVITIES_QUERY_KEY(),
-  ...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+  ...MANAGED_CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
 ];
 
-export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (
+export const SET_MANAGED_CONTENT_ACTIVITIES_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannelContentActivities>>,
+  keyParams: Parameters<typeof MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetManagedChannelContentActivities>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(...keyParams),
+      ...MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetChannelContentActivitiesParams extends InfiniteQueryParams {
+export interface GetManagedChannelContentActivitiesParams
+  extends InfiniteQueryParams {
   channelId: string;
   contentId: string;
 }
 
-export const GetChannelContentActivities = async ({
+export const GetManagedChannelContentActivities = async ({
   channelId,
   contentId,
   pageParam,
@@ -52,12 +55,12 @@ export const GetChannelContentActivities = async ({
   queryClient,
   clientApiParams,
   locale,
-}: GetChannelContentActivitiesParams): Promise<
+}: GetManagedChannelContentActivitiesParams): Promise<
   ConnectedXMResponse<Activity[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/channels/${channelId}/contents/${contentId}/activities`,
+    `/channels/managed/${channelId}/contents/${contentId}/activities`,
     {
       params: {
         page: pageParam || undefined,
@@ -79,7 +82,7 @@ export const GetChannelContentActivities = async ({
   return data;
 };
 
-export const useGetChannelContentActivities = (
+export const useGetManagedChannelContentActivities = (
   channelId: string = "",
   contentId: string = "",
   params: Omit<
@@ -87,15 +90,15 @@ export const useGetChannelContentActivities = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetChannelContentActivities>>
+    Awaited<ReturnType<typeof GetManagedChannelContentActivities>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetChannelContentActivities>>
+    Awaited<ReturnType<typeof GetManagedChannelContentActivities>>
   >(
-    CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(channelId, contentId),
+    MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(channelId, contentId),
     (params: InfiniteQueryParams) =>
-      GetChannelContentActivities({ channelId, contentId, ...params }),
+      GetManagedChannelContentActivities({ channelId, contentId, ...params }),
     params,
     {
       ...options,
