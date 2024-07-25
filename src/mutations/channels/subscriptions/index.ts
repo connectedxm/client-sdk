@@ -1,3 +1,3 @@
 export * from "./useCreateChannelSubscriber";
 export * from "./useDeleteChannelSubscriber";
-export * from "./useUpdateChannelSubsciber";
+export * from "./useUpdateChannelSubscriber";
