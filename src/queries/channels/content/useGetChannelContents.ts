@@ -104,7 +104,13 @@ export const useGetChannelContents = (
   >(
     CHANNEL_CONTENTS_QUERY_KEY(channelId, type, featured, past),
     (params: InfiniteQueryParams) =>
-      GetChannelContents({ ...params, channelId: channelId || "", type }),
+      GetChannelContents({
+        ...params,
+        channelId: channelId || "",
+        type,
+        featured,
+        past,
+      }),
     params,
     {
       ...options,
