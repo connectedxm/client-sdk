@@ -5,7 +5,11 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_QUERY_KEY, REMOVE_SELF_RELATIONSHIP } from "@src/queries";
+import {
+  CHANNEL_QUERY_KEY,
+  REMOVE_SELF_RELATIONSHIP,
+  SUBSCRIBED_CHANNELS_QUERY_KEY,
+} from "@src/queries";
 
 export interface DeleteChannelSubscriberParams extends MutationParams {
   channelId: string;
@@ -26,6 +30,9 @@ export const DeleteChannelSubscriber = async ({
   if (data.status === "ok" && queryClient) {
     queryClient.invalidateQueries({
       queryKey: CHANNEL_QUERY_KEY(channelId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SUBSCRIBED_CHANNELS_QUERY_KEY(),
     });
 
     REMOVE_SELF_RELATIONSHIP(
