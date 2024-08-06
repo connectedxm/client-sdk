@@ -5,3 +5,4 @@ export * from "./useGetThreadMembers";
 export * from "./useGetThreadMessages";
 export * from "./useGetThreadMessage";
 export * from "./useGetThreadMessageReplies";
+export * from "./useGetThreadGroups";
