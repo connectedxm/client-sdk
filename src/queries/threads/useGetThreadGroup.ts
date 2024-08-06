@@ -1,7 +1,6 @@
 import {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
-  SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
@@ -18,7 +17,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const THREAD_GROUP_QUERY_KEY = (
   groupId: string,
-  accountId?: string
+  accountId: string
 ): QueryKey => [...THREADS_QUERY_KEY(), "group", groupId, accountId];
 
 export const SET_THREAD_GROUP_QUERY_DATA = (
@@ -38,8 +37,10 @@ export const SET_THREAD_GROUP_QUERY_DATA = (
   );
 };
 
-export interface GetThreadGroupProps extends SingleQueryParams {
+export interface GetThreadGroupProps {
   groupId: string;
+  accountId: string;
+  clientApiParams?: any;
 }
 
 export const GetThreadGroup = async ({
@@ -53,11 +54,12 @@ export const GetThreadGroup = async ({
 
 export const useGetThreadGroup = (
   groupId: string = "",
+  accountId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetThreadGroup>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetThreadGroup>>(
-    THREAD_GROUP_QUERY_KEY(groupId),
-    (params) => GetThreadGroup({ groupId, ...params }),
+    THREAD_GROUP_QUERY_KEY(groupId, accountId),
+    (params) => GetThreadGroup({ groupId, accountId, ...params }),
     {
       ...options,
       enabled: !!groupId && (options?.enabled ?? true),
