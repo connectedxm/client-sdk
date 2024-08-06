@@ -12,9 +12,13 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { CacheIndividualQueries } from "@src/utilities";
 import { THREAD_QUERY_KEY } from "./useGetThread";
 
-export const THREADS_QUERY_KEY = (access?: "public" | "private"): QueryKey => {
+export const THREADS_QUERY_KEY = (
+  access?: "public" | "private",
+  groupId?: string
+): QueryKey => {
   const keys = ["THREADS"];
   if (access) keys.push(access);
+  if (groupId) keys.push(groupId);
   return keys;
 };
 
@@ -87,7 +91,7 @@ export const useGetThreads = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetThreads>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreads>>>(
-    THREADS_QUERY_KEY(access),
+    THREADS_QUERY_KEY(access, groupId),
     (params: InfiniteQueryParams) =>
       GetThreads({ access, groupId, eventId, ...params }),
     params,
