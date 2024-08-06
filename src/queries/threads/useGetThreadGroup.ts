@@ -15,10 +15,11 @@ import {
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const THREAD_GROUP_QUERY_KEY = (
-  groupId: string,
-  accountId: string
-): QueryKey => [...THREADS_QUERY_KEY(), "group", groupId, accountId];
+export const THREAD_GROUP_QUERY_KEY = (groupId: string): QueryKey => [
+  ...THREADS_QUERY_KEY(),
+  "group",
+  groupId,
+];
 
 export const SET_THREAD_GROUP_QUERY_DATA = (
   client: QueryClient,
@@ -39,7 +40,6 @@ export const SET_THREAD_GROUP_QUERY_DATA = (
 
 export interface GetThreadGroupProps {
   groupId: string;
-  accountId: string;
   clientApiParams?: any;
 }
 
@@ -54,12 +54,11 @@ export const GetThreadGroup = async ({
 
 export const useGetThreadGroup = (
   groupId: string = "",
-  accountId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetThreadGroup>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetThreadGroup>>(
-    THREAD_GROUP_QUERY_KEY(groupId, accountId),
-    (params) => GetThreadGroup({ groupId, accountId, ...params }),
+    THREAD_GROUP_QUERY_KEY(groupId),
+    (params) => GetThreadGroup({ groupId, ...params }),
     {
       ...options,
       enabled: !!groupId && (options?.enabled ?? true),
