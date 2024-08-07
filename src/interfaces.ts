@@ -202,6 +202,7 @@ export interface SelfRelationships {
   >;
   events: Record<string, boolean>;
   channels: Record<string, boolean>;
+  threads: Record<string, boolean>;
 }
 
 export interface Self extends Account {
@@ -363,6 +364,7 @@ export interface Event extends BaseEvent {
   publicRegistrants: boolean;
   chatBotNumber: string | null;
   iosAppLink: string | null;
+  registrations: BaseRegistration[];
   androidAppLink: string | null;
   pages: BaseEventPage[];
   streamInput: StreamInput | null;
@@ -1893,6 +1895,133 @@ export interface BaseFile {
 }
 
 export interface File extends BaseFile {}
+
+export enum ThreadInvitationStatus {
+  invited = "invited",
+  rejected = "rejected",
+}
+
+export interface ThreadInvitation {
+  id: string;
+  organizationId: string;
+  threadId: string;
+  thread: BaseThread;
+  status: ThreadInvitationStatus;
+  role: ThreadMemberRole;
+  invitedById: string;
+  invitedBy: BaseAccount;
+  invitedId: string;
+  invited: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseThread {
+  id: string;
+  name: string;
+}
+
+export enum ThreadAccessLevel {
+  public = "public",
+  private = "private",
+}
+
+export enum ThreadMemberRole {
+  member = "member",
+  moderator = "moderator",
+}
+
+export enum ThreadMessageType {
+  user = "user",
+  bot = "bot",
+  system = "system",
+}
+
+export interface ThreadMessageReaction {
+  id: string;
+  organizationId: string;
+  threadId: string;
+  messageId: string;
+  message: BaseThreadMessage;
+  accountId: string;
+  account: BaseAccount;
+  emojiName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseThreadMessage {
+  id: string;
+  organizationId: string;
+  threadId: string;
+  body: string;
+  createdAt: string;
+  replyToId: string | null;
+  reactions: ThreadMessageReaction[];
+  account: BaseAccount;
+}
+
+export interface ThreadMessage {
+  id: string;
+  organizationId: string;
+  threadId: string;
+  thread: BaseThread;
+  accountId: string;
+  account: BaseAccount;
+  type: ThreadMessageType;
+  body: string;
+  reactions: ThreadMessageReaction[];
+  replyToId: string | null;
+  replyTo: BaseThreadMessage | null;
+  replies: BaseThreadMessage[];
+  mentions: BaseAccount[];
+  files: BaseFile[];
+  images: BaseImage[];
+  videos: BaseVideo[];
+  editedAt: string | null;
+  sentAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseThreadMember {}
+
+export interface ThreadMember extends BaseThreadMember {
+  id: string;
+  organizationId: string;
+  threadId: string;
+  thread: BaseThread;
+  accountId: string;
+  account: BaseAccount;
+  role: ThreadMemberRole;
+  accepted: boolean;
+  lastReadAt: string | null;
+  notifications: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Thread extends BaseThread {
+  organizationId: string;
+  organization: BaseOrganization;
+  featured: boolean;
+  visible: boolean;
+  access: ThreadAccessLevel;
+  id: string;
+  name: string;
+  description: string | null;
+  lastMessageAt: string | null;
+  groupId: string | null;
+  group: BaseGroup | null;
+  eventId: string | null;
+  event: BaseEvent | null;
+  members: ThreadMember[];
+  messages: ThreadMessage[];
+  invitations: ThreadInvitation[];
+  image: BaseImage | null;
+  imageId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export enum SupportedLocale {
   en = "en",
