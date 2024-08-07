@@ -7,3 +7,5 @@ export * from "./useGetThreadMessage";
 export * from "./useGetThreadMessageReplies";
 export * from "./useGetThreadGroups";
 export * from "./useGetThreadGroup";
+export * from "./useGetThreadEvents";
+export * from "./useGetThreadEvent";
