@@ -364,6 +364,7 @@ export interface Event extends BaseEvent {
   publicRegistrants: boolean;
   chatBotNumber: string | null;
   iosAppLink: string | null;
+  registrations: BaseRegistration[];
   androidAppLink: string | null;
   pages: BaseEventPage[];
   streamInput: StreamInput | null;

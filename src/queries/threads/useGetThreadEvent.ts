@@ -15,10 +15,11 @@ import {
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const THREAD_EVENT_QUERY_KEY = (
-  threadId: string,
-  eventId: string
-): QueryKey => [...THREADS_QUERY_KEY(), "thread", threadId, "event", eventId];
+export const THREAD_EVENT_QUERY_KEY = (eventId: string): QueryKey => [
+  ...THREADS_QUERY_KEY(),
+  "event",
+  eventId,
+];
 
 export const SET_THREAD_EVENT_QUERY_DATA = (
   client: QueryClient,
@@ -38,34 +39,29 @@ export const SET_THREAD_EVENT_QUERY_DATA = (
 };
 
 export interface GetThreadEventProps {
-  threadId: string;
   eventId: string;
   clientApiParams?: any;
 }
 
 export const GetThreadEvent = async ({
-  threadId,
   eventId,
   clientApiParams,
 }: GetThreadEventProps): Promise<ConnectedXMResponse<Thread>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(
-    `/threads/${threadId}/events/${eventId}`
-  );
+  const { data } = await clientApi.get(`/threads/events/${eventId}`);
   return data;
 };
 
 export const useGetThreadEvent = (
-  threadId: string = "",
   eventId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetThreadEvent>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetThreadEvent>>(
-    THREAD_EVENT_QUERY_KEY(threadId, eventId),
-    (params) => GetThreadEvent({ threadId, eventId, ...params }),
+    THREAD_EVENT_QUERY_KEY(eventId),
+    (params) => GetThreadEvent({ eventId, ...params }),
     {
       ...options,
-      enabled: !!threadId && !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };
