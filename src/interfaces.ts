@@ -1946,7 +1946,7 @@ export interface OrganizationConfig {
   COGNITO_CLIENT_ID: string;
   COGNITO_HOSTED_URL: string;
   BUNDLE_IDENTIFIER: string | null;
-  EXPO_EXPO_PROJECT_ID: string | null;
+  EXPO_PROJECT_ID: string | null;
   API_URL:
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com";
