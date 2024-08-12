@@ -1947,9 +1947,6 @@ export interface OrganizationConfig {
   COGNITO_HOSTED_URL: string;
   BUNDLE_IDENTIFIER: string | null;
   EXPO_EXPO_PROJECT_ID: string | null;
-  APP_ICON: string | null;
-  ADAPTIVE_ICON: string | null;
-  SPLASH_SCREEN: string | null;
   API_URL:
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com";
@@ -1972,6 +1969,9 @@ export interface OrganizationConfig {
     LIGHT: string;
     DARK?: string;
   };
+  APP_ICON: string | null;
+  ADAPTIVE_ICON: string | null;
+  SPLASH_SCREEN: string | null;
   DEFAULT_LOCALE: SupportedLocale;
   LANGUAGES: Record<SupportedLocale, Record<string, string>>;
   AUTH: {
