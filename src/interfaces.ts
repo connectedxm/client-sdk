@@ -1947,6 +1947,7 @@ export interface OrganizationConfig {
   COGNITO_HOSTED_URL: string;
   BUNDLE_IDENTIFIER: string | null;
   EXPO_PROJECT_ID: string | null;
+  EXPO_SLUG: string | null;
   API_URL:
     | "https://client-api.connectedxm.com"
     | "https://staging-client-api.connectedxm.com";
@@ -1975,6 +1976,7 @@ export interface OrganizationConfig {
   DEFAULT_LOCALE: SupportedLocale;
   LANGUAGES: Record<SupportedLocale, Record<string, string>>;
   AUTH: {
+    LAYOUT: "default" | "social";
     DEFAULT_ACTION: DefaultAuthAction;
     FACEBOOK: boolean;
     GOOGLE: boolean;
