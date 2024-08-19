@@ -2014,7 +2014,7 @@ export interface OrganizationAction {
 
 export interface OrganizationOAuth {
   name: string;
-  text?: string;
+  btnText?: string;
   icon?: string;
   color: string;
   textColor: string;
