@@ -3,7 +3,6 @@ import {
   ACTIVITY_COMMENTS_QUERY_KEY,
   ACTIVITY_QUERY_KEY,
   GROUP_ACTIVITIES_QUERY_KEY,
-  CONTENT_ACTIVITIES_QUERY_KEY,
   EVENT_ACTIVITIES_QUERY_KEY,
   GetBaseSingleQueryKeys,
 } from "@src/queries";
@@ -19,6 +18,7 @@ import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
+import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
 
 export interface CreateActivity {
   message: string;
@@ -87,12 +87,15 @@ export const SelfCreateActivity = async ({
       );
     }
 
-    if (activity.contentId) {
+    if (data.data.content) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
-          ...CONTENT_ACTIVITIES_QUERY_KEY(activity.contentId),
+          ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+            data.data.content.channel.id,
+            data.data.content.id
+          ),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
         data.data

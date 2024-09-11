@@ -4,10 +4,10 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { Content } from "@interfaces";
-import { CONTENTS_QUERY_KEY } from "./useGetContents";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { CONTENTS_QUERY_KEY } from "./useGetContents";
 
 export const CONTENT_QUERY_KEY = (contentId: string): QueryKey => [
   ...CONTENTS_QUERY_KEY(),
@@ -49,8 +49,7 @@ export const useGetContent = (
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetContent>>(
     CONTENT_QUERY_KEY(contentId),
-    (params: SingleQueryParams) =>
-      GetContent({ contentId: contentId || "", ...params }),
+    (params: SingleQueryParams) => GetContent({ contentId, ...params }),
     {
       ...options,
       enabled: !!contentId && options.enabled,

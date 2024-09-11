@@ -65,6 +65,7 @@ export interface BaseOrganization {
   id: string;
   slug: string;
   name: string;
+  description: string;
   email: string;
   address1: string | null;
   address2: string | null;
@@ -74,6 +75,12 @@ export interface BaseOrganization {
   zip: string | null;
   logo: BaseImage | null;
   logoId: string | null;
+  darkLogo: BaseImage | null;
+  darkLogoId: string | null;
+  icon: BaseImage | null;
+  iconId: string | null;
+  darkIcon: BaseImage | null;
+  darkIconId: string | null;
 }
 
 export enum Currency {
@@ -387,14 +394,17 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
+  externalUrl: string | null;
   registration: boolean;
   registrationCount: number;
   registrationLimit: number;
   registrationStart: string;
   registrationEnd: string;
+  tickets: {
+    enableCoupons: boolean;
+  }[];
   _count: {
     sections: number;
-    tickets: number;
     coupons: number;
     addOns: number;
     reservationSections: number;
@@ -492,6 +502,7 @@ export interface BaseRegistrationSection {
 export interface RegistrationSection extends BaseRegistrationSection {
   accountTiers: BaseAccountTier[];
   eventTickets: BaseTicket[];
+  eventAddOns: BaseEventAddOn[];
   questions: RegistrationQuestion[];
 }
 
@@ -561,6 +572,10 @@ export interface BaseTicket {
   minReservationEnd: string | null;
   reservationEnd: string | null;
   maxReservationEnd: string | null;
+  priceSchedules: BaseTicketPriceSchedule[];
+  enableCoupons: boolean;
+  minCouponQuantity: number | null;
+  maxCouponQuantity: number | null;
 }
 
 export interface Ticket extends BaseTicket {
@@ -568,6 +583,19 @@ export interface Ticket extends BaseTicket {
   active: boolean;
   event: BaseEvent;
 }
+
+export interface BaseTicketPriceSchedule {
+  id: string;
+  ticketId: string;
+  price: number;
+  name: string | null;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TicketPriceSchedule extends BaseTicketPriceSchedule {}
 
 export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
@@ -592,6 +620,8 @@ export interface BasePurchase {
   reservationEnd: string | null;
   reservationSectionLocation: BaseEventReservationSectionLocation | null;
   responses: BaseRegistrationQuestionResponse[];
+  couponId: string | null;
+  coupon: BaseCoupon | null;
   createdAt: string;
 }
 
@@ -661,6 +691,7 @@ export enum NotificationType {
   ACTIVITY = "ACTIVITY",
   GROUP_INVITATION = "GROUP_INVITATION",
   GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
+  CONTENT = "CONTENT",
 }
 
 export interface BaseNotification {
@@ -678,6 +709,7 @@ export interface Notification extends BaseNotification {
   announcement: BaseAnnouncement | null;
   group: BaseGroup | null;
   invitation: BaseGroupInvitation | null;
+  content: BaseContent | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -694,8 +726,22 @@ export const isTypeNotification = (
 export interface BaseCoupon {
   id: string;
   code: string;
-  discountAmount: number;
-  discountPercent: number;
+  eventId: string;
+  ticketId: string | null;
+  ticket: BaseTicket | null;
+  prePaid: boolean;
+  active: boolean;
+  startDate: string | null;
+  endDate: string | null;
+  discountAmount: number | null;
+  discountPercent: number | null;
+  quantityMin: number | null;
+  quantityMax: number | null;
+  useLimit: number | null;
+  purchaseLimit: number | null;
+  emailDomains: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum CouponType {
@@ -705,7 +751,6 @@ export enum CouponType {
 
 export interface Coupon extends BaseCoupon {
   description: string | null;
-  ticket: BaseTicket | null;
 }
 
 export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
@@ -713,27 +758,15 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 };
 
 export interface ManagedCoupon extends Coupon {
-  active: boolean;
-  type: CouponType;
-  startDate: string | null;
-  endDate: string | null;
-  quantityMin: number;
-  quantityMax: number | null;
-  amountMin: number;
-  amountMax: number | null;
-  useLimit: number | null;
-  limitOnePerAccount: boolean;
-  studentDiscount: boolean;
   _count: {
-    instances: number;
-    uses: number;
+    purchases: number;
   };
 }
 
 export const isManagedCoupon = (
   coupon: BaseCoupon | Coupon | ManagedCoupon
 ): coupon is ManagedCoupon => {
-  return (coupon as Omit<ManagedCoupon, keyof Coupon>).active !== undefined;
+  return (coupon as Omit<ManagedCoupon, keyof Coupon>)._count !== undefined;
 };
 
 export interface ManagedCouponOrder {
@@ -742,6 +775,15 @@ export interface ManagedCouponOrder {
   createdAt: string;
   coupon: BaseCoupon | null;
   account: BaseAccount;
+}
+
+export interface ManagedCouponPurchase {
+  id: string;
+  coupon: BaseCoupon;
+  registration: {
+    account: BaseAccount;
+  };
+  createdAt: string;
 }
 
 export interface BaseInstance {
@@ -1104,39 +1146,63 @@ export const isTypeGroupMembership = (
   );
 };
 
-export enum ContentTypeFormat {
-  article = "article",
-  podcast = "podcast",
-  video = "video",
-}
-
-export interface BaseContentType {
+export interface BaseChannel {
   id: string;
   slug: string;
   name: string;
   description: string | null;
-  format: ContentTypeFormat;
   image: BaseImage;
+  subscriberCount: number;
+  creatorId: string | null;
+  _count: {
+    contents: number;
+  };
 }
 
-export interface ContentType extends BaseContentType {
+export interface Channel extends BaseChannel {
+  banner: BaseImage | null;
   priority: number;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
+  visilble: boolean;
   hosts: BaseAccount[];
+  group: BaseGroup | null;
 }
 
-export const isTypeContentType = (
-  contentType: BaseContentType | ContentType
-): contentType is ContentType => {
-  return (
-    (contentType as Omit<ContentType, keyof BaseContentType>).priority !==
-    undefined
-  );
+export const isTypeChannel = (
+  channel: BaseChannel | Channel
+): channel is Channel => {
+  return (channel as Omit<Channel, keyof BaseChannel>).priority !== undefined;
 };
+
+export interface BaseChannelSubscriber {
+  channelId: string;
+  accountId: string;
+  contentEmailNotification: boolean;
+  contentPushNotification: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface ChannelSubscriber extends BaseChannelSubscriber {
+  channel: BaseChannel;
+  account: BaseAccount;
+}
+
+export interface BaseChannelCollection {
+  id: string;
+  slug: string;
+  channelId: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChannelCollection extends BaseChannelCollection {}
 
 export interface BaseContent {
   id: string;
@@ -1145,24 +1211,32 @@ export interface BaseContent {
   title: string | null;
   description: string | null;
   imageUrl: string | null;
-  audioUrl: string | null;
-  videoUrl: string | null;
+  image: BaseImage | null;
+  audio: BaseFile | null;
+  video: BaseVideo | null;
   duration: string | null;
-  contentType: BaseContentType;
+  channel: BaseChannel;
   published: string | null;
+  visible: boolean;
 }
 
 export interface Content extends BaseContent {
   body: string | null;
+  editor: string | null;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
-  authors: BaseAccount[];
-  mentions: BaseAccount[];
+  guests: BaseContentGuest[];
+  publishSchedule: BaseSchedule | null;
+  email: boolean;
+  push: boolean;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    likes: number; // if you have liked = number > 0
+  };
 }
 
 export const isTypeContent = (
@@ -1170,6 +1244,41 @@ export const isTypeContent = (
 ): content is Content => {
   return (content as Omit<Content, keyof BaseContent>).body !== undefined;
 };
+
+export enum ContentGuestType {
+  guest = "guest",
+  host = "host",
+  author = "author",
+}
+
+export interface BaseContentGuest {
+  id: string;
+  slug: string;
+  contentId: string;
+  accountId: string | null;
+  account: BaseAccount | null;
+  type: ContentGuestType;
+  name: string;
+  title: string | null;
+  bio: string | null;
+  company: string | null;
+  companyLink: string | null;
+  companyBio: string | null;
+  imageId: string | null;
+  image: BaseImage | null;
+  website: string | null;
+  facebook: string | null;
+  twitter: string | null;
+  instagram: string | null;
+  linkedIn: string | null;
+  tikTok: string | null;
+  youtube: string | null;
+  discord: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface ContentGuest extends BaseContentGuest {}
 
 interface BaseRegistration {
   id: string;
@@ -1181,10 +1290,9 @@ export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   status: RegistrationStatus;
-  couponId: string | null;
-  coupon: BaseCoupon | null;
   purchases: BasePurchase[];
   payments: Payment[];
+  coupons: ManagedCoupon[];
   createdAt: string;
 }
 
@@ -1208,14 +1316,16 @@ export interface BasePayment {
   id: string;
   type: RegistrationPaymentType;
   chargedAmt: number;
-  ticketId: string | null;
-  ticket: BaseTicket | null;
   last4: string | null;
   stripeId: string | null;
   createdAt: string;
 }
 
-export interface Payment extends BasePayment {}
+export interface Payment extends BasePayment {
+  addOns: BaseEventAddOn[];
+  purchases: BasePurchase[];
+  coupons: BaseCoupon[];
+}
 export interface BaseLead {
   id: string;
   firstName: string | null;
@@ -1427,7 +1537,7 @@ export interface LinkPreview {
   siteName: string | null;
   description: string | null;
   mediaType: string | null;
-  contentType: string | null;
+  channel: string | null;
   image: string | null;
   imageWidth: number | null;
   imageHeight: number | null;
@@ -1750,6 +1860,29 @@ export interface InvitableAccount extends Account {
   }[];
 }
 
+export interface BasePaymentIntent {
+  id: string;
+  integrationId: string;
+  accountId: string;
+  description: string | null;
+  secret: string;
+  referenceId: string;
+  amount: number;
+  metadata: Record<string, any>;
+  eventId: string | null;
+  registrationId: string | null;
+  invoiceId: string | null;
+  createdAt: string;
+}
+export interface PaymentIntent extends BasePaymentIntent {
+  integration: {
+    connectionId: string;
+    type: string;
+  };
+  account: BaseAccount;
+  registration: BaseRegistration;
+  invoice: BaseInvoice;
+}
 export interface BaseFile {
   id: number;
   name: string;
@@ -1760,3 +1893,139 @@ export interface BaseFile {
 }
 
 export interface File extends BaseFile {}
+
+export enum SupportedLocale {
+  en = "en",
+  es = "es",
+  fr = "fr",
+  ja = "ja",
+}
+
+export enum DefaultAuthAction {
+  signIn = "signIn",
+  signUp = "signUp",
+}
+
+export enum PrimaryModule {
+  activities = "activities",
+  events = "events",
+  channels = "channels",
+  groups = "groups",
+  threads = "threads",
+}
+
+export enum OrganizationModuleType {
+  accounts = "accounts",
+  events = "events",
+  listings = "listings",
+  activities = "activities",
+  groups = "groups",
+  contents = "contents",
+  chat = "chat",
+  support = "support",
+  sponsors = "sponsors",
+  benefits = "benefits",
+  advertisements = "advertisements",
+  announcements = "announcements",
+  subscriptions = "subscriptions",
+  threads = "threads",
+}
+
+export enum OrganizationActionType {
+  create = "create",
+  read = "read",
+  update = "update",
+  delete = "delete",
+}
+
+export interface OrganizationConfig {
+  ORGANIZATION_ID: string;
+  SLUG: string;
+  WEBSITE_URL: string;
+  COGNITO_USERPOOL_ID: string;
+  COGNITO_CLIENT_ID: string;
+  COGNITO_HOSTED_URL: string;
+  BUNDLE_IDENTIFIER: string | null;
+  EXPO_PROJECT_ID: string | null;
+  EXPO_SLUG: string | null;
+  API_URL:
+    | "https://client-api.connectedxm.com"
+    | "https://staging-client-api.connectedxm.com";
+  OPENGRAPH_URL:
+    | "https://opengraph-api.connectedxm.com"
+    | "https://staging-opengraph-api.connectedxm.com";
+  CHAT_URL: "wss://chat.connectedxm.com" | "wss://staging-chat.connectedxm.com";
+  APPLE_APPSTORE_LINK: string | null;
+  GOOGLE_PLAYSTORE_LINK: string | null;
+  NAME: string;
+  DESCRIPTION: string;
+  PRIMARY_MODULE: PrimaryModule;
+  PRIMARY_COLOR: string;
+  SECONDARY_COLOR: string;
+  LOGO: {
+    LIGHT: string;
+    DARK?: string;
+  };
+  ICON: {
+    LIGHT: string;
+    DARK?: string;
+  };
+  APP_ICON: string | null;
+  ADAPTIVE_ICON: string | null;
+  SPLASH_SCREEN: string | null;
+  DEFAULT_LOCALE: SupportedLocale;
+  LANGUAGES: Record<SupportedLocale, Record<string, string>>;
+  AUTH: {
+    LAYOUT: "default" | "social";
+    DEFAULT_ACTION: DefaultAuthAction;
+    FACEBOOK: boolean;
+    GOOGLE: boolean;
+    APPLE: boolean;
+    CUSTOM: OrganizationOAuth[];
+    FIELDS: {
+      PHONE: boolean;
+      TITLE: boolean;
+      COMPANY: boolean;
+    };
+  };
+  MODULES: Record<keyof typeof OrganizationModuleType, OrganizationModule>;
+  SOCIAL: {
+    facebook: string | null;
+    instagram: string | null;
+    twitter: string | null;
+    linkedIn: string | null;
+    tikTok: string | null;
+    youtube: string | null;
+    discord: string | null;
+  };
+}
+
+export interface OrganizationModule {
+  enabled: boolean;
+  requireAuth: boolean;
+  actions: Record<keyof typeof OrganizationActionType, OrganizationAction>;
+}
+
+export interface OrganizationAction {
+  enabled: boolean;
+  requireAuth: boolean;
+  tiers: string[];
+}
+
+export interface OrganizationOAuth {
+  name: string;
+  btnText?: string;
+  icon?: string;
+  color: string;
+  textColor: string;
+  borderColor?: string;
+}
+
+export interface BaseSchedule {
+  name: string;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Schedule extends BaseSchedule {}

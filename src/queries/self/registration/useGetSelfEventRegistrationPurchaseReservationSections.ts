@@ -63,7 +63,7 @@ export const GetSelfEventRegistrationPurchaseReservationSections = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/draft/purchases/${purchaseId}/reservationSections`,
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/reservationSections`,
     {}
   );
 
