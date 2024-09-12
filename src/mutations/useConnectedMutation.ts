@@ -53,7 +53,7 @@ export const useConnectedMutation = <
       mutation({
         queryClient,
         clientApiParams: {
-          apiUrl,
+          apiUrl: apiUrl as any,
           getToken,
           organizationId,
           getExecuteAs,

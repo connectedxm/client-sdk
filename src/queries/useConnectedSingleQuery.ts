@@ -77,7 +77,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     queryFn: () =>
       queryFn({
         clientApiParams: {
-          apiUrl,
+          apiUrl: apiUrl as any,
           organizationId,
           getToken,
           getExecuteAs,
