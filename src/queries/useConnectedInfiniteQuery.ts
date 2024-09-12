@@ -124,7 +124,7 @@ export const useConnectedInfiniteQuery = <
     ],
     queryFn: ({ pageParam }) =>
       queryFn({ ...params, pageSize: params.pageSize || 25, locale: params.locale || locale, pageParam, queryClient, clientApiParams: {
-        apiUrl: apiUrl as any,
+        apiUrl,
         getToken,
         organizationId,
         getExecuteAs,
