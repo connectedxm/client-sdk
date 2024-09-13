@@ -2,8 +2,8 @@ import axios, { AxiosInstance } from "axios";
 
 export interface ClientApiParams {
   apiUrl:
-    | "https://client-api.connectedxm.com"
-    | "https://staging-client-api.connectedxm.com"
+    | "https://client-api.connected.dev"
+    | "https://staging-client-api.connected.dev"
     | "http://localhost:4001";
   organizationId: string;
   getToken: () => Promise<string | undefined> | string | undefined;
