@@ -371,12 +371,10 @@ export interface Event extends BaseEvent {
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
-  _count: {
-    sessions: number;
-    speakers: number;
-    sponsors: number;
-    faqSections: number;
-  };
+  sessions: BaseSession[];
+  speakers: BaseSpeaker[];
+  sponsors: BaseAccount[];
+  faqSections: BaseFaqSection[];
 }
 
 export type EventWithSessions = Event & {
@@ -392,7 +390,7 @@ export type EventWithSponsors = Event & {
 };
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
-  return (event as Omit<Event, keyof BaseEvent>)._count !== undefined;
+  return (event as Omit<Event, keyof BaseEvent>).sessions !== undefined;
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
