@@ -20,7 +20,6 @@ export const CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
 ): QueryKey => [
   ...ACTIVITIES_QUERY_KEY(),
   ...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
-  "ACTIVITIES",
 ];
 
 export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (

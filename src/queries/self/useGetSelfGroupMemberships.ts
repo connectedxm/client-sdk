@@ -9,10 +9,13 @@ import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_GROUP_MEMBERSHIPS_QUERY_KEY = (): QueryKey => [
-  ...SELF_QUERY_KEY(),
-  "GROUP_MEMBERSHIPS",
-];
+export const SELF_GROUP_MEMBERSHIPS_QUERY_KEY = (
+  role?: "member" | "moderator"
+): QueryKey => {
+  const key = [...SELF_QUERY_KEY(), "GROUP_MEMBERSHIPS"];
+  if (role) key.push(role);
+  return key;
+};
 
 export interface GetSelfGroupMembershipsProps extends InfiniteQueryParams {
   role?: "member" | "moderator";
@@ -56,7 +59,7 @@ export const useGetSelfGroupMemberships = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfGroupMemberships>>
   >(
-    SELF_GROUP_MEMBERSHIPS_QUERY_KEY(),
+    SELF_GROUP_MEMBERSHIPS_QUERY_KEY(role),
     (params: InfiniteQueryParams) =>
       GetSelfGroupMemberships({ role, ...params }),
     params,
