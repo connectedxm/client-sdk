@@ -1236,9 +1236,9 @@ export interface Content extends BaseContent {
   push: boolean;
   createdAt: string;
   updatedAt: string;
-  _count: {
-    likes: number; // if you have liked = number > 0
-  };
+  likes: {
+    createdAt: string;
+  }[]; // if you have liked = length > 0
 }
 
 export const isTypeContent = (
