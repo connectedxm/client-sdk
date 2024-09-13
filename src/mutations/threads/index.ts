@@ -9,3 +9,4 @@ export * from "./useUpdateThreadMessage";
 export * from "./useDeleteThreadMessage";
 export * from "./useAddThreadMessageReaction";
 export * from "./useRemoveThreadMessageReaction";
+export * from "./useAddThreadMessageReply";
