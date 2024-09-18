@@ -7,6 +7,7 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import {
   ADD_SELF_RELATIONSHIP,
+  GROUPS_INVITED_QUERY_KEY,
   SELF_NOTIFICATIONS_QUERY_KEY,
   SELF_NOTIFICATION_COUNT_QUERY_KEY,
 } from "@src/queries";
@@ -26,6 +27,9 @@ export const AcceptGroupInvitation = async ({
   );
 
   if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: GROUPS_INVITED_QUERY_KEY(),
+    });
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATIONS_QUERY_KEY(""),
     });
