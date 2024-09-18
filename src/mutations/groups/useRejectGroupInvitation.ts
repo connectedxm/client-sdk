@@ -6,6 +6,7 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  GROUPS_INVITED_QUERY_KEY,
   REMOVE_SELF_RELATIONSHIP,
   SELF_NOTIFICATIONS_QUERY_KEY,
   SELF_NOTIFICATION_COUNT_QUERY_KEY,
@@ -28,6 +29,9 @@ export const RejectGroupInvitation = async ({
   );
 
   if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: GROUPS_INVITED_QUERY_KEY(),
+    });
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATIONS_QUERY_KEY(""),
     });
