@@ -5,7 +5,10 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { REMOVE_SELF_RELATIONSHIP } from "@src/queries";
+import {
+  GROUPS_REQUESTED_QUERY_KEY,
+  REMOVE_SELF_RELATIONSHIP,
+} from "@src/queries";
 
 export interface CancelGroupRequestParams extends MutationParams {
   groupId: string;
@@ -28,6 +31,9 @@ export const CancelGroupRequest = async ({
       "groups",
       groupId
     );
+    queryClient.invalidateQueries({
+      queryKey: GROUPS_REQUESTED_QUERY_KEY(),
+    });
   }
 
   return data;
