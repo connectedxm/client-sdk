@@ -11,13 +11,20 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { GROUPS_QUERY_KEY } from "./useGetGroups";
 
-export const GROUPS_INVITED_QUERY_KEY = (): QueryKey => {
-  return [...GROUPS_QUERY_KEY(), "INVITED"];
+export const GROUPS_INVITED_QUERY_KEY = (rejected?: boolean): QueryKey => {
+  const keys = [...GROUPS_QUERY_KEY(), "INVITED"];
+  if (typeof rejected === "boolean") {
+    keys.push(rejected ? "REJECTED" : "NEW");
+  }
+  return keys;
 };
 
-export interface GetGroupsInvitedProps extends InfiniteQueryParams {}
+export interface GetGroupsInvitedProps extends InfiniteQueryParams {
+  rejected?: boolean;
+}
 
 export const GetGroupsInvited = async ({
+  rejected,
   pageParam,
   pageSize,
   orderBy,
@@ -33,6 +40,7 @@ export const GetGroupsInvited = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      rejected,
     },
   });
 
@@ -49,6 +57,7 @@ export const GetGroupsInvited = async ({
 };
 
 export const useGetGroupsInvited = (
+  rejected?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -60,8 +69,8 @@ export const useGetGroupsInvited = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetGroupsInvited>>
   >(
-    GROUPS_INVITED_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetGroupsInvited({ ...params }),
+    GROUPS_INVITED_QUERY_KEY(rejected),
+    (params: InfiniteQueryParams) => GetGroupsInvited({ rejected, ...params }),
     params,
     options
   );
