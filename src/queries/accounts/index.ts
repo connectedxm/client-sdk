@@ -5,3 +5,4 @@ export * from "./useGetAccountGroups";
 export * from "./useGetAccountFollowers";
 export * from "./useGetAccountFollowings";
 export * from "./useGetAccounts";
+export * from "./useGetAccountMedia";
