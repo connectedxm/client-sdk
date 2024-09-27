@@ -13,6 +13,7 @@ export * from "./sponsors";
 export * from "./invoices";
 export * from "./listings";
 export * from "./interests";
+export * from "./threads";
 
 export * from "./useConnectedInfiniteQuery";
 export * from "./useConnectedSingleQuery";
