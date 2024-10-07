@@ -11,3 +11,4 @@ export * from "./useGetSelfEventTicketCouponIntent";
 export * from "./useGetSelfEventRegistrationCoupon";
 export * from "./useGetSelfEventRegistrationCoupons";
 export * from "./useGetSelfEventRegistrationCouponPurchases";
+export * from "./useGetSelfEventPaidPurchases";
