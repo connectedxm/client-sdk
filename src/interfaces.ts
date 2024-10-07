@@ -601,12 +601,19 @@ export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
 };
 
+export enum PurchaseStatus {
+  draft = "draft",
+  canceled = "canceled",
+  needsInfo = "needsInfo",
+  ready = "ready",
+}
+
 export interface BasePurchase {
   id: string;
   alternateId: number;
   location: string | null;
   usedAt: string | null;
-  paid: boolean;
+  status: PurchaseStatus;
   firstName: string;
   lastName: string;
   email: string;
