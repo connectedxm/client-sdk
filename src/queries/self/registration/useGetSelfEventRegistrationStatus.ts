@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, RegistrationStatus } from "@src/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -33,7 +33,6 @@ export interface GetSelfEventRegistrationStatusProps extends SingleQueryParams {
 }
 
 export interface RegistrationStatusDetails {
-  status: RegistrationStatus;
   purchases: {
     paid: number;
     unpaid: number;

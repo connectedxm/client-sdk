@@ -6,17 +6,6 @@ export interface ConnectedXMResponse<TData> {
   url?: string;
 }
 
-export enum RegistrationStatus {
-  registered = "registered",
-  checkedIn = "checkedIn",
-  checkedOut = "checkedOut",
-  waitlisted = "waitlisted",
-  cancelled = "cancelled",
-  transferred = "transferred",
-  invited = "invited",
-  rejected = "rejected",
-  draft = "draft",
-}
 export interface BaseImage {
   id: string;
   uri: string;
@@ -1296,7 +1285,6 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
-  status: RegistrationStatus;
   purchases: BasePurchase[];
   payments: Payment[];
   coupons: ManagedCoupon[];
@@ -1306,7 +1294,6 @@ export interface Registration extends BaseRegistration {
 export interface ListingRegistration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount & { email: string | null; phone: string | null };
-  status: RegistrationStatus;
   couponId: string | null;
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
@@ -2083,12 +2070,12 @@ export interface OrganizationConfig {
   EXPO_PROJECT_ID: string | null;
   EXPO_SLUG: string | null;
   API_URL:
-    | "https://client-api.connectedxm.com"
-    | "https://staging-client-api.connectedxm.com";
+    | "https://client-api.connected.dev"
+    | "https://staging-client-api.connected.dev";
   OPENGRAPH_URL:
-    | "https://opengraph-api.connectedxm.com"
-    | "https://staging-opengraph-api.connectedxm.com";
-  CHAT_URL: "wss://chat.connectedxm.com" | "wss://staging-chat.connectedxm.com";
+    | "https://opengraph-api.connected.dev"
+    | "https://staging-opengraph-api.connected.dev";
+  CHAT_URL: "wss://chat.connected.dev" | "wss://staging-chat.connected.dev";
   APPLE_APPSTORE_LINK: string | null;
   GOOGLE_PLAYSTORE_LINK: string | null;
   NAME: string;

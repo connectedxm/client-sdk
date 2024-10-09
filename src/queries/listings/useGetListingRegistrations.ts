@@ -1,7 +1,7 @@
 import type {
   ConnectedXMResponse,
   ListingRegistration,
-  RegistrationStatus,
+  PurchaseStatus,
 } from "@interfaces";
 import {
   InfiniteQueryOptions,
@@ -13,13 +13,13 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const LISTING_REGISTRATIONS_QUERY_KEY = (
   eventId: string,
-  status?: keyof typeof RegistrationStatus
+  status?: keyof typeof PurchaseStatus
 ) => [...LISTING_QUERY_KEY(eventId), "REGISTRATIONS", status ?? "ALL"];
 
 export interface GetSelfEventListingRegistrationsProps
   extends InfiniteQueryParams {
   eventId: string;
-  status?: keyof typeof RegistrationStatus;
+  status?: keyof typeof PurchaseStatus;
 }
 
 export const GetSelfEventListingRegistrations = async ({
@@ -48,7 +48,7 @@ export const GetSelfEventListingRegistrations = async ({
 
 export const useGetSelfEventListingsRegistrations = (
   eventId: string,
-  status?: keyof typeof RegistrationStatus,
+  status?: keyof typeof PurchaseStatus,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
