@@ -2076,12 +2076,12 @@ export interface OrganizationConfig {
   EXPO_PROJECT_ID: string | null;
   EXPO_SLUG: string | null;
   API_URL:
-    | "https://client-api.connectedxm.com"
-    | "https://staging-client-api.connectedxm.com";
+    | "https://client-api.connected.dev"
+    | "https://staging-client-api.connected.dev";
   OPENGRAPH_URL:
-    | "https://opengraph-api.connectedxm.com"
-    | "https://staging-opengraph-api.connectedxm.com";
-  CHAT_URL: "wss://chat.connectedxm.com" | "wss://staging-chat.connectedxm.com";
+    | "https://opengraph-api.connected.dev"
+    | "https://staging-opengraph-api.connected.dev";
+  CHAT_URL: "wss://chat.connected.dev" | "wss://staging-chat.connected.dev";
   APPLE_APPSTORE_LINK: string | null;
   GOOGLE_PLAYSTORE_LINK: string | null;
   NAME: string;
