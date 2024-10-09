@@ -6,17 +6,6 @@ export interface ConnectedXMResponse<TData> {
   url?: string;
 }
 
-export enum RegistrationStatus {
-  registered = "registered",
-  checkedIn = "checkedIn",
-  checkedOut = "checkedOut",
-  waitlisted = "waitlisted",
-  cancelled = "cancelled",
-  transferred = "transferred",
-  invited = "invited",
-  rejected = "rejected",
-  draft = "draft",
-}
 export interface BaseImage {
   id: string;
   uri: string;
@@ -601,12 +590,19 @@ export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
 };
 
+export enum PurchaseStatus {
+  draft = "draft",
+  canceled = "canceled",
+  needsInfo = "needsInfo",
+  ready = "ready",
+}
+
 export interface BasePurchase {
   id: string;
   alternateId: number;
   location: string | null;
   usedAt: string | null;
-  paid: boolean;
+  status: PurchaseStatus;
   firstName: string;
   lastName: string;
   email: string;
@@ -1289,7 +1285,6 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
-  status: RegistrationStatus;
   purchases: BasePurchase[];
   payments: Payment[];
   coupons: ManagedCoupon[];
@@ -1299,7 +1294,6 @@ export interface Registration extends BaseRegistration {
 export interface ListingRegistration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount & { email: string | null; phone: string | null };
-  status: RegistrationStatus;
   couponId: string | null;
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
