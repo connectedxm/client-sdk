@@ -3,10 +3,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../../../useConnectedMutation";
-import {
-  SELF_EVENT_REGISTRATION_STATUS_QUERY_KEY,
-  SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
-} from "@src/queries";
+import { SET_SELF_EVENT_REGISTRATION_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
@@ -59,9 +56,6 @@ export const SubmitSelfEventRegistration = async ({
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
-    queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_REGISTRATION_STATUS_QUERY_KEY(eventId),
-    });
     ADD_SELF_RELATIONSHIP(
       queryClient,
       [clientApiParams.locale],
