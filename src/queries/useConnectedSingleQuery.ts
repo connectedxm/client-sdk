@@ -1,7 +1,7 @@
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useConnectedXM } from "../hooks";
 import { AxiosError } from "axios";
-import { ConnectedXMResponse } from "..";
+import { ConnectedXMResponse, CUSTOM_ERROR_CODES } from "..";
 import { ClientApiParams } from "@src/ClientAPI";
 
 export interface SingleQueryParams {
@@ -57,7 +57,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
       }
 
       // MODULE FORBIDDEN FOR USER
-      if (error.response?.status === 403 || error.response?.status === 453) {
+      if (error.response?.status === 403 || !!error.response?.status && CUSTOM_ERROR_CODES.includes(error.response.status)) {
         if (onModuleForbidden) onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
