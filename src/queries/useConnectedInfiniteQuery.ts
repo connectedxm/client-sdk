@@ -9,7 +9,7 @@ import {
 import { useConnectedXM } from "../hooks";
 import { AxiosError } from "axios";
 import { ClientApiParams } from "@src/ClientAPI";
-import { CUSTOM_ERROR_CODES } from "./useConnectedSingleQuery";
+import { CUSTOM_ERROR_CODES } from "@src/utilities";
 
 export interface InfiniteQueryParams {
   pageParam: number;
