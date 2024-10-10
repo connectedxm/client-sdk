@@ -9,6 +9,7 @@ import {
 import { useConnectedXM } from "../hooks";
 import { AxiosError } from "axios";
 import { ClientApiParams } from "@src/ClientAPI";
+import { CUSTOM_ERROR_CODES } from "./useConnectedSingleQuery";
 
 export interface InfiniteQueryParams {
   pageParam: number;
@@ -102,7 +103,7 @@ export const useConnectedInfiniteQuery = <
       }
 
       // MODULE FORBIDDEN FOR USER
-      if (error.response?.status === 403 || error.response?.status === 453) {
+      if (error.response?.status === 403 || !!error.response?.status && CUSTOM_ERROR_CODES.includes(error.response.status)) {
         if (onModuleForbidden) onModuleForbidden(error, queryKeys, options.shouldRedirect || false);
         return false;
       }
