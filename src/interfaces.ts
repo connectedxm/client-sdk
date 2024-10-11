@@ -366,18 +366,6 @@ export interface Event extends BaseEvent {
   faqSections: BaseFaqSection[];
 }
 
-export type EventWithSessions = Event & {
-  sessions: BaseSession[];
-};
-
-export type EventWithSpeakers = Event & {
-  speakers: BaseSpeaker[];
-};
-
-export type EventWithSponsors = Event & {
-  sponsors: BaseAccount[];
-};
-
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>).sessions !== undefined;
 };

@@ -28,7 +28,7 @@ export const GetSelfEventPaidPurchases = async ({
   ConnectedXMResponse<Purchase[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/events/${eventId}/purchases`, {
+  const { data } = await clientApi.get(`/self/events/${eventId}/passes`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
