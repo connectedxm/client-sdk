@@ -1,4 +1,8 @@
-import { ConnectedXMResponse, SupportTicket } from "@src/interfaces";
+import {
+  ConnectedXMResponse,
+  SupportTicket,
+  SupportTicketType,
+} from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -6,7 +10,7 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateSupportTicketParams extends MutationParams {
-  type: "support" | "inquiry";
+  type: SupportTicketType;
   email: string;
   request: any;
   eventId?: string;
