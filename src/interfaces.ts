@@ -1005,7 +1005,6 @@ export interface BaseSupportTicket {
 
 export enum SupportTicketType {
   support = "support",
-  inquiry = "inquiry", // deprecated
   bug = "bug",
   feedback = "feedback",
 }

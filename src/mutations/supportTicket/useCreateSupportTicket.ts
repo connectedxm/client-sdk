@@ -10,7 +10,7 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface CreateSupportTicketParams extends MutationParams {
-  type: SupportTicketType;
+  type: keyof typeof SupportTicketType;
   email: string;
   request: any;
   eventId?: string;
