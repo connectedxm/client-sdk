@@ -366,18 +366,6 @@ export interface Event extends BaseEvent {
   faqSections: BaseFaqSection[];
 }
 
-export type EventWithSessions = Event & {
-  sessions: BaseSession[];
-};
-
-export type EventWithSpeakers = Event & {
-  speakers: BaseSpeaker[];
-};
-
-export type EventWithSponsors = Event & {
-  sponsors: BaseAccount[];
-};
-
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>).sessions !== undefined;
 };
@@ -1005,7 +993,8 @@ export interface BaseSupportTicket {
 
 export enum SupportTicketType {
   support = "support",
-  inquiry = "inquiry",
+  bug = "bug",
+  feedback = "feedback",
 }
 
 export interface SupportTicket extends BaseSupportTicket {
@@ -1604,7 +1593,7 @@ export interface BaseVideo {
   height: number;
   thumbnailUrl: string;
   previewUrl: string;
-  readyToStream: string;
+  readyToStream: boolean;
   hlsUrl: string;
   dashUrl: string;
 }
