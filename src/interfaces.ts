@@ -1605,7 +1605,7 @@ export interface BaseVideo {
   height: number;
   thumbnailUrl: string;
   previewUrl: string;
-  readyToStream: string;
+  readyToStream: boolean;
   hlsUrl: string;
   dashUrl: string;
 }
