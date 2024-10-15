@@ -35,7 +35,7 @@ export interface CreateListing {
   externalUrl?: string;
   meetingUrl?: string;
   registration?: boolean;
-  registrationLimit?: string;
+  registrationLimit?: number | null;
   groupOnly?: boolean;
 }
 
