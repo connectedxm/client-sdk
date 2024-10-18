@@ -742,6 +742,7 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 };
 
 export interface ManagedCoupon extends Coupon {
+  registrationId: string;
   _count: {
     purchases: number;
   };
