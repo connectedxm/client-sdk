@@ -1,3 +1,11 @@
+export interface Integration {
+  id: string | null;
+  type: boolean;
+  enabled: string | null;
+  publicKey: string | null;
+  publicUrl: string | null;
+}
+
 export interface ConnectedXMResponse<TData> {
   status: "ok" | "error" | "redirect";
   message: string;
@@ -742,6 +750,7 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 };
 
 export interface ManagedCoupon extends Coupon {
+  registrationId: string;
   _count: {
     purchases: number;
   };
@@ -2108,6 +2117,7 @@ export interface OrganizationConfig {
     youtube: string | null;
     discord: string | null;
   };
+  INTEGRATIONS: Integration[];
 }
 
 export interface OrganizationModule {

@@ -16,3 +16,4 @@ export * from "./useGetEventSpeakers";
 export * from "./useGetEventSponsors";
 export * from "./useGetEventTickets";
 export * from "./useGetFeaturedEvents";
+export * from "./useGetEventTicket";
