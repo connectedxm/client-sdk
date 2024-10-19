@@ -13,6 +13,9 @@ export interface Integration {
     name: string;
     description: string;
     logo: string;
+    info: boolean;
+    email: boolean;
+    phone: boolean;
   };
 }
 
