@@ -10,5 +10,6 @@ export * from "./groups";
 export * from "./listings";
 export * from "./storage";
 export * from "./threads";
+export * from "./integrations";
 
 export * from "./useConnectedMutation";

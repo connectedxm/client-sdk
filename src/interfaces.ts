@@ -2,21 +2,24 @@ export enum IntegrationType {
   snagtag = "snagtag",
 }
 
+export interface IntegrationDetails {
+  type: keyof typeof IntegrationType;
+  name: string;
+  description: string;
+  logo: string;
+  permissions: {
+    info: boolean;
+    contact: boolean;
+  };
+}
+
 export interface Integration {
   id: string | null;
   type: IntegrationType;
-  enabled: string | null;
+  enabled: boolean;
   publicKey: string | null;
   publicUrl: string | null;
-  details: {
-    type: keyof typeof IntegrationType;
-    name: string;
-    description: string;
-    logo: string;
-    info: boolean;
-    email: boolean;
-    phone: boolean;
-  };
+  details: IntegrationDetails;
 }
 
 export interface ConnectedXMResponse<TData> {
