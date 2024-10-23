@@ -1,3 +1,27 @@
+export enum IntegrationType {
+  snagtag = "snagtag",
+}
+
+export interface IntegrationDetails {
+  type: keyof typeof IntegrationType;
+  name: string;
+  description: string;
+  logo: string;
+  permissions: {
+    info: boolean;
+    contact: boolean;
+  };
+}
+
+export interface Integration {
+  id: string | null;
+  type: IntegrationType;
+  enabled: boolean;
+  publicKey: string | null;
+  publicUrl: string | null;
+  details: IntegrationDetails;
+}
+
 export interface ConnectedXMResponse<TData> {
   status: "ok" | "error" | "redirect";
   message: string;
@@ -6,17 +30,6 @@ export interface ConnectedXMResponse<TData> {
   url?: string;
 }
 
-export enum RegistrationStatus {
-  registered = "registered",
-  checkedIn = "checkedIn",
-  checkedOut = "checkedOut",
-  waitlisted = "waitlisted",
-  cancelled = "cancelled",
-  transferred = "transferred",
-  invited = "invited",
-  rejected = "rejected",
-  draft = "draft",
-}
 export interface BaseImage {
   id: string;
   uri: string;
@@ -377,18 +390,6 @@ export interface Event extends BaseEvent {
   faqSections: BaseFaqSection[];
 }
 
-export type EventWithSessions = Event & {
-  sessions: BaseSession[];
-};
-
-export type EventWithSpeakers = Event & {
-  speakers: BaseSpeaker[];
-};
-
-export type EventWithSponsors = Event & {
-  sponsors: BaseAccount[];
-};
-
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>).sessions !== undefined;
 };
@@ -601,12 +602,19 @@ export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
 };
 
+export enum PurchaseStatus {
+  draft = "draft",
+  canceled = "canceled",
+  needsInfo = "needsInfo",
+  ready = "ready",
+}
+
 export interface BasePurchase {
   id: string;
   alternateId: number;
   location: string | null;
   usedAt: string | null;
-  paid: boolean;
+  status: PurchaseStatus;
   firstName: string;
   lastName: string;
   email: string;
@@ -758,6 +766,7 @@ export const isTypeCoupon = (coupon: BaseCoupon | Coupon): coupon is Coupon => {
 };
 
 export interface ManagedCoupon extends Coupon {
+  registrationId: string;
   _count: {
     purchases: number;
   };
@@ -1009,7 +1018,8 @@ export interface BaseSupportTicket {
 
 export enum SupportTicketType {
   support = "support",
-  inquiry = "inquiry",
+  bug = "bug",
+  feedback = "feedback",
 }
 
 export interface SupportTicket extends BaseSupportTicket {
@@ -1289,7 +1299,6 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
-  status: RegistrationStatus;
   purchases: BasePurchase[];
   payments: Payment[];
   coupons: ManagedCoupon[];
@@ -1299,7 +1308,6 @@ export interface Registration extends BaseRegistration {
 export interface ListingRegistration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount & { email: string | null; phone: string | null };
-  status: RegistrationStatus;
   couponId: string | null;
   coupon: BaseCoupon | null;
   purchases: BasePurchase[];
@@ -1610,7 +1618,7 @@ export interface BaseVideo {
   height: number;
   thumbnailUrl: string;
   previewUrl: string;
-  readyToStream: string;
+  readyToStream: boolean;
   hlsUrl: string;
   dashUrl: string;
 }
@@ -2076,12 +2084,12 @@ export interface OrganizationConfig {
   EXPO_PROJECT_ID: string | null;
   EXPO_SLUG: string | null;
   API_URL:
-    | "https://client-api.connectedxm.com"
-    | "https://staging-client-api.connectedxm.com";
+    | "https://client-api.connected.dev"
+    | "https://staging-client-api.connected.dev";
   OPENGRAPH_URL:
-    | "https://opengraph-api.connectedxm.com"
-    | "https://staging-opengraph-api.connectedxm.com";
-  CHAT_URL: "wss://chat.connectedxm.com" | "wss://staging-chat.connectedxm.com";
+    | "https://opengraph-api.connected.dev"
+    | "https://staging-opengraph-api.connected.dev";
+  CHAT_URL: "wss://chat.connected.dev" | "wss://staging-chat.connected.dev";
   APPLE_APPSTORE_LINK: string | null;
   GOOGLE_PLAYSTORE_LINK: string | null;
   NAME: string;
@@ -2125,6 +2133,7 @@ export interface OrganizationConfig {
     youtube: string | null;
     discord: string | null;
   };
+  INTEGRATIONS: Integration[];
 }
 
 export interface OrganizationModule {
