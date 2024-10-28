@@ -61,6 +61,9 @@ export const UpdateSelfEventRegistrationPurchaseResponses = async ({
         purchaseId
       ),
     });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_PAID_PURCHASES_QUERY_KEY(eventId),
+    });
   }
 
   return data;

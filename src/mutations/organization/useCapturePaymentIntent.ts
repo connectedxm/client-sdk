@@ -4,7 +4,11 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { INVOICE_QUERY_KEY } from "@src/queries";
+import {
+  ADD_SELF_RELATIONSHIP,
+  INVOICE_QUERY_KEY,
+  SELF_EVENT_PAID_PURCHASES_QUERY_KEY,
+} from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
   intent: PaymentIntent;
@@ -35,6 +39,15 @@ export const CapturePaymentIntent = async ({
           return false;
         },
       });
+      queryClient.invalidateQueries({
+        queryKey: SELF_EVENT_PAID_PURCHASES_QUERY_KEY(intent.eventId),
+      });
+      ADD_SELF_RELATIONSHIP(
+        queryClient,
+        [clientApiParams.locale],
+        "events",
+        intent.eventId
+      );
     }
 
     if (intent.invoiceId) {
