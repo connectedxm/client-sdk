@@ -748,6 +748,9 @@ export interface BaseCoupon {
   useLimit: number | null;
   purchaseLimit: number | null;
   emailDomains: string | null;
+  applyToPassType: boolean;
+  applyToAddOns: boolean;
+  applyToReservation: boolean;
   createdAt: string;
   updatedAt: string;
 }
