@@ -20,6 +20,4 @@ export * from "./useGetSelfNotificationsCount";
 export * from "./useGetSelfPushDevice";
 export * from "./useGetSelfPushDevices";
 export * from "./useGetSelfRecommendations";
-export * from "./useGetSelfTransfer";
-export * from "./useGetSelfTransfers";
 export * from "./useGetSelfGroupActivities";

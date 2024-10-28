@@ -2,12 +2,10 @@ export * from "./chat";
 export * from "./events";
 export * from "./subscriptions";
 
-export * from "./useAcceptTransfer";
 export * from "./useAddSelfDelegate";
 export * from "./useAddSelfEventSession";
 export * from "./useDeleteSelf";
 export * from "./useDeleteSelfPushDevice";
-export * from "./useRejectTransfer";
 export * from "./useRemoveSelfDelegate";
 export * from "./useRemoveSelfEventSession";
 export * from "./useSelfCreateActivity";
