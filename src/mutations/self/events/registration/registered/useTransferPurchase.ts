@@ -10,14 +10,14 @@ import {
 } from "@src/queries";
 
 export interface TransferPurchaseParams extends MutationParams {
-  email: string;
+  passId: string;
   purchaseId: string;
   eventId: string;
   registrationId: string;
 }
 
 export const TransferPurchase = async ({
-  email,
+  passId,
   purchaseId,
   eventId,
   registrationId,
@@ -26,11 +26,7 @@ export const TransferPurchase = async ({
 }: TransferPurchaseParams): Promise<ConnectedXMResponse<Transfer>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
-    `/self/events/${eventId}/registration/${registrationId}/transfer`,
-    {
-      email,
-      purchaseId,
-    }
+    `/self/events/${eventId}/registration/${registrationId}/passes/${passId}/transfer`
   );
 
   if (queryClient && data.status === "ok") {
@@ -38,7 +34,8 @@ export const TransferPurchase = async ({
       queryKey: SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY(
         eventId,
         registrationId,
-        purchaseId
+        purchaseId,
+        passId
       ),
     });
     queryClient.invalidateQueries({
