@@ -679,6 +679,39 @@ export interface Transfer extends BaseTransfer {
   updatedAt: string;
 }
 
+export interface BaseEventAttendee {
+  id: string;
+  alternateId: number;
+  accountId: string;
+  account: BaseAccount;
+  eventId: string;
+  event: BaseEvent;
+}
+
+export interface EventAttendee extends BaseEventAttendee {
+  payments: BasePayment[];
+  purchases: BasePurchase[];
+  coupons: BaseCoupon[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseTransferLog {
+  id: number;
+  fromRegistrationId: string;
+  fromRegistration: BaseEventAttendee;
+  toRegistrationId: string;
+  toRegistration: BaseEventAttendee;
+}
+
+export interface TransferLog extends BaseTransferLog {
+  purchaseId: string;
+  purchase: BasePurchase;
+  userId: string | null;
+  user: BaseAccount | null;
+  createdAt: string;
+}
+
 export const isTypeTransfer = (
   transfer: BaseTransfer | Transfer
 ): transfer is Transfer => {
