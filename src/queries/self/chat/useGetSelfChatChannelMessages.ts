@@ -62,13 +62,18 @@ export const GetSelfChatChannelMessages = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], (old) => ({
-      ...old,
-      data: {
-        ...old.data,
-        read: true,
-      },
-    }));
+    SET_SELF_CHAT_CHANNEL_QUERY_DATA(queryClient, [channelId], (old) => {
+      if (old && old.data) {
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            read: true,
+          },
+        };
+      }
+      return old;
+    });
   }
 
   return data;
