@@ -618,7 +618,6 @@ export interface BasePurchase {
   firstName: string;
   lastName: string;
   email: string;
-  transfer: { id: string; email: string; createdAt: string } | null;
   registrationId: string;
   registration: BaseRegistration;
   ticketId: string | null;
@@ -668,25 +667,6 @@ export interface Order {
   updatedAt: string;
 }
 
-export interface BaseTransfer {
-  id: string;
-  email: string;
-}
-
-export interface Transfer extends BaseTransfer {
-  purchase: BasePurchase;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export const isTypeTransfer = (
-  transfer: BaseTransfer | Transfer
-): transfer is Transfer => {
-  return (
-    (transfer as Omit<Transfer, keyof BaseTransfer>).createdAt !== undefined
-  );
-};
-
 export enum NotificationType {
   ANNOUNCEMENT = "ANNOUNCEMENT",
   FOLLOW = "FOLLOW",
@@ -710,7 +690,6 @@ export interface BaseNotification {
 }
 
 export interface Notification extends BaseNotification {
-  transfer: BaseTransfer | null;
   like: BaseLike | null;
   activity: BaseActivity | null;
   event: BaseEvent | null;
@@ -830,6 +809,22 @@ export interface Track extends BaseTrack {
 export const isTypeTrack = (track: BaseTrack | Track): track is Track => {
   return (track as Omit<Track, keyof BaseTrack>).description !== undefined;
 };
+
+export interface BaseTransferLog {
+  id: number;
+  fromRegistrationId: string;
+  fromRegistration: BaseRegistration;
+  toRegistrationId: string;
+  toRegistration: BaseRegistration;
+}
+
+export interface TransferLog extends BaseTransferLog {
+  purchaseId: string;
+  purchase: BasePurchase;
+  userId: string | null;
+  user: BaseAccount | null;
+  createdAt: string;
+}
 
 export interface BaseSpeaker {
   id: string;
