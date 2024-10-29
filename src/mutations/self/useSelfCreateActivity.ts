@@ -93,8 +93,8 @@ export const SelfCreateActivity = async ({
         queryClient,
         [
           ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
-            data.data.content.channel.id,
-            data.data.content.id
+            data.data.content.channel.slug,
+            data.data.content.slug
           ),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
