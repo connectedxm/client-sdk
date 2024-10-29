@@ -810,6 +810,22 @@ export const isTypeTrack = (track: BaseTrack | Track): track is Track => {
   return (track as Omit<Track, keyof BaseTrack>).description !== undefined;
 };
 
+export interface BaseTransferLog {
+  id: number;
+  fromRegistrationId: string;
+  fromRegistration: BaseRegistration;
+  toRegistrationId: string;
+  toRegistration: BaseRegistration;
+}
+
+export interface TransferLog extends BaseTransferLog {
+  purchaseId: string;
+  purchase: BasePurchase;
+  userId: string | null;
+  user: BaseAccount | null;
+  createdAt: string;
+}
+
 export interface BaseSpeaker {
   id: string;
   slug: string;
