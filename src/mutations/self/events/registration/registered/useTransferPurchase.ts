@@ -14,6 +14,7 @@ export interface TransferPurchaseParams extends MutationParams {
   purchaseId: string;
   eventId: string;
   registrationId: string;
+  receiverId: string;
 }
 
 export const TransferPurchase = async ({
@@ -21,12 +22,16 @@ export const TransferPurchase = async ({
   purchaseId,
   eventId,
   registrationId,
+  receiverId,
   clientApiParams,
   queryClient,
 }: TransferPurchaseParams): Promise<ConnectedXMResponse<Transfer>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
-    `/self/events/${eventId}/registration/${registrationId}/passes/${passId}/transfer`
+    `/self/events/${eventId}/registration/${registrationId}/passes/${passId}/transfer`,
+    {
+      receiverId,
+    }
   );
 
   if (queryClient && data.status === "ok") {
