@@ -618,7 +618,6 @@ export interface BasePurchase {
   firstName: string;
   lastName: string;
   email: string;
-  transfer: { id: string; email: string; createdAt: string } | null;
   registrationId: string;
   registration: BaseRegistration;
   ticketId: string | null;
@@ -668,58 +667,6 @@ export interface Order {
   updatedAt: string;
 }
 
-export interface BaseTransfer {
-  id: string;
-  email: string;
-}
-
-export interface Transfer extends BaseTransfer {
-  purchase: BasePurchase;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BaseEventAttendee {
-  id: string;
-  alternateId: number;
-  accountId: string;
-  account: BaseAccount;
-  eventId: string;
-  event: BaseEvent;
-}
-
-export interface EventAttendee extends BaseEventAttendee {
-  payments: BasePayment[];
-  purchases: BasePurchase[];
-  coupons: BaseCoupon[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BaseTransferLog {
-  id: number;
-  fromRegistrationId: string;
-  fromRegistration: BaseEventAttendee;
-  toRegistrationId: string;
-  toRegistration: BaseEventAttendee;
-}
-
-export interface TransferLog extends BaseTransferLog {
-  purchaseId: string;
-  purchase: BasePurchase;
-  userId: string | null;
-  user: BaseAccount | null;
-  createdAt: string;
-}
-
-export const isTypeTransfer = (
-  transfer: BaseTransfer | Transfer
-): transfer is Transfer => {
-  return (
-    (transfer as Omit<Transfer, keyof BaseTransfer>).createdAt !== undefined
-  );
-};
-
 export enum NotificationType {
   ANNOUNCEMENT = "ANNOUNCEMENT",
   FOLLOW = "FOLLOW",
@@ -742,7 +689,6 @@ export interface BaseNotification {
 }
 
 export interface Notification extends BaseNotification {
-  transfer: BaseTransfer | null;
   like: BaseLike | null;
   activity: BaseActivity | null;
   event: BaseEvent | null;
