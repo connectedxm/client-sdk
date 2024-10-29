@@ -12,3 +12,4 @@ export * from "./useGetSelfEventRegistrationCoupons";
 export * from "./useGetSelfEventRegistrationCouponPurchases";
 export * from "./useGetSelfEventPaidPurchases";
 export * from "./useGetSelfEventCoupons";
+export * from "./useGetEventPassTransferLogs";
