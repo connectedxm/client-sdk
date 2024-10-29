@@ -1,5 +1,5 @@
 import { GetClientAPI } from "@src/ClientAPI";
-import { ConnectedXMResponse, Transfer } from "@src/interfaces";
+import { ConnectedXMResponse, Purchase } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -19,9 +19,9 @@ export const AddFreePurchaseAddOns = async ({
   addOnIds,
   clientApiParams,
   queryClient,
-}: AddFreePurchaseAddOnsParams): Promise<ConnectedXMResponse<Transfer>> => {
+}: AddFreePurchaseAddOnsParams): Promise<ConnectedXMResponse<Purchase>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Transfer>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<Purchase>>(
     `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/addOns/free`,
     {
       addOnIds,
