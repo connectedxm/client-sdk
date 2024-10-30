@@ -11,7 +11,6 @@ import {
 
 export interface TransferPurchaseParams extends MutationParams {
   passId: string;
-  purchaseId: string;
   eventId: string;
   registrationId: string;
   receiverId: string;
@@ -19,7 +18,6 @@ export interface TransferPurchaseParams extends MutationParams {
 
 export const TransferPurchase = async ({
   passId,
-  purchaseId,
   eventId,
   registrationId,
   receiverId,
@@ -39,7 +37,6 @@ export const TransferPurchase = async ({
       queryKey: SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY(
         eventId,
         registrationId,
-        purchaseId,
         passId
       ),
     });

@@ -25,8 +25,7 @@ interface PurchaseWithResponseQuestions extends Purchase {
 export const SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY = (
   eventId: string,
   registrationId: string,
-  purchaseId: string,
-  passId?: string
+  purchaseId: string
 ): QueryKey => [
   ...SELF_QUERY_KEY(),
   "EVENT",
@@ -35,8 +34,6 @@ export const SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY = (
   registrationId,
   "PURCHASE",
   purchaseId,
-  "PASSID",
-  passId,
 ];
 
 export const SET_SELF_EVENT_REGISTRATION_PURCHASE_QUERY_DATA = (
