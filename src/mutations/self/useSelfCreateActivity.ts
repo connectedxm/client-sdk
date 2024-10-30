@@ -87,14 +87,25 @@ export const SelfCreateActivity = async ({
       );
     }
 
-    if (data.data.content) {
+    if (activity.contentId && data.data.content) {
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
           ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+            data.data.content.channel.slug,
+            activity.contentId
+          ),
+          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+        ],
+        data.data
+      );
+      AppendInfiniteQuery<Activity>(
+        queryClient,
+        [
+          ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
             data.data.content.channel.id,
-            data.data.content.id
+            activity.contentId
           ),
           ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
         ],
