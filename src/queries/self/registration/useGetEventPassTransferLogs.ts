@@ -2,7 +2,6 @@ import { ConnectedXMResponse, TransferLog } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { CacheIndividualQueries } from "@src/utilities";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -11,9 +10,8 @@ import {
 
 export const EVENT_PASS_TRANSFER_LOGS_QUERY_KEY = (
   eventId: string,
-  passId: string,
-  transferLogId?: string
-): QueryKey => ["EVENT_PASS_TRANSFER_LOGS", eventId, passId, transferLogId];
+  passId: string
+): QueryKey => ["EVENT_PASS_TRANSFER_LOGS", eventId, passId];
 
 export interface useGetEventPassTransferLogsProps extends InfiniteQueryParams {
   eventId: string;
@@ -28,8 +26,6 @@ export const GetEventPassTransferLogs = async ({
   eventId,
   passId,
   clientApiParams,
-  queryClient,
-  locale,
 }: useGetEventPassTransferLogsProps): Promise<
   ConnectedXMResponse<TransferLog[]>
 > => {
@@ -45,16 +41,6 @@ export const GetEventPassTransferLogs = async ({
       },
     }
   );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (transferLogId) =>
-        EVENT_PASS_TRANSFER_LOGS_QUERY_KEY(eventId, passId, transferLogId),
-      locale
-    );
-  }
 
   return data;
 };
