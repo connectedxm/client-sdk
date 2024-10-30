@@ -2072,6 +2072,7 @@ export enum OrganizationActionType {
 }
 
 export interface OrganizationConfig {
+  ENVIRONMENT: "prod" | "staging";
   ORGANIZATION_ID: string;
   SLUG: string;
   WEBSITE_URL: string;
