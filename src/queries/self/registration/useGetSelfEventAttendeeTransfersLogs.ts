@@ -2,40 +2,41 @@ import { ConnectedXMResponse, TransferLog } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { CacheIndividualQueries } from "@src/utilities";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../../useConnectedInfiniteQuery";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 
 export const EVENT_PASS_TRANSFER_LOGS_QUERY_KEY = (
   eventId: string,
-  passId: string,
-  transferLogId?: string
-): QueryKey => ["EVENT_PASS_TRANSFER_LOGS", eventId, passId, transferLogId];
+  attendeeId: string
+): QueryKey => [
+  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, attendeeId),
+  "TRANSFERS",
+];
 
-export interface useGetEventPassTransferLogsProps extends InfiniteQueryParams {
+export interface GetSelfEventAttendeeTransfersLogsProps
+  extends InfiniteQueryParams {
   eventId: string;
-  passId: string;
+  attendeeId: string;
 }
 
-export const GetEventPassTransferLogs = async ({
+export const GetSelfEventAttendeeTransfersLogs = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
   eventId,
-  passId,
+  attendeeId,
   clientApiParams,
-  queryClient,
-  locale,
-}: useGetEventPassTransferLogsProps): Promise<
+}: GetSelfEventAttendeeTransfersLogsProps): Promise<
   ConnectedXMResponse<TransferLog[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/passes/${passId}/transfers/logs`,
+    `/self/events/${eventId}/attendees/${attendeeId}/transfers/logs`,
     {
       params: {
         page: pageParam || undefined,
@@ -46,47 +47,40 @@ export const GetEventPassTransferLogs = async ({
     }
   );
 
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (transferLogId) =>
-        EVENT_PASS_TRANSFER_LOGS_QUERY_KEY(eventId, passId, transferLogId),
-      locale
-    );
-  }
-
   return data;
 };
 
-export const useGetEventPassTransferLogs = (
+export const useGetSelfEventAttendeeTransfersLogs = (
   eventId: string,
-  passId: string,
+  attendeeId: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetEventPassTransferLogs>>
+    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventPassTransferLogs>>
+    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
   >(
-    EVENT_PASS_TRANSFER_LOGS_QUERY_KEY(eventId, passId),
+    EVENT_PASS_TRANSFER_LOGS_QUERY_KEY(eventId, attendeeId),
     (params: InfiniteQueryParams) =>
-      GetEventPassTransferLogs({
+      GetSelfEventAttendeeTransfersLogs({
         ...params,
         eventId,
-        passId,
+        attendeeId,
       }),
     params,
     {
       ...options,
       enabled:
-        !!authenticated && !!eventId && !!passId && (options?.enabled ?? true),
+        !!authenticated &&
+        !!eventId &&
+        !!attendeeId &&
+        (options?.enabled ?? true),
     }
   );
 };
