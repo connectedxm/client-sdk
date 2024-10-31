@@ -9,23 +9,11 @@ import {
   SET_CHANNEL_QUERY_DATA,
   SET_MANAGED_CHANNEL_QUERY_DATA,
 } from "@src/queries";
-
-export interface UpdateChannel {
-  name?: string;
-  description?: string;
-  visible?: boolean;
-  slug?: string;
-  groupId?: string | null;
-  externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
-  googleUrl?: string | null;
-  youtubeUrl?: string | null;
-}
+import { ChannelUpdateInputs } from "@src/params";
 
 export interface UpdateChannelParams extends MutationParams {
   channelId: string;
-  channel: UpdateChannel;
+  channel: ChannelUpdateInputs;
   imageDataUri?: any;
 }
 

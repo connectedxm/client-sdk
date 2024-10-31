@@ -9,39 +9,11 @@ import {
   SET_LISTING_QUERY_DATA,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-export interface UpdateListing {
-  eventType?: keyof typeof EventType;
-  visible?: boolean;
-  name?: string;
-  shortDescription?: string;
-  longDescription?: string | null;
-  eventStart?: string;
-  eventEnd?: string;
-  timezone?: string | null;
-  meetingUrl?: string | null;
-  venue?: string | null;
-  address1?: string | null;
-  address2?: string | null;
-  city?: string | null;
-  state?: string | null;
-  zip?: string | null;
-  country?: string | null;
-  externalUrl?: string | null;
-  registration?: boolean;
-  publicRegistrants?: boolean;
-  registrationLimit?: number | null;
-  newActivityCreatorEmailNotification?: boolean;
-  newActivityCreatorPushNotification?: boolean;
-  slug?: string;
-  groupOnly?: boolean;
-  groupId?: string | null;
-  location?: string | null;
-}
+import { GroupEventListingUpdateInputs } from "@src/params";
 
 export interface UpdateListingParams extends MutationParams {
   eventId: string;
-  event: UpdateListing;
+  event: GroupEventListingUpdateInputs;
   base64?: any;
 }
 

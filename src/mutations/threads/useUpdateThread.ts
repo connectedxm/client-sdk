@@ -10,21 +10,11 @@ import useConnectedMutation, {
 
 import { THREADS_QUERY_KEY, SET_THREAD_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface UpdateThread {
-  id: string;
-  name?: string;
-  description?: string;
-  imageId?: string;
-  featured?: boolean;
-  eventId?: string;
-  groupId?: string;
-  access?: keyof typeof ThreadAccessLevel;
-}
+import { ThreadUpdateInputs } from "@src/params";
 
 export interface UpdateThreadParams extends MutationParams {
   threadId: string;
-  thread: UpdateThread;
+  thread: ThreadUpdateInputs;
   imageDataUri?: string;
 }
 

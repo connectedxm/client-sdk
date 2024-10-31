@@ -5,20 +5,12 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_QUESTIONS_QUERY_KEY } from "@src/queries/listings/useGetListingQuestions";
+import { GroupEventListingQuestionUpdateInputs } from "@src/params";
 
 export interface UpdateListingQuestionParams extends MutationParams {
   eventId: string;
   questionId: string;
-  question: {
-    name: string;
-    required: boolean;
-    mutable: boolean;
-    sortOrder?: number;
-    choices: {
-      id: number | null;
-      value: string;
-    }[];
-  };
+  question: GroupEventListingQuestionUpdateInputs;
 }
 
 export const UpdateListingQuestion = async ({

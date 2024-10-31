@@ -5,15 +5,11 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface UpdateChannelSubscriber {
-  contentEmailNotification?: boolean;
-  contentPushNotification?: boolean;
-}
+import { ChannelSubscriberUpdateInputs } from "@src/params";
 
 export interface UpdateChannelSubscriberParams extends MutationParams {
   channelId: string;
-  channelSubscriber: UpdateChannelSubscriber;
+  channelSubscriber: ChannelSubscriberUpdateInputs;
 }
 
 export const UpdateChannelSubscriber = async ({

@@ -8,10 +8,11 @@ import {
   SELF_PUSH_DEVICES_QUERY_KEY,
   SELF_PUSH_DEVICE_QUERY_KEY,
 } from "@src/queries";
+import { SelfPushDeviceUpdateInputs } from "@src/params";
 
 export interface UpdateSelfPushDeviceParams extends MutationParams {
   pushDeviceId: string;
-  pushDevice: PushDevice;
+  pushDevice: SelfPushDeviceUpdateInputs;
 }
 
 export const UpdateSelfPushDevice = async ({

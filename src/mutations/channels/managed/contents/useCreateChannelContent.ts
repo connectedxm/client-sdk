@@ -6,23 +6,11 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { MANAGED_CHANNEL_CONTENTS_QUERY_KEY } from "@src/queries";
-
-export interface CreateChannelContent {
-  title: string;
-  visible?: boolean;
-  description?: string | null;
-  duration?: string | null;
-  body?: string | null;
-  externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
-  googleUrl?: string | null;
-  youtubeUrl?: string | null;
-}
+import { ChannelContentCreateInputs } from "@src/params";
 
 export interface CreateChannelContentParams extends MutationParams {
   channelId: string;
-  content: CreateChannelContent;
+  content: ChannelContentCreateInputs;
 }
 
 export const CreateChannelContent = async ({

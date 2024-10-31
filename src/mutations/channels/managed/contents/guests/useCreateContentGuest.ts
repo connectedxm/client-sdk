@@ -15,30 +15,12 @@ import {
 } from "@src/queries";
 import { CONTENT_QUERY_KEY } from "@src/queries/contents/useGetContent";
 import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
-
-export interface CreateContentGuest {
-  accountId?: string | null;
-  type: ContentGuestType;
-  name: string;
-  title: string | null;
-  bio: string | null;
-  company: string | null;
-  companyLink: string | null;
-  companyBio: string | null;
-  website: string | null;
-  facebook: string | null;
-  twitter: string | null;
-  instagram: string | null;
-  linkedIn: string | null;
-  tikTok: string | null;
-  youtube: string | null;
-  discord: string | null;
-}
+import { ContentGuestCreateInputs } from "@src/params";
 
 export interface CreateContentGuestParams extends MutationParams {
   channelId: string;
   contentId: string;
-  guest: CreateContentGuest;
+  guest: ContentGuestCreateInputs;
   imageDataUri?: string;
 }
 

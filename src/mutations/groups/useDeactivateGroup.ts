@@ -12,7 +12,6 @@ export interface DeactivateGroupParams extends MutationParams {
   group: Group;
   imageDataUri?: string;
 }
-
 export const DeactivateGroup = async ({
   groupId,
   group,
@@ -21,6 +20,7 @@ export const DeactivateGroup = async ({
   queryClient,
 }: DeactivateGroupParams): Promise<ConnectedXMResponse<Group>> => {
   const clientApi = await GetClientAPI(clientApiParams);
+  // I think this url and hook are wrong
   const { data } = await clientApi.post<ConnectedXMResponse<Group>>(
     `/groups/${groupId}`,
     {

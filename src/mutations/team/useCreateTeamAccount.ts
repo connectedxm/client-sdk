@@ -4,15 +4,14 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { TeamAccountCreateInputs } from "@src/params";
 
 export interface CreateTeamAccountParams extends MutationParams {
-  name: string;
-  email: string;
+  teamAccount: TeamAccountCreateInputs;
 }
 
 export const CreateTeamAccount = async ({
-  name,
-  email,
+  teamAccount: { name, email },
   clientApiParams,
 }: CreateTeamAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const clientApi = await GetClientAPI(clientApiParams);

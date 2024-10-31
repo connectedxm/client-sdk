@@ -6,21 +6,16 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_ANNOUNCEMENTS_QUERY_KEY } from "@src/queries";
+import { GroupEventListingAnnouncementCreateInputs } from "@src/params";
 
 export interface CreateListingAnnouncementParams extends MutationParams {
   eventId: string;
-  title: string;
-  html: string;
-  email: boolean;
-  push: boolean;
+  listingAnnouncement: GroupEventListingAnnouncementCreateInputs;
 }
 
 export const CreateListingAnnouncement = async ({
   eventId,
-  title,
-  html,
-  email,
-  push,
+  listingAnnouncement: { title, html, email, push },
   clientApiParams,
   queryClient,
 }: CreateListingAnnouncementParams): Promise<

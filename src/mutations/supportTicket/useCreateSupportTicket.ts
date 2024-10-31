@@ -8,19 +8,16 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SupportTicketCreateInputs } from "@src/params";
 
 export interface CreateSupportTicketParams extends MutationParams {
-  type: keyof typeof SupportTicketType;
-  email: string;
-  request: any;
+  supportTicket: SupportTicketCreateInputs;
   eventId?: string;
   productId?: string;
 }
 
 export const CreateSupportTicket = async ({
-  type,
-  email,
-  request,
+  supportTicket: { type, email, request },
   eventId,
   productId,
   clientApiParams,

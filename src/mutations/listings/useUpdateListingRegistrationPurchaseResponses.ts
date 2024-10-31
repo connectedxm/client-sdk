@@ -12,6 +12,7 @@ import {
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY } from "@src/queries/listings/useGetListingRegistrationPurchaseSections";
+import { GroupEventListingQuestionChoiceUpdateInputs } from "@src/params";
 
 export interface UpdateListingRegistrationPurchaseResponsesParams
   extends MutationParams {

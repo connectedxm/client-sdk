@@ -5,16 +5,10 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-
-export interface CreateChannel {
-  name: string;
-  description?: string;
-  visible: boolean;
-  groupId?: string;
-}
+import { ChannelCreateInputs } from "@src/params";
 
 export interface CreateChannelParams extends MutationParams {
-  channel: CreateChannel;
+  channel: ChannelCreateInputs;
   imageDataUri?: any;
 }
 

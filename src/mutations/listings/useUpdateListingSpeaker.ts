@@ -5,17 +5,12 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { EVENT_SPEAKERS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { GroupEventListingSpeakerUpdateInputs } from "@src/params";
 
 export interface UpdateListingSpeakerParams extends MutationParams {
   eventId: string;
   speakerId: string;
-  speaker: {
-    firstName: string | null;
-    lastName: string | null;
-    title: string | null;
-    company: string | null;
-    bio: string | null;
-  };
+  speaker: GroupEventListingSpeakerUpdateInputs;
   imageDataUri?: string;
 }
 

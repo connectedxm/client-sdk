@@ -19,25 +19,12 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
-
-export interface CreateActivity {
-  message: string;
-  contentId?: string;
-  eventId?: string;
-  groupId?: string;
-  commentedId?: string;
-  videoId?: string;
-}
-
-export interface CreateInterest {
-  name: string;
-  imageId?: string;
-}
+import { ActivityCreateInputs, InterestCreateInputs } from "@src/params";
 
 export interface SelfCreateActivityParams extends MutationParams {
-  activity: CreateActivity;
+  activity: ActivityCreateInputs;
   base64Image?: any;
-  interests?: CreateInterest[];
+  interests?: InterestCreateInputs[];
 }
 
 export const SelfCreateActivity = async ({

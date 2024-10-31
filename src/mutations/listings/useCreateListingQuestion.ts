@@ -5,19 +5,11 @@ import useConnectedMutation, {
 import { ConnectedXMResponse, RegistrationQuestion } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_QUESTIONS_QUERY_KEY } from "@src/queries/listings/useGetListingQuestions";
+import { GroupEventListingQuestionCreateInputs } from "@src/params";
 
 export interface CreateListingQuestionParams extends MutationParams {
   eventId: string;
-  question: {
-    name: string;
-    type: string;
-    required: boolean;
-    mutable: boolean;
-    choices: {
-      id: number | null;
-      value: string;
-    }[];
-  };
+  question: GroupEventListingQuestionCreateInputs;
 }
 
 export const CreateListingQuestion = async ({

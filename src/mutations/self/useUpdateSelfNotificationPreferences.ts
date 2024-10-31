@@ -5,35 +5,17 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { ConnectedXMResponse, NotificationPreferences } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SelfNotificationPreferencesUpdateInputs } from "@src/params";
 
 export interface UpdateSelfNotificationPreferencesParams
   extends MutationParams {
-  newFollowerPush?: boolean;
-  newFollowerEmail?: boolean;
-  likePush?: boolean;
-  resharePush?: boolean;
-  commentPush?: boolean;
-  commentEmail?: boolean;
-  transferPush?: boolean;
-  transferEmail?: boolean;
-  supportTicketConfirmationEmail?: boolean;
-  chatPush?: boolean;
-  chatUnreadPush?: boolean;
-  chatUnreadEmail?: boolean;
-  eventReminderEmail?: boolean;
-  eventAnnouncementPush?: boolean;
-  eventAnnouncementEmail?: boolean;
-  organizationAnnouncementPush?: boolean;
-  organizationAnnouncementEmail?: boolean;
-  groupAnnouncementPush?: boolean;
-  groupAnnouncementEmail?: boolean;
+  preferences: SelfNotificationPreferencesUpdateInputs;
 }
 
 export const UpdateSelfNotificationPreferences = async ({
   clientApiParams,
   queryClient,
-
-  ...params
+  preferences,
 }: UpdateSelfNotificationPreferencesParams): Promise<
   ConnectedXMResponse<NotificationPreferences>
 > => {
@@ -42,7 +24,7 @@ export const UpdateSelfNotificationPreferences = async ({
       [...SELF_PREFERENCES_QUERY_KEY(), clientApiParams.locale],
       (oldData: any) => {
         if (oldData?.data) {
-          oldData.data = { ...oldData.data, ...params };
+          oldData.data = { ...oldData.data, ...preferences };
           return oldData;
         } else {
           return oldData;
@@ -54,7 +36,7 @@ export const UpdateSelfNotificationPreferences = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<
     ConnectedXMResponse<NotificationPreferences>
-  >(`/self/notificationPreferences`, params);
+  >(`/self/notificationPreferences`, preferences);
 
   return data;
 };
