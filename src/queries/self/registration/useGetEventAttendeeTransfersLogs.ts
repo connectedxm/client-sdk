@@ -7,11 +7,15 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../../useConnectedInfiniteQuery";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 
 export const EVENT_PASS_TRANSFER_LOGS_QUERY_KEY = (
   eventId: string,
   attendeeId: string
-): QueryKey => ["EVENT_PASS_TRANSFER_LOGS", eventId, attendeeId];
+): QueryKey => [
+  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, attendeeId),
+  "TRANSFERS",
+];
 
 export interface useGetEventAttendeeTransfersLogsProps
   extends InfiniteQueryParams {
