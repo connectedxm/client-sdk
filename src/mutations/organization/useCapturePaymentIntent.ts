@@ -7,7 +7,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import {
   ADD_SELF_RELATIONSHIP,
   INVOICE_QUERY_KEY,
-  SELF_EVENT_PAID_PURCHASES_QUERY_KEY,
+  SELF_EVENT_PASSES_QUERY_KEY,
 } from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
@@ -40,7 +40,7 @@ export const CapturePaymentIntent = async ({
         },
       });
       queryClient.invalidateQueries({
-        queryKey: SELF_EVENT_PAID_PURCHASES_QUERY_KEY(intent.eventId),
+        queryKey: SELF_EVENT_PASSES_QUERY_KEY(intent.eventId),
       });
       ADD_SELF_RELATIONSHIP(
         queryClient,

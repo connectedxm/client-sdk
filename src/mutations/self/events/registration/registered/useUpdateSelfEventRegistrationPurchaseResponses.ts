@@ -5,7 +5,7 @@ import useConnectedMutation, {
 } from "../../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
-  SELF_EVENT_PAID_PURCHASES_QUERY_KEY,
+  SELF_EVENT_PASSES_QUERY_KEY,
   SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
@@ -52,7 +52,7 @@ export const UpdateSelfEventRegistrationPurchaseResponses = async ({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_PAID_PURCHASES_QUERY_KEY(eventId),
+      queryKey: SELF_EVENT_PASSES_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY(
@@ -62,7 +62,7 @@ export const UpdateSelfEventRegistrationPurchaseResponses = async ({
       ),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_PAID_PURCHASES_QUERY_KEY(eventId),
+      queryKey: SELF_EVENT_PASSES_QUERY_KEY(eventId),
     });
   }
 
