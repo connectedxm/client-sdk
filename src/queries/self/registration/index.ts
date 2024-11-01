@@ -10,6 +10,6 @@ export * from "./useGetSelfEventTicketCouponIntent";
 export * from "./useGetSelfEventRegistrationCoupon";
 export * from "./useGetSelfEventRegistrationCoupons";
 export * from "./useGetSelfEventRegistrationCouponPurchases";
-export * from "./useGetSelfEventPaidPurchases";
+export * from "./useGetSelfEventPasses";
 export * from "./useGetSelfEventCoupons";
 export * from "./useGetSelfEventTransfersLogs";
