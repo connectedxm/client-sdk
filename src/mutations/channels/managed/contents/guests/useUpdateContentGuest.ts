@@ -17,7 +17,7 @@ import { ContentGuestUpdateInputs } from "@src/params";
 export interface UpdateContentGuestParams extends MutationParams {
   channelId: string;
   contentId: string;
-  guest: ContentGuestUpdateInputs;
+  contentGuest: ContentGuestUpdateInputs;
   guestId: string;
   imageDataUri?: string;
 }
@@ -25,7 +25,7 @@ export interface UpdateContentGuestParams extends MutationParams {
 export const UpdateContentGuest = async ({
   channelId,
   contentId,
-  guest,
+  contentGuest,
   guestId,
   imageDataUri,
   clientApiParams,
@@ -34,7 +34,7 @@ export const UpdateContentGuest = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<ContentGuest>>(
     `/channels/managed/${channelId}/contents/${contentId}/guests/${guestId}`,
-    { contentGuest: guest, imageDataUri }
+    { contentGuest, imageDataUri }
   );
 
   if (queryClient && data.status === "ok") {

@@ -9,24 +9,16 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export interface DeactivateGroupParams extends MutationParams {
   groupId: string;
-  group: Group;
-  imageDataUri?: string;
 }
 export const DeactivateGroup = async ({
   groupId,
-  group,
-  imageDataUri,
   clientApiParams,
   queryClient,
 }: DeactivateGroupParams): Promise<ConnectedXMResponse<Group>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  // I think this url and hook are wrong
-  const { data } = await clientApi.post<ConnectedXMResponse<Group>>(
-    `/groups/${groupId}`,
-    {
-      group,
-      imageDataUri,
-    }
+  // I think this url and hook are wrong. there is no POST for this endpoint
+  const { data } = await clientApi.delete<ConnectedXMResponse<Group>>(
+    `/groups/${groupId}`
   );
 
   if (queryClient && data.status === "ok") {

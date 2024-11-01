@@ -12,101 +12,118 @@ import {
 } from "./interfaces";
 
 export interface ChannelCollectionCreateInputs {
-  name: string;
-  description?: string;
+  name: string | null;
+  description?: string | null;
 }
 export interface ChannelCollectionUpdateInputs {
-  name: string;
-  description?: string;
+  name?: string | null;
+  description?: string | null;
 }
 
 export interface ContentGuestCreateInputs {
   accountId?: string | null;
-  type: ContentGuestType;
+  bio?: string | null;
+  company?: string | null;
+  companyBio?: string | null;
+  companyLink?: string | null;
+  discord?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  linkedIn?: string | null;
   name: string;
-  title: string | null;
-  bio: string | null;
-  company: string | null;
-  companyLink: string | null;
-  companyBio: string | null;
-  website: string | null;
-  facebook: string | null;
-  twitter: string | null;
-  instagram: string | null;
-  linkedIn: string | null;
-  tikTok: string | null;
-  youtube: string | null;
-  discord: string | null;
+  slug?: string | null;
+  tikTok?: string | null;
+  title?: string | null;
+  twitter?: string | null;
+  type?: ContentGuestType;
+  website?: string | null;
+  youtube?: string | null;
 }
 
 export interface ContentGuestUpdateInputs {
   accountId?: string | null;
-  type: ContentGuestType;
-  name: string;
-  title: string | null;
-  bio: string | null;
-  company: string | null;
-  companyLink: string | null;
-  companyBio: string | null;
-  website: string | null;
-  facebook: string | null;
-  twitter: string | null;
-  instagram: string | null;
-  linkedIn: string | null;
-  tikTok: string | null;
-  youtube: string | null;
-  discord: string | null;
+  bio?: string | null;
+  company?: string | null;
+  companyBio?: string | null;
+  companyLink?: string | null;
+  discord?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  linkedIn?: string | null;
+  name?: string | null;
+  slug?: string;
+  tikTok?: string | null;
+  title?: string | null;
+  twitter?: string | null;
+  type?: ContentGuestType;
+  website?: string | null;
+  youtube?: string | null;
 }
 
 export interface ChannelContentCreateInputs {
-  title: string;
-  visible?: boolean;
+  appleUrl?: string | null;
+  audioUrl?: string | null;
+  body?: string | null;
+  //not 100% sure this is needed at this level
+  channelId?: string | null;
   description?: string | null;
   duration?: string | null;
-  body?: string | null;
   externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
   googleUrl?: string | null;
+  imageUrl?: string | null;
+  published?: string | null;
+  slug?: string;
+  spotifyUrl?: string | null;
+  title: string;
+  videoUrl?: string | null;
+  visible: boolean;
   youtubeUrl?: string | null;
 }
 
 export interface ChannelContentUpdateInputs {
-  visible?: boolean;
-  title?: string;
+  appleUrl?: string | null;
+  audioId?: number | null;
+  body?: string | null;
+  //not 100% sure this is needed at this level
+  channelId?: string | null;
   description?: string | null;
   duration?: string | null;
-  body?: string | null;
-  editor?: string | null;
   externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
   googleUrl?: string | null;
-  youtubeUrl?: string | null;
-  videoId?: string | null;
-  audioId?: number | null;
+  imageUrl?: string | null;
+  published?: string | null;
   slug?: string;
-  email?: boolean;
-  push?: boolean;
+  spotifyUrl?: string | null;
+  title?: string;
+  videoId?: string | null;
+  visible?: boolean;
+  youtubeUrl?: string | null;
 }
 
 export interface ChannelCreateInputs {
+  appleUrl?: string | null;
+  description?: string | null;
+  externalUrl?: string | null;
+  googleUrl?: string | null;
+  groupId?: string | null;
+  imageId: string;
   name: string;
-  description?: string;
+  slug?: string;
+  spotifyUrl?: string | null;
   visible: boolean;
-  groupId?: string;
+  youtubeUrl?: string | null;
 }
 
 export interface ChannelUpdateInputs {
-  name?: string;
-  description?: string;
-  visible?: boolean;
-  slug?: string;
-  groupId?: string | null;
-  externalUrl?: string | null;
   appleUrl?: string | null;
-  spotifyUrl?: string | null;
+  description?: string;
+  externalUrl?: string | null;
   googleUrl?: string | null;
+  groupId?: string | null;
+  imageId?: string | null;
+  name?: string | null;
+  slug?: string;
+  spotifyUrl?: string | null;
   youtubeUrl?: string | null;
 }
 
@@ -120,50 +137,78 @@ export interface GroupCreateInputs {
   name: string;
   description: string;
   access: keyof typeof GroupAccess;
-  active: boolean;
-  externalUrl?: string;
+  imageId?: string | null;
+  externalUrl?: string | null;
+  slug?: string;
 }
 
 export interface GroupAnnouncementCreateInputs {
-  title: string;
-  html: string;
+  accountId?: string | null;
+  creatorId?: string | null;
   email: boolean;
+  eventId?: string | null;
+  groupId?: string | null;
+  html?: string | null;
   push: boolean;
+  slug?: string;
+  sponsorshipLevelId?: string | null;
+  ticketId?: string | null;
+  title: string | null;
 }
+
 export interface GroupUpdateInputs {
-  name?: string;
-  active?: boolean;
-  description?: string;
-  externalUrl?: string;
-  access?: "public" | "private";
+  access?: GroupAccess;
+  description?: string | null;
+  externalUrl?: string | null;
+  imageId?: string | null;
+  name?: string | null;
+  slug?: string;
 }
 
 export interface GroupEventListingCreateInputs {
-  eventType: keyof typeof EventType;
-  visible: boolean;
-  name: string;
-  shortDescription: string;
-  eventStart: string;
+  address1?: string | null;
+  address2?: string | null;
+  city?: string | null;
+  country?: string | null;
+  creatorId?: string | null;
   eventEnd: string;
-  timezone: string;
-  // Optional fields
-  venue?: string;
-  address1?: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  country?: string;
-  externalUrl?: string;
-  meetingUrl?: string;
-  registration?: boolean;
-  registrationLimit?: number | null;
+  eventStart: string;
+  eventType: EventType;
+  externalUrl?: string | null;
+  groupId?: string | null;
   groupOnly?: boolean;
+  imageId?: string | null;
+  location?: string | null;
+  longDescription?: string | null;
+  meetingUrl?: string | null;
+  name: string;
+  newActivityCreatorEmailNotification?: boolean;
+  newActivityCreatorPushNotification?: boolean;
+  publicRegistrants?: boolean;
+  registration?: boolean;
+  registrationEnd?: string | null;
+  registrationLimit?: string | null;
+  registrationStart?: string | null;
+  shortDescription: string;
+  slug?: string;
+  state?: string | null;
+  timezone: string;
+  venue?: string | null;
+  venueMapId?: string | null;
+  visible?: boolean | null;
+  zip?: string | null;
 }
 
 export interface GroupEventListingAnnouncementCreateInputs {
-  title: string;
-  html: string;
+  creatorId?: string | null;
+  eventId?: string | null;
+  groupId?: string | null;
+  accountId?: string | null;
+  ticketId?: string | null;
+  sponsorshipLevelId?: string | null;
+  title?: string | null;
+  slug?: string | null;
+  html?: string | null;
   email: boolean;
   push: boolean;
 }
@@ -181,18 +226,36 @@ export interface GroupEventListingQuestionCreateInputs {
 
 export interface GroupEventListingSessionCreateInputs {
   name: string;
-  description: string;
-  location: string | null;
-  startTime: Date;
-  endTime: Date;
+  slug?: string;
+  startTime: string;
+  endTime: string;
+  location?: string | null;
+  description?: string | null;
+  longDescription?: string | null;
+  imageId?: string | null;
+  sortOrder?: number | null;
 }
 
 export interface GroupEventListingSpeakerCreateInputs {
+  bio?: string | null;
+  company?: string | null;
+  companyBio?: string | null;
+  discord?: string | null;
+  facebook?: string | null;
   firstName: string;
-  lastName: string;
-  title: string | null;
-  company: string | null;
-  bio: string | null;
+  imageId?: string | null;
+  instagram?: string | null;
+  isHost?: boolean;
+  label?: string | null;
+  lastName?: string | null;
+  linkedIn?: string | null;
+  priority?: number | null;
+  slug?: string | null;
+  tikTok?: string | null;
+  title?: string | null;
+  twitter?: string | null;
+  website?: string | null;
+  youtube?: string | null;
 }
 
 export interface GroupEventListingUpdateInputs {
@@ -226,7 +289,6 @@ export interface GroupEventListingUpdateInputs {
 
 export interface GroupEventListingQuestionUpdateInputs {
   name?: string;
-  type?: string;
   required?: boolean;
   mutable?: boolean;
   sortOrder?: number;
@@ -237,18 +299,37 @@ export interface GroupEventListingQuestionUpdateInputs {
 }
 
 export interface GroupEventListingSessionUpdateInputs {
-  name?: string;
-  description?: string;
+  description?: string | null;
+  endTime?: string;
+  imageId?: string | null;
   location?: string | null;
-  startTime?: Date;
-  endTime?: Date;
+  longDescription?: string | null;
+  slug?: string;
+  sortOrder?: number | null;
+  startTime?: string | null;
+  name?: string | null;
 }
+
 export interface GroupEventListingSpeakerUpdateInputs {
-  firstName?: string;
-  lastName?: string;
-  title?: string | null;
-  company?: string | null;
   bio?: string | null;
+  company?: string | null;
+  companyBio?: string | null;
+  discord?: string | null;
+  facebook?: string | null;
+  firstName?: string | null;
+  imageId?: string | null;
+  instagram?: string | null;
+  isHost?: boolean;
+  label?: string | null;
+  lastName?: string | null;
+  linkedIn?: string | null;
+  priority?: number | null;
+  slug?: string | null;
+  tikTok?: string | null;
+  title?: string | null;
+  twitter?: string | null;
+  website?: string | null;
+  youtube?: string | null;
 }
 
 export interface ActivityCreateInputs {
@@ -346,33 +427,32 @@ export interface SelfPushDeviceUpdateInputs {
 }
 
 export interface SupportTicketCreateInputs {
-  type: keyof typeof SupportTicketType;
+  accountId?: string | null;
   email: string;
+  eventId?: string | null;
   request: any;
+  status: "new" | "inProgress" | "complete";
+  type: SupportTicketType;
 }
 
 export interface TeamAccountCreateInputs {
   name: string;
   email: string;
+  username?: string | null;
 }
 
 export interface ThreadCreateInputs {
+  access: ThreadAccessLevel;
+  description?: string | null;
+  eventId?: string | null;
+  groupId?: string | null;
   name: string;
-  description?: string;
-  imageId?: string;
-  eventId?: string;
-  groupId?: string;
-  featured?: boolean;
-  access: keyof typeof ThreadAccessLevel;
 }
 
 export interface ThreadUpdateInputs {
-  id: string;
+  access?: ThreadAccessLevel;
+  description?: string | null;
+  eventId?: string | null;
+  groupId?: string | null;
   name?: string;
-  description?: string;
-  imageId?: string;
-  featured?: boolean;
-  eventId?: string;
-  groupId?: string;
-  access?: keyof typeof ThreadAccessLevel;
 }
