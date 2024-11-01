@@ -9,34 +9,28 @@ import {
 } from "../../useConnectedInfiniteQuery";
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 
-export const EVENT_PASS_TRANSFER_LOGS_QUERY_KEY = (
-  eventId: string,
-  attendeeId: string
-): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, attendeeId),
+export const EVENT_TRANSFER_LOGS_QUERY_KEY = (eventId: string): QueryKey => [
+  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
   "TRANSFERS",
 ];
 
-export interface GetSelfEventAttendeeTransfersLogsProps
-  extends InfiniteQueryParams {
+export interface GetSelfEventTransfersLogsProps extends InfiniteQueryParams {
   eventId: string;
-  attendeeId: string;
 }
 
-export const GetSelfEventAttendeeTransfersLogs = async ({
+export const GetSelfEventTransfersLogs = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
   eventId,
-  attendeeId,
   clientApiParams,
-}: GetSelfEventAttendeeTransfersLogsProps): Promise<
+}: GetSelfEventTransfersLogsProps): Promise<
   ConnectedXMResponse<TransferLog[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/attendees/${attendeeId}/transfers/logs`,
+    `/self/events/${eventId}/transfers/logs`,
     {
       params: {
         page: pageParam || undefined,
@@ -50,37 +44,31 @@ export const GetSelfEventAttendeeTransfersLogs = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeTransfersLogs = (
+export const useGetSelfEventTransfersLogs = (
   eventId: string,
-  attendeeId: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
+    Awaited<ReturnType<typeof GetSelfEventTransfersLogs>>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
+    Awaited<ReturnType<typeof GetSelfEventTransfersLogs>>
   >(
-    EVENT_PASS_TRANSFER_LOGS_QUERY_KEY(eventId, attendeeId),
+    EVENT_TRANSFER_LOGS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
-      GetSelfEventAttendeeTransfersLogs({
+      GetSelfEventTransfersLogs({
         ...params,
         eventId,
-        attendeeId,
       }),
     params,
     {
       ...options,
-      enabled:
-        !!authenticated &&
-        !!eventId &&
-        !!attendeeId &&
-        (options?.enabled ?? true),
+      enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );
 };
