@@ -94,6 +94,7 @@ export interface BaseOrganization {
   iconId: string | null;
   darkIcon: BaseImage | null;
   darkIconId: string | null;
+  locale: string;
 }
 
 export enum Currency {
@@ -228,6 +229,7 @@ export interface Self extends Account {
   zip: string | null;
   shareCode: string;
   chatToken?: string;
+  locale: string;
 }
 
 export const isSelf = (
