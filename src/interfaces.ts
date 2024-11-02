@@ -179,7 +179,6 @@ export interface BaseAccount {
       tiers: BaseAccountTier[];
     };
   }[];
-  locale: string;
 }
 
 export interface Account extends BaseAccount {
