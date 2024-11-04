@@ -390,6 +390,11 @@ export interface Event extends BaseEvent {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   faqSections: BaseFaqSection[];
+  _count: {
+    sessions: number;
+    speakers: number;
+    sponsors: number;
+  };
 }
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
