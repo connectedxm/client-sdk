@@ -42,6 +42,7 @@ export interface GetAccountsProps extends InfiniteQueryParams {
 }
 
 export const GetAccounts = async ({
+  pageParam,
   pageSize,
   orderBy,
   search,
@@ -54,6 +55,7 @@ export const GetAccounts = async ({
   const { data } = await clientApi.get(`/accounts`, {
     params: {
       accountType: accountType || undefined,
+      page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
