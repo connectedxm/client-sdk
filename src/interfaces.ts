@@ -988,7 +988,7 @@ export interface BaseFaq {
   id: string;
   slug: string;
   question: string;
-  answer: string;
+  answer?: string;
 }
 
 export interface Faq extends BaseFaq {
