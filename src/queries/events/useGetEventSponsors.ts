@@ -9,7 +9,6 @@ import {
 import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { EVENT_TICKETS_QUERY_KEY } from "./useGetEventTickets";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACCOUNT_QUERY_KEY } from "../accounts";
 
@@ -82,7 +81,7 @@ export const useGetEventSponsors = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventSponsors>>
   >(
-    EVENT_TICKETS_QUERY_KEY(eventId),
+    EVENT_SPONSORS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) => GetEventSponsors({ eventId, ...params }),
     params,
     {
