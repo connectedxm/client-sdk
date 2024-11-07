@@ -584,6 +584,7 @@ export interface BaseTicket {
   enableCoupons: boolean;
   minCouponQuantity: number | null;
   maxCouponQuantity: number | null;
+  sortOrder: number;
 }
 
 export interface Ticket extends BaseTicket {
