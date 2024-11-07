@@ -71,6 +71,12 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
   };
 
   if (queryClient && data.status === "ok") {
+    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(
+      queryClient,
+      [eventId, undefined, true],
+      response,
+      [clientApiParams.locale]
+    );
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], response, [
       clientApiParams.locale,
     ]);

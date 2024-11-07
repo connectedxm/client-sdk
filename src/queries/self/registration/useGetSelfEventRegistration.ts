@@ -69,7 +69,7 @@ export const useGetSelfEventRegistration = (
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventRegistration>>(
-    SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, undefined, create),
     (params: SingleQueryParams) =>
       GetSelfEventRegistration({
         eventId,
