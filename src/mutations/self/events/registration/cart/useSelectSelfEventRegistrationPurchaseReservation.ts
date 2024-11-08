@@ -42,12 +42,6 @@ export const SelectSelfEventRegistrationPurchaseReservation = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(
-      queryClient,
-      [eventId, undefined, true],
-      data,
-      [clientApiParams.locale]
-    );
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);

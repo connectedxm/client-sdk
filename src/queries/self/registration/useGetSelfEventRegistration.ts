@@ -11,13 +11,9 @@ import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_QUERY_KEY = (
   eventId: string,
-  registrationId?: string,
   create?: boolean
 ): QueryKey => {
   const key = [...SELF_QUERY_KEY(), "EVENT_REGISTRATION", eventId];
-  if (registrationId) {
-    key.push(registrationId);
-  }
   if (create) {
     key.push("CREATE");
   }
@@ -32,7 +28,14 @@ export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_QUERY_KEY(...keyParams),
+      ...SELF_EVENT_REGISTRATION_QUERY_KEY(...[keyParams[0]], true),
+      ...GetBaseSingleQueryKeys(...baseKeys),
+    ],
+    response
+  );
+  client.setQueryData(
+    [
+      ...SELF_EVENT_REGISTRATION_QUERY_KEY(...[keyParams[0]], true),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
@@ -69,7 +72,7 @@ export const useGetSelfEventRegistration = (
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventRegistration>>(
-    SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, undefined, create),
+    SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, create),
     (params: SingleQueryParams) =>
       GetSelfEventRegistration({
         eventId,
