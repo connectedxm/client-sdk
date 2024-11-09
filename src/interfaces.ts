@@ -821,16 +821,18 @@ export const isTypeTrack = (track: BaseTrack | Track): track is Track => {
 export interface BaseTransferLog {
   id: number;
   fromRegistrationId: string;
-  fromRegistration: BaseRegistration;
+  fromRegistration: {
+    account: BaseAccount;
+  };
   toRegistrationId: string;
-  toRegistration: BaseRegistration;
+  toRegistration: {
+    account: BaseAccount;
+  };
 }
 
 export interface TransferLog extends BaseTransferLog {
   purchaseId: string;
   purchase: BasePurchase;
-  userId: string | null;
-  user: BaseAccount | null;
   createdAt: string;
 }
 
@@ -2116,7 +2118,7 @@ export interface OrganizationConfig {
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;
   DEFAULT_LOCALE: SupportedLocale;
-  LANGUAGES: Record<SupportedLocale, Record<string, string>>;
+  LANGUAGES: Partial<Record<SupportedLocale, Record<string, string>>>;
   AUTH: {
     LAYOUT: "default" | "social";
     DEFAULT_ACTION: DefaultAuthAction;

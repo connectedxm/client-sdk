@@ -37,6 +37,7 @@ export const RemoveSelfEventRegistrationPurchase = async ({
         registrationId
       ),
     });
+
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);

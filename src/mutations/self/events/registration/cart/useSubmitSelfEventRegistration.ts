@@ -59,6 +59,7 @@ export const SubmitSelfEventRegistration = async ({
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_PASSES_QUERY_KEY(eventId),
     });
+
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
