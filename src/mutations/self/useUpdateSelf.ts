@@ -5,43 +5,22 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { SELF_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SelfUpdateInputs } from "@src/params";
 
 export interface UpdateSelfParams extends MutationParams {
-  username?: string;
-  firstName?: string | null;
-  lastName?: string | null;
-  phone?: string | null;
-  title?: string | null;
-  company?: string | null;
-  bio?: string | null;
-  dietaryRestrictions?: string | null;
-  address1?: string | null;
-  address2?: string | null;
-  city?: string | null;
-  state?: string | null;
-  zip?: string | null;
-  country?: string | null;
-  facebook?: string | null;
-  twitter?: string | null;
-  instagram?: string | null;
-  tikTok?: string | null;
-  linkedIn?: string | null;
-  youtube?: string | null;
-  discord?: string | null;
-  video?: string | null;
-  website?: string | null;
+  self: SelfUpdateInputs;
 }
 
 export const UpdateSelf = async ({
   clientApiParams,
   queryClient,
-  ...params
+  self,
 }: UpdateSelfParams): Promise<ConnectedXMResponse<Self>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
   const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
     `/self`,
-    params
+    self
   );
 
   if (queryClient && data.status !== "ok") {

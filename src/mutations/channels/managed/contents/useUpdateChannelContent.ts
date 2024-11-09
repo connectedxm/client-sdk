@@ -13,30 +13,12 @@ import {
 } from "@src/queries";
 import { SET_CONTENT_QUERY_DATA } from "@src/queries/contents/useGetContent";
 import { CONTENTS_QUERY_KEY } from "@src/queries/contents/useGetContents";
-
-export interface UpdateChannelContent {
-  visible?: boolean;
-  title?: string;
-  description?: string | null;
-  duration?: string | null;
-  body?: string | null;
-  editor?: string | null;
-  externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
-  googleUrl?: string | null;
-  youtubeUrl?: string | null;
-  videoId?: string | null;
-  audioId?: number | null;
-  slug?: string;
-  email?: boolean;
-  push?: boolean;
-}
+import { ChannelContentUpdateInputs } from "@src/params";
 
 export interface UpdateChannelContentParams extends MutationParams {
   channelId: string;
   contentId: string;
-  content: UpdateChannelContent;
+  content: ChannelContentUpdateInputs;
   imageDataUri?: string;
 }
 

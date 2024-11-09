@@ -10,17 +10,10 @@ import {
   SET_GROUP_QUERY_DATA,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface CreateGroup {
-  name: string;
-  description: string;
-  access: keyof typeof GroupAccess;
-  active: boolean;
-  externalUrl?: string;
-}
+import { GroupCreateInputs } from "@src/params";
 
 export interface CreateGroupParams extends MutationParams {
-  group: CreateGroup;
+  group: GroupCreateInputs;
   imageDataUri?: string;
 }
 

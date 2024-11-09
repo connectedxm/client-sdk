@@ -5,16 +5,11 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { ConnectedXMResponse, EventListing } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { GroupEventListingSessionCreateInputs } from "@src/params";
 
 export interface CreateListingSessionParams extends MutationParams {
   eventId: string;
-  session: {
-    name: string;
-    description: string;
-    location: string | null;
-    startTime: Date;
-    endTime: Date;
-  };
+  session: GroupEventListingSessionCreateInputs;
   imageDataUri?: string;
 }
 

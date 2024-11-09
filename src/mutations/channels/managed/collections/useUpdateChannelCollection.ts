@@ -9,16 +9,12 @@ import {
   CHANNEL_COLLECTIONS_QUERY_KEY,
   SET_CHANNEL_COLLECTION_QUERY_DATA,
 } from "@src/queries/channels";
-
-export interface UpdateChannelCollection {
-  name?: string;
-  description?: string;
-}
+import { ChannelCollectionUpdateInputs } from "@src/params";
 
 export interface UpdateChannelCollectionParams extends MutationParams {
   channelId: string;
-  collection: UpdateChannelCollection;
   collectionId: string;
+  collection: ChannelCollectionUpdateInputs;
 }
 
 export const UpdateChannelCollection = async ({

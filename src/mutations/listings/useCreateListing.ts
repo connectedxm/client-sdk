@@ -15,32 +15,10 @@ import {
   LISTINGS_QUERY_KEY,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-export interface CreateListing {
-  eventType: keyof typeof EventType;
-  visible: boolean;
-  name: string;
-  shortDescription: string;
-  eventStart: string;
-  eventEnd: string;
-  timezone: string;
-  // Optional fields
-  venue?: string;
-  address1?: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  country?: string;
-  externalUrl?: string;
-  meetingUrl?: string;
-  registration?: boolean;
-  registrationLimit?: number | null;
-  groupOnly?: boolean;
-}
+import { GroupEventListingCreateInputs } from "@src/params";
 
 export interface CreateListingParams extends MutationParams {
-  event: CreateListing;
+  event: GroupEventListingCreateInputs;
   imageDataUri?: any;
   groupId?: string;
   sponsorIds?: string[];

@@ -5,17 +5,12 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { EVENT_SESSIONS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { GroupEventListingSessionUpdateInputs } from "@src/params";
 
 export interface UpdateListingSessionParams extends MutationParams {
   eventId: string;
   sessionId: string;
-  session: {
-    name: string;
-    description: string;
-    location: string | null;
-    startTime: Date;
-    endTime: Date;
-  };
+  session: GroupEventListingSessionUpdateInputs;
   imageDataUri?: string;
 }
 

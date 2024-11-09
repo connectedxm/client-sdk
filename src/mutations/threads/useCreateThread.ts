@@ -10,19 +10,10 @@ import useConnectedMutation, {
 
 import { THREADS_QUERY_KEY, SET_THREAD_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface CreateThread {
-  name: string;
-  description?: string;
-  imageId?: string;
-  eventId?: string;
-  groupId?: string;
-  featured?: boolean;
-  access: keyof typeof ThreadAccessLevel;
-}
+import { ThreadCreateInputs } from "@src/params";
 
 export interface CreateThreadParams extends MutationParams {
-  thread: CreateThread;
+  thread: ThreadCreateInputs;
   accountIds: string[];
   firstMessage: string;
 }

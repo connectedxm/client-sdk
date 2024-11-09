@@ -157,7 +157,7 @@ export const useUpdateSelfEventRegistrationQuestionResponse = (
     UpdateSelfEventRegistrationQuestionResponseParams,
     Awaited<ReturnType<typeof UpdateSelfEventRegistrationQuestionResponse>>
   >(
-    (params) =>
+    (params: UpdateSelfEventRegistrationQuestionResponseParams) =>
       UpdateSelfEventRegistrationQuestionResponse({ update, ...params }),
     options
   );
