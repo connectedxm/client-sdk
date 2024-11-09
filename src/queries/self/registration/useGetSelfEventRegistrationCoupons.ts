@@ -15,7 +15,8 @@ export const SELF_EVENT_REGISTRATION_COUPONS_QUERY_KEY = (
   eventId: string,
   registrationId: string
 ): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId, registrationId),
+  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+  registrationId,
   "COUPONS",
 ];
 
