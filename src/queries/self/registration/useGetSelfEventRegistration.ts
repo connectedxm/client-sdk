@@ -35,7 +35,7 @@ export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
   );
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_QUERY_KEY(...[keyParams[0]], true),
+      ...SELF_EVENT_REGISTRATION_QUERY_KEY(...[keyParams[0]], false),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
