@@ -38,7 +38,7 @@ export const UnfollowAccount = async ({
       queryClient,
       [clientApiParams.locale],
       "accounts",
-      accountId
+      data.data.id
     );
   }
 
