@@ -581,7 +581,7 @@ export interface BaseTicket {
   reservationEnd: string | null;
   maxReservationEnd: string | null;
   priceSchedules: BaseTicketPriceSchedule[];
-  refundSchedules: BaseTicketPriceSchedule[];
+  refundSchedules: BasePassTypeRefundSchedule[];
   enableCoupons: boolean;
   minCouponQuantity: number | null;
   maxCouponQuantity: number | null;
@@ -653,6 +653,7 @@ export interface Purchase extends BasePurchase {
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
+  payerId: string | null;
 }
 
 export interface ListingPurchase extends BasePurchase {
@@ -789,6 +790,7 @@ export interface ManagedCouponOrder {
 
 export interface ManagedCouponPurchase {
   id: string;
+  status: PurchaseStatus;
   coupon: BaseCoupon;
   registration: {
     account: BaseAccount;
@@ -2174,3 +2176,12 @@ export interface BaseSchedule {
 }
 
 export interface Schedule extends BaseSchedule {}
+
+export interface BasePassTypeRefundSchedule {
+  id: string;
+  percentage: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface PassTypeRefundSchedule extends BasePassTypeRefundSchedule {}
