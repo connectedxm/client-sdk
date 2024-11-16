@@ -2088,6 +2088,11 @@ export enum OrganizationModuleType {
   announcements = "announcements",
 }
 
+export enum PaymentIntegrationType {
+  stripe = "stripe",
+  paypal = "paypal",
+}
+
 export interface OrganizationConfig {
   ENVIRONMENT: "prod" | "staging";
   ORGANIZATION_ID: string;
@@ -2148,6 +2153,10 @@ export interface OrganizationConfig {
     tikTok: string | null;
     youtube: string | null;
     discord: string | null;
+  };
+  PAYMENT: {
+    TYPE: PaymentIntegrationType;
+    CONNECTION_ID: string;
   };
   INTEGRATIONS: Integration[];
 }
