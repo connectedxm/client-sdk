@@ -790,6 +790,7 @@ export interface ManagedCouponOrder {
 
 export interface ManagedCouponPurchase {
   id: string;
+  status: PurchaseStatus;
   coupon: BaseCoupon;
   registration: {
     account: BaseAccount;
