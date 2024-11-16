@@ -14,6 +14,7 @@ export * from "./useGetSelfEvents";
 export * from "./useGetSelfEventSessions";
 export * from "./useGetSelfFeed";
 export * from "./useGetSelfInterests";
+export * from "./useGetSelfContacts";
 export * from "./useGetSelfNotificationPreferences";
 export * from "./useGetSelfNotifications";
 export * from "./useGetSelfNotificationsCount";
