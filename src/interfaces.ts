@@ -1199,8 +1199,8 @@ export interface Channel extends BaseChannel {
   googleUrl: string | null;
   youtubeUrl: string | null;
   visilble: boolean;
-  hosts: BaseAccount[];
   group: BaseGroup | null;
+  creator: BaseAccount | null;
 }
 
 export const isTypeChannel = (
