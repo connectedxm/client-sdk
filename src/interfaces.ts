@@ -2156,8 +2156,8 @@ export interface OrganizationConfig {
     discord: string | null;
   };
   PAYMENT: {
-    TYPE: PaymentIntegrationType;
-    CONNECTION_ID: string;
+    TYPE: PaymentIntegrationType | "none";
+    CONNECTION_ID: string | null;
   };
   INTEGRATIONS: Integration[];
 }
