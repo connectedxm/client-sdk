@@ -581,6 +581,7 @@ export interface BaseTicket {
   reservationEnd: string | null;
   maxReservationEnd: string | null;
   priceSchedules: BaseTicketPriceSchedule[];
+  refundSchedules: BasePassTypeRefundSchedule[];
   enableCoupons: boolean;
   minCouponQuantity: number | null;
   maxCouponQuantity: number | null;
@@ -642,6 +643,8 @@ export interface BasePurchase {
 
 export interface Purchase extends BasePurchase {
   updatedAt: string;
+  amtPaid: number;
+  amtRefunded: number;
 }
 
 export interface ListingPurchase extends BasePurchase {
@@ -2058,27 +2061,21 @@ export enum PrimaryModule {
 }
 
 export enum OrganizationModuleType {
-  accounts = "accounts",
-  events = "events",
-  listings = "listings",
   activities = "activities",
+  events = "events",
   groups = "groups",
-  contents = "contents",
-  chat = "chat",
+  accounts = "accounts",
+  channels = "channels",
+  threads = "threads",
+  storage = "storage",
   support = "support",
   sponsors = "sponsors",
   benefits = "benefits",
+  interests = "interests",
   advertisements = "advertisements",
-  announcements = "announcements",
   subscriptions = "subscriptions",
-  threads = "threads",
-}
-
-export enum OrganizationActionType {
-  create = "create",
-  read = "read",
-  update = "update",
-  delete = "delete",
+  invoices = "invoices",
+  announcements = "announcements",
 }
 
 export interface OrganizationConfig {
@@ -2148,13 +2145,9 @@ export interface OrganizationConfig {
 export interface OrganizationModule {
   enabled: boolean;
   requireAuth: boolean;
-  actions: Record<keyof typeof OrganizationActionType, OrganizationAction>;
-}
-
-export interface OrganizationAction {
-  enabled: boolean;
-  requireAuth: boolean;
-  tiers: string[];
+  editable: boolean;
+  enabledTiers: string[];
+  editableTiers: string[];
 }
 
 export interface OrganizationOAuth {
@@ -2174,3 +2167,12 @@ export interface BaseSchedule {
 }
 
 export interface Schedule extends BaseSchedule {}
+
+export interface BasePassTypeRefundSchedule {
+  id: string;
+  percentage: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface PassTypeRefundSchedule extends BasePassTypeRefundSchedule {}
