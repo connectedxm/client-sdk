@@ -182,6 +182,7 @@ export interface BaseAccount {
 }
 
 export interface Account extends BaseAccount {
+  banner: BaseImage | null;
   bio: string | null;
   website: string | null;
   facebook: string | null;
