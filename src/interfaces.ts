@@ -653,6 +653,7 @@ export interface Purchase extends BasePurchase {
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
+  payerId: string | null;
 }
 
 export interface ListingPurchase extends BasePurchase {
