@@ -606,6 +606,14 @@ export interface BaseTicketPriceSchedule {
 }
 
 export interface TicketPriceSchedule extends BaseTicketPriceSchedule {}
+export interface BaseTicketRefundSchedule {
+  id: string;
+  percentage: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface TicketRefundSchedule extends BaseTicketRefundSchedule {}
 
 export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
   return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
@@ -2141,12 +2149,11 @@ export interface OrganizationConfig {
   };
   INTEGRATIONS: Integration[];
 }
-
 export interface OrganizationModule {
-  enabled: boolean;
   requireAuth: boolean;
-  editable: boolean;
+  enabled: boolean;
   enabledTiers: string[];
+  editable: boolean;
   editableTiers: string[];
 }
 
