@@ -913,6 +913,59 @@ export const isTypeSession = (
     (session as Omit<Session, keyof BaseSession>).longDescription !== undefined
   );
 };
+
+export interface BaseSessionLocation {
+  id: string;
+  name: string;
+}
+
+export interface SessionLocation extends BaseSessionLocation {
+  googlePlaceId: string | null;
+  description: string | null;
+  address1: string | null;
+  address2: string | null;
+  zip: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  image: BaseImage | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface BaseSessionQuestion {
+  id: string;
+  name: string;
+  label: string | null;
+  description: string | null;
+  required: string;
+}
+
+export interface SessionQuestion extends BaseSessionQuestion {
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface BaseSessionQuestionResponse {
+  id: string;
+  value: string;
+}
+
+export interface SessionQuestionResponse extends BaseSessionQuestionResponse {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseSessionPass {
+  id: string;
+  status: string;
+}
+
+export interface SessionPass extends BaseSessionPass {
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BaseEventPage {
   id: string;
   slug: string;
