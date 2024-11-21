@@ -587,6 +587,7 @@ export interface BaseTicket {
   minCouponQuantity: number | null;
   maxCouponQuantity: number | null;
   sortOrder: number;
+  overrideStartDate: string | null;
 }
 
 export interface Ticket extends BaseTicket {
