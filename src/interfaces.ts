@@ -2111,7 +2111,9 @@ export interface OrganizationConfig {
   OPENGRAPH_URL:
     | "https://opengraph-api.connected.dev"
     | "https://staging-opengraph-api.connected.dev";
-  CHAT_URL: "wss://chat.connected.dev" | "wss://staging-chat.connected.dev";
+  CHAT_URL:
+    | "wss://websocket.connected.dev"
+    | "wss://staging-websocket.connected.dev";
   APPLE_APPSTORE_LINK: string | null;
   GOOGLE_PLAYSTORE_LINK: string | null;
   NAME: string;
