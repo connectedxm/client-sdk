@@ -904,6 +904,8 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
+  registrationEnabled: boolean;
+  price: number | null;
 }
 
 export const isTypeSession = (
