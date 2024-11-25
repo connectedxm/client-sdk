@@ -889,7 +889,7 @@ export interface BaseSession {
   slug: string;
   name: string;
   description: string | null;
-  location: string | null;
+  location: BaseSessionLocation | null;
   image: BaseImage | null;
   startTime: string;
   endTime: string;
@@ -904,6 +904,8 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
+  registrationEnabled: boolean;
+  price: number | null;
 }
 
 export const isTypeSession = (
@@ -913,6 +915,66 @@ export const isTypeSession = (
     (session as Omit<Session, keyof BaseSession>).longDescription !== undefined
   );
 };
+
+export interface BaseSessionLocation {
+  id: string;
+  name: string;
+  description: string | null;
+  address1: string | null;
+  address2: string | null;
+  zip: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  image: BaseImage | null;
+  googlePlaceId: string | null;
+}
+
+export interface SessionLocation extends BaseSessionLocation {
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface BaseSessionQuestion {
+  id: string;
+  name: string;
+  label: string | null;
+  description: string | null;
+  required: string;
+}
+
+export interface SessionQuestion extends BaseSessionQuestion {
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface BaseSessionQuestionResponse {
+  id: string;
+  value: string;
+}
+
+export interface SessionQuestionResponse extends BaseSessionQuestionResponse {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export enum SessionPassStatus {
+  draft = "draft",
+  ready = "ready",
+  canceled = "canceled",
+}
+
+export interface BaseSessionPass {
+  id: string;
+  status: string;
+}
+
+export interface SessionPass extends BaseSessionPass {
+  pass: BasePurchase;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BaseEventPage {
   id: string;
   slug: string;
