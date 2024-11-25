@@ -904,6 +904,8 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
+  registrationEnabled: boolean;
+  price: number | null;
 }
 
 export const isTypeSession = (
@@ -956,12 +958,19 @@ export interface SessionQuestionResponse extends BaseSessionQuestionResponse {
   updatedAt: string;
 }
 
+export enum SessionPassStatus {
+  draft = "draft",
+  ready = "ready",
+  canceled = "canceled",
+}
+
 export interface BaseSessionPass {
   id: string;
   status: string;
 }
 
 export interface SessionPass extends BaseSessionPass {
+  pass: BasePurchase;
   createdAt: string;
   updatedAt: string;
 }
