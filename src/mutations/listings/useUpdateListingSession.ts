@@ -12,7 +12,6 @@ export interface UpdateListingSessionParams extends MutationParams {
   session: {
     name: string;
     description: string;
-    location: string | null;
     startTime: Date;
     endTime: Date;
   };
