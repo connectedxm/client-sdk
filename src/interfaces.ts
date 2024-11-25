@@ -889,7 +889,7 @@ export interface BaseSession {
   slug: string;
   name: string;
   description: string | null;
-  location: string | null;
+  location: BaseSessionLocation | null;
   image: BaseImage | null;
   startTime: string;
   endTime: string;
@@ -917,10 +917,6 @@ export const isTypeSession = (
 export interface BaseSessionLocation {
   id: string;
   name: string;
-}
-
-export interface SessionLocation extends BaseSessionLocation {
-  googlePlaceId: string | null;
   description: string | null;
   address1: string | null;
   address2: string | null;
@@ -929,6 +925,10 @@ export interface SessionLocation extends BaseSessionLocation {
   state: string | null;
   country: string | null;
   image: BaseImage | null;
+  googlePlaceId: string | null;
+}
+
+export interface SessionLocation extends BaseSessionLocation {
   createdAt: string | null;
   updatedAt: string | null;
 }
