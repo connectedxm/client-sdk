@@ -1,4 +1,2 @@
-export * from "./useAddSelfEventRegistrationPurchaseSession";
-export * from "./useRemoveSelfEventRegistrationPurchaseSession";
-export * from "./useSubmitSelfEventRegistrationSessions";
+export * from "./useSubmitSelfEventRegistrationSessionPasses";
 export * from "./useUpdateSelfEventRegistrationPurchaseSessionResponses";
