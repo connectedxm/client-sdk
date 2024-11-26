@@ -2197,6 +2197,7 @@ export interface OrganizationConfig {
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;
   DEFAULT_LOCALE: SupportedLocale;
+  LOCALES: SupportedLocale[];
   LANGUAGES: Partial<Record<SupportedLocale, Record<string, string>>>;
   AUTH: {
     LAYOUT: "default" | "social";
