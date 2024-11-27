@@ -4,19 +4,14 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SessionPassesInput } from "@src/queries";
 
 export interface SubmitSelfEventRegistrationSessionPassesParams
   extends MutationParams {
   eventId: string;
   registrationId: string;
   sessionId: string;
-  sessionPasses: {
-    passId: string;
-    responses: {
-      questionId: string;
-      value: string;
-    }[];
-  }[];
+  sessionPasses: SessionPassesInput;
 }
 
 export const SubmitSelfEventRegistrationSessionPasses = async ({

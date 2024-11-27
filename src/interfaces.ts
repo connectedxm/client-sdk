@@ -648,6 +648,7 @@ export interface BasePurchase {
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
+  sessions: BaseSessionPass[];
   createdAt: string;
 }
 
@@ -941,7 +942,7 @@ export interface BaseSessionQuestion {
   name: string;
   label: string | null;
   description: string | null;
-  required: string;
+  required: boolean;
 }
 
 export interface SessionQuestion extends BaseSessionQuestion {
@@ -968,6 +969,7 @@ export enum SessionPassStatus {
 export interface BaseSessionPass {
   id: string;
   canceled: boolean;
+  sessionId: string;
 }
 
 export interface SessionPass extends BaseSessionPass {
