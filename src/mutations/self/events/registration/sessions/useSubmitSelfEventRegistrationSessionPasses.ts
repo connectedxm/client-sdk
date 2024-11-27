@@ -4,7 +4,10 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SessionPassesInput } from "@src/queries";
+import {
+  SELF_EVENT_REGISTRATION_QUERY_KEY,
+  SessionPassesInput,
+} from "@src/queries";
 
 export interface SubmitSelfEventRegistrationSessionPassesParams
   extends MutationParams {
@@ -20,6 +23,7 @@ export const SubmitSelfEventRegistrationSessionPasses = async ({
   sessionId,
   sessionPasses,
   clientApiParams,
+  queryClient,
 }: SubmitSelfEventRegistrationSessionPassesParams): Promise<
   ConnectedXMResponse<null>
 > => {
@@ -28,6 +32,12 @@ export const SubmitSelfEventRegistrationSessionPasses = async ({
     `/self/events/${eventId}/registration/${registrationId}/sessions/${sessionId}/submit`,
     sessionPasses
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+  }
 
   return data;
 };

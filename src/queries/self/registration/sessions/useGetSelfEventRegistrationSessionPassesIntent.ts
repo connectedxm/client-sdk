@@ -50,6 +50,7 @@ export const GetSelfEventRegistrationSessionPassesIntent = async ({
     `/self/events/${eventId}/registration/${registrationId}/sessions/${sessionId}/intent`,
     sessionPasses
   );
+
   return data;
 };
 
