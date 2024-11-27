@@ -42,7 +42,7 @@ export const useGetSelfNotificationPreferences = (
     (params: any) => GetSelfNotificationPreferences({ ...params }),
     {
       ...options,
-      enabled: authenticated && (options?.enabled ?? true),
+      enabled: !!authenticated && (options?.enabled ?? true),
     }
   );
 };

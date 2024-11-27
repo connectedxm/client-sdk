@@ -15,7 +15,7 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connected.dev"
     | "https://staging-client-api.connected.dev"
     | "http://localhost:4001";
-  authenticated: boolean;
+  authenticated: boolean | null;
   setAuthenticated: (authenticated: boolean) => void;
   getToken: () => Promise<string | undefined>;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
@@ -67,7 +67,9 @@ export const ConnectedXMProvider = ({
   getToken,
   ...state
 }: ConnectedXMProviderProps) => {
-  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
+  const [authenticated, setAuthenticated] = React.useState<boolean | null>(
+    null
+  );
   const [ssr, setSSR] = React.useState<boolean>(true);
 
   React.useEffect(() => {
@@ -75,6 +77,8 @@ export const ConnectedXMProvider = ({
       getToken().then((token) => {
         if (token) {
           setAuthenticated(true);
+        } else {
+          setAuthenticated(false);
         }
       });
     }
