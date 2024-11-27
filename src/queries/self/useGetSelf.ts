@@ -57,7 +57,7 @@ export const useGetSelf = (
     (params: SingleQueryParams) => GetSelf({ ignoreExecuteAs, ...params }),
     {
       ...options,
-      enabled: authenticated && (options?.enabled ?? true),
+      enabled: !!authenticated && (options?.enabled ?? true),
     }
   );
 };
