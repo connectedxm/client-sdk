@@ -9,7 +9,6 @@ import {
   ADD_SELF_RELATIONSHIP,
   GROUPS_INVITED_QUERY_KEY,
   SELF_NOTIFICATIONS_QUERY_KEY,
-  SELF_NOTIFICATION_COUNT_QUERY_KEY,
 } from "@src/queries";
 
 export interface AcceptGroupInviteParitation extends MutationParams {
@@ -32,9 +31,6 @@ export const AcceptGroupInvitation = async ({
     });
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATIONS_QUERY_KEY(""),
-    });
-    queryClient.invalidateQueries({
-      queryKey: SELF_NOTIFICATION_COUNT_QUERY_KEY(""),
     });
     ADD_SELF_RELATIONSHIP(
       queryClient,

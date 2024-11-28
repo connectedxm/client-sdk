@@ -220,7 +220,7 @@ export interface SelfRelationships {
   threads: Record<string, boolean>;
 }
 
-export interface Self extends Account {
+export interface Self extends Omit<Account, "_count"> {
   email: string | null;
   phone: string | null;
   dietaryRestrictions: string | null;
@@ -231,6 +231,10 @@ export interface Self extends Account {
   shareCode: string;
   chatToken?: string;
   locale: string;
+  _count: {
+    chatChannels: number;
+    notifications: number;
+  };
 }
 
 export const isSelf = (
