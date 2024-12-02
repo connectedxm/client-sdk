@@ -17,7 +17,6 @@ export * from "./useGetSelfInterests";
 export * from "./useGetSelfContacts";
 export * from "./useGetSelfNotificationPreferences";
 export * from "./useGetSelfNotifications";
-export * from "./useGetSelfNotificationsCount";
 export * from "./useGetSelfPushDevice";
 export * from "./useGetSelfPushDevices";
 export * from "./useGetSelfGroupActivities";
