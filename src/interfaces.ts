@@ -975,6 +975,7 @@ export interface BaseSessionPass {
   id: string;
   canceled: boolean;
   sessionId: string;
+  session: BaseSession;
 }
 
 export interface SessionPass extends BaseSessionPass {
