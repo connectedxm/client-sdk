@@ -912,6 +912,7 @@ export interface Session extends BaseSession {
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
   questions: BaseSessionQuestion[];
+  supply?: number | null;
 }
 
 export const isTypeSession = (
