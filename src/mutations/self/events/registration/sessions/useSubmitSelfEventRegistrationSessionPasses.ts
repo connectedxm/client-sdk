@@ -5,6 +5,8 @@ import useConnectedMutation, {
 } from "../../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  EVENT_SESSION_QUERY_KEY,
+  EVENT_SESSIONS_QUERY_KEY,
   SELF_EVENT_ATTENDEE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
   SessionPassesInput,
@@ -40,6 +42,12 @@ export const SubmitSelfEventRegistrationSessionPasses = async ({
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SESSIONS_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_SESSION_QUERY_KEY(eventId, sessionId),
     });
   }
 
