@@ -29,7 +29,9 @@ export const CapturePaymentIntent = async ({
       queryClient.invalidateQueries({
         predicate: ({ queryKey }) => {
           if (
-            (queryKey[0] === "SELF" && queryKey[1] === "EVENT_REGISTRATION") ||
+            (queryKey[0] === "SELF" &&
+              (queryKey[1] === "EVENT_REGISTRATION" ||
+                queryKey[1] === "EVENT_ATTENDEE")) ||
             (queryKey[0] === "SELF" &&
               queryKey[1] === "EVENT" &&
               queryKey[3] === "REGISTRATION")
