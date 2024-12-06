@@ -220,7 +220,7 @@ export interface SelfRelationships {
   threads: Record<string, boolean>;
 }
 
-export interface Self extends Account {
+export interface Self extends Omit<Account, "_count"> {
   email: string | null;
   phone: string | null;
   dietaryRestrictions: string | null;
@@ -231,6 +231,10 @@ export interface Self extends Account {
   shareCode: string;
   chatToken?: string;
   locale: string;
+  _count: {
+    chatChannels: number;
+    notifications: number;
+  };
 }
 
 export const isSelf = (
@@ -648,6 +652,7 @@ export interface BasePurchase {
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
+  sessions: BaseSessionPass[];
   createdAt: string;
 }
 
@@ -895,6 +900,8 @@ export interface BaseSession {
   endTime: string;
   sortOrder: number | null;
   nonSession: boolean;
+  registrationEnabled: boolean;
+  price: number | null;
 }
 
 export interface Session extends BaseSession {
@@ -904,8 +911,8 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
-  registrationEnabled: boolean;
-  price: number | null;
+  questions: BaseSessionQuestion[];
+  supply?: number | null;
 }
 
 export const isTypeSession = (
@@ -940,7 +947,7 @@ export interface BaseSessionQuestion {
   name: string;
   label: string | null;
   description: string | null;
-  required: string;
+  required: boolean;
 }
 
 export interface SessionQuestion extends BaseSessionQuestion {
@@ -966,7 +973,9 @@ export enum SessionPassStatus {
 
 export interface BaseSessionPass {
   id: string;
-  status: string;
+  canceled: boolean;
+  sessionId: string;
+  session: BaseSession;
 }
 
 export interface SessionPass extends BaseSessionPass {

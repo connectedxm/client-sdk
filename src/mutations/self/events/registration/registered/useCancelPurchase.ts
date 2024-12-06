@@ -5,6 +5,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
 import {
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
 } from "@src/queries";
@@ -42,6 +43,9 @@ export const CancelPurchase = async ({
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
     });
   }
   return data;

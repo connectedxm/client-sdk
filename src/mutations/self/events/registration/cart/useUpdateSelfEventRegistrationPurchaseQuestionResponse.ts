@@ -7,6 +7,7 @@ import {
 } from "../../../../../interfaces";
 import {
   GetBaseSingleQueryKeys,
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
@@ -85,6 +86,10 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
 
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
     });
 
     queryClient.setQueryData(

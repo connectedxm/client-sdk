@@ -9,51 +9,51 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_EVENT_REGISTRATION_QUERY_KEY = (
-  eventId: string
-): QueryKey => [...SELF_QUERY_KEY(), "EVENT_REGISTRATION", eventId];
+export const SELF_EVENT_ATTENDEE_QUERY_KEY = (eventId: string): QueryKey => [
+  ...SELF_QUERY_KEY(),
+  "EVENT_ATTENDEE",
+  eventId,
+];
 
-export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
+export const SET_SELF_EVENT_ATTENDEE_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistration>>,
+  keyParams: Parameters<typeof SELF_EVENT_ATTENDEE_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetSelfEventAttendee>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_QUERY_KEY(...keyParams),
+      ...SELF_EVENT_ATTENDEE_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationProps extends SingleQueryParams {
+export interface GetSelfEventAttendeeProps extends SingleQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventRegistration = async ({
+export const GetSelfEventAttendee = async ({
   eventId,
   clientApiParams,
-}: GetSelfEventRegistrationProps): Promise<
-  ConnectedXMResponse<Registration>
-> => {
+}: GetSelfEventAttendeeProps): Promise<ConnectedXMResponse<Registration>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/events/${eventId}/registration`);
+  const { data } = await clientApi.get(`/self/events/${eventId}/attendee`);
 
   return data;
 };
 
-export const useGetSelfEventRegistration = (
+export const useGetSelfEventAttendee = (
   eventId: string,
-  options: SingleQueryOptions<ReturnType<typeof GetSelfEventRegistration>> = {}
+  options: SingleQueryOptions<ReturnType<typeof GetSelfEventAttendee>> = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
-  return useConnectedSingleQuery<ReturnType<typeof GetSelfEventRegistration>>(
-    SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+  return useConnectedSingleQuery<ReturnType<typeof GetSelfEventAttendee>>(
+    SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistration({
+      GetSelfEventAttendee({
         eventId,
         ...params,
       }),

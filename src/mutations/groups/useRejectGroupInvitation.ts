@@ -9,7 +9,6 @@ import {
   GROUPS_INVITED_QUERY_KEY,
   REMOVE_SELF_RELATIONSHIP,
   SELF_NOTIFICATIONS_QUERY_KEY,
-  SELF_NOTIFICATION_COUNT_QUERY_KEY,
 } from "@src/queries";
 
 export interface RejectGroupInvitationParams extends MutationParams {
@@ -34,9 +33,6 @@ export const RejectGroupInvitation = async ({
     });
     queryClient.invalidateQueries({
       queryKey: SELF_NOTIFICATIONS_QUERY_KEY(""),
-    });
-    queryClient.invalidateQueries({
-      queryKey: SELF_NOTIFICATION_COUNT_QUERY_KEY(""),
     });
     REMOVE_SELF_RELATIONSHIP(
       queryClient,
