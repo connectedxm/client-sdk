@@ -2123,15 +2123,6 @@ export interface Thread extends BaseThread {
   updatedAt: string;
 }
 
-export enum SupportedLocale {
-  en = "en",
-  es = "es",
-  fr = "fr",
-  ja = "ja",
-  id = "id",
-  ms = "ms",
-}
-
 export enum DefaultAuthAction {
   signIn = "signIn",
   signUp = "signUp",
@@ -2206,9 +2197,9 @@ export interface OrganizationConfig {
   APP_ICON: string | null;
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;
-  DEFAULT_LOCALE: SupportedLocale;
-  LOCALES: SupportedLocale[];
-  LANGUAGES: Partial<Record<SupportedLocale, Record<string, string>>>;
+  DEFAULT_LOCALE: string;
+  LOCALES: string[];
+  LANGUAGES: Partial<Record<string, Record<string, string>>>;
   AUTH: {
     LAYOUT: "default" | "social";
     DEFAULT_ACTION: DefaultAuthAction;
