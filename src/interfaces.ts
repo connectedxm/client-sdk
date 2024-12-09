@@ -2128,6 +2128,8 @@ export enum SupportedLocale {
   es = "es",
   fr = "fr",
   ja = "ja",
+  id = "id",
+  ms = "ms",
 }
 
 export enum DefaultAuthAction {
