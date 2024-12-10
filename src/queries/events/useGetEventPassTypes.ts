@@ -53,7 +53,7 @@ export const useGetEventPassTypes = (
   options: SingleQueryOptions<ReturnType<typeof GetEventPassTypes>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventPassTypes>>(
-    EVENT_PASS_TYPES_QUERY_KEY(eventId),
+    EVENT_PASS_TYPES_QUERY_KEY(eventId, passTypeId),
     (params) => GetEventPassTypes({ eventId, passTypeId, ...params }),
     {
       ...options,
