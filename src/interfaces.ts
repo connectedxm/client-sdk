@@ -652,6 +652,7 @@ export interface BasePurchase {
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
+  sessions: BaseSessionPass[];
   createdAt: string;
 }
 
@@ -899,6 +900,8 @@ export interface BaseSession {
   endTime: string;
   sortOrder: number | null;
   nonSession: boolean;
+  registrationEnabled: boolean;
+  price: number | null;
 }
 
 export interface Session extends BaseSession {
@@ -908,8 +911,8 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
-  registrationEnabled: boolean;
-  price: number | null;
+  questions: BaseSessionQuestion[];
+  supply?: number | null;
 }
 
 export const isTypeSession = (
@@ -944,7 +947,7 @@ export interface BaseSessionQuestion {
   name: string;
   label: string | null;
   description: string | null;
-  required: string;
+  required: boolean;
 }
 
 export interface SessionQuestion extends BaseSessionQuestion {
@@ -970,7 +973,9 @@ export enum SessionPassStatus {
 
 export interface BaseSessionPass {
   id: string;
-  status: string;
+  canceled: boolean;
+  sessionId: string;
+  session: BaseSession;
 }
 
 export interface SessionPass extends BaseSessionPass {
@@ -2118,13 +2123,6 @@ export interface Thread extends BaseThread {
   updatedAt: string;
 }
 
-export enum SupportedLocale {
-  en = "en",
-  es = "es",
-  fr = "fr",
-  ja = "ja",
-}
-
 export enum DefaultAuthAction {
   signIn = "signIn",
   signUp = "signUp",
@@ -2199,9 +2197,9 @@ export interface OrganizationConfig {
   APP_ICON: string | null;
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;
-  DEFAULT_LOCALE: SupportedLocale;
-  LOCALES: SupportedLocale[];
-  LANGUAGES: Partial<Record<SupportedLocale, Record<string, string>>>;
+  DEFAULT_LOCALE: string;
+  LOCALES: string[];
+  LANGUAGES: Partial<Record<string, Record<string, string>>>;
   AUTH: {
     LAYOUT: "default" | "social";
     DEFAULT_ACTION: DefaultAuthAction;
