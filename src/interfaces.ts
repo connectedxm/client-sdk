@@ -193,8 +193,6 @@ export interface Account extends BaseAccount {
   youtube: string | null;
   discord: string | null;
   video: string | null;
-  state: string | null;
-  country: string | null;
   timezone: string | null;
   createdAt: string;
   _count: {
@@ -224,13 +222,10 @@ export interface Self extends Omit<Account, "_count"> {
   email: string | null;
   phone: string | null;
   dietaryRestrictions: string | null;
-  address1: string | null;
-  address2: string | null;
-  city: string | null;
-  zip: string | null;
   shareCode: string;
   chatToken?: string;
   locale: string;
+  addresses: BaseAddress[];
   _count: {
     chatChannels: number;
     notifications: number;
@@ -242,6 +237,20 @@ export const isSelf = (
 ): account is Self => {
   return (account as Omit<Self, keyof Account>).email !== undefined;
 };
+
+export interface BaseAddress {
+  id: string;
+  primary: boolean;
+  name: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  country: string;
+  zip: string;
+}
+
+export interface Address extends BaseAddress {}
 
 export interface AccountShare extends Account {
   email: string | null;
