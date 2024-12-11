@@ -1,3 +1,4 @@
+export * from "./addresses";
 export * from "./chat";
 export * from "./events";
 export * from "./subscriptions";
