@@ -1856,6 +1856,12 @@ export interface BaseEventReservationSection {
   pricePerDay: boolean;
   shortDescription: string;
   image: BaseImage | null;
+  minStart: string | null;
+  start: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  end: string | null;
+  maxEnd: string | null;
   createdAt: string;
   updatedAt: string;
 }
