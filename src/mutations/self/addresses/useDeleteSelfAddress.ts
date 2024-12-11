@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, PushDevice } from "@src/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -14,9 +14,9 @@ export const DeleteSelfAddress = async ({
   addressId,
   clientApiParams,
   queryClient,
-}: DeleteSelfAddressParams): Promise<ConnectedXMResponse<PushDevice>> => {
+}: DeleteSelfAddressParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<PushDevice>>(
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/self/addresses/${addressId}`
   );
 

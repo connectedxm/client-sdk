@@ -1,4 +1,4 @@
-import type { Activity, ConnectedXMResponse } from "@interfaces";
+import type { AccountAddress, ConnectedXMResponse } from "@interfaces";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -27,7 +27,7 @@ export const GetSelfAddresses = async ({
   queryClient,
   clientApiParams,
   locale,
-}: GetSelfAddressesProps): Promise<ConnectedXMResponse<Activity[]>> => {
+}: GetSelfAddressesProps): Promise<ConnectedXMResponse<AccountAddress[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
   const { data } = await clientApi.get(`/self/addresses`, {

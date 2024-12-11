@@ -3,7 +3,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../useConnectedMutation";
-import { ConnectedXMResponse, Lead } from "@src/interfaces";
+import { AccountAddress, ConnectedXMResponse } from "@src/interfaces";
 import { SELF_ADDRESS_QUERY_KEY, SELF_ADDRESSES_QUERY_KEY } from "@src/queries";
 
 export interface UpdateSelfAddressParams extends MutationParams {
@@ -16,9 +16,9 @@ export const UpdateSelfAddress = async ({
   address,
   queryClient,
   clientApiParams,
-}: UpdateSelfAddressParams): Promise<ConnectedXMResponse<Lead>> => {
+}: UpdateSelfAddressParams): Promise<ConnectedXMResponse<AccountAddress>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<Lead>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<AccountAddress>>(
     `/self/addresses/${addressId}`,
     address
   );

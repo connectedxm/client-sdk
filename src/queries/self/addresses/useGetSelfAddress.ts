@@ -4,7 +4,7 @@ import {
   useConnectedSingleQuery,
 } from "../../useConnectedSingleQuery";
 
-import type { ConnectedXMResponse, Self } from "@interfaces";
+import type { AccountAddress, ConnectedXMResponse } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
@@ -22,7 +22,7 @@ export interface GetSelfAddressProps extends SingleQueryParams {
 export const GetSelfAddress = async ({
   addressId,
   clientApiParams,
-}: GetSelfAddressProps): Promise<ConnectedXMResponse<Self>> => {
+}: GetSelfAddressProps): Promise<ConnectedXMResponse<AccountAddress>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
   const { data } = await clientApi.get(`/self/addresses/${addressId}`);

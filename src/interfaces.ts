@@ -225,7 +225,7 @@ export interface Self extends Omit<Account, "_count"> {
   shareCode: string;
   chatToken?: string;
   locale: string;
-  addresses: BaseAddress[];
+  addresses: BaseAccountAddress[];
   _count: {
     chatChannels: number;
     notifications: number;
@@ -238,7 +238,7 @@ export const isSelf = (
   return (account as Omit<Self, keyof Account>).email !== undefined;
 };
 
-export interface BaseAddress {
+export interface BaseAccountAddress {
   id: string;
   primary: boolean;
   name: string;
@@ -250,7 +250,7 @@ export interface BaseAddress {
   zip: string;
 }
 
-export interface Address extends BaseAddress {}
+export interface AccountAddress extends BaseAccountAddress {}
 
 export interface AccountShare extends Account {
   email: string | null;
