@@ -395,6 +395,7 @@ export interface Event extends BaseEvent {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   faqSections: BaseFaqSection[];
+  reservationDescription: string | null;
   _count: {
     sessions: number;
     speakers: number;
@@ -407,6 +408,7 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
+  reservationDescription: string | null;
   externalUrl: string | null;
   registration: boolean;
   registrationCount: number;
