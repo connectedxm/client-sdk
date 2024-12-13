@@ -648,13 +648,10 @@ export interface BasePurchase {
   location: string | null;
   usedAt: string | null;
   status: PurchaseStatus;
-  firstName: string;
-  lastName: string;
-  email: string;
   registrationId: string;
   registration: BaseRegistration;
-  ticketId: string | null;
-  ticket: BaseTicket | null;
+  ticketId: string;
+  ticket: BaseTicket;
   addOns: BaseEventAddOn[];
   reservationStart: string | null;
   reservationEnd: string | null;
@@ -1892,6 +1889,7 @@ export interface BaseEventReservationSectionLocation {
   createdAt: string;
   updatedAt: string;
   reservationSection: {
+    id: string;
     name: string;
     pricePerDay: boolean;
     price: number;
