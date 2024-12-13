@@ -9,31 +9,32 @@ import {
   EVENT_REGISTRANTS_QUERY_KEY,
   SELF_EVENTS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface AddSelfEventRegistrationPurchaseAddOnParams
+export interface UpdateSelfEventRegistrationPurchaseAddOnParams
   extends MutationParams {
   eventId: string;
   registrationId: string;
-  purchaseId: string;
-  addOnId: string;
+  passes: {
+    passId: string;
+    addOnIds: string[];
+  }[];
 }
 
-export const AddSelfEventRegistrationPurchaseAddOn = async ({
+export const UpdateSelfEventRegistrationPurchaseAddOn = async ({
   eventId,
   registrationId,
-  purchaseId,
-  addOnId,
+  passes,
   clientApiParams,
   queryClient,
-}: AddSelfEventRegistrationPurchaseAddOnParams): Promise<
+}: UpdateSelfEventRegistrationPurchaseAddOnParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/addOns/${addOnId}`
+    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/addOns`,
+    passes
   );
 
   if (queryClient && data.status === "ok") {
@@ -46,13 +47,16 @@ export const AddSelfEventRegistrationPurchaseAddOn = async ({
         registrationId
       ),
     });
-    queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
-        eventId,
-        registrationId,
-        purchaseId
-      ),
-    });
+
+    // TODO: Do something to invalidate registration section queries.
+    // This will cause a bug when the user selects add ons, moves on to questions, changes their add ons, and goes back to questions.
+    // queryClient.removeQueries({
+    //   queryKey: SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+    //     eventId,
+    //     registrationId,
+    //     purchaseId
+    //   ),
+    // });
     queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(false) });
     queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(true) });
     queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
@@ -63,12 +67,12 @@ export const AddSelfEventRegistrationPurchaseAddOn = async ({
   return data;
 };
 
-export const useAddSelfEventRegistrationPurchaseAddOn = (
+export const useUpdateSelfEventRegistrationPurchaseAddOn = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof AddSelfEventRegistrationPurchaseAddOn>>,
+      Awaited<ReturnType<typeof UpdateSelfEventRegistrationPurchaseAddOn>>,
       Omit<
-        AddSelfEventRegistrationPurchaseAddOnParams,
+        UpdateSelfEventRegistrationPurchaseAddOnParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -76,7 +80,7 @@ export const useAddSelfEventRegistrationPurchaseAddOn = (
   > = {}
 ) => {
   return useConnectedMutation<
-    AddSelfEventRegistrationPurchaseAddOnParams,
-    Awaited<ReturnType<typeof AddSelfEventRegistrationPurchaseAddOn>>
-  >(AddSelfEventRegistrationPurchaseAddOn, options);
+    UpdateSelfEventRegistrationPurchaseAddOnParams,
+    Awaited<ReturnType<typeof UpdateSelfEventRegistrationPurchaseAddOn>>
+  >(UpdateSelfEventRegistrationPurchaseAddOn, options);
 };

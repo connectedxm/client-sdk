@@ -4,7 +4,6 @@ export * from "./useRemoveSelfEventRegistrationPurchase";
 export * from "./useAddSelfEventRegistrationPurchase";
 export * from "./useSubmitSelfEventRegistration";
 export * from "./useUpdateSelfEventRegistrationPurchaseQuestionResponse";
-export * from "./useAddSelfEventRegistrationPurchaseAddOn";
-export * from "./useRemoveSelfEventRegistrationPurchaseAddOn";
+export * from "./useUpdateSelfEventRegistrationAddOns";
 export * from "./useSelectSelfEventRegistrationPurchaseReservation";
 export * from "./useSelectSelfEventRegistrationReservations";
