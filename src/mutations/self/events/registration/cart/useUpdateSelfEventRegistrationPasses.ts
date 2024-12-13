@@ -12,30 +12,26 @@ import {
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface AddSelfEventRegistrationPurchaseParams extends MutationParams {
+export interface UpdateSelfEventRegistrationPassesParams
+  extends MutationParams {
   eventId: string;
   registrationId: string;
-  ticketId: string;
-  quantity: number;
+  passes: { passId: string; passTypeId: string }[];
 }
 
-export const AddSelfEventRegistrationPurchase = async ({
+export const UpdateSelfEventRegistrationPasses = async ({
   eventId,
   registrationId,
-  ticketId,
-  quantity,
+  passes,
   clientApiParams,
   queryClient,
-}: AddSelfEventRegistrationPurchaseParams): Promise<
+}: UpdateSelfEventRegistrationPassesParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/${registrationId}/cart/purchases`,
-    {
-      ticketId,
-      quantity,
-    }
+    passes
   );
 
   if (queryClient && data.status === "ok") {
@@ -58,12 +54,12 @@ export const AddSelfEventRegistrationPurchase = async ({
   return data;
 };
 
-export const useAddSelfEventRegistrationPurchase = (
+export const useUpdateSelfEventRegistrationPasses = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>,
+      Awaited<ReturnType<typeof UpdateSelfEventRegistrationPasses>>,
       Omit<
-        AddSelfEventRegistrationPurchaseParams,
+        UpdateSelfEventRegistrationPassesParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -71,7 +67,7 @@ export const useAddSelfEventRegistrationPurchase = (
   > = {}
 ) => {
   return useConnectedMutation<
-    AddSelfEventRegistrationPurchaseParams,
-    Awaited<ReturnType<typeof AddSelfEventRegistrationPurchase>>
-  >(AddSelfEventRegistrationPurchase, options);
+    UpdateSelfEventRegistrationPassesParams,
+    Awaited<ReturnType<typeof UpdateSelfEventRegistrationPasses>>
+  >(UpdateSelfEventRegistrationPasses, options);
 };
