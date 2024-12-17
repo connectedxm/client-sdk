@@ -7,21 +7,17 @@ import useConnectedSingleQuery, {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_COUPONS_QUERY_KEY } from "./useGetSelfEventRegistrationCoupons";
+import { SELF_EVENT_ATTENDEE_COUPONS_QUERY_KEY } from "./useGetSelfEventAttendeeCoupons";
 
 export const SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY = (
   eventId: string,
-  registrationId: string,
   couponId: string
-): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_COUPONS_QUERY_KEY(eventId, registrationId),
-  couponId,
-];
+): QueryKey => [SELF_EVENT_ATTENDEE_COUPONS_QUERY_KEY(eventId), couponId];
 
 export const SET_SELF_EVENT_REGISTRATION_COUPON_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationCoupon>>,
+  response: Awaited<ReturnType<typeof GetSelfEventAttendeeCoupon>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
@@ -33,47 +29,41 @@ export const SET_SELF_EVENT_REGISTRATION_COUPON_QUERY_DATA = (
   );
 };
 
-export interface GetSelfEventRegistrationCouponProps extends SingleQueryParams {
+export interface GetSelfEventAttendeeCouponProps extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
   couponId: string;
 }
 
-export const GetSelfEventRegistrationCoupon = async ({
+export const GetSelfEventAttendeeCoupon = async ({
   eventId,
-  registrationId,
   couponId,
   clientApiParams,
-}: GetSelfEventRegistrationCouponProps): Promise<
+}: GetSelfEventAttendeeCouponProps): Promise<
   ConnectedXMResponse<ManagedCoupon>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/coupons/${couponId}`,
+    `/self/events/${eventId}/attendee/coupons/${couponId}`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventRegistrationCoupon = (
+export const useGetSelfEventAttendeeCoupon = (
   eventId: string = "",
-  registrationId: string = "",
   couponId: string = "",
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationCoupon>
+    ReturnType<typeof GetSelfEventAttendeeCoupon>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
-  return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationCoupon>
-  >(
-    SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(eventId, registrationId, couponId),
+  return useConnectedSingleQuery<ReturnType<typeof GetSelfEventAttendeeCoupon>>(
+    SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(eventId, couponId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationCoupon({
+      GetSelfEventAttendeeCoupon({
         eventId,
-        registrationId,
         couponId,
         ...params,
       }),
@@ -82,7 +72,6 @@ export const useGetSelfEventRegistrationCoupon = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
         !!couponId &&
         (options?.enabled ?? true),
     }

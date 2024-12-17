@@ -7,74 +7,67 @@ import useConnectedSingleQuery, {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
 
-export const SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY = (
+export const SELF_EVENT_ATTENDEE_PAYMENT_QUERY_KEY = (
   eventId: string,
   paymentId: string
 ): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+  ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
   "PAYMENT",
   paymentId,
 ];
 
-export const SET_SELF_EVENT_REGISTRATION_PAYMENT_QUERY_DATA = (
+export const SET_SELF_EVENT_ATTENDEE_PAYMENT_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationPayment>>,
+  keyParams: Parameters<typeof SELF_EVENT_ATTENDEE_PAYMENT_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetSelfEventAttendeePayment>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY(...keyParams),
+      ...SELF_EVENT_ATTENDEE_PAYMENT_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationPaymentProps
-  extends SingleQueryParams {
+export interface GetSelfEventAttendeePaymentProps extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
   paymentId: string;
 }
 
-export const GetSelfEventRegistrationPayment = async ({
+export const GetSelfEventAttendeePayment = async ({
   eventId,
-  registrationId,
   paymentId,
   clientApiParams,
-}: GetSelfEventRegistrationPaymentProps): Promise<
-  ConnectedXMResponse<Payment>
-> => {
+}: GetSelfEventAttendeePaymentProps): Promise<ConnectedXMResponse<Payment>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/payments/${paymentId}`,
+    `/self/events/${eventId}/attendee/payments/${paymentId}`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventRegistrationPayment = (
+export const useGetSelfEventAttendeePayment = (
   eventId: string,
-  registrationId: string,
   paymentId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationPayment>
+    ReturnType<typeof GetSelfEventAttendeePayment>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationPayment>
+    ReturnType<typeof GetSelfEventAttendeePayment>
   >(
-    SELF_EVENT_REGISTRATION_PAYMENT_QUERY_KEY(eventId, paymentId),
+    SELF_EVENT_ATTENDEE_PAYMENT_QUERY_KEY(eventId, paymentId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationPayment({
+      GetSelfEventAttendeePayment({
         eventId,
-        registrationId,
         paymentId,
         ...params,
       }),
@@ -83,7 +76,6 @@ export const useGetSelfEventRegistrationPayment = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
         !!paymentId &&
         (options?.enabled ?? true),
     }

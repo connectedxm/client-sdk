@@ -7,33 +7,30 @@ import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
-export const SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY = (
-  eventId: string,
-  registrationId: string
-) => [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), registrationId, "INTENT"];
+export const SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY = (eventId: string) => [
+  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+  "INTENT",
+];
 
 export interface GetSelfEventRegistrationIntentProps extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
 }
 
 export const GetSelfEventRegistrationIntent = async ({
   eventId,
-  registrationId,
   clientApiParams,
 }: GetSelfEventRegistrationIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/cart/intent`
+    `/self/events/${eventId}/registration/intent`
   );
   return data;
 };
 
 export const useGetSelfEventRegistrationIntent = (
   eventId: string,
-  registrationId: string = "",
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventRegistrationIntent>
   > = {}
@@ -43,19 +40,14 @@ export const useGetSelfEventRegistrationIntent = (
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationIntent>
   >(
-    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, registrationId),
-    (params) =>
-      GetSelfEventRegistrationIntent({ eventId, registrationId, ...params }),
+    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
+    (params) => GetSelfEventRegistrationIntent({ eventId, ...params }),
     {
       staleTime: Infinity,
       retry: false,
       retryOnMount: false,
       ...options,
-      enabled:
-        !!authenticated &&
-        !!eventId &&
-        !!registrationId &&
-        (options?.enabled ?? true),
+      enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );
 };

@@ -11,7 +11,7 @@ import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_ATTENDEE_QUERY_KEY = (eventId: string): QueryKey => [
   ...SELF_QUERY_KEY(),
-  "EVENT_ATTENDEE",
+  "ATTENDEE",
   eventId,
 ];
 

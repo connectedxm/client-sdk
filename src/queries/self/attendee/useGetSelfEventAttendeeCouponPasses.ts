@@ -7,71 +7,58 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../../useConnectedInfiniteQuery";
-import { SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY } from "./useGetSelfEventRegistrationCoupon";
+import { SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY } from "./useGetSelfEventAttendeeCoupon";
 
-export const SELF_EVENT_REGISTRATION_COUPON_REGISTRATIONS_QUERY_KEY = (
+export const SELF_EVENT_ATTENDEE_COUPON_PASSES_QUERY_KEY = (
   eventId: string,
-  registrationId: string,
   couponId: string
 ): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(
-    eventId,
-    registrationId,
-    couponId
-  ),
-  "PURCHASES",
+  ...SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(eventId, couponId),
+  "PASSES",
 ];
 
-export interface GetSelfEventRegistrationCouponPurchasesProps
+export interface GetSelfEventAttendeeCouponPassesProps
   extends InfiniteQueryParams {
   eventId: string;
-  registrationId: string;
   couponId: string;
 }
 
-export const GetSelfEventRegistrationCouponPurchases = async ({
+export const GetSelfEventAttendeeCouponPasses = async ({
   eventId,
-  registrationId,
   couponId,
   clientApiParams,
-}: GetSelfEventRegistrationCouponPurchasesProps): Promise<
+}: GetSelfEventAttendeeCouponPassesProps): Promise<
   ConnectedXMResponse<ManagedCouponPurchase[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/coupons/${couponId}/purchases`,
+    `/self/events/${eventId}/attendee/coupons/${couponId}/passes`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventRegistrationCouponPurchases = (
+export const useGetSelfEventAttendeeCouponPasses = (
   eventId: string = "",
-  registrationId: string = "",
   couponId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventRegistrationCouponPurchases>>
+    Awaited<ReturnType<typeof GetSelfEventAttendeeCouponPasses>>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventRegistrationCouponPurchases>>
+    Awaited<ReturnType<typeof GetSelfEventAttendeeCouponPasses>>
   >(
-    SELF_EVENT_REGISTRATION_COUPON_REGISTRATIONS_QUERY_KEY(
-      eventId,
-      registrationId,
-      couponId
-    ),
+    SELF_EVENT_ATTENDEE_COUPON_PASSES_QUERY_KEY(eventId, couponId),
     (params: InfiniteQueryParams) =>
-      GetSelfEventRegistrationCouponPurchases({
+      GetSelfEventAttendeeCouponPasses({
         eventId,
-        registrationId,
         couponId,
         ...params,
       }),
@@ -81,7 +68,6 @@ export const useGetSelfEventRegistrationCouponPurchases = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
         !!couponId &&
         (options?.enabled ?? true),
     }

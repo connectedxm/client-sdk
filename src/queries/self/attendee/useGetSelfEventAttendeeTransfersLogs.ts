@@ -7,30 +7,30 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../../useConnectedInfiniteQuery";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
 
-export const EVENT_TRANSFER_LOGS_QUERY_KEY = (eventId: string): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
-  "TRANSFERS",
-];
+export const SELF_EVENT_ATTENDEE_TRANSFER_LOGS_QUERY_KEY = (
+  eventId: string
+): QueryKey => [...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId), "TRANSFERS"];
 
-export interface GetSelfEventTransfersLogsProps extends InfiniteQueryParams {
+export interface GetSelfEventAttendeeTransfersLogsProps
+  extends InfiniteQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventTransfersLogs = async ({
+export const GetSelfEventAttendeeTransfersLogs = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
   eventId,
   clientApiParams,
-}: GetSelfEventTransfersLogsProps): Promise<
+}: GetSelfEventAttendeeTransfersLogsProps): Promise<
   ConnectedXMResponse<TransferLog[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/transfers/logs`,
+    `/self/events/${eventId}/attendee/transfers/logs`,
     {
       params: {
         page: pageParam || undefined,
@@ -44,24 +44,24 @@ export const GetSelfEventTransfersLogs = async ({
   return data;
 };
 
-export const useGetSelfEventTransfersLogs = (
+export const useGetSelfEventAttendeeTransfersLogs = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventTransfersLogs>>
+    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventTransfersLogs>>
+    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
   >(
-    EVENT_TRANSFER_LOGS_QUERY_KEY(eventId),
+    SELF_EVENT_ATTENDEE_TRANSFER_LOGS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
-      GetSelfEventTransfersLogs({
+      GetSelfEventAttendeeTransfersLogs({
         ...params,
         eventId,
       }),

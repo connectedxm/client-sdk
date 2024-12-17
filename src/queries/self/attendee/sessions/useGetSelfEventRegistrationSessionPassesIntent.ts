@@ -2,19 +2,17 @@ import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
 } from "../../../useConnectedSingleQuery";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "../useGetSelfEventRegistration";
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
+import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "../useGetSelfEventAttendee";
 
-export const SELF_EVENT_REGISTRATION_SESSION_PASSES_INTENT_QUERY_KEY = (
+export const SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY = (
   eventId: string,
-  registrationId: string,
   sessionId: string,
   sessionPassIds: string[]
 ) => [
-  ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
-  registrationId,
+  ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
   sessionId,
   ...sessionPassIds,
   "SESSION_PASSES_INTENT",
@@ -28,56 +26,51 @@ export type SessionPassesInput = {
   }[];
 }[];
 
-export interface GetSelfEventRegistrationSessionPassesIntentProps
+export interface GetSelfEventAttendeeSessionPassesIntentProps
   extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
   sessionId: string;
   sessionPasses: SessionPassesInput;
 }
 
-export const GetSelfEventRegistrationSessionPassesIntent = async ({
+export const GetSelfEventAttendeeSessionPassesIntent = async ({
   eventId,
-  registrationId,
   sessionId,
   sessionPasses,
   clientApiParams,
-}: GetSelfEventRegistrationSessionPassesIntentProps): Promise<
+}: GetSelfEventAttendeeSessionPassesIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<PaymentIntent>>(
-    `/self/events/${eventId}/registration/${registrationId}/sessions/${sessionId}/intent`,
+    `/self/events/${eventId}/attendee/sessions/${sessionId}/intent`,
     sessionPasses
   );
 
   return data;
 };
 
-export const useGetSelfEventRegistrationSessionPassesIntent = (
+export const useGetSelfEventAttendeeSessionPassesIntent = (
   eventId: string,
-  registrationId: string,
   sessionId: string,
   sessionPasses: SessionPassesInput,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationSessionPassesIntent>
+    ReturnType<typeof GetSelfEventAttendeeSessionPassesIntent>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationSessionPassesIntent>
+    ReturnType<typeof GetSelfEventAttendeeSessionPassesIntent>
   >(
-    SELF_EVENT_REGISTRATION_SESSION_PASSES_INTENT_QUERY_KEY(
+    SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY(
       eventId,
-      registrationId,
       sessionId,
       sessionPasses.map(({ passId }) => passId)
     ),
     (params) =>
-      GetSelfEventRegistrationSessionPassesIntent({
+      GetSelfEventAttendeeSessionPassesIntent({
         eventId,
-        registrationId,
         sessionId,
         sessionPasses,
         ...params,
@@ -90,7 +83,6 @@ export const useGetSelfEventRegistrationSessionPassesIntent = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
         !!sessionId &&
         !!sessionPasses &&
         (options?.enabled ?? true),

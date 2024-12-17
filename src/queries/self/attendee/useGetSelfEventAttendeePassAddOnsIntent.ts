@@ -6,20 +6,16 @@ import useConnectedSingleQuery, {
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY } from "./useGetSelfEventRegistrationPurchase";
+import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
 
 export const SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY = (
   eventId: string,
-  registrationId: string,
-  purchaseId: string,
+  passId: string,
   addOnIds?: string[]
 ): QueryKey => {
   const key = [
-    ...SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY(
-      eventId,
-      registrationId,
-      purchaseId
-    ),
+    ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
+    passId,
     "ADD_ONS_INTENT",
   ];
 
@@ -30,26 +26,24 @@ export const SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY = (
   return key;
 };
 
-export interface GetSelfEventRegistrationPurchaseAddOnsIntentProps
+export interface GetSelfEventAttendeePassAddOnsIntentProps
   extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
-  purchaseId: string;
+  passId: string;
   addOnIds: string[];
 }
 
-export const GetSelfEventRegistrationPurchaseAddOnsIntent = async ({
+export const GetSelfEventAttendeePassAddOnsIntent = async ({
   eventId,
-  registrationId,
-  purchaseId,
+  passId,
   addOnIds,
   clientApiParams,
-}: GetSelfEventRegistrationPurchaseAddOnsIntentProps): Promise<
+}: GetSelfEventAttendeePassAddOnsIntentProps): Promise<
   ConnectedXMResponse<PaymentIntent>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/addOns/intent`,
+    `/self/events/${eventId}/attendee/passes/${passId}/addOns/intent`,
     {
       params: {
         addOnIds: addOnIds ? addOnIds.join(",") : "",
@@ -60,31 +54,28 @@ export const GetSelfEventRegistrationPurchaseAddOnsIntent = async ({
   return data;
 };
 
-export const useGetSelfEventRegistrationPurchaseAddOnsIntent = (
+export const useGetSelfEventAttendeePassAddOnsIntent = (
   eventId: string,
-  registrationId: string,
-  purchaseId: string,
+  passId: string,
   addOnIds: string[],
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationPurchaseAddOnsIntent>
+    ReturnType<typeof GetSelfEventAttendeePassAddOnsIntent>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationPurchaseAddOnsIntent>
+    ReturnType<typeof GetSelfEventAttendeePassAddOnsIntent>
   >(
     SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY(
       eventId,
-      registrationId,
-      purchaseId,
+      passId,
       addOnIds
     ),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationPurchaseAddOnsIntent({
+      GetSelfEventAttendeePassAddOnsIntent({
         eventId,
-        registrationId,
-        purchaseId,
+        passId,
         addOnIds,
         ...params,
       }),
@@ -96,8 +87,7 @@ export const useGetSelfEventRegistrationPurchaseAddOnsIntent = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
-        !!purchaseId &&
+        !!passId &&
         !!addOnIds &&
         (options?.enabled ?? true),
     }
