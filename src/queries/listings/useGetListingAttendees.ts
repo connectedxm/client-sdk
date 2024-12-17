@@ -11,18 +11,17 @@ import {
 import { LISTING_QUERY_KEY } from "./useGetListing";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const LISTING_REGISTRATIONS_QUERY_KEY = (
+export const LISTING_ATTENDEES_QUERY_KEY = (
   eventId: string,
   status?: keyof typeof PurchaseStatus
-) => [...LISTING_QUERY_KEY(eventId), "REGISTRATIONS", status ?? "ALL"];
+) => [...LISTING_QUERY_KEY(eventId), "ATTENDEES", status ?? "ALL"];
 
-export interface GetSelfEventListingRegistrationsProps
-  extends InfiniteQueryParams {
+export interface GetSelfEventListingAttendeesProps extends InfiniteQueryParams {
   eventId: string;
   status?: keyof typeof PurchaseStatus;
 }
 
-export const GetSelfEventListingRegistrations = async ({
+export const GetSelfEventListingAttendees = async ({
   eventId,
   pageParam,
   pageSize,
@@ -30,11 +29,11 @@ export const GetSelfEventListingRegistrations = async ({
   search,
   status,
   clientApiParams,
-}: GetSelfEventListingRegistrationsProps): Promise<
+}: GetSelfEventListingAttendeesProps): Promise<
   ConnectedXMResponse<ListingRegistration[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/listings/${eventId}/registrations`, {
+  const { data } = await clientApi.get(`/listings/${eventId}/attendees`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -54,15 +53,15 @@ export const useGetSelfEventListingsRegistrations = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
+    Awaited<ReturnType<typeof GetSelfEventListingAttendees>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventListingRegistrations>>
+    Awaited<ReturnType<typeof GetSelfEventListingAttendees>>
   >(
-    LISTING_REGISTRATIONS_QUERY_KEY(eventId, status),
+    LISTING_ATTENDEES_QUERY_KEY(eventId, status),
     (params: InfiniteQueryParams) =>
-      GetSelfEventListingRegistrations({ eventId, status, ...params }),
+      GetSelfEventListingAttendees({ eventId, status, ...params }),
     params,
     {
       ...options,

@@ -7,22 +7,22 @@ import { GetClientAPI } from "@src/ClientAPI";
 import {
   EVENT_SESSION_QUERY_KEY,
   EVENT_SESSIONS_QUERY_KEY,
-  SELF_EVENT_ATTENDEE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
-  SessionPassesInput,
 } from "@src/queries";
+import {
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
+  SessionPassesInput,
+} from "@src/queries/self/attendee";
 
 export interface SubmitSelfEventRegistrationSessionPassesParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
   sessionId: string;
   sessionPasses: SessionPassesInput;
 }
 
 export const SubmitSelfEventRegistrationSessionPasses = async ({
   eventId,
-  registrationId,
   sessionId,
   sessionPasses,
   clientApiParams,
@@ -32,7 +32,7 @@ export const SubmitSelfEventRegistrationSessionPasses = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/${registrationId}/sessions/${sessionId}/submit`,
+    `/self/events/${eventId}/registration/sessions/${sessionId}/submit`,
     sessionPasses
   );
 

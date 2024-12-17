@@ -524,7 +524,7 @@ export interface BaseRegistrationSection {
 
 export interface RegistrationSection extends BaseRegistrationSection {
   accountTiers: BaseAccountTier[];
-  eventTickets: BaseTicket[];
+  eventTickets: BasePassType[];
   eventAddOns: BaseEventAddOn[];
   questions: RegistrationQuestion[];
 }
@@ -576,7 +576,7 @@ export enum TicketEventAccessLevel {
   virtual = "virtual",
   vip = "vip",
 }
-export interface BaseTicket {
+export interface BasePassType {
   id: string;
   slug: string;
   transferable: boolean;
@@ -595,7 +595,7 @@ export interface BaseTicket {
   minReservationEnd: string | null;
   reservationEnd: string | null;
   maxReservationEnd: string | null;
-  priceSchedules: BaseTicketPriceSchedule[];
+  priceSchedules: BasePassTypePriceSchedule[];
   refundSchedules: BasePassTypeRefundSchedule[];
   enableCoupons: boolean;
   minCouponQuantity: number | null;
@@ -604,13 +604,13 @@ export interface BaseTicket {
   overrideStartDate: string | null;
 }
 
-export interface Ticket extends BaseTicket {
+export interface PassType extends BasePassType {
   visibility: TicketVisibility;
   active: boolean;
   event: BaseEvent;
 }
 
-export interface BaseTicketPriceSchedule {
+export interface BasePassTypePriceSchedule {
   id: string;
   ticketId: string;
   price: number;
@@ -621,7 +621,7 @@ export interface BaseTicketPriceSchedule {
   updatedAt: string;
 }
 
-export interface TicketPriceSchedule extends BaseTicketPriceSchedule {}
+export interface TicketPriceSchedule extends BasePassTypePriceSchedule {}
 export interface BaseTicketRefundSchedule {
   id: string;
   percentage: number;
@@ -631,8 +631,12 @@ export interface BaseTicketRefundSchedule {
 
 export interface TicketRefundSchedule extends BaseTicketRefundSchedule {}
 
-export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
-  return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
+export const isTypeTicket = (
+  ticket: BasePassType | PassType
+): ticket is PassType => {
+  return (
+    (ticket as Omit<PassType, keyof BasePassType>).visibility !== undefined
+  );
 };
 
 export enum PurchaseStatus {
@@ -642,7 +646,7 @@ export enum PurchaseStatus {
   ready = "ready",
 }
 
-export interface BasePurchase {
+export interface BasePass {
   id: string;
   alternateId: number;
   location: string | null;
@@ -651,7 +655,7 @@ export interface BasePurchase {
   registrationId: string;
   registration: BaseRegistration;
   ticketId: string;
-  ticket: BaseTicket;
+  ticket: BasePassType;
   addOns: BaseEventAddOn[];
   reservationStart: string | null;
   reservationEnd: string | null;
@@ -663,26 +667,22 @@ export interface BasePurchase {
   createdAt: string;
 }
 
-export interface Purchase extends BasePurchase {
+export interface Pass extends BasePass {
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
   payerId: string | null;
 }
 
-export interface ListingPurchase extends BasePurchase {
+export interface ListingPass extends BasePass {
   registration: BaseRegistration & {
     account: BaseAccount & { email: string | null; phone: string | null };
   };
   updatedAt: string;
 }
 
-export const isTypePurchase = (
-  purchase: BasePurchase | Purchase
-): purchase is Purchase => {
-  return (
-    (purchase as Omit<Purchase, keyof BasePurchase>).updatedAt !== undefined
-  );
+export const isTypePurchase = (purchase: BasePass | Pass): purchase is Pass => {
+  return (purchase as Omit<Pass, keyof BasePass>).updatedAt !== undefined;
 };
 
 export interface Order {
@@ -694,7 +694,7 @@ export interface Order {
   grandTotal: number;
   coupon: BaseCoupon | null;
   paymentConfirmationId: string | null;
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   accountId: string;
   account: BaseAccount;
   createdAt: string;
@@ -749,7 +749,7 @@ export interface BaseCoupon {
   code: string;
   eventId: string;
   ticketId: string | null;
-  ticket: BaseTicket | null;
+  ticket: BasePassType | null;
   prePaid: boolean;
   active: boolean;
   startDate: string | null;
@@ -802,7 +802,7 @@ export interface ManagedCouponOrder {
   account: BaseAccount;
 }
 
-export interface ManagedCouponPurchase {
+export interface ManagedCouponPass {
   id: string;
   status: PurchaseStatus;
   coupon: BaseCoupon;
@@ -859,7 +859,7 @@ export interface BaseTransferLog {
 
 export interface TransferLog extends BaseTransferLog {
   purchaseId: string;
-  purchase: BasePurchase;
+  purchase: BasePass;
   createdAt: string;
 }
 
@@ -986,7 +986,7 @@ export interface BaseSessionPass {
 }
 
 export interface SessionPass extends BaseSessionPass {
-  pass: BasePurchase;
+  pass: BasePass;
   createdAt: string;
   updatedAt: string;
 }
@@ -1057,7 +1057,7 @@ export const isTypeSponsorshipLevel = (
 
 export interface BaseComplimentaryTicket {
   ticketId: string;
-  complimentaryTicket: BaseTicket;
+  complimentaryTicket: BasePassType;
   quantity: number;
 }
 
@@ -1129,7 +1129,7 @@ export interface SupportTicket extends BaseSupportTicket {
   request: string;
   account: BaseAccount | null;
   event: BaseEvent | null;
-  ticket: BaseTicket | null;
+  ticket: BasePassType | null;
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -1400,7 +1400,7 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
@@ -1411,7 +1411,7 @@ export interface ListingRegistration extends BaseRegistration {
   account: BaseAccount & { email: string | null; phone: string | null };
   couponId: string | null;
   coupon: BaseCoupon | null;
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   payments: Payment[];
   createdAt: string;
 }
@@ -1432,7 +1432,7 @@ export interface BasePayment {
 
 export interface Payment extends BasePayment {
   addOns: BaseEventAddOn[];
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   coupons: BaseCoupon[];
 }
 export interface BaseLead {

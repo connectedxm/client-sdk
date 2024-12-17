@@ -15,12 +15,10 @@ import {
 export interface RemoveSelfEventRegistrationCouponParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
 }
 
 export const RemoveSelfEventRegistrationCoupon = async ({
   eventId,
-  registrationId,
   clientApiParams,
   queryClient,
 }: RemoveSelfEventRegistrationCouponParams): Promise<
@@ -28,15 +26,12 @@ export const RemoveSelfEventRegistrationCoupon = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/cart/coupons`
+    `/self/events/${eventId}/registration/coupons`
   );
 
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
-        eventId,
-        registrationId
-      ),
+      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
     });
 
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [

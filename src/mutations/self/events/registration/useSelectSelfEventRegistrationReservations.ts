@@ -12,7 +12,6 @@ import {
 export interface SelectSelfEventRegistrationReservationsParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
   reservations: {
     startDate: string;
     endDate: string;
@@ -25,7 +24,6 @@ export interface SelectSelfEventRegistrationReservationsParams
 
 export const SelectSelfEventRegistrationReservations = async ({
   eventId,
-  registrationId,
   reservations,
   clientApiParams,
   queryClient,
@@ -34,7 +32,7 @@ export const SelectSelfEventRegistrationReservations = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/cart/purchases/reservations`,
+    `/self/events/${eventId}/registration/passes/reservations`,
     reservations
   );
 
@@ -43,10 +41,7 @@ export const SelectSelfEventRegistrationReservations = async ({
       clientApiParams.locale,
     ]);
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
-        eventId,
-        registrationId
-      ),
+      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
     });
   }
 

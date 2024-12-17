@@ -2,14 +2,11 @@ import { ConnectedXMResponse, Registration } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../../../useConnectedMutation";
-import {
-  SELF_EVENT_PASSES_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_QUERY_KEY,
-  SET_SELF_EVENT_ATTENDEE_QUERY_DATA,
-} from "@src/queries";
+} from "../../../useConnectedMutation";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
+import { SET_SELF_EVENT_ATTENDEE_QUERY_DATA } from "@src/queries/self/attendee";
 
 interface SubmitStripe {
   type: "stripe";
@@ -37,13 +34,11 @@ export type SubmitResponse = SubmitStripeResponse | SubmitPaypalResponse;
 
 export interface SubmitSelfEventRegistrationParams extends MutationParams {
   eventId: string;
-  registrationId: string;
   payment?: SubmitPayment;
 }
 
 export const SubmitSelfEventRegistration = async ({
   eventId,
-  registrationId,
   payment,
   clientApiParams,
   queryClient,
@@ -52,15 +47,11 @@ export const SubmitSelfEventRegistration = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/cart/submit`,
+    `/self/events/${eventId}/registration/submit`,
     payment
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_PASSES_QUERY_KEY(eventId),
-    });
-
     SET_SELF_EVENT_ATTENDEE_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);

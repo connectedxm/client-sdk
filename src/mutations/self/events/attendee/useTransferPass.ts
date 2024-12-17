@@ -4,30 +4,28 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 import {
+  SELF_EVENT_ATTENDEE_PASS_QUERY_KEY,
   SELF_EVENT_ATTENDEE_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_QUERY_KEY,
-} from "@src/queries";
+} from "@src/queries/self/attendee";
 
-export interface TransferPurchaseParams extends MutationParams {
+export interface TransferPassParams extends MutationParams {
   passId: string;
   eventId: string;
-  registrationId: string;
   receiverId: string;
 }
 
-export const TransferPurchase = async ({
+export const TransferPass = async ({
   passId,
   eventId,
-  registrationId,
   receiverId,
   clientApiParams,
   queryClient,
-}: TransferPurchaseParams): Promise<ConnectedXMResponse<null>> => {
+}: TransferPassParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/${registrationId}/passes/${passId}/transfer`,
+    `/self/events/${eventId}/registration/passes/${passId}/transfer`,
     {
       receiverId,
     }
@@ -35,11 +33,7 @@ export const TransferPurchase = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_QUERY_KEY(
-        eventId,
-        registrationId,
-        passId
-      ),
+      queryKey: SELF_EVENT_ATTENDEE_PASS_QUERY_KEY(eventId, passId),
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
@@ -51,17 +45,17 @@ export const TransferPurchase = async ({
   return data;
 };
 
-export const useTransferPurchase = (
+export const useTransferPass = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof TransferPurchase>>,
-      Omit<TransferPurchaseParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof TransferPass>>,
+      Omit<TransferPassParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    TransferPurchaseParams,
-    Awaited<ReturnType<typeof TransferPurchase>>
-  >(TransferPurchase, options);
+    TransferPassParams,
+    Awaited<ReturnType<typeof TransferPass>>
+  >(TransferPass, options);
 };

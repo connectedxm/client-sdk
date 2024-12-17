@@ -1,4 +1,4 @@
-import type { ConnectedXMResponse, ListingPurchase } from "@interfaces";
+import type { ConnectedXMResponse, ListingPass } from "@interfaces";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -7,7 +7,7 @@ import {
 import { LISTING_QUERY_KEY } from "./useGetListing";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const LISTING_PURCHASES_QUERY_KEY = (
+export const LISTING_PASSES_QUERY_KEY = (
   eventId: string,
   checkedIn?: boolean
 ) => [
@@ -16,12 +16,12 @@ export const LISTING_PURCHASES_QUERY_KEY = (
   typeof checkedIn !== "undefined" ? checkedIn : "ALL",
 ];
 
-export interface GetSelfEventListingPurchasesProps extends InfiniteQueryParams {
+export interface GetSelfEventListingPassesProps extends InfiniteQueryParams {
   eventId: string;
   checkedIn?: boolean;
 }
 
-export const GetSelfEventListingPurchases = async ({
+export const GetSelfEventListingPasses = async ({
   eventId,
   checkedIn,
   pageParam,
@@ -29,11 +29,11 @@ export const GetSelfEventListingPurchases = async ({
   orderBy,
   search,
   clientApiParams,
-}: GetSelfEventListingPurchasesProps): Promise<
-  ConnectedXMResponse<ListingPurchase[]>
+}: GetSelfEventListingPassesProps): Promise<
+  ConnectedXMResponse<ListingPass[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/listings/${eventId}/purchases`, {
+  const { data } = await clientApi.get(`/listings/${eventId}/passes`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -45,7 +45,7 @@ export const GetSelfEventListingPurchases = async ({
   return data;
 };
 
-export const useGetSelfEventListingPurchases = (
+export const useGetSelfEventListingPasses = (
   eventId: string,
   checkedIn?: boolean,
   params: Omit<
@@ -53,15 +53,15 @@ export const useGetSelfEventListingPurchases = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventListingPurchases>>
+    Awaited<ReturnType<typeof GetSelfEventListingPasses>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventListingPurchases>>
+    Awaited<ReturnType<typeof GetSelfEventListingPasses>>
   >(
-    LISTING_PURCHASES_QUERY_KEY(eventId, checkedIn),
+    LISTING_PASSES_QUERY_KEY(eventId, checkedIn),
     (params: InfiniteQueryParams) =>
-      GetSelfEventListingPurchases({ eventId, checkedIn, ...params }),
+      GetSelfEventListingPasses({ eventId, checkedIn, ...params }),
     params,
     {
       ...options,

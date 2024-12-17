@@ -5,7 +5,7 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
-import type { ConnectedXMResponse, Ticket } from "@interfaces";
+import type { ConnectedXMResponse, PassType } from "@interfaces";
 import { EVENT_PASS_TYPES_QUERY_KEY } from "./useGetEventPassTypes";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -39,10 +39,10 @@ export const GetEventPassType = async ({
   eventId,
   passTypeId,
   clientApiParams,
-}: GetEventPassTypeProps): Promise<ConnectedXMResponse<Ticket>> => {
+}: GetEventPassTypeProps): Promise<ConnectedXMResponse<PassType>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/events/${eventId}/tickets/${passTypeId}`
+    `/events/${eventId}/passTypes/${passTypeId}`
   );
   return data;
 };

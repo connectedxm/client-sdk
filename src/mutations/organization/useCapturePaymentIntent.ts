@@ -4,11 +4,7 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import {
-  ADD_SELF_RELATIONSHIP,
-  INVOICE_QUERY_KEY,
-  SELF_EVENT_PASSES_QUERY_KEY,
-} from "@src/queries";
+import { ADD_SELF_RELATIONSHIP, INVOICE_QUERY_KEY } from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
   intent: PaymentIntent;
@@ -30,8 +26,7 @@ export const CapturePaymentIntent = async ({
         predicate: ({ queryKey }) => {
           if (
             (queryKey[0] === "SELF" &&
-              (queryKey[1] === "EVENT_REGISTRATION" ||
-                queryKey[1] === "EVENT_ATTENDEE")) ||
+              (queryKey[1] === "REGISTRATION" || queryKey[1] === "ATTENDEE")) ||
             (queryKey[0] === "SELF" &&
               queryKey[1] === "EVENT" &&
               queryKey[3] === "REGISTRATION")
@@ -40,9 +35,6 @@ export const CapturePaymentIntent = async ({
           }
           return false;
         },
-      });
-      queryClient.invalidateQueries({
-        queryKey: SELF_EVENT_PASSES_QUERY_KEY(intent.eventId),
       });
       ADD_SELF_RELATIONSHIP(
         queryClient,

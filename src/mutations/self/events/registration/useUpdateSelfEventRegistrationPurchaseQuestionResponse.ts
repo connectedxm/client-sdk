@@ -4,26 +4,25 @@ import {
   Registration,
   RegistrationQuestion,
   RegistrationSection,
-} from "../../../../../interfaces";
+} from "../../../../interfaces";
 import {
   GetBaseSingleQueryKeys,
-  SELF_EVENT_ATTENDEE_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
-} from "../../../../../queries";
+} from "../../../../queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../../../useConnectedMutation";
-import { GetClientAPI } from "../../../../../ClientAPI";
+} from "../../../useConnectedMutation";
+import { GetClientAPI } from "../../../../ClientAPI";
 import { produce } from "immer";
+import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "@src/queries/self/attendee";
 
 export interface UpdateSelfEventRegistrationQuestionResponseParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
-  purchaseId: string;
+  passId: string;
   questionId: number;
   value: string;
   update?: boolean;
@@ -31,11 +30,9 @@ export interface UpdateSelfEventRegistrationQuestionResponseParams
 
 export const UpdateSelfEventRegistrationQuestionResponse = async ({
   eventId,
-  registrationId,
-  purchaseId,
+  passId,
   questionId,
   value,
-  update,
   clientApiParams,
   queryClient,
 }: UpdateSelfEventRegistrationQuestionResponseParams): Promise<
@@ -43,28 +40,14 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
 
-  let data;
-  if (update) {
-    const response = await clientApi.put<
-      ConnectedXMResponse<[Registration, string]>
-    >(
-      `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/questions/${questionId}`,
-      {
-        value: value,
-      }
-    );
-    data = response.data;
-  } else {
-    const response = await clientApi.put<
-      ConnectedXMResponse<[Registration, string]>
-    >(
-      `/self/events/${eventId}/registration/${registrationId}/cart/purchases/${purchaseId}/questions/${questionId}`,
-      {
-        value: value,
-      }
-    );
-    data = response.data;
-  }
+  const { data } = await clientApi.put<
+    ConnectedXMResponse<[Registration, string]>
+  >(
+    `/self/events/${eventId}/registration/passes/${passId}/questions/${questionId}`,
+    {
+      value: value,
+    }
+  );
 
   const response = {
     ...data,
@@ -77,10 +60,9 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
     ]);
 
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+      queryKey: SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY(
         eventId,
-        registrationId,
-        purchaseId
+        passId
       ),
     });
 
@@ -94,10 +76,9 @@ export const UpdateSelfEventRegistrationQuestionResponse = async ({
 
     queryClient.setQueryData(
       [
-        ...SELF_EVENT_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+        ...SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY(
           eventId,
-          registrationId,
-          purchaseId
+          passId
         ),
         ...GetBaseSingleQueryKeys(clientApiParams.locale),
       ],

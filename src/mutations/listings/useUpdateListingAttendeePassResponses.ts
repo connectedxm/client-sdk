@@ -3,21 +3,21 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
+import { GetClientAPI } from "@src/ClientAPI";
+import { LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY } from "@src/queries/listings/useGetListingAttendeePassSectionQuestions";
 import {
-  LISTING_PURCHASES_QUERY_KEY,
-  LISTING_PURCHASE_QUERY_KEY,
-  LISTING_REGISTRATIONS_QUERY_KEY,
-  LISTING_REGISTRATION_QUERY_KEY,
+  LISTING_ATTENDEE_QUERY_KEY,
+  LISTING_ATTENDEES_QUERY_KEY,
+  LISTING_PASS_QUERY_KEY,
+  LISTING_PASSES_QUERY_KEY,
   LISTING_REPORT_QUERY_KEY,
 } from "@src/queries";
-import { GetClientAPI } from "@src/ClientAPI";
-import { LISTING_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY } from "@src/queries/listings/useGetListingRegistrationPurchaseSections";
 
 export interface UpdateListingRegistrationPurchaseResponsesParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
-  purchaseId: string;
+  accountId: string;
+  passId: string;
   questions: {
     id: number;
     value: string;
@@ -26,8 +26,8 @@ export interface UpdateListingRegistrationPurchaseResponsesParams
 
 export const UpdateListingRegistrationPurchaseResponses = async ({
   eventId,
-  registrationId,
-  purchaseId,
+  accountId,
+  passId,
   questions,
   clientApiParams,
   queryClient,
@@ -36,7 +36,7 @@ export const UpdateListingRegistrationPurchaseResponses = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<null>>(
-    `/listings/${eventId}/registrations/${registrationId}/purchases/${purchaseId}`,
+    `/listings/${eventId}/attendees/${accountId}/passes/${passId}/responses`,
     {
       questions,
     }
@@ -44,23 +44,23 @@ export const UpdateListingRegistrationPurchaseResponses = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: LISTING_REGISTRATION_PURCHASE_SECTIONS_QUERY_KEY(
+      queryKey: LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY(
         eventId,
-        registrationId,
-        purchaseId
+        accountId,
+        passId
       ),
     });
     queryClient.invalidateQueries({
-      queryKey: LISTING_REGISTRATIONS_QUERY_KEY(eventId),
+      queryKey: LISTING_ATTENDEES_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: LISTING_REGISTRATION_QUERY_KEY(eventId, registrationId),
+      queryKey: LISTING_ATTENDEE_QUERY_KEY(eventId, accountId),
     });
     queryClient.invalidateQueries({
-      queryKey: LISTING_PURCHASES_QUERY_KEY(eventId),
+      queryKey: LISTING_PASSES_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: LISTING_PURCHASE_QUERY_KEY(eventId, purchaseId),
+      queryKey: LISTING_PASS_QUERY_KEY(eventId, passId),
     });
     queryClient.invalidateQueries({
       queryKey: LISTING_REPORT_QUERY_KEY(eventId),

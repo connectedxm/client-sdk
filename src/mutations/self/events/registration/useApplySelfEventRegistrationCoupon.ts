@@ -12,26 +12,26 @@ import {
   SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
-export interface UpdateSelfEventRegistrationPassesParams
+export interface SelectSelfEventRegistrationCouponParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
-  passes: { passId: string; passTypeId: string }[];
+  couponId: string;
 }
 
-export const UpdateSelfEventRegistrationPasses = async ({
+export const SelectSelfEventRegistrationCoupon = async ({
   eventId,
-  registrationId,
-  passes,
+  couponId,
   clientApiParams,
   queryClient,
-}: UpdateSelfEventRegistrationPassesParams): Promise<
+}: SelectSelfEventRegistrationCouponParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/${registrationId}/cart/purchases`,
-    passes
+    `/self/events/${eventId}/registration/coupon`,
+    {
+      couponId,
+    }
   );
 
   if (queryClient && data.status === "ok") {
@@ -39,14 +39,17 @@ export const UpdateSelfEventRegistrationPasses = async ({
       clientApiParams.locale,
     ]);
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(
-        eventId,
-        registrationId
-      ),
+      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
     });
-    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(false) });
-    queryClient.invalidateQueries({ queryKey: SELF_EVENTS_QUERY_KEY(true) });
-    queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(false),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENTS_QUERY_KEY(true),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_QUERY_KEY(eventId),
+    });
     queryClient.invalidateQueries({
       queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
     });
@@ -54,12 +57,12 @@ export const UpdateSelfEventRegistrationPasses = async ({
   return data;
 };
 
-export const useUpdateSelfEventRegistrationPasses = (
+export const useSelectSelfEventRegistrationCoupon = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateSelfEventRegistrationPasses>>,
+      Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>,
       Omit<
-        UpdateSelfEventRegistrationPassesParams,
+        SelectSelfEventRegistrationCouponParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -67,7 +70,7 @@ export const useUpdateSelfEventRegistrationPasses = (
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateSelfEventRegistrationPassesParams,
-    Awaited<ReturnType<typeof UpdateSelfEventRegistrationPasses>>
-  >(UpdateSelfEventRegistrationPasses, options);
+    SelectSelfEventRegistrationCouponParams,
+    Awaited<ReturnType<typeof SelectSelfEventRegistrationCoupon>>
+  >(SelectSelfEventRegistrationCoupon, options);
 };

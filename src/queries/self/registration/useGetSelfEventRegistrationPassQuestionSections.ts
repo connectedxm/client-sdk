@@ -9,7 +9,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 
-export const SELF_EVENT_REGISTRATION_PASS_QUESTIONS_QUERY_KEY = (
+export const SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY = (
   eventId: string,
   passId: string
 ): QueryKey => [
@@ -19,60 +19,62 @@ export const SELF_EVENT_REGISTRATION_PASS_QUESTIONS_QUERY_KEY = (
   "QUESTIONS",
 ];
 
-export const SET_SELF_EVENT_REGISTRATION_PASS_QUESTIONS_QUERY_DATA = (
+export const SET_SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<
-    typeof SELF_EVENT_REGISTRATION_PASS_QUESTIONS_QUERY_KEY
+    typeof SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY
   >,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationPassQuestions>>,
+  response: Awaited<
+    ReturnType<typeof GetSelfEventRegistrationPassQuestionSections>
+  >,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_PASS_QUESTIONS_QUERY_KEY(...keyParams),
+      ...SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationPassQuestionsProps
+export interface GetSelfEventRegistrationPassQuestionSectionsProps
   extends SingleQueryParams {
   eventId: string;
   passId: string;
 }
 
-export const GetSelfEventRegistrationPassQuestions = async ({
+export const GetSelfEventRegistrationPassQuestionSections = async ({
   eventId,
   passId,
   clientApiParams,
-}: GetSelfEventRegistrationPassQuestionsProps): Promise<
+}: GetSelfEventRegistrationPassQuestionSectionsProps): Promise<
   ConnectedXMResponse<RegistrationSection[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/passs/${passId}/questions`,
+    `/self/events/${eventId}/registration/passes/${passId}/questions`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventRegistrationPassQuestions = (
+export const useGetSelfEventRegistrationPassQuestionSections = (
   eventId: string,
   passId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationPassQuestions>
+    ReturnType<typeof GetSelfEventRegistrationPassQuestionSections>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationPassQuestions>
+    ReturnType<typeof GetSelfEventRegistrationPassQuestionSections>
   >(
-    SELF_EVENT_REGISTRATION_PASS_QUESTIONS_QUERY_KEY(eventId, passId),
+    SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY(eventId, passId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationPassQuestions({
+      GetSelfEventRegistrationPassQuestionSections({
         eventId,
         passId,
         ...params,

@@ -8,8 +8,7 @@ import { GetClientAPI } from "../../../../../ClientAPI";
 export interface UpdateSelfEventRegistrationPurchaseSessionResponsesParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
-  purchaseId: string;
+  passId: string;
   sessionPassId: string;
   responses: {
     questionId: string;
@@ -19,8 +18,7 @@ export interface UpdateSelfEventRegistrationPurchaseSessionResponsesParams
 
 export const UpdateSelfEventRegistrationPurchaseSessionResponses = async ({
   eventId,
-  registrationId,
-  purchaseId,
+  passId,
   sessionPassId,
   responses,
   clientApiParams,
@@ -30,7 +28,7 @@ export const UpdateSelfEventRegistrationPurchaseSessionResponses = async ({
   const clientApi = await GetClientAPI(clientApiParams);
 
   const { data } = await clientApi.put<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/${registrationId}/purchases/${purchaseId}/sessions/${sessionPassId}`,
+    `/self/events/${eventId}/registration/passes/${passId}/sessions/${sessionPassId}`,
     responses
   );
 
