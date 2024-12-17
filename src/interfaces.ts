@@ -1394,6 +1394,7 @@ export interface ContentGuest extends BaseContentGuest {}
 interface BaseRegistration {
   id: string;
   alternateId: number;
+  accountId: string;
   eventId: string;
 }
 
