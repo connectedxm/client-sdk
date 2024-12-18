@@ -2,6 +2,7 @@ export * from "./addresses";
 export * from "./chat";
 export * from "./registration";
 export * from "./subscriptions";
+export * from "./attendee";
 
 export * from "./useGetSelf";
 export * from "./useGetSelfRelationships";

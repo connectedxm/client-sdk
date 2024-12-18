@@ -6,4 +6,6 @@ export * from "./useGetSelfEventAttendeeCouponPasses";
 export * from "./useGetSelfEventAttendeeCoupons";
 export * from "./useGetSelfEventAttendeeTransfersLogs";
 export * from "./useGetSelfEventAttendee";
+export * from "./useGetSelfEventAttendeePassQuestionSections";
+export * from "./useGetSelfEventAttendeePassAddOns";
 export * from "./sessions";
