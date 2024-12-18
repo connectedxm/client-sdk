@@ -14,7 +14,6 @@ import {
 export interface UpdateSelfEventAttendeePassResponsesParams
   extends MutationParams {
   eventId: string;
-  registrationId: string;
   passId: string;
   questions: {
     id: number;
@@ -24,7 +23,6 @@ export interface UpdateSelfEventAttendeePassResponsesParams
 
 export const UpdateSelfEventAttendeePassResponses = async ({
   eventId,
-  registrationId,
   passId,
   questions,
   clientApiParams,
@@ -34,7 +32,7 @@ export const UpdateSelfEventAttendeePassResponses = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/${registrationId}/passes/${passId}`,
+    `/self/events/${eventId}/attendee/passes/${passId}/questions`,
     {
       questions,
     }
