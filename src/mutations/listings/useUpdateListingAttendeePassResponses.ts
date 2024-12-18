@@ -13,7 +13,7 @@ import {
   LISTING_REPORT_QUERY_KEY,
 } from "@src/queries";
 
-export interface UpdateListingRegistrationPurchaseResponsesParams
+export interface UpdateListingRegistrationPassResponsesParams
   extends MutationParams {
   eventId: string;
   accountId: string;
@@ -24,14 +24,14 @@ export interface UpdateListingRegistrationPurchaseResponsesParams
   }[];
 }
 
-export const UpdateListingRegistrationPurchaseResponses = async ({
+export const UpdateListingRegistrationPassResponses = async ({
   eventId,
   accountId,
   passId,
   questions,
   clientApiParams,
   queryClient,
-}: UpdateListingRegistrationPurchaseResponsesParams): Promise<
+}: UpdateListingRegistrationPassResponsesParams): Promise<
   ConnectedXMResponse<null>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -70,12 +70,12 @@ export const UpdateListingRegistrationPurchaseResponses = async ({
   return data;
 };
 
-export const useUpdateListingRegistrationPurchaseResponses = (
+export const useUpdateListingRegistrationPassResponses = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateListingRegistrationPurchaseResponses>>,
+      Awaited<ReturnType<typeof UpdateListingRegistrationPassResponses>>,
       Omit<
-        UpdateListingRegistrationPurchaseResponsesParams,
+        UpdateListingRegistrationPassResponsesParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -83,7 +83,7 @@ export const useUpdateListingRegistrationPurchaseResponses = (
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateListingRegistrationPurchaseResponsesParams,
+    UpdateListingRegistrationPassResponsesParams,
     Awaited<ConnectedXMResponse<null>>
-  >(UpdateListingRegistrationPurchaseResponses, options);
+  >(UpdateListingRegistrationPassResponses, options);
 };

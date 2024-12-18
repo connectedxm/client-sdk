@@ -1396,7 +1396,6 @@ interface BaseRegistration {
   alternateId: number;
   accountId: string;
   eventId: string;
-  accountId: string;
 }
 
 export interface Registration extends BaseRegistration {
