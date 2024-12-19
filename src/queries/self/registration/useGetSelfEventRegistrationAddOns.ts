@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, EventAddOn } from "@src/interfaces";
+import { BasePassType, ConnectedXMResponse, EventAddOn } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -8,6 +8,10 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+
+interface PassTypeWithAddOns extends BasePassType {
+  addOns: EventAddOn[];
+}
 
 export const SELF_EVENT_REGISTRATION_ADD_ONS_QUERY_KEY = (
   eventId: string
@@ -36,7 +40,7 @@ export const GetSelfEventRegistrationAddOns = async ({
   eventId,
   clientApiParams,
 }: GetSelfEventRegistrationAddOnsProps): Promise<
-  ConnectedXMResponse<EventAddOn[]>
+  ConnectedXMResponse<PassTypeWithAddOns[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(

@@ -1,5 +1,5 @@
 import { GetClientAPI } from "@src/ClientAPI";
-import { ConnectedXMResponse, Registration } from "@src/interfaces";
+import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -9,13 +9,12 @@ import {
   EVENT_REGISTRANTS_QUERY_KEY,
   SELF_EVENTS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
-  SET_SELF_EVENT_REGISTRATION_QUERY_DATA,
 } from "@src/queries";
 
 export interface UpdateSelfEventRegistrationPassesParams
   extends MutationParams {
   eventId: string;
-  passes: { passId: string; passTypeId: string }[];
+  passes: { id: string; ticketId: string }[];
 }
 
 export const UpdateSelfEventRegistrationPasses = async ({
@@ -24,18 +23,15 @@ export const UpdateSelfEventRegistrationPasses = async ({
   clientApiParams,
   queryClient,
 }: UpdateSelfEventRegistrationPassesParams): Promise<
-  ConnectedXMResponse<Registration>
+  ConnectedXMResponse<null>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/self/events/${eventId}/registration/passes`,
     passes
   );
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [
-      clientApiParams.locale,
-    ]);
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
     });

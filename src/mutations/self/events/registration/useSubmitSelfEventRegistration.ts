@@ -3,10 +3,12 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../../useConnectedMutation";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
+import {
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_QUERY_KEY,
+} from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
-import { SET_SELF_EVENT_ATTENDEE_QUERY_DATA } from "@src/queries/self/attendee";
 
 interface SubmitStripe {
   type: "stripe";
@@ -52,11 +54,11 @@ export const SubmitSelfEventRegistration = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_SELF_EVENT_ATTENDEE_QUERY_DATA(queryClient, [eventId], data, [
-      clientApiParams.locale,
-    ]);
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
     });
     ADD_SELF_RELATIONSHIP(
       queryClient,

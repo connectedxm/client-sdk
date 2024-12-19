@@ -5,6 +5,7 @@ import useConnectedMutation, {
 } from "../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
   SELF_EVENT_REGISTRATION_PASS_QUESTION_SECTIONS_QUERY_KEY,
   SELF_EVENT_REGISTRATION_QUERY_KEY,
 } from "@src/queries";
@@ -13,16 +14,13 @@ export interface UpdateSelfEventAttendeeRegistrationResponsesParams
   extends MutationParams {
   eventId: string;
   passId: string;
-  questions: {
-    id: number;
-    value: string;
-  }[];
+  responses: { questionId: number; value: string }[];
 }
 
 export const UpdateSelfEventAttendeeRegistrationResponses = async ({
   eventId,
   passId,
-  questions,
+  responses,
   clientApiParams,
   queryClient,
 }: UpdateSelfEventAttendeeRegistrationResponsesParams): Promise<
@@ -32,7 +30,7 @@ export const UpdateSelfEventAttendeeRegistrationResponses = async ({
   const { data } = await clientApi.put<ConnectedXMResponse<null>>(
     `/self/events/${eventId}/registration/passes/${passId}/questions`,
     {
-      questions,
+      responses,
     }
   );
 
@@ -45,6 +43,9 @@ export const UpdateSelfEventAttendeeRegistrationResponses = async ({
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
     });
   }
 
