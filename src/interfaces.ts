@@ -468,9 +468,7 @@ export interface BaseRegistrationQuestion {
   choices: BaseRegistrationQuestionChoice[];
 }
 
-export interface RegistrationQuestion extends BaseRegistrationQuestion {
-  response?: string; // THIS DOESNT MATCH THE BACKEND SELECT BUT IT IS POSSIBLE IT EXISTS WHEN YOU QUERY FOR PURCHASE SECTION/QUESTIONS
-}
+export interface RegistrationQuestion extends BaseRegistrationQuestion {}
 
 export const isRegistrationQuestion = (
   question: RegistrationQuestion | { questionId: number }

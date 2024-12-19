@@ -10,20 +10,20 @@ import {
   SELF_EVENT_REGISTRATION_QUERY_KEY,
 } from "@src/queries";
 
-export interface UpdateSelfEventAttendeeRegistrationResponsesParams
+export interface UpdateSelfEventRegistrationPassResponsesParams
   extends MutationParams {
   eventId: string;
   passId: string;
   responses: { questionId: number; value: string }[];
 }
 
-export const UpdateSelfEventAttendeeRegistrationResponses = async ({
+export const UpdateSelfEventRegistrationPassResponses = async ({
   eventId,
   passId,
   responses,
   clientApiParams,
   queryClient,
-}: UpdateSelfEventAttendeeRegistrationResponsesParams): Promise<
+}: UpdateSelfEventRegistrationPassResponsesParams): Promise<
   ConnectedXMResponse<null>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -52,12 +52,12 @@ export const UpdateSelfEventAttendeeRegistrationResponses = async ({
   return data;
 };
 
-export const useUpdateSelfEventAttendeeRegistrationResponses = (
+export const useUpdateSelfEventRegistrationPassResponses = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateSelfEventAttendeeRegistrationResponses>>,
+      Awaited<ReturnType<typeof UpdateSelfEventRegistrationPassResponses>>,
       Omit<
-        UpdateSelfEventAttendeeRegistrationResponsesParams,
+        UpdateSelfEventRegistrationPassResponsesParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -65,7 +65,7 @@ export const useUpdateSelfEventAttendeeRegistrationResponses = (
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateSelfEventAttendeeRegistrationResponsesParams,
+    UpdateSelfEventRegistrationPassResponsesParams,
     Awaited<ConnectedXMResponse<null>>
-  >(UpdateSelfEventAttendeeRegistrationResponses, options);
+  >(UpdateSelfEventRegistrationPassResponses, options);
 };
