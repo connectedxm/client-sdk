@@ -4,7 +4,6 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 import { SELF_EVENT_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY } from "@src/queries/self/attendee/useGetSelfEventAttendeePassQuestionSections";
 import {
   SELF_EVENT_ATTENDEE_PASS_QUERY_KEY,
@@ -44,9 +43,6 @@ export const UpdateSelfEventAttendeePassResponses = async ({
         eventId,
         passId
       ),
-    });
-    queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),

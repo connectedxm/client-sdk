@@ -1835,7 +1835,7 @@ export interface BaseEventAddOn {
   name: string;
   shortDescription: string;
   longDescription: string | null;
-  supply: number;
+  supply: number | null;
   price: number;
   sortOrder: number;
   eventId: string;

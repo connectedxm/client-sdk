@@ -59,6 +59,9 @@ export const useGetSelfEventRegistration = (
       }),
     {
       ...options,
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
       enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );

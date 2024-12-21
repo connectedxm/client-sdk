@@ -1,6 +1,8 @@
 export * from "./useGetSelfEventRegistration";
-export * from "./useGetSelfEventRegistrationIntent";
-export * from "./useGetSelfEventRegistrationPassQuestionSections";
-export * from "./useGetSelfEventRegistrationReservationSections";
-export * from "./useGetSelfEventTicketCouponIntent";
+export * from "./useGetSelfEventRegistrationPassTypes";
 export * from "./useGetSelfEventRegistrationAddOns";
+export * from "./useGetSelfEventRegistrationRoomTypes";
+export * from "./useGetSelfEventRegistrationQuestions";
+
+export * from "./useGetSelfEventTicketCouponIntent";
+export * from "./useGetSelfEventRegistrationIntent";

@@ -4,7 +4,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY } from "@src/queries";
+import {
+  SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
+  SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY,
+} from "@src/queries";
 
 export interface SelectSelfEventRegistrationReservationsParams
   extends MutationParams {
@@ -32,6 +35,9 @@ export const SelectSelfEventRegistrationReservations = async ({
   );
 
   if (queryClient && data.status === "ok") {
+    queryClient.removeQueries({
+      queryKey: SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(eventId),
+    });
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
     });
