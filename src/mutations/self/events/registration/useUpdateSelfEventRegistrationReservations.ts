@@ -14,9 +14,12 @@ export interface SelectSelfEventRegistrationReservationsParams
   eventId: string;
   passes: {
     id: string;
-    reservationSectionLocationId: string;
-    reservationStart?: string;
-    reservationEnd?: string;
+    reservation: {
+      id: string;
+      eventRoomTypeId: string;
+      start?: Date | string;
+      end?: Date | string;
+    };
   }[];
 }
 
@@ -30,7 +33,7 @@ export const SelectSelfEventRegistrationReservations = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/passes/reservations`,
+    `/self/events/${eventId}/registration/reservations`,
     passes
   );
 

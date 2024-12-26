@@ -430,7 +430,7 @@ export interface RegistrationEventDetails extends BaseEvent {
     sections: number;
     coupons: number;
     addOns: number;
-    reservationSections: number;
+    roomTypes: number;
   };
 }
 
@@ -587,12 +587,6 @@ export interface BasePassType {
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
   supply: number | null;
-  minReservationStart: string | null;
-  reservationStart: string | null;
-  maxReservationStart: string | null;
-  minReservationEnd: string | null;
-  reservationEnd: string | null;
-  maxReservationEnd: string | null;
   priceSchedules: BasePassTypePriceSchedule[];
   refundSchedules: BasePassTypeRefundSchedule[];
   enableCoupons: boolean;
@@ -655,9 +649,14 @@ export interface BasePass {
   ticketId: string;
   ticket: BasePassType;
   addOns: BaseEventAddOn[];
-  reservationStart: string | null;
-  reservationEnd: string | null;
-  reservationSectionLocation: BaseEventReservationSectionLocation | null;
+  reservationId: string | null;
+  reservation: {
+    id: string;
+    start: string | null;
+    end: string | null;
+    eventRoomTypeId: string;
+    eventRoomType: BaseEventRoomType;
+  };
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
@@ -1837,14 +1836,9 @@ export interface BaseEventAddOn {
   longDescription: string | null;
   supply: number | null;
   price: number;
+  pricePerNight: boolean;
   sortOrder: number;
   eventId: string;
-  minReservationStart: string | null;
-  reservationStart: string | null;
-  maxReservationStart: string | null;
-  minReservationEnd: string | null;
-  reservationEnd: string | null;
-  maxReservationEnd: string | null;
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
@@ -1853,57 +1847,6 @@ export interface BaseEventAddOn {
 export interface EventAddOn extends BaseEventAddOn {
   event: BaseEvent;
 }
-
-export interface BaseEventReservationSection {
-  id: string;
-  eventId: string;
-  name: string;
-  price: number;
-  pricePerDay: boolean;
-  shortDescription: string;
-  image: BaseImage | null;
-  minStart: string | null;
-  start: string | null;
-  maxStart: string | null;
-  minEnd: string | null;
-  end: string | null;
-  maxEnd: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface EventReservationSection extends BaseEventReservationSection {
-  event: BaseEvent;
-  locations: BaseEventReservationSectionLocation[];
-}
-
-export interface BaseEventReservationSectionLocation {
-  id: string;
-  eventId: string;
-  reservationSectionId: string;
-  name: string;
-  shortDescription: string;
-  supply: number;
-  premium: number;
-  createdAt: string;
-  updatedAt: string;
-  reservationSection: {
-    id: string;
-    name: string;
-    pricePerDay: boolean;
-    price: number;
-    image: BaseImage | null;
-  };
-  _count: {
-    purchases: number;
-  };
-}
-
-export interface EventReservationSectionLocation
-  extends BaseEventReservationSectionLocation {
-  reservationSection: BaseEventReservationSection;
-}
-
 export enum GroupRequestStatus {
   requested = "requested",
   rejected = "rejected",
@@ -2276,3 +2219,70 @@ export interface BasePassTypeRefundSchedule {
 }
 
 export interface PassTypeRefundSchedule extends BasePassTypeRefundSchedule {}
+
+export interface BaseEventRoomType {
+  id: string;
+  name: string;
+  price: number;
+  pricePerNight: boolean;
+  image: BaseImage;
+  minPasses: number | null;
+  maxPasses: number | null;
+  minStart: string | null;
+  defaultStart: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  defaultEnd: string | null;
+  maxEnd: string | null;
+  passTypes: BaseEventRoomTypePassTypeDetails[];
+  addOns: BaseEventRoomTypeAddOnDetails[];
+}
+
+export interface EventRoomType extends BaseEventRoomType {
+  sortOrder: number;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventRoomTypeReservation {
+  id: string;
+  start: string | null;
+  end: string | null;
+}
+
+export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventRoomTypePassTypeDetails {
+  id: string;
+  premium: number;
+  includedNights: number;
+  minPasses: number | null;
+  maxPasses: number | null;
+}
+
+export interface EventRoomTypePassTypeDetails
+  extends BaseEventRoomTypePassTypeDetails {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventRoomTypeAddOnDetails {
+  id: string;
+  addOnId: string;
+  minStart: string | null;
+  defaultStart: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  defaultEnd: string | null;
+  maxEnd: string | null;
+}
+
+export interface EventRoomTypeAddOnDetails
+  extends BaseEventRoomTypeAddOnDetails {
+  createdAt: string;
+  updatedAt: string;
+}
