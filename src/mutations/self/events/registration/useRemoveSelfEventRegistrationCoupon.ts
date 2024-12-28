@@ -32,6 +32,7 @@ export const RemoveSelfEventRegistrationCoupon = async ({
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
+      exact: false,
     });
 
     SET_SELF_EVENT_REGISTRATION_QUERY_DATA(queryClient, [eventId], data, [

@@ -1423,6 +1423,15 @@ enum RegistrationPaymentType {
 export interface BasePayment {
   id: string;
   type: RegistrationPaymentType;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  country: string;
+  zip: string;
+  subTotal: number;
+  salesTax: number;
+  salesTaxRate: string | null;
   chargedAmt: number;
   last4: string | null;
   stripeId: string | null;
@@ -1987,6 +1996,11 @@ export interface BasePaymentIntent {
   eventId: string | null;
   registrationId: string | null;
   invoiceId: string | null;
+  salesTax: number;
+  salesTaxRate: number;
+  country: string;
+  state: string;
+  zip: string;
   createdAt: string;
 }
 export interface PaymentIntent extends BasePaymentIntent {

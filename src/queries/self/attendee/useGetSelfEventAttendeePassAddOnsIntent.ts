@@ -11,7 +11,8 @@ import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
 export const SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY = (
   eventId: string,
   passId: string,
-  addOnIds?: string[]
+  addressId: string,
+  addOnIds: string[]
 ): QueryKey => {
   const key = [
     ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
@@ -23,6 +24,8 @@ export const SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY = (
     key.push(...addOnIds);
   }
 
+  key.push(addressId);
+
   return key;
 };
 
@@ -31,12 +34,14 @@ export interface GetSelfEventAttendeePassAddOnsIntentProps
   eventId: string;
   passId: string;
   addOnIds: string[];
+  addressId: string;
 }
 
 export const GetSelfEventAttendeePassAddOnsIntent = async ({
   eventId,
   passId,
   addOnIds,
+  addressId,
   clientApiParams,
 }: GetSelfEventAttendeePassAddOnsIntentProps): Promise<
   ConnectedXMResponse<PaymentIntent>
@@ -47,6 +52,7 @@ export const GetSelfEventAttendeePassAddOnsIntent = async ({
     {
       params: {
         addOnIds: addOnIds ? addOnIds.join(",") : "",
+        addressId,
       },
     }
   );
@@ -57,6 +63,7 @@ export const GetSelfEventAttendeePassAddOnsIntent = async ({
 export const useGetSelfEventAttendeePassAddOnsIntent = (
   eventId: string,
   passId: string,
+  addressId: string,
   addOnIds: string[],
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventAttendeePassAddOnsIntent>
@@ -70,12 +77,14 @@ export const useGetSelfEventAttendeePassAddOnsIntent = (
     SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY(
       eventId,
       passId,
+      addressId,
       addOnIds
     ),
     (params: SingleQueryParams) =>
       GetSelfEventAttendeePassAddOnsIntent({
         eventId,
         passId,
+        addressId,
         addOnIds,
         ...params,
       }),
@@ -88,6 +97,7 @@ export const useGetSelfEventAttendeePassAddOnsIntent = (
         !!authenticated &&
         !!eventId &&
         !!passId &&
+        !!addressId &&
         !!addOnIds &&
         (options?.enabled ?? true),
     }

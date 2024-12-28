@@ -10,12 +10,14 @@ import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "../useGetSelfEventAttendee";
 export const SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY = (
   eventId: string,
   sessionId: string,
+  addressId: string,
   sessionPassIds: string[]
 ) => [
   ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
   sessionId,
-  ...sessionPassIds,
+  addressId,
   "SESSION_PASSES_INTENT",
+  ...sessionPassIds,
 ];
 
 export type SessionPassesInput = {
@@ -30,12 +32,14 @@ export interface GetSelfEventAttendeeSessionPassesIntentProps
   extends SingleQueryParams {
   eventId: string;
   sessionId: string;
+  addressId: string;
   sessionPasses: SessionPassesInput;
 }
 
 export const GetSelfEventAttendeeSessionPassesIntent = async ({
   eventId,
   sessionId,
+  addressId,
   sessionPasses,
   clientApiParams,
 }: GetSelfEventAttendeeSessionPassesIntentProps): Promise<
@@ -44,7 +48,10 @@ export const GetSelfEventAttendeeSessionPassesIntent = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<PaymentIntent>>(
     `/self/events/${eventId}/attendee/sessions/${sessionId}/intent`,
-    sessionPasses
+    {
+      addressId,
+      sessionPasses,
+    }
   );
 
   return data;
@@ -53,6 +60,7 @@ export const GetSelfEventAttendeeSessionPassesIntent = async ({
 export const useGetSelfEventAttendeeSessionPassesIntent = (
   eventId: string,
   sessionId: string,
+  addressId: string,
   sessionPasses: SessionPassesInput,
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventAttendeeSessionPassesIntent>
@@ -66,12 +74,14 @@ export const useGetSelfEventAttendeeSessionPassesIntent = (
     SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY(
       eventId,
       sessionId,
+      addressId,
       sessionPasses.map(({ passId }) => passId)
     ),
     (params) =>
       GetSelfEventAttendeeSessionPassesIntent({
         eventId,
         sessionId,
+        addressId,
         sessionPasses,
         ...params,
       }),
@@ -84,6 +94,7 @@ export const useGetSelfEventAttendeeSessionPassesIntent = (
         !!authenticated &&
         !!eventId &&
         !!sessionId &&
+        !!addressId &&
         !!sessionPasses &&
         (options?.enabled ?? true),
     }

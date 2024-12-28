@@ -10,24 +10,28 @@ import { useConnectedXM } from "@src/hooks";
 export const SELF_EVENT_TICKET_COUPON_INTENT_QUERY_KEY = (
   eventId: string,
   ticketId: string,
-  quantity: number
+  quantity: number,
+  addressId: string
 ) => [
   ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
   "COUPON_INTENT",
   ticketId,
   quantity,
+  addressId,
 ];
 
 export interface GetSelfEventTicketCouponIntentProps extends SingleQueryParams {
   eventId: string;
   ticketId: string;
   quantity: number;
+  addressId: string;
 }
 
 export const GetSelfEventTicketCouponIntent = async ({
   eventId,
   ticketId,
   quantity,
+  addressId,
   clientApiParams,
 }: GetSelfEventTicketCouponIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
@@ -39,6 +43,7 @@ export const GetSelfEventTicketCouponIntent = async ({
       params: {
         ticketId,
         quantity,
+        addressId,
       },
     }
   );
@@ -49,6 +54,7 @@ export const useGetSelfEventTicketCouponIntent = (
   eventId: string = "",
   ticketId: string = "",
   quantity: number = 0,
+  addressId: string = "",
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventTicketCouponIntent>
   > = {}
@@ -58,12 +64,18 @@ export const useGetSelfEventTicketCouponIntent = (
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventTicketCouponIntent>
   >(
-    SELF_EVENT_TICKET_COUPON_INTENT_QUERY_KEY(eventId, ticketId, quantity),
+    SELF_EVENT_TICKET_COUPON_INTENT_QUERY_KEY(
+      eventId,
+      ticketId,
+      quantity,
+      addressId
+    ),
     (params) =>
       GetSelfEventTicketCouponIntent({
         eventId,
         ticketId,
         quantity,
+        addressId,
         ...params,
       }),
     {
@@ -76,6 +88,7 @@ export const useGetSelfEventTicketCouponIntent = (
         !!eventId &&
         !!ticketId &&
         !!quantity &&
+        !!addressId &&
         (options?.enabled ?? true),
     }
   );
