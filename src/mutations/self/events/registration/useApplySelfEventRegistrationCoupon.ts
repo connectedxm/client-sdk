@@ -40,6 +40,7 @@ export const SelectSelfEventRegistrationCoupon = async ({
     ]);
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
+      exact: false,
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENTS_QUERY_KEY(false),
