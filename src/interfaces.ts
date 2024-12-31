@@ -2268,10 +2268,18 @@ export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
 
 export interface BaseEventRoomTypePassTypeDetails {
   id: string;
+  passTypeId: string;
+  enabled: boolean;
   premium: number;
   includedNights: number;
   minPasses: number | null;
   maxPasses: number | null;
+  minStart: string | null;
+  defaultStart: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  defaultEnd: string | null;
+  maxEnd: string | null;
 }
 
 export interface EventRoomTypePassTypeDetails

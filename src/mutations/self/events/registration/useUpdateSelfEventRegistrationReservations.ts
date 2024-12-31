@@ -9,7 +9,7 @@ import {
   SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY,
 } from "@src/queries";
 
-export interface SelectSelfEventRegistrationReservationsParams
+export interface UpdateSelfEventRegistrationReservationsParams
   extends MutationParams {
   eventId: string;
   passes: {
@@ -23,12 +23,12 @@ export interface SelectSelfEventRegistrationReservationsParams
   }[];
 }
 
-export const SelectSelfEventRegistrationReservations = async ({
+export const UpdateSelfEventRegistrationReservations = async ({
   eventId,
   passes,
   clientApiParams,
   queryClient,
-}: SelectSelfEventRegistrationReservationsParams): Promise<
+}: UpdateSelfEventRegistrationReservationsParams): Promise<
   ConnectedXMResponse<null>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -50,12 +50,12 @@ export const SelectSelfEventRegistrationReservations = async ({
   return data;
 };
 
-export const useSelectSelfEventRegistrationReservations = (
+export const useUpdateSelfEventRegistrationReservations = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelectSelfEventRegistrationReservations>>,
+      Awaited<ReturnType<typeof UpdateSelfEventRegistrationReservations>>,
       Omit<
-        SelectSelfEventRegistrationReservationsParams,
+        UpdateSelfEventRegistrationReservationsParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -63,7 +63,7 @@ export const useSelectSelfEventRegistrationReservations = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SelectSelfEventRegistrationReservationsParams,
-    Awaited<ReturnType<typeof SelectSelfEventRegistrationReservations>>
-  >(SelectSelfEventRegistrationReservations, options);
+    UpdateSelfEventRegistrationReservationsParams,
+    Awaited<ReturnType<typeof UpdateSelfEventRegistrationReservations>>
+  >(UpdateSelfEventRegistrationReservations, options);
 };
