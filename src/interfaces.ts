@@ -650,13 +650,7 @@ export interface BasePass {
   ticket: BasePassType;
   addOns: BaseEventAddOn[];
   reservationId: string | null;
-  reservation: {
-    id: string;
-    start: string | null;
-    end: string | null;
-    eventRoomTypeId: string;
-    eventRoomType: BaseEventRoomType;
-  };
+  reservation: BaseEventRoomTypeReservation | null;
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
@@ -2249,6 +2243,8 @@ export interface BaseEventRoomTypeReservation {
   id: string;
   start: string | null;
   end: string | null;
+  eventRoomTypeId: string;
+  eventRoomType: BaseEventRoomType;
 }
 
 export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
