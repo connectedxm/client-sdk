@@ -2,31 +2,36 @@ import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
-import { ConnectedXMResponse, Lead } from "@src/interfaces";
+} from "../../useConnectedMutation";
+import { Lead, ConnectedXMResponse } from "@src/interfaces";
+import { SELF_LEAD_QUERY_KEY, SELF_LEADS_QUERY_KEY } from "@src/queries";
 
 export interface UpdateSelfLeadParams extends MutationParams {
   leadId: string;
-  note: string;
+  lead: {
+    status?: "new" | "favorited" | "archived" | "deleted";
+    note?: string;
+  };
 }
 
 export const UpdateSelfLead = async ({
   leadId,
-  note,
+  lead,
+  queryClient,
   clientApiParams,
 }: UpdateSelfLeadParams): Promise<ConnectedXMResponse<Lead>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Lead>>(
     `/self/leads/${leadId}`,
-    {
-      note,
-    }
+    lead
   );
 
-  // TO DO: Update invalidate query - we don't have a getter yet so we don't have a query key
-  // if(queryClient && data.status === "ok") {
-  //   queryClient.invalidateQueries([LEAD_KEY, response?.data?.id]);
-  // }
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_LEADS_QUERY_KEY() });
+    queryClient.invalidateQueries({
+      queryKey: SELF_LEAD_QUERY_KEY(leadId),
+    });
+  }
 
   return data;
 };
