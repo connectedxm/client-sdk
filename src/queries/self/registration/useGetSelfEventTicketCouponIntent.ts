@@ -9,40 +9,41 @@ import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_TICKET_COUPON_INTENT_QUERY_KEY = (
   eventId: string,
-  registrationId: string,
   ticketId: string,
-  quantity: number
+  quantity: number,
+  addressId: string
 ) => [
   ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
-  registrationId,
   "COUPON_INTENT",
   ticketId,
   quantity,
+  addressId,
 ];
 
 export interface GetSelfEventTicketCouponIntentProps extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
   ticketId: string;
   quantity: number;
+  addressId: string;
 }
 
 export const GetSelfEventTicketCouponIntent = async ({
   eventId,
-  registrationId,
   ticketId,
   quantity,
+  addressId,
   clientApiParams,
 }: GetSelfEventTicketCouponIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/coupons/intent`,
+    `/self/events/${eventId}/registration/coupons/intent`,
     {
       params: {
         ticketId,
         quantity,
+        addressId,
       },
     }
   );
@@ -51,9 +52,9 @@ export const GetSelfEventTicketCouponIntent = async ({
 
 export const useGetSelfEventTicketCouponIntent = (
   eventId: string = "",
-  registrationId: string = "",
   ticketId: string = "",
   quantity: number = 0,
+  addressId: string = "",
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventTicketCouponIntent>
   > = {}
@@ -65,16 +66,16 @@ export const useGetSelfEventTicketCouponIntent = (
   >(
     SELF_EVENT_TICKET_COUPON_INTENT_QUERY_KEY(
       eventId,
-      registrationId,
       ticketId,
-      quantity
+      quantity,
+      addressId
     ),
     (params) =>
       GetSelfEventTicketCouponIntent({
         eventId,
-        registrationId,
         ticketId,
         quantity,
+        addressId,
         ...params,
       }),
     {
@@ -85,9 +86,9 @@ export const useGetSelfEventTicketCouponIntent = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
         !!ticketId &&
         !!quantity &&
+        !!addressId &&
         (options?.enabled ?? true),
     }
   );
