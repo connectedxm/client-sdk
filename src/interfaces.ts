@@ -2242,12 +2242,13 @@ export interface BaseEventRoomType {
   minEnd: string | null;
   defaultEnd: string | null;
   maxEnd: string | null;
+  sortOrder: number;
   passTypes: BaseEventRoomTypePassTypeDetails[];
   addOns: BaseEventRoomTypeAddOnDetails[];
+  supply: number | null;
 }
 
 export interface EventRoomType extends BaseEventRoomType {
-  sortOrder: number;
   description: string | null;
   createdAt: string;
   updatedAt: string;
