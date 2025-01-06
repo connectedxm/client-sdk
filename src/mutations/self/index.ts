@@ -1,4 +1,5 @@
 export * from "./addresses";
+export * from "./leads";
 export * from "./chat";
 export * from "./events";
 export * from "./subscriptions";
@@ -14,7 +15,6 @@ export * from "./useSelfDeleteActivity";
 export * from "./useSelfUpdateGroupMembership";
 export * from "./useUpdateSelf";
 export * from "./useUpdateSelfImage";
-export * from "./useUpdateSelfLead";
 export * from "./useUpdateSelfNotificationPreferences";
 export * from "./useUpdateSelfPushDevice";
 export * from "./useAddSelfInterests";

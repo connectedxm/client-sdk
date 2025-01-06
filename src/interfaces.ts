@@ -1436,6 +1436,13 @@ export interface Payment extends BasePayment {
   purchases: BasePass[];
   coupons: BaseCoupon[];
 }
+
+export enum LeadStatus {
+  new = "new",
+  favorited = "favorited",
+  archived = "archived",
+  deleted = "deleted",
+}
 export interface BaseLead {
   id: string;
   firstName: string | null;
@@ -1446,6 +1453,7 @@ export interface BaseLead {
     id: string;
     image: BaseImage | null;
   };
+  status: LeadStatus;
   createdAt: string;
 }
 
