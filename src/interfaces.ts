@@ -1460,8 +1460,6 @@ export interface BaseLead {
 export interface Lead extends BaseLead {
   email: string | null;
   phone: string | null;
-  state: string | null;
-  country: string | null;
   website: string | null;
   facebook: string | null;
   instagram: string | null;
