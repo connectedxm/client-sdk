@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, EventReservationSection } from "@src/interfaces";
+import { ConnectedXMResponse, EventRoomType } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -37,7 +37,7 @@ export const GetSelfEventRegistrationRoomTypes = async ({
   eventId,
   clientApiParams,
 }: GetSelfEventRegistrationRoomTypesProps): Promise<
-  ConnectedXMResponse<EventReservationSection[]>
+  ConnectedXMResponse<EventRoomType[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
