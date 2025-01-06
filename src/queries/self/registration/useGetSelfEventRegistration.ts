@@ -11,7 +11,7 @@ import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_QUERY_KEY = (
   eventId: string
-): QueryKey => [...SELF_QUERY_KEY(), "EVENT_REGISTRATION", eventId];
+): QueryKey => [...SELF_QUERY_KEY(), "REGISTRATION", eventId];
 
 export const SET_SELF_EVENT_REGISTRATION_QUERY_DATA = (
   client: QueryClient,
@@ -59,6 +59,9 @@ export const useGetSelfEventRegistration = (
       }),
     {
       ...options,
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
       enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );

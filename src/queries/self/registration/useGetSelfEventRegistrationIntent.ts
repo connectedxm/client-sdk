@@ -9,31 +9,42 @@ import { useConnectedXM } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY = (
   eventId: string,
-  registrationId: string
-) => [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), registrationId, "INTENT"];
+  addressId?: string
+) => {
+  const key = [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), "INTENT"];
+  if (addressId) {
+    key.push(addressId);
+  }
+  return key;
+};
 
 export interface GetSelfEventRegistrationIntentProps extends SingleQueryParams {
   eventId: string;
-  registrationId: string;
+  addressId: string;
 }
 
 export const GetSelfEventRegistrationIntent = async ({
   eventId,
-  registrationId,
+  addressId,
   clientApiParams,
 }: GetSelfEventRegistrationIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/registration/${registrationId}/cart/intent`
+    `/self/events/${eventId}/registration/intent`,
+    {
+      params: {
+        addressId,
+      },
+    }
   );
   return data;
 };
 
 export const useGetSelfEventRegistrationIntent = (
-  eventId: string,
-  registrationId: string = "",
+  eventId: string = "",
+  addressId: string = "",
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventRegistrationIntent>
   > = {}
@@ -43,9 +54,9 @@ export const useGetSelfEventRegistrationIntent = (
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationIntent>
   >(
-    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, registrationId),
+    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, addressId),
     (params) =>
-      GetSelfEventRegistrationIntent({ eventId, registrationId, ...params }),
+      GetSelfEventRegistrationIntent({ eventId, addressId, ...params }),
     {
       staleTime: Infinity,
       retry: false,
@@ -54,7 +65,7 @@ export const useGetSelfEventRegistrationIntent = (
       enabled:
         !!authenticated &&
         !!eventId &&
-        !!registrationId &&
+        !!addressId &&
         (options?.enabled ?? true),
     }
   );

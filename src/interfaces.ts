@@ -403,6 +403,7 @@ export interface Event extends BaseEvent {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   faqSections: BaseFaqSection[];
+  reservationDescription: string | null;
   _count: {
     sessions: number;
     speakers: number;
@@ -415,6 +416,7 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
+  reservationDescription: string | null;
   externalUrl: string | null;
   registration: boolean;
   registrationCount: number;
@@ -428,7 +430,7 @@ export interface RegistrationEventDetails extends BaseEvent {
     sections: number;
     coupons: number;
     addOns: number;
-    reservationSections: number;
+    roomTypes: number;
   };
 }
 
@@ -466,9 +468,7 @@ export interface BaseRegistrationQuestion {
   choices: BaseRegistrationQuestionChoice[];
 }
 
-export interface RegistrationQuestion extends BaseRegistrationQuestion {
-  response?: string; // THIS DOESNT MATCH THE BACKEND SELECT BUT IT IS POSSIBLE IT EXISTS WHEN YOU QUERY FOR PURCHASE SECTION/QUESTIONS
-}
+export interface RegistrationQuestion extends BaseRegistrationQuestion {}
 
 export const isRegistrationQuestion = (
   question: RegistrationQuestion | { questionId: number }
@@ -522,7 +522,7 @@ export interface BaseRegistrationSection {
 
 export interface RegistrationSection extends BaseRegistrationSection {
   accountTiers: BaseAccountTier[];
-  eventTickets: BaseTicket[];
+  eventTickets: BasePassType[];
   eventAddOns: BaseEventAddOn[];
   questions: RegistrationQuestion[];
 }
@@ -574,7 +574,7 @@ export enum TicketEventAccessLevel {
   virtual = "virtual",
   vip = "vip",
 }
-export interface BaseTicket {
+export interface BasePassType {
   id: string;
   slug: string;
   transferable: boolean;
@@ -587,13 +587,7 @@ export interface BaseTicket {
   minQuantityPerSale: number;
   maxQuantityPerSale: number;
   supply: number | null;
-  minReservationStart: string | null;
-  reservationStart: string | null;
-  maxReservationStart: string | null;
-  minReservationEnd: string | null;
-  reservationEnd: string | null;
-  maxReservationEnd: string | null;
-  priceSchedules: BaseTicketPriceSchedule[];
+  priceSchedules: BasePassTypePriceSchedule[];
   refundSchedules: BasePassTypeRefundSchedule[];
   enableCoupons: boolean;
   minCouponQuantity: number | null;
@@ -602,13 +596,13 @@ export interface BaseTicket {
   overrideStartDate: string | null;
 }
 
-export interface Ticket extends BaseTicket {
+export interface PassType extends BasePassType {
   visibility: TicketVisibility;
   active: boolean;
   event: BaseEvent;
 }
 
-export interface BaseTicketPriceSchedule {
+export interface BasePassTypePriceSchedule {
   id: string;
   ticketId: string;
   price: number;
@@ -619,7 +613,7 @@ export interface BaseTicketPriceSchedule {
   updatedAt: string;
 }
 
-export interface TicketPriceSchedule extends BaseTicketPriceSchedule {}
+export interface TicketPriceSchedule extends BasePassTypePriceSchedule {}
 export interface BaseTicketRefundSchedule {
   id: string;
   percentage: number;
@@ -629,8 +623,12 @@ export interface BaseTicketRefundSchedule {
 
 export interface TicketRefundSchedule extends BaseTicketRefundSchedule {}
 
-export const isTypeTicket = (ticket: BaseTicket | Ticket): ticket is Ticket => {
-  return (ticket as Omit<Ticket, keyof BaseTicket>).visibility !== undefined;
+export const isTypeTicket = (
+  ticket: BasePassType | PassType
+): ticket is PassType => {
+  return (
+    (ticket as Omit<PassType, keyof BasePassType>).visibility !== undefined
+  );
 };
 
 export enum PurchaseStatus {
@@ -640,23 +638,19 @@ export enum PurchaseStatus {
   ready = "ready",
 }
 
-export interface BasePurchase {
+export interface BasePass {
   id: string;
   alternateId: number;
   location: string | null;
   usedAt: string | null;
   status: PurchaseStatus;
-  firstName: string;
-  lastName: string;
-  email: string;
   registrationId: string;
   registration: BaseRegistration;
-  ticketId: string | null;
-  ticket: BaseTicket | null;
+  ticketId: string;
+  ticket: BasePassType;
   addOns: BaseEventAddOn[];
-  reservationStart: string | null;
-  reservationEnd: string | null;
-  reservationSectionLocation: BaseEventReservationSectionLocation | null;
+  reservationId: string | null;
+  reservation: BaseEventRoomTypeReservation | null;
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
@@ -664,26 +658,22 @@ export interface BasePurchase {
   createdAt: string;
 }
 
-export interface Purchase extends BasePurchase {
+export interface Pass extends BasePass {
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
   payerId: string | null;
 }
 
-export interface ListingPurchase extends BasePurchase {
+export interface ListingPass extends BasePass {
   registration: BaseRegistration & {
     account: BaseAccount & { email: string | null; phone: string | null };
   };
   updatedAt: string;
 }
 
-export const isTypePurchase = (
-  purchase: BasePurchase | Purchase
-): purchase is Purchase => {
-  return (
-    (purchase as Omit<Purchase, keyof BasePurchase>).updatedAt !== undefined
-  );
+export const isTypePurchase = (purchase: BasePass | Pass): purchase is Pass => {
+  return (purchase as Omit<Pass, keyof BasePass>).updatedAt !== undefined;
 };
 
 export interface Order {
@@ -695,7 +685,7 @@ export interface Order {
   grandTotal: number;
   coupon: BaseCoupon | null;
   paymentConfirmationId: string | null;
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   accountId: string;
   account: BaseAccount;
   createdAt: string;
@@ -750,7 +740,7 @@ export interface BaseCoupon {
   code: string;
   eventId: string;
   ticketId: string | null;
-  ticket: BaseTicket | null;
+  ticket: BasePassType | null;
   prePaid: boolean;
   active: boolean;
   startDate: string | null;
@@ -803,7 +793,7 @@ export interface ManagedCouponOrder {
   account: BaseAccount;
 }
 
-export interface ManagedCouponPurchase {
+export interface ManagedCouponPass {
   id: string;
   status: PurchaseStatus;
   coupon: BaseCoupon;
@@ -860,7 +850,7 @@ export interface BaseTransferLog {
 
 export interface TransferLog extends BaseTransferLog {
   purchaseId: string;
-  purchase: BasePurchase;
+  purchase: BasePass;
   createdAt: string;
 }
 
@@ -987,7 +977,7 @@ export interface BaseSessionPass {
 }
 
 export interface SessionPass extends BaseSessionPass {
-  pass: BasePurchase;
+  pass: BasePass;
   createdAt: string;
   updatedAt: string;
 }
@@ -1058,7 +1048,7 @@ export const isTypeSponsorshipLevel = (
 
 export interface BaseComplimentaryTicket {
   ticketId: string;
-  complimentaryTicket: BaseTicket;
+  complimentaryTicket: BasePassType;
   quantity: number;
 }
 
@@ -1130,7 +1120,7 @@ export interface SupportTicket extends BaseSupportTicket {
   request: string;
   account: BaseAccount | null;
   event: BaseEvent | null;
-  ticket: BaseTicket | null;
+  ticket: BasePassType | null;
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -1395,13 +1385,14 @@ export interface ContentGuest extends BaseContentGuest {}
 interface BaseRegistration {
   id: string;
   alternateId: number;
+  accountId: string;
   eventId: string;
 }
 
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
@@ -1412,7 +1403,7 @@ export interface ListingRegistration extends BaseRegistration {
   account: BaseAccount & { email: string | null; phone: string | null };
   couponId: string | null;
   coupon: BaseCoupon | null;
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   payments: Payment[];
   createdAt: string;
 }
@@ -1425,6 +1416,15 @@ enum RegistrationPaymentType {
 export interface BasePayment {
   id: string;
   type: RegistrationPaymentType;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  country: string;
+  zip: string;
+  subTotal: number;
+  salesTax: number;
+  salesTaxRate: string | null;
   chargedAmt: number;
   last4: string | null;
   stripeId: string | null;
@@ -1433,8 +1433,15 @@ export interface BasePayment {
 
 export interface Payment extends BasePayment {
   addOns: BaseEventAddOn[];
-  purchases: BasePurchase[];
+  purchases: BasePass[];
   coupons: BaseCoupon[];
+}
+
+export enum LeadStatus {
+  new = "new",
+  favorited = "favorited",
+  archived = "archived",
+  deleted = "deleted",
 }
 export interface BaseLead {
   id: string;
@@ -1446,6 +1453,7 @@ export interface BaseLead {
     id: string;
     image: BaseImage | null;
   };
+  status: LeadStatus;
   createdAt: string;
 }
 
@@ -1837,16 +1845,11 @@ export interface BaseEventAddOn {
   name: string;
   shortDescription: string;
   longDescription: string | null;
-  supply: number;
+  supply: number | null;
   price: number;
+  pricePerNight: boolean;
   sortOrder: number;
   eventId: string;
-  minReservationStart: string | null;
-  reservationStart: string | null;
-  maxReservationStart: string | null;
-  minReservationEnd: string | null;
-  reservationEnd: string | null;
-  maxReservationEnd: string | null;
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
@@ -1855,50 +1858,6 @@ export interface BaseEventAddOn {
 export interface EventAddOn extends BaseEventAddOn {
   event: BaseEvent;
 }
-
-export interface BaseEventReservationSection {
-  id: string;
-  eventId: string;
-  name: string;
-  price: number;
-  pricePerDay: boolean;
-  shortDescription: string;
-  image: BaseImage | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface EventReservationSection extends BaseEventReservationSection {
-  event: BaseEvent;
-  locations: BaseEventReservationSectionLocation[];
-}
-
-export interface BaseEventReservationSectionLocation {
-  id: string;
-  eventId: string;
-  reservationSectionId: string;
-  name: string;
-  shortDescription: string;
-  supply: number;
-  premium: number;
-  createdAt: string;
-  updatedAt: string;
-  reservationSection: {
-    name: string;
-    pricePerDay: boolean;
-    price: number;
-    image: BaseImage | null;
-  };
-  _count: {
-    purchases: number;
-  };
-}
-
-export interface EventReservationSectionLocation
-  extends BaseEventReservationSectionLocation {
-  reservationSection: BaseEventReservationSection;
-}
-
 export enum GroupRequestStatus {
   requested = "requested",
   rejected = "rejected",
@@ -1982,6 +1941,11 @@ export interface BasePaymentIntent {
   eventId: string | null;
   registrationId: string | null;
   invoiceId: string | null;
+  salesTax: number;
+  salesTaxRate: number;
+  country: string;
+  state: string;
+  zip: string;
   createdAt: string;
 }
 export interface PaymentIntent extends BasePaymentIntent {
@@ -2271,3 +2235,81 @@ export interface BasePassTypeRefundSchedule {
 }
 
 export interface PassTypeRefundSchedule extends BasePassTypeRefundSchedule {}
+
+export interface BaseEventRoomType {
+  id: string;
+  name: string;
+  price: number;
+  pricePerNight: boolean;
+  image: BaseImage;
+  minPasses: number | null;
+  maxPasses: number | null;
+  minStart: string | null;
+  defaultStart: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  defaultEnd: string | null;
+  maxEnd: string | null;
+  sortOrder: number;
+  passTypes: BaseEventRoomTypePassTypeDetails[];
+  addOns: BaseEventRoomTypeAddOnDetails[];
+  supply: number | null;
+}
+
+export interface EventRoomType extends BaseEventRoomType {
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventRoomTypeReservation {
+  id: string;
+  start: string | null;
+  end: string | null;
+  eventRoomTypeId: string;
+  eventRoomType: BaseEventRoomType;
+}
+
+export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventRoomTypePassTypeDetails {
+  id: string;
+  passTypeId: string;
+  enabled: boolean;
+  premium: number;
+  includedNights: number;
+  minPasses: number | null;
+  maxPasses: number | null;
+  minStart: string | null;
+  defaultStart: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  defaultEnd: string | null;
+  maxEnd: string | null;
+}
+
+export interface EventRoomTypePassTypeDetails
+  extends BaseEventRoomTypePassTypeDetails {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventRoomTypeAddOnDetails {
+  id: string;
+  addOnId: string;
+  minStart: string | null;
+  defaultStart: string | null;
+  maxStart: string | null;
+  minEnd: string | null;
+  defaultEnd: string | null;
+  maxEnd: string | null;
+}
+
+export interface EventRoomTypeAddOnDetails
+  extends BaseEventRoomTypeAddOnDetails {
+  createdAt: string;
+  updatedAt: string;
+}

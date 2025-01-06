@@ -14,6 +14,4 @@ export * from "./useGetEventSessions";
 export * from "./useGetEventSpeaker";
 export * from "./useGetEventSpeakers";
 export * from "./useGetEventSponsors";
-export * from "./useGetEventPassTypes";
 export * from "./useGetFeaturedEvents";
-export * from "./useGetEventPassType";

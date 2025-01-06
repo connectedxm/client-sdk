@@ -7,7 +7,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import {
   ADD_SELF_RELATIONSHIP,
   INVOICE_QUERY_KEY,
-  SELF_EVENT_PASSES_QUERY_KEY,
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
 } from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
@@ -25,25 +25,16 @@ export const CapturePaymentIntent = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    if (intent.eventId && intent.registrationId) {
-      queryClient.invalidateQueries({
-        predicate: ({ queryKey }) => {
-          if (
-            (queryKey[0] === "SELF" &&
-              (queryKey[1] === "EVENT_REGISTRATION" ||
-                queryKey[1] === "EVENT_ATTENDEE")) ||
-            (queryKey[0] === "SELF" &&
-              queryKey[1] === "EVENT" &&
-              queryKey[3] === "REGISTRATION")
-          ) {
-            return true;
-          }
-          return false;
-        },
+    if (intent.eventId) {
+      queryClient.removeQueries({
+        queryKey: ["SELF", "REGISTRATION"],
+        exact: false,
       });
+
       queryClient.invalidateQueries({
-        queryKey: SELF_EVENT_PASSES_QUERY_KEY(intent.eventId),
+        queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(intent.eventId),
       });
+
       ADD_SELF_RELATIONSHIP(
         queryClient,
         [clientApiParams.locale],
