@@ -53,7 +53,7 @@ export const GetSelfEventAttendeePassQuestionSections = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/attendee/passs/${passId}/questions`,
+    `/self/events/${eventId}/attendee/passes/${passId}/questions`,
     {}
   );
 
