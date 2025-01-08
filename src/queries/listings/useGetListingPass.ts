@@ -55,7 +55,7 @@ export const useGetSelfEventListingPass = (
     (params) => GetSelfEventListingPass({ eventId, passId, ...params }),
     {
       ...options,
-      enabled: !!eventId && !!passId,
+      enabled: !!eventId && !!passId && (options?.enabled ?? true),
     }
   );
 };
