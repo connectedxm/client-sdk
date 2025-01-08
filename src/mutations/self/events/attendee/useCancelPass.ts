@@ -25,7 +25,7 @@ export const CancelPass = async ({
 }: CancelPassParams): Promise<ConnectedXMResponse<Pass>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Pass>>(
-    `/self/events/${eventId}/registration/passes/${passId}/cancel`,
+    `/self/events/${eventId}/attendee/passes/${passId}/cancel`,
     {
       issueRefund,
     }
