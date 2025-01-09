@@ -15,12 +15,17 @@ import {
 export interface SelectSelfEventRegistrationCouponParams
   extends MutationParams {
   eventId: string;
-  couponId: string;
+  passes: {
+    id: string;
+    ticketId: string;
+  }[];
+  couponCode: string;
 }
 
 export const SelectSelfEventRegistrationCoupon = async ({
   eventId,
-  couponId,
+  passes,
+  couponCode,
   clientApiParams,
   queryClient,
 }: SelectSelfEventRegistrationCouponParams): Promise<
@@ -29,9 +34,7 @@ export const SelectSelfEventRegistrationCoupon = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/coupon`,
-    {
-      couponId,
-    }
+    { passes, couponCode }
   );
 
   if (queryClient && data.status === "ok") {
@@ -55,6 +58,7 @@ export const SelectSelfEventRegistrationCoupon = async ({
       queryKey: EVENT_REGISTRANTS_QUERY_KEY(eventId),
     });
   }
+
   return data;
 };
 
