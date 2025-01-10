@@ -91,6 +91,9 @@ export const useGetManagedChannelCollectionContents = (
         ...params,
       }),
     params,
-    options
+    {
+      ...options,
+      enabled: !!channelId && !!collectionId && (options?.enabled ?? true),
+    }
   );
 };

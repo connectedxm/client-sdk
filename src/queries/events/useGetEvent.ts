@@ -50,7 +50,7 @@ export const useGetEvent = (
     (params) => GetEvent({ eventId, ...params }),
     {
       ...options,
-      enabled: !!eventId,
+      enabled: !!eventId && (options.enabled ?? true),
     }
   );
 };
