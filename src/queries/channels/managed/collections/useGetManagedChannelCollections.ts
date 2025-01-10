@@ -92,6 +92,6 @@ export const useGetManagedChannelCollections = (
     (params: InfiniteQueryParams) =>
       GetManagedChannelCollections({ channelId, ...params }),
     params,
-    options
+    { ...options, enabled: !!channelId && (options?.enabled ?? true) }
   );
 };

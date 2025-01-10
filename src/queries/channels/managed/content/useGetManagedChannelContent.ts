@@ -58,7 +58,7 @@ export const useGetManagedChannelContent = (
       GetManagedChannelContent({ contentId, channelId, ...params }),
     {
       ...options,
-      enabled: !!channelId && !!contentId && options.enabled,
+      enabled: !!channelId && !!contentId && (options?.enabled ?? true),
     }
   );
 };
