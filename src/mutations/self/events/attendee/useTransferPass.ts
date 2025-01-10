@@ -24,7 +24,7 @@ export const TransferPass = async ({
 }: TransferPassParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/passes/${passId}/transfer`,
+    `/self/events/${eventId}/attendee/passes/${passId}/transfer`,
     {
       receiverId,
     }
