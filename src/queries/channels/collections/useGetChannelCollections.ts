@@ -88,6 +88,6 @@ export const useGetChannelCollections = (
     (params: InfiniteQueryParams) =>
       GetChannelCollections({ channelId, ...params }),
     params,
-    { ...options, enabled: !!channelId && (options.enabled ?? true) }
+    { ...options, enabled: !!channelId && (options?.enabled ?? true) }
   );
 };

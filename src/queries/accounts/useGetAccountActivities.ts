@@ -87,7 +87,7 @@ export const useGetAccountActivities = (
     params,
     {
       ...options,
-      enabled: !!accountId && (options.enabled ?? true),
+      enabled: !!accountId && (options?.enabled ?? true),
     }
   );
 };
