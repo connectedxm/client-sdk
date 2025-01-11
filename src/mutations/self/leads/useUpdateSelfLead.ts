@@ -4,7 +4,12 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../useConnectedMutation";
 import { Lead, ConnectedXMResponse } from "@src/interfaces";
-import { SELF_LEAD_QUERY_KEY, SELF_LEADS_QUERY_KEY } from "@src/queries";
+import {
+  GetBaseSingleQueryKeys,
+  SELF_LEAD_COUNTS_QUERY_KEY,
+  SELF_LEAD_QUERY_KEY,
+  SELF_LEADS_QUERY_KEY,
+} from "@src/queries";
 
 export interface UpdateSelfLeadParams extends MutationParams {
   leadId: string;
@@ -27,10 +32,18 @@ export const UpdateSelfLead = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.invalidateQueries({ queryKey: SELF_LEADS_QUERY_KEY() });
-    queryClient.invalidateQueries({
-      queryKey: SELF_LEAD_QUERY_KEY(leadId),
-    });
+    if (lead.status) {
+      queryClient.invalidateQueries({ queryKey: SELF_LEADS_QUERY_KEY() });
+      queryClient.invalidateQueries({ queryKey: SELF_LEAD_COUNTS_QUERY_KEY() });
+    }
+
+    queryClient.setQueryData(
+      [
+        ...SELF_LEAD_QUERY_KEY(leadId),
+        ...GetBaseSingleQueryKeys(clientApiParams.locale),
+      ],
+      data
+    );
   }
 
   return data;
