@@ -20,7 +20,7 @@ export const AddFreePassAddOns = async ({
 }: AddFreePassAddOnsParams): Promise<ConnectedXMResponse<Pass>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Pass>>(
-    `/self/events/${eventId}/registration/passes/${passId}/addOns/free`,
+    `/self/events/${eventId}/attendee/passes/${passId}/addOns/free`,
     {
       addOnIds,
     }

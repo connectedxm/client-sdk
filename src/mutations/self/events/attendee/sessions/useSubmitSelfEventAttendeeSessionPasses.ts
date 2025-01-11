@@ -31,7 +31,7 @@ export const SubmitSelfEventRegistrationSessionPasses = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/self/events/${eventId}/registration/sessions/${sessionId}/submit`,
+    `/self/events/${eventId}/attendee/sessions/${sessionId}/submit`,
     sessionPasses
   );
 
