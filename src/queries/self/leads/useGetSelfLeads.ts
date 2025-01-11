@@ -1,4 +1,4 @@
-import type { Lead, ConnectedXMResponse } from "@interfaces";
+import type { Lead, ConnectedXMResponse, LeadStatus } from "@interfaces";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -12,14 +12,22 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 import { SELF_LEAD_QUERY_KEY } from "./useGetSelfLead";
 
-export const SELF_LEADS_QUERY_KEY = (): QueryKey => [
-  ...SELF_QUERY_KEY(),
-  "LEADS",
-];
+export const SELF_LEADS_QUERY_KEY = (
+  status?: keyof typeof LeadStatus
+): QueryKey => {
+  const key = [...SELF_QUERY_KEY(), "LEADS"];
+  if (status) {
+    key.push(status);
+  }
+  return key;
+};
 
-export interface GetSelfLeadsProps extends InfiniteQueryParams {}
+export interface GetSelfLeadsProps extends InfiniteQueryParams {
+  status?: keyof typeof LeadStatus;
+}
 
 export const GetSelfLeads = async ({
+  status,
   pageParam,
   pageSize,
   orderBy,
@@ -32,6 +40,7 @@ export const GetSelfLeads = async ({
 
   const { data } = await clientApi.get(`/self/leads`, {
     params: {
+      status: status || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
@@ -52,6 +61,7 @@ export const GetSelfLeads = async ({
 };
 
 export const useGetSelfLeads = (
+  status?: keyof typeof LeadStatus,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -61,8 +71,8 @@ export const useGetSelfLeads = (
   const { authenticated } = useConnectedXM();
 
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetSelfLeads>>>(
-    SELF_LEADS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetSelfLeads({ ...params }),
+    SELF_LEADS_QUERY_KEY(status),
+    (params: InfiniteQueryParams) => GetSelfLeads({ ...params, status }),
     params,
     {
       ...options,
