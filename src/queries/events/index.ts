@@ -15,3 +15,8 @@ export * from "./useGetEventSpeaker";
 export * from "./useGetEventSpeakers";
 export * from "./useGetEventSponsors";
 export * from "./useGetFeaturedEvents";
+export * from "./useGetEventActivation";
+export * from "./useGetEventActivationCompletions";
+export * from "./useGetEventActivations";
+export * from "./useGetEventActivationsLeaderboard";
+export * from "./useGetEventActivationSummary";

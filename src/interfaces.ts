@@ -405,6 +405,7 @@ export interface Event extends BaseEvent {
   faqSections: BaseFaqSection[];
   reservationDescription: string | null;
   _count: {
+    activations: number;
     sessions: number;
     speakers: number;
     sponsors: number;
