@@ -4,6 +4,10 @@ import useConnectedMutation, {
   MutationOptions,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { EVENT_ACTIVATION_QUERY_KEY } from "@src/queries/events/useGetEventActivation";
+import { EVENT_ACTIVATION_COMPLETIONS_QUERY_KEY } from "@src/queries/events/useGetEventActivationCompletions";
+import { EVENT_ACTIVATION_SUMMARY_QUERY_KEY } from "@src/queries/events/useGetEventActivationSummary";
+import { EVENT_ACTIVATIONS_QUERY_KEY } from "@src/queries";
 
 export interface CompleteEventActivationParams extends MutationParams {
   eventId: string;
@@ -29,16 +33,18 @@ export const CompleteEventActivation = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    // TODO: QUERIES NEED TO BE ADDED
-    // queryClient.invalidateQueries({
-    //   queryKey: EVENT_ACTIVATION_QUERY_KEY(eventId, activationId),
-    // });
-    // queryClient.invalidateQueries([
-    //   EVENT_ACTIVATION_COMPLETIONS,
-    //   eventId,
-    //   activationId,
-    // ]);
-    // queryClient.invalidateQueries([EVENT_ACTIVATIONS_SUMMARY, eventId]);
+    queryClient.invalidateQueries({
+      queryKey: EVENT_ACTIVATION_SUMMARY_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_ACTIVATION_QUERY_KEY(eventId, activationId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_ACTIVATIONS_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: EVENT_ACTIVATION_COMPLETIONS_QUERY_KEY(eventId, activationId),
+    });
   }
 
   return data;
