@@ -2199,6 +2199,7 @@ export interface OrganizationConfig {
     CONNECTION_ID: string | null;
   };
   INTEGRATIONS: Integration[];
+  GOOGLE_SERVICES: string;
 }
 export interface OrganizationModule {
   requireAuth: boolean;
