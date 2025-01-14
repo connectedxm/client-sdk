@@ -172,7 +172,6 @@ export interface BaseAccount {
   title: string | null;
   company: string | null;
   image: BaseImage | null;
-  chatConnected: boolean;
   accountTiers: BaseAccountTier[];
   subscriptions: {
     subscriptionProduct: {
