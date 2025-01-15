@@ -644,7 +644,6 @@ export interface BasePass {
   location: string | null;
   usedAt: string | null;
   status: PurchaseStatus;
-  eventId: string;
   attendeeId: string;
   attendee: BaseRegistration;
   ticketId: string;
@@ -667,7 +666,7 @@ export interface Pass extends BasePass {
 }
 
 export interface ListingPass extends BasePass {
-  registration: BaseRegistration & {
+  attendee: BaseRegistration & {
     account: BaseAccount & { email: string | null; phone: string | null };
   };
   updatedAt: string;
