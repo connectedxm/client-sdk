@@ -644,8 +644,9 @@ export interface BasePass {
   location: string | null;
   usedAt: string | null;
   status: PurchaseStatus;
-  registrationId: string;
-  registration: BaseRegistration;
+  eventId: string;
+  attendeeId: string;
+  attendee: BaseRegistration;
   ticketId: string;
   ticket: BasePassType;
   addOns: BaseEventAddOn[];
@@ -1392,7 +1393,7 @@ interface BaseRegistration {
 export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
-  purchases: BasePass[];
+  passes: BasePass[];
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
@@ -1403,7 +1404,7 @@ export interface ListingRegistration extends BaseRegistration {
   account: BaseAccount & { email: string | null; phone: string | null };
   couponId: string | null;
   coupon: BaseCoupon | null;
-  purchases: BasePass[];
+  passes: BasePass[];
   payments: Payment[];
   createdAt: string;
 }
