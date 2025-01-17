@@ -1,4 +1,5 @@
 export * from "./useGetAccount";
+export * from "./useGetAccountFollowStats";
 export * from "./useGetAccountActivities";
 export * from "./useGetAccountByShareCode";
 export * from "./useGetAccountGroups";

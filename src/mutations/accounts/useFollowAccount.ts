@@ -3,12 +3,13 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import {
+  ACCOUNT_FOLLOW_STATS_QUERY_KEY,
   ACCOUNT_FOLLOWERS_QUERY_KEY,
-  SET_ACCOUNT_QUERY_DATA,
 } from "@src/queries";
 import { Account, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
+import { produce } from "immer";
 
 export interface FollowAccountParams extends MutationParams {
   accountId: string;
@@ -25,12 +26,27 @@ export const FollowAccount = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.id], data, [
-      clientApiParams.locale,
-    ]);
-    SET_ACCOUNT_QUERY_DATA(queryClient, [data.data.username], data, [
-      clientApiParams.locale,
-    ]);
+    queryClient.setQueryData(
+      [...ACCOUNT_FOLLOW_STATS_QUERY_KEY(data.data.id), clientApiParams.locale],
+      (prev: ConnectedXMResponse<{ followers: number; following: number }>) =>
+        produce(prev, (data) => {
+          if (data?.data) {
+            data.data.followers = data.data.followers + 1;
+          }
+        })
+    );
+    queryClient.setQueryData(
+      [
+        ...ACCOUNT_FOLLOW_STATS_QUERY_KEY(data.data.username),
+        clientApiParams.locale,
+      ],
+      (prev: ConnectedXMResponse<{ followers: number; following: number }>) =>
+        produce(prev, (data) => {
+          if (data?.data) {
+            data.data.followers = data.data.followers + 1;
+          }
+        })
+    );
     queryClient.invalidateQueries({
       queryKey: ACCOUNT_FOLLOWERS_QUERY_KEY(data.data.id),
     });
