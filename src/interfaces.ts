@@ -194,16 +194,12 @@ export interface Account extends BaseAccount {
   video: string | null;
   timezone: string | null;
   createdAt: string;
-  _count: {
-    followers: number;
-    following: number;
-  };
 }
 
 export const isTypeAccount = (
   account: BaseAccount | Account
 ): account is Account => {
-  return (account as Omit<Account, keyof BaseAccount>)._count !== undefined;
+  return (account as Omit<Account, keyof BaseAccount>).bio !== undefined;
 };
 
 export interface SelfRelationships {
