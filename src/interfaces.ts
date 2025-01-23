@@ -573,6 +573,7 @@ export enum TicketEventAccessLevel {
 export interface BasePassType {
   id: string;
   slug: string;
+  cancelable: boolean;
   transferable: boolean;
   name: string;
   shortDescription: string;
