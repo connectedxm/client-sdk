@@ -2274,6 +2274,7 @@ export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
 export interface BaseEventRoomTypePassTypeDetails {
   id: string;
   passTypeId: string;
+  passType: BasePassType;
   enabled: boolean;
   premium: number;
   includedNights: number;
