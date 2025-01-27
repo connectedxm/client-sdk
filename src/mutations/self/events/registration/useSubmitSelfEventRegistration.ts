@@ -10,38 +10,12 @@ import {
 import { GetClientAPI } from "@src/ClientAPI";
 import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
-interface SubmitStripe {
-  type: "stripe";
-  paymentMethodId: string;
-}
-
-interface SubmitPaypal {
-  type: "paypal";
-  orderId: string;
-}
-
-export type SubmitPayment = SubmitStripe | SubmitPaypal;
-
-export interface SubmitStripeResponse {
-  status: string;
-  clientSecret: string;
-  registration: Registration;
-}
-
-export interface SubmitPaypalResponse {
-  registration: Registration;
-}
-
-export type SubmitResponse = SubmitStripeResponse | SubmitPaypalResponse;
-
 export interface SubmitSelfEventRegistrationParams extends MutationParams {
   eventId: string;
-  payment?: SubmitPayment;
 }
 
 export const SubmitSelfEventRegistration = async ({
   eventId,
-  payment,
   clientApiParams,
   queryClient,
 }: SubmitSelfEventRegistrationParams): Promise<
@@ -49,8 +23,7 @@ export const SubmitSelfEventRegistration = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/submit`,
-    payment
+    `/self/events/${eventId}/registration/submit`
   );
 
   if (queryClient && data.status === "ok") {
