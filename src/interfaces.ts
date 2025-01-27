@@ -2124,6 +2124,7 @@ export enum OrganizationModuleType {
 export enum PaymentIntegrationType {
   stripe = "stripe",
   paypal = "paypal",
+  braintree = "braintree",
 }
 
 export interface OrganizationConfig {
