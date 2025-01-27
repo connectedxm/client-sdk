@@ -8,16 +8,25 @@ import { ADD_SELF_RELATIONSHIP, INVOICE_QUERY_KEY } from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
   intent: PaymentIntent;
+  paymentDetails?: {
+    nonce: string;
+    deviceData?: string;
+  };
 }
 
 export const CapturePaymentIntent = async ({
   intent,
+  paymentDetails,
   clientApiParams,
   queryClient,
 }: CapturePaymentIntentParams): Promise<ConnectedXMResponse<Activity>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
-    `/organization/intents/${intent.id}/capture`
+    `/organization/intents/${intent.id}/capture`,
+    {
+      nonce: paymentDetails?.nonce || undefined,
+      deviceData: paymentDetails?.deviceData || undefined,
+    }
   );
 
   if (queryClient && data.status === "ok") {
