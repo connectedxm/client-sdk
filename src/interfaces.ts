@@ -645,7 +645,7 @@ export interface BasePass {
   attendee: BaseRegistration;
   ticketId: string;
   ticket: BasePassType;
-  addOns: BaseEventAddOn[];
+  passAddOns: PassAddOn[];
   reservationId: string | null;
   reservation: BaseEventRoomTypeReservation | null;
   responses: BaseRegistrationQuestionResponse[];
@@ -660,6 +660,11 @@ export interface Pass extends BasePass {
   amtPaid: number;
   amtRefunded: number;
   payerId: string | null;
+}
+
+export interface PassAddOn {
+  addOnId: string;
+  addOn: BaseEventAddOn;
 }
 
 export interface ListingPass extends BasePass {
