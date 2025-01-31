@@ -665,8 +665,6 @@ export interface Pass extends BasePass {
 export interface PassAddOn {
   addOnId: string;
   addOn: BaseEventAddOn;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface ListingPass extends BasePass {
