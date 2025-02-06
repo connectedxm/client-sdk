@@ -27,6 +27,11 @@ export const RemoveSelfEventRegistrationCoupon = async ({
     queryClient.removeQueries({
       queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
     });
+    queryClient.invalidateQueries({
+      predicate: ({ queryKey }) => {
+        return queryKey.includes("INTENT");
+      },
+    });
   }
 
   return data;
