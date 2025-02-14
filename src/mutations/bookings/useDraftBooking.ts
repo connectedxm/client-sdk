@@ -2,26 +2,36 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { Account, ConnectedXMResponse } from "@src/interfaces";
+import { Booking, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { BOOKINGS_QUERY_KEY } from "@src/queries";
 
 export interface DraftBookingParams extends MutationParams {
   placeId: string;
   spaceId: string;
-  start: string;
+  day: string;
+  time: string;
 }
 
 export const DraftBooking = async ({
   placeId,
   spaceId,
-  start,
+  day,
+  time,
+  queryClient,
   clientApiParams,
-}: DraftBookingParams): Promise<ConnectedXMResponse<Account>> => {
+}: DraftBookingParams): Promise<ConnectedXMResponse<Booking>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<Booking>>(
     `/bookings/places/${placeId}/spaces/${spaceId}/slots`,
-    { start }
+    { day, time }
   );
+
+  if (data.status === "ok" && queryClient) {
+    queryClient.invalidateQueries({
+      queryKey: BOOKINGS_QUERY_KEY(),
+    });
+  }
 
   return data;
 };

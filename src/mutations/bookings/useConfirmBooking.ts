@@ -2,7 +2,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { Account, ConnectedXMResponse } from "@src/interfaces";
+import { Booking, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { BOOKINGS_QUERY_KEY } from "@src/queries/bookings/useGetBookings";
 import { BOOKING_QUERY_KEY } from "@src/queries/bookings/useGetBooking";
@@ -15,9 +15,9 @@ export const ConfirmBooking = async ({
   bookingId,
   clientApiParams,
   queryClient,
-}: ConfirmBookingParams): Promise<ConnectedXMResponse<Account>> => {
+}: ConfirmBookingParams): Promise<ConnectedXMResponse<Booking>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<Booking>>(
     `/bookings/${bookingId}`
   );
 

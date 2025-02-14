@@ -2124,6 +2124,7 @@ export enum OrganizationModuleType {
   subscriptions = "subscriptions",
   invoices = "invoices",
   announcements = "announcements",
+  bookings = "bookings",
 }
 
 export enum PaymentIntegrationType {
@@ -2388,7 +2389,9 @@ export interface BookingSpaceBlackout extends BaseBookingSpaceBlackout {
 
 export interface BaseBooking {
   id: string;
-  start: string;
+  day: string;
+  time: string;
+  duration: number;
   status: string;
 }
 
@@ -2403,7 +2406,7 @@ export interface BookingDaySlots {
 }
 
 export interface BookingSpaceSlot {
-  start: string;
+  time: string;
   blackout: boolean;
   supply: number | null;
 }
