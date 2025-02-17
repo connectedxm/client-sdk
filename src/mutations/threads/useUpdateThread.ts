@@ -2,6 +2,7 @@ import {
   Thread,
   ThreadAccessLevel,
   ConnectedXMResponse,
+  ThreadStatus,
 } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
@@ -20,6 +21,7 @@ interface UpdateThread {
   eventId?: string;
   groupId?: string;
   access?: keyof typeof ThreadAccessLevel;
+  status?: keyof typeof ThreadStatus;
 }
 
 export interface UpdateThreadParams extends MutationParams {
