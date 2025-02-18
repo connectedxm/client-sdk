@@ -2286,6 +2286,7 @@ export interface BookingPlace extends BaseBookingPlace {
   city: string | null;
   state: string | null;
   zip: string | null;
+  country: string | null;
   createdAt: string | null;
   updatedAt: string | null;
 }
@@ -2299,11 +2300,11 @@ export interface BaseBookingSpace {
   price: number;
   description: string | null;
   image: BaseImage | null;
-  start: string | null;
-  end: string | null;
 }
 
 export interface BookingSpace extends BaseBookingSpace {
+  start: string | null;
+  end: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -2342,6 +2343,7 @@ export interface BookingSpaceBlackout extends BaseBookingSpaceBlackout {
 
 export interface BaseBooking {
   id: string;
+  alternateId: number;
   day: string;
   time: string;
   duration: number;
@@ -2349,6 +2351,8 @@ export interface BaseBooking {
 }
 
 export interface Booking extends BaseBooking {
+  space: BaseBookingSpace;
+  place: BaseBookingPlace;
   createdAt: string;
   updatedAt: string;
 }

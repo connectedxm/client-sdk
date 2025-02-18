@@ -12,7 +12,19 @@ import { BOOKING_QUERY_KEY } from "./useGetBooking";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const BOOKINGS_QUERY_KEY = (): QueryKey => ["BOOKINGS"];
+export const BOOKINGS_QUERY_KEY = (
+  past?: boolean,
+  placeId?: string
+): QueryKey => {
+  const keys = ["BOOKINGS"];
+  if (typeof past !== "undefined") {
+    keys.push(past ? "PAST" : "UPCOMING");
+  }
+  if (placeId) {
+    keys.push(placeId);
+  }
+  return keys;
+};
 
 export const SET_BOOKINGS_QUERY_DATA = (
   client: QueryClient,
@@ -29,13 +41,18 @@ export const SET_BOOKINGS_QUERY_DATA = (
   );
 };
 
-export interface GetBookingsParams extends InfiniteQueryParams {}
+export interface GetBookingsParams extends InfiniteQueryParams {
+  past?: boolean;
+  placeId?: string;
+}
 
 export const GetBookings = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
+  past,
+  placeId,
   queryClient,
   clientApiParams,
   locale,
@@ -47,6 +64,8 @@ export const GetBookings = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      past: past !== undefined ? past : undefined,
+      placeId: placeId || undefined,
     },
   });
   if (queryClient && data.status === "ok") {
@@ -61,6 +80,8 @@ export const GetBookings = async ({
 };
 
 export const useGetBookings = (
+  past: boolean = false,
+  placeId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -68,8 +89,8 @@ export const useGetBookings = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetBookings>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetBookings>>>(
-    BOOKINGS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetBookings({ ...params }),
+    BOOKINGS_QUERY_KEY(past, placeId),
+    (params: InfiniteQueryParams) => GetBookings({ past, placeId, ...params }),
     params,
     options
   );
