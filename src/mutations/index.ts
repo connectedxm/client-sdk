@@ -1,5 +1,6 @@
 export * from "./accounts";
 export * from "./activities";
+export * from "./bookings";
 export * from "./channels";
 export * from "./events";
 export * from "./organization";

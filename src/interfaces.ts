@@ -2124,6 +2124,7 @@ export enum OrganizationModuleType {
   subscriptions = "subscriptions",
   invoices = "invoices",
   announcements = "announcements",
+  bookings = "bookings",
 }
 
 export enum PaymentIntegrationType {
@@ -2315,4 +2316,101 @@ export interface EventRoomTypeAddOnDetails
   extends BaseEventRoomTypeAddOnDetails {
   createdAt: string;
   updatedAt: string;
+}
+
+export interface BaseBookingPlace {
+  id: string;
+  name: string;
+  slug: string;
+  timezone: string;
+  description: string | null;
+  image: BaseImage | null;
+}
+
+export interface BookingPlace extends BaseBookingPlace {
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  country: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface BaseBookingSpace {
+  id: string;
+  name: string;
+  slug: string;
+  supply: number;
+  slotDuration: number;
+  price: number;
+  description: string | null;
+  image: BaseImage | null;
+}
+
+export interface BookingSpace extends BaseBookingSpace {
+  start: string | null;
+  end: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export enum DayOfWeek {
+  sunday = "sunday",
+  monday = "monday",
+  tuesday = "tuesday",
+  wednesday = "wednesday",
+  thursday = "thursday",
+  friday = "friday",
+  saturday = "saturday",
+}
+export interface BaseBookingSpaceAvailability {
+  id: string;
+  dayOfWeek: DayOfWeek;
+  startTime: string;
+  endTime: string;
+}
+
+export interface BookingSpaceAvailability extends BaseBookingSpaceAvailability {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseBookingSpaceBlackout {
+  id: string;
+  start: string;
+  end: string;
+}
+
+export interface BookingSpaceBlackout extends BaseBookingSpaceBlackout {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseBooking {
+  id: string;
+  alternateId: number;
+  day: string;
+  time: string;
+  duration: number;
+  status: string;
+}
+
+export interface Booking extends BaseBooking {
+  space: BaseBookingSpace;
+  place: BaseBookingPlace;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookingDaySlots {
+  day: string;
+  slots: BookingSpaceSlot[];
+}
+
+export interface BookingSpaceSlot {
+  time: string;
+  blackout: boolean;
+  supply: number | null;
 }
