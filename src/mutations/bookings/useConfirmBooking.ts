@@ -26,6 +26,9 @@ export const ConfirmBooking = async ({
     queryClient.invalidateQueries({
       queryKey: BOOKINGS_QUERY_KEY(),
     });
+    queryClient.invalidateQueries({
+      predicate: ({ queryKey }) => queryKey.includes("SLOTS"),
+    });
   }
 
   return data;

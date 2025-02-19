@@ -1941,6 +1941,7 @@ export interface BasePaymentIntent {
   eventId: string | null;
   registrationId: string | null;
   invoiceId: string | null;
+  bookingId: string | null;
   salesTax: number;
   salesTaxRate: number;
   country: string;
@@ -1954,8 +1955,9 @@ export interface PaymentIntent extends BasePaymentIntent {
     type: string;
   };
   account: BaseAccount;
-  registration: BaseRegistration;
-  invoice: BaseInvoice;
+  registration: BaseRegistration | null;
+  invoice: BaseInvoice | null;
+  booking: BaseBooking | null;
 }
 export interface BaseFile {
   id: number;
@@ -2411,6 +2413,5 @@ export interface BookingDaySlots {
 
 export interface BookingSpaceSlot {
   time: string;
-  blackout: boolean;
   supply: number | null;
 }
