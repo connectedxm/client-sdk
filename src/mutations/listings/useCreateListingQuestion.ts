@@ -14,7 +14,7 @@ export interface CreateListingQuestionParams extends MutationParams {
     required: boolean;
     mutable: boolean;
     choices: {
-      id: number | null;
+      id: string | null;
       value: string;
     }[];
   };

@@ -15,7 +15,7 @@ export interface UpdateSelfEventAttendeePassResponsesParams
   eventId: string;
   passId: string;
   questions: {
-    id: number;
+    id: string;
     value: string;
   }[];
 }
