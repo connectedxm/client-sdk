@@ -218,10 +218,8 @@ export interface Self extends Omit<Account, "_count"> {
   phone: string | null;
   dietaryRestrictions: string | null;
   shareCode: string;
-  chatToken?: string;
   locale: string;
   _count: {
-    chatChannels: number;
     notifications: number;
   };
 }
@@ -1236,7 +1234,6 @@ export interface GroupMembership extends BaseGroupMembership {
   announcementPushNotification: boolean;
   eventEmailNotification: boolean;
   eventPushNotification: boolean;
-  chatPushNotification: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -1488,9 +1485,6 @@ export interface NotificationPreferences {
   transferPush: boolean;
   transferEmail: boolean;
   supportTicketConfirmationEmail: boolean;
-  chatPush: boolean;
-  chatUnreadPush: boolean;
-  chatUnreadEmail: boolean;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
   groupAnnouncementEmail: boolean;
@@ -1668,47 +1662,6 @@ export interface StreamInput {
   connected: boolean;
 }
 
-export interface BaseChatChannel {
-  id: number;
-  name: string | null;
-  image: BaseImage | null;
-  lastMessageAt: string | null;
-}
-export interface ChatChannel extends BaseChatChannel {
-  messages: BaseChatChannelMessage[]; // MOST RECENT 1 MESSAGES
-  members: BaseChatChannelMember[]; // Up to 5 members will be returned
-  _count: {
-    members: number;
-  };
-}
-
-export interface BaseChatChannelMessage {
-  id: number;
-  text: string;
-  html: string;
-  type: "user" | "system";
-  accountId: string;
-  account: BaseAccount | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ChatChannelMessage extends BaseChatChannelMessage {}
-
-export interface BaseChatChannelMember {
-  accountId: string;
-  account: BaseAccount;
-  role: "moderator" | "member";
-  read: boolean;
-  notifications: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ChatChannelMember extends BaseChatChannelMember {
-  channelId: number;
-  channel: ChatChannel;
-}
 export interface BaseSeries {
   id: string;
   sortOrder: number;
@@ -2002,7 +1955,6 @@ export interface ThreadMessageReaction extends BaseThreadMessageReaction {
 
 export interface BaseThreadMessage {
   id: string;
-  threadId: string;
   body: string;
   sentAt: string;
   account: BaseAccount;
@@ -2018,15 +1970,11 @@ export interface ThreadMessage extends BaseThreadMessage {
 }
 
 export interface BaseThreadMember {
-  accountId: string;
   account: BaseAccount;
   role: ThreadMemberRole;
 }
 
-export interface ThreadMember extends BaseThreadMember {
-  createdAt: string;
-  updatedAt: string;
-}
+export interface ThreadMember extends BaseThreadMember {}
 
 export interface BaseThread {
   id: string;
@@ -2039,8 +1987,7 @@ export interface BaseThread {
 }
 
 export interface Thread extends BaseThread {
-  group: BaseGroup | null;
-  event: BaseEvent | null;
+  groups: BaseGroup[];
   members: ThreadMember[]; // Up to 5 members will be returned
   createdAt: string;
   _count: {
