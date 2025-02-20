@@ -445,7 +445,7 @@ export enum RegistrationQuestionType {
 }
 
 export interface BaseRegistrationQuestion {
-  id: number;
+  id: string;
   eventId: string;
   featured: boolean;
   type: RegistrationQuestionType;
@@ -467,7 +467,7 @@ export interface BaseRegistrationQuestion {
 export interface RegistrationQuestion extends BaseRegistrationQuestion {}
 
 export const isRegistrationQuestion = (
-  question: RegistrationQuestion | { questionId: number }
+  question: RegistrationQuestion | { questionId: string }
 ): question is RegistrationQuestion => {
   return (
     (question as Omit<RegistrationQuestion, "questionId">).name !== undefined
@@ -475,13 +475,13 @@ export const isRegistrationQuestion = (
 };
 
 export interface BaseRegistrationQuestionChoice {
-  id: number;
+  id: string;
   value: string;
   text: string | null;
   supply: number | null;
   description: string | null;
   sortOrder: number;
-  subQuestions: RegistrationQuestion[] | { questionId: number }[];
+  subQuestions: RegistrationQuestion[] | { questionId: string }[];
 }
 
 export interface RegistrationQuestionChoice
@@ -496,7 +496,7 @@ export interface RegistrationQuestionSearchValue
   extends BaseRegistrationQuestionSearchValue {}
 
 export interface BaseRegistrationQuestionResponse {
-  questionId: number;
+  questionId: string;
   question: BaseRegistrationQuestion;
   value: string;
 }
@@ -510,7 +510,7 @@ export interface RegistrationQuestionResponse
 }
 
 export interface BaseRegistrationSection {
-  id: number;
+  id: string;
   name: string;
   description: string | null;
   sortOrder: number;

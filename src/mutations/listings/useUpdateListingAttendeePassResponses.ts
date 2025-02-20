@@ -19,7 +19,7 @@ export interface UpdateListingRegistrationPassResponsesParams
   accountId: string;
   passId: string;
   questions: {
-    id: number;
+    id: string;
     value: string;
   }[];
 }
