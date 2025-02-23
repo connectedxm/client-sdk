@@ -319,7 +319,7 @@ export interface BaseGroup {
   name: string;
   image: BaseImage | null;
   access: GroupAccess;
-  lastThreadAt: string | null;
+  lastThreadMessageAt: string | null;
 }
 
 export interface Group extends BaseGroup {
@@ -1953,7 +1953,7 @@ export interface BaseThread {
   subject: string;
   image: BaseImage | null;
   lastMessageAt: string | null;
-  lastMessage: BaseThreadMessage;
+  lastMessage: string | null;
 }
 
 export interface Thread extends BaseThread {}
