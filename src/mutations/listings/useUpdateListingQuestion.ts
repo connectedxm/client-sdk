@@ -15,7 +15,7 @@ export interface UpdateListingQuestionParams extends MutationParams {
     mutable: boolean;
     sortOrder?: number;
     choices: {
-      id: number | null;
+      id: string | null;
       value: string;
     }[];
   };

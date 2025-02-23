@@ -1,36 +1,28 @@
-import {
-  Thread,
-  ThreadAccessLevel,
-  ConnectedXMResponse,
-} from "@src/interfaces";
+import { Thread, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
 
-import { THREADS_QUERY_KEY, SET_THREAD_QUERY_DATA } from "@src/queries";
+import { SET_THREAD_QUERY_DATA, PRIVATE_THREADS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 interface CreateThread {
-  name: string;
-  description?: string;
   imageId?: string;
-  eventId?: string;
-  groupId?: string;
-  featured?: boolean;
-  access: keyof typeof ThreadAccessLevel;
 }
 
 export interface CreateThreadParams extends MutationParams {
   thread: CreateThread;
   accountIds: string[];
-  firstMessage: string;
+  groupIds: string[];
+  message: string;
 }
 
 export const CreateThread = async ({
   thread,
   accountIds,
-  firstMessage,
+  groupIds,
+  message,
   clientApiParams,
   queryClient,
 }: CreateThreadParams): Promise<ConnectedXMResponse<Thread>> => {
@@ -40,14 +32,15 @@ export const CreateThread = async ({
     {
       thread,
       accountIds,
-      firstMessage,
+      groupIds,
+      message,
     }
   );
 
   if (queryClient && data.status === "ok") {
     SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
     queryClient.invalidateQueries({
-      queryKey: THREADS_QUERY_KEY(),
+      queryKey: PRIVATE_THREADS_QUERY_KEY(),
     });
   }
 

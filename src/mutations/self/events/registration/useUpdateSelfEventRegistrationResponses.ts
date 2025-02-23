@@ -11,7 +11,7 @@ export interface UpdateSelfEventRegistrationResponsesParams
   eventId: string;
   passes: {
     id: string;
-    responses: { questionId: number; value: string }[];
+    responses: { questionId: string; value: string }[];
   }[];
 }
 

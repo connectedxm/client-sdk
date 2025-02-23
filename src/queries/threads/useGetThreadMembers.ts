@@ -5,7 +5,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { ThreadMember, ThreadMemberRole } from "@interfaces";
+import { BaseGroup, ThreadMember, ThreadMemberRole } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { THREAD_QUERY_KEY } from "./useGetThread";
 import { ConnectedXMResponse } from "@interfaces";
@@ -52,7 +52,12 @@ export const GetThreadMembers = async ({
   role,
   threadId,
   clientApiParams,
-}: GetThreadMembersProps): Promise<ConnectedXMResponse<ThreadMember[]>> => {
+}: GetThreadMembersProps): Promise<
+  ConnectedXMResponse<{
+    members: ThreadMember[];
+    groups: BaseGroup[];
+  }>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/threads/${threadId}/members`, {
     params: {

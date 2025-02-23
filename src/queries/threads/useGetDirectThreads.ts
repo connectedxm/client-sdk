@@ -12,59 +12,39 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { CacheIndividualQueries } from "@src/utilities";
 import { THREAD_QUERY_KEY } from "./useGetThread";
 
-export const THREADS_QUERY_KEY = (
-  access?: "public" | "private",
-  groupId?: string
-): QueryKey => {
-  const keys = ["THREADS"];
-  if (access) keys.push(access);
-  if (groupId) keys.push(groupId);
-  return keys;
+export const DIRECT_THREADS_QUERY_KEY = (): QueryKey => {
+  return ["DIRECT_THREADS"];
 };
 
-export const SET_THREADS_QUERY_DATA = (
+export const SET_DIRECT_THREADS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof THREADS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetThreads>>,
+  response: Awaited<ReturnType<typeof GetDirectThreads>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
-    [
-      ...THREADS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
+    [...DIRECT_THREADS_QUERY_KEY(), ...GetBaseInfiniteQueryKeys(...baseKeys)],
     setFirstPageData(response)
   );
 };
 
-export interface GetThreadsProps extends InfiniteQueryParams {
-  access?: "public" | "private";
-  groupId?: string;
-  eventId?: string;
-}
+export interface GetDirectThreadsProps extends InfiniteQueryParams {}
 
-export const GetThreads = async ({
+export const GetDirectThreads = async ({
   pageParam,
   pageSize,
   orderBy,
   queryClient,
-  access,
-  groupId,
-  eventId,
   search,
   locale,
   clientApiParams,
-}: GetThreadsProps): Promise<ConnectedXMResponse<Thread[]>> => {
+}: GetDirectThreadsProps): Promise<ConnectedXMResponse<Thread[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/threads`, {
+  const { data } = await clientApi.get(`/threads/direct`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      access: access || undefined,
-      groupId: groupId || undefined,
-      eventId: eventId || undefined,
     },
   });
 
@@ -80,20 +60,20 @@ export const GetThreads = async ({
   return data;
 };
 
-export const useGetThreads = (
-  access: "public" | "private" = "public",
-  groupId?: string,
-  eventId?: string,
+export const useGetDirectThreads = (
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
-  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetThreads>>> = {}
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetDirectThreads>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreads>>>(
-    THREADS_QUERY_KEY(access, groupId),
-    (params: InfiniteQueryParams) =>
-      GetThreads({ access, groupId, eventId, ...params }),
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetDirectThreads>>
+  >(
+    DIRECT_THREADS_QUERY_KEY(),
+    (params: InfiniteQueryParams) => GetDirectThreads({ ...params }),
     params,
     {
       ...options,

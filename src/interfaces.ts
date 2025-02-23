@@ -319,6 +319,7 @@ export interface BaseGroup {
   name: string;
   image: BaseImage | null;
   access: GroupAccess;
+  lastThreadAt: string | null;
 }
 
 export interface Group extends BaseGroup {
@@ -443,7 +444,7 @@ export enum RegistrationQuestionType {
 }
 
 export interface BaseRegistrationQuestion {
-  id: number;
+  id: string;
   eventId: string;
   featured: boolean;
   type: RegistrationQuestionType;
@@ -465,7 +466,7 @@ export interface BaseRegistrationQuestion {
 export interface RegistrationQuestion extends BaseRegistrationQuestion {}
 
 export const isRegistrationQuestion = (
-  question: RegistrationQuestion | { questionId: number }
+  question: RegistrationQuestion | { questionId: string }
 ): question is RegistrationQuestion => {
   return (
     (question as Omit<RegistrationQuestion, "questionId">).name !== undefined
@@ -473,13 +474,13 @@ export const isRegistrationQuestion = (
 };
 
 export interface BaseRegistrationQuestionChoice {
-  id: number;
+  id: string;
   value: string;
   text: string | null;
   supply: number | null;
   description: string | null;
   sortOrder: number;
-  subQuestions: RegistrationQuestion[] | { questionId: number }[];
+  subQuestions: RegistrationQuestion[] | { questionId: string }[];
 }
 
 export interface RegistrationQuestionChoice
@@ -494,7 +495,7 @@ export interface RegistrationQuestionSearchValue
   extends BaseRegistrationQuestionSearchValue {}
 
 export interface BaseRegistrationQuestionResponse {
-  questionId: number;
+  questionId: string;
   question: BaseRegistrationQuestion;
   value: string;
 }
@@ -508,7 +509,7 @@ export interface RegistrationQuestionResponse
 }
 
 export interface BaseRegistrationSection {
-  id: number;
+  id: string;
   name: string;
   description: string | null;
   sortOrder: number;
@@ -1228,6 +1229,7 @@ export interface BaseGroupMembership {
 export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
   following: boolean;
+  lastThreadsReadAt: string | null;
   activityEmailNotification: boolean;
   activityPushNotification: boolean;
   announcementEmailNotification: boolean;
@@ -1894,6 +1896,7 @@ export interface BasePaymentIntent {
   eventId: string | null;
   registrationId: string | null;
   invoiceId: string | null;
+  bookingId: string | null;
   salesTax: number;
   salesTaxRate: number;
   country: string;
@@ -1907,8 +1910,9 @@ export interface PaymentIntent extends BasePaymentIntent {
     type: string;
   };
   account: BaseAccount;
-  registration: BaseRegistration;
-  invoice: BaseInvoice;
+  registration: BaseRegistration | null;
+  invoice: BaseInvoice | null;
+  booking: BaseBooking | null;
 }
 export interface BaseFile {
   id: number;
@@ -1921,9 +1925,10 @@ export interface BaseFile {
 
 export interface File extends BaseFile {}
 
-export enum ThreadAccessLevel {
+export enum ThreadType {
   public = "public",
   private = "private",
+  direct = "direct",
 }
 
 export enum ThreadStatus {
@@ -1943,14 +1948,27 @@ export enum ThreadMessageType {
   system = "system",
 }
 
-export interface BaseThreadMessageReaction {
+export interface BaseThread {
   id: string;
-  emojiName: string;
-  accountId: string;
+  subject: string;
+  image: BaseImage | null;
+  lastMessageAt: string | null;
+  lastMessage: BaseThreadMessage;
 }
-export interface ThreadMessageReaction extends BaseThreadMessageReaction {
+
+export interface Thread extends BaseThread {}
+
+export interface GroupThread extends Thread {
+  joined: boolean; // IF MEMBERS.LENGTH > 0, THEN you have joined the thread.
+}
+
+export interface BaseThreadMember {
+  role: keyof typeof ThreadMemberRole;
   account: BaseAccount;
-  createdAt: string;
+}
+
+export interface ThreadMember extends BaseThreadMember {
+  status: keyof typeof ThreadStatus;
 }
 
 export interface BaseThreadMessage {
@@ -1969,30 +1987,15 @@ export interface ThreadMessage extends BaseThreadMessage {
   };
 }
 
-export interface BaseThreadMember {
-  account: BaseAccount;
-  role: ThreadMemberRole;
-}
-
-export interface ThreadMember extends BaseThreadMember {}
-
-export interface BaseThread {
+export interface BaseThreadMessageReaction {
   id: string;
-  name: string;
-  description: string | null;
-  image: BaseImage | null;
-  status: ThreadStatus;
-  access: ThreadAccessLevel;
-  lastMessageAt: string;
+  accountId: string;
+  emojiName: string;
 }
 
-export interface Thread extends BaseThread {
-  groups: BaseGroup[];
-  members: ThreadMember[]; // Up to 5 members will be returned
+export interface ThreadMessageReaction extends BaseThreadMessageReaction {
+  account: BaseAccount;
   createdAt: string;
-  _count: {
-    members: number;
-  };
 }
 
 export enum DefaultAuthAction {
@@ -2311,6 +2314,5 @@ export interface BookingDaySlots {
 
 export interface BookingSpaceSlot {
   time: string;
-  blackout: boolean;
   supply: number | null;
 }

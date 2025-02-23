@@ -10,7 +10,7 @@ export interface UpdateSelfEventRegistrationPassResponseParams
   extends MutationParams {
   eventId: string;
   passId: string;
-  questionId: number;
+  questionId: string;
   response: string;
 }
 
