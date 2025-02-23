@@ -1973,14 +1973,14 @@ export interface ThreadMember extends BaseThreadMember {
 
 export interface BaseThreadMessage {
   id: string;
+  type: ThreadMessageType;
   body: string;
   sentAt: string;
   account: BaseAccount;
+  editedAt: string | null;
 }
 
 export interface ThreadMessage extends BaseThreadMessage {
-  type: ThreadMessageType;
-  editedAt: string | null;
   reactions: ThreadMessageReaction[];
   _count: {
     replies: number;
