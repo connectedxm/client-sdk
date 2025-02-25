@@ -1,4 +1,6 @@
 export * from "./useGetPrivateThreads";
+export * from "./useGetDirectThreads";
+export * from "./useGetPublicThreads";
 export * from "./useGetThread";
 export * from "./useGetThreadMember";
 export * from "./useGetThreadMembers";

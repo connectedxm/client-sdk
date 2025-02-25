@@ -13,19 +13,19 @@ import { AppendInfiniteQuery } from "@src/utilities";
 
 export interface CreateThreadMessageParams extends MutationParams {
   threadId: string;
-  body: string;
+  message: string;
 }
 
 export const CreateThreadMessage = async ({
   threadId,
-  body,
+  message,
   clientApiParams,
   queryClient,
 }: CreateThreadMessageParams): Promise<ConnectedXMResponse<ThreadMessage>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<ThreadMessage>>(
     `/threads/${threadId}/messages`,
-    { body }
+    { message }
   );
 
   if (queryClient && data.status === "ok") {

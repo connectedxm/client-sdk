@@ -96,7 +96,6 @@ export const useGetThreadMessages = (
       GetThreadMessages({ ...params, threadId }),
     params,
     {
-      refetchInterval: 5 * 1000,
       ...options,
       enabled: !!authenticated && !!threadId && (options?.enabled ?? true),
     }

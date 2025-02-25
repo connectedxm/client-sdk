@@ -5,7 +5,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Thread } from "@interfaces";
+import { Thread, ThreadStatus } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -67,6 +67,7 @@ export const GetPrivateThreads = async ({
 };
 
 export const useGetPrivateThreads = (
+  status?: keyof typeof ThreadStatus,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -78,8 +79,8 @@ export const useGetPrivateThreads = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetPrivateThreads>>
   >(
-    PRIVATE_THREADS_QUERY_KEY(params.status),
-    (params: InfiniteQueryParams) => GetPrivateThreads({ ...params }),
+    PRIVATE_THREADS_QUERY_KEY(status),
+    (params: InfiniteQueryParams) => GetPrivateThreads({ status, ...params }),
     params,
     {
       ...options,
