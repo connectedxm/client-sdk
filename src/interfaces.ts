@@ -651,11 +651,13 @@ export interface BasePass {
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
+  packageId: string | null;
   sessions: BaseSessionPass[];
   createdAt: string;
 }
 
 export interface Pass extends BasePass {
+  package: BaseEventPackage | null;
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
@@ -1395,6 +1397,7 @@ export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   passes: BasePass[];
+  packages: BaseEventPackage[];
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
@@ -2414,4 +2417,46 @@ export interface BookingDaySlots {
 export interface BookingSpaceSlot {
   time: string;
   supply: number | null;
+}
+
+export interface BaseEventPackage {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  isActive: boolean;
+}
+
+export interface EventPackage extends BaseEventPackage {
+  passes: BasePass[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventPackagePass {
+  id: string;
+  passTypeId: string;
+  passType: BasePassType;
+  quantity: number;
+}
+
+export interface EventPackagePass extends BaseEventPackagePass {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseAttendeePackage {
+  id: string;
+  attendeeId: string;
+  packageId: string;
+  package: BaseEventPackage;
+  status: keyof typeof PurchaseStatus;
+  amtPaid: number;
+  amtRefunded: number;
+}
+
+export interface AttendeePackage extends BaseAttendeePackage {
+  passes: BasePass[];
+  createdAt: string;
+  updatedAt: string;
 }
