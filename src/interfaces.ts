@@ -1409,6 +1409,7 @@ export interface ListingRegistration extends BaseRegistration {
   couponId: string | null;
   coupon: BaseCoupon | null;
   passes: BasePass[];
+  packages: BaseAttendeePackage[];
   payments: Payment[];
   createdAt: string;
 }
