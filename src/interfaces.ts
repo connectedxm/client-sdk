@@ -657,7 +657,7 @@ export interface BasePass {
 }
 
 export interface Pass extends BasePass {
-  package: BaseEventPackage | null;
+  package: BaseAttendeePackage | null;
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
