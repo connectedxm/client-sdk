@@ -6,20 +6,15 @@ import useConnectedMutation, {
 
 import { SET_THREAD_QUERY_DATA, PRIVATE_THREADS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface CreateThread {
-  imageId?: string;
-}
-
 export interface CreateThreadParams extends MutationParams {
-  thread: CreateThread;
+  subject: string;
   accountIds: string[];
   groupIds: string[];
   message: string;
 }
 
 export const CreateThread = async ({
-  thread,
+  subject,
   accountIds,
   groupIds,
   message,
@@ -30,7 +25,7 @@ export const CreateThread = async ({
   const { data } = await clientApi.post<ConnectedXMResponse<Thread>>(
     `/threads`,
     {
-      thread,
+      subject,
       accountIds,
       groupIds,
       message,

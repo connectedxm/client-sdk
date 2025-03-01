@@ -14,4 +14,5 @@ export * from "./useGetGroupsFeatured";
 export * from "./useGetGroupsInvited";
 export * from "./useGetGroupsRequested";
 export * from "./useGetAllGroupEvents";
+export * from "./useGetGroupThread";
 export * from "./useGetGroupThreads";

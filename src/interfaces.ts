@@ -1964,6 +1964,7 @@ export interface GroupThread extends Thread {
 
 export interface BaseThreadMember {
   role: keyof typeof ThreadMemberRole;
+  lastReadAt: string | null;
   account: BaseAccount;
 }
 
@@ -1976,7 +1977,7 @@ export interface BaseThreadMessage {
   type: ThreadMessageType;
   body: string;
   sentAt: string;
-  account: BaseAccount;
+  account: BaseAccount | null;
   editedAt: string | null;
 }
 

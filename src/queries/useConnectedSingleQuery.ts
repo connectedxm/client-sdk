@@ -1,4 +1,9 @@
-import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryKey,
+  useQuery,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { useConnectedXM } from "../hooks";
 import { AxiosError } from "axios";
 import { ConnectedXMResponse, CUSTOM_ERROR_CODES } from "..";
@@ -6,6 +11,7 @@ import { ClientApiParams } from "@src/ClientAPI";
 
 export interface SingleQueryParams {
   clientApiParams: ClientApiParams;
+  queryClient?: QueryClient;
 }
 
 export interface SingleQueryOptions<TQueryData = unknown>
@@ -39,6 +45,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     organizationId,
     getToken,
     getExecuteAs,
+    queryClient,
   } = useConnectedXM();
 
   // prettier-ignore
@@ -83,6 +90,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
           getExecuteAs,
           locale,
         },
+        queryClient,
       }),
   });
 };

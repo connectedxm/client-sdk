@@ -16,10 +16,10 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { PRIVATE_THREADS_QUERY_KEY } from "@src/queries";
 
-export const THREAD_QUERY_KEY = (
-  threadId: string,
-  accountId?: string
-): QueryKey => [...PRIVATE_THREADS_QUERY_KEY(), threadId, accountId];
+export const THREAD_QUERY_KEY = (threadId: string): QueryKey => [
+  ...PRIVATE_THREADS_QUERY_KEY(),
+  threadId,
+];
 
 export const SET_THREAD_QUERY_DATA = (
   client: QueryClient,

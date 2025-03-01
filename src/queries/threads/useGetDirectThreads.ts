@@ -5,7 +5,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Thread } from "@interfaces";
+import { BaseThreadMember, Thread } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -37,7 +37,9 @@ export const GetDirectThreads = async ({
   search,
   locale,
   clientApiParams,
-}: GetDirectThreadsProps): Promise<ConnectedXMResponse<Thread[]>> => {
+}: GetDirectThreadsProps): Promise<
+  ConnectedXMResponse<(Thread & { members: BaseThreadMember[] })[]>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/threads/direct`, {
     params: {

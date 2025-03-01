@@ -13,10 +13,10 @@ import { useConnectedXM } from "@src/hooks";
 import { CacheIndividualQueries } from "@src/utilities";
 import { THREAD_MESSAGE_QUERY_KEY } from "./useGetThreadMessage";
 
-export const THREAD_MESSAGES_QUERY_KEY = (
-  threadId: string,
-  messageId?: string
-): QueryKey => [...THREAD_QUERY_KEY(threadId, messageId), "MESSAGES"];
+export const THREAD_MESSAGES_QUERY_KEY = (threadId: string): QueryKey => [
+  ...THREAD_QUERY_KEY(threadId),
+  "MESSAGES",
+];
 
 export const SET_THREAD_MESSAGES_QUERY_DATA = (
   client: QueryClient,
