@@ -1397,7 +1397,7 @@ export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   passes: BasePass[];
-  packages: BaseEventPackage[];
+  packages: BaseAttendeePackage[];
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
