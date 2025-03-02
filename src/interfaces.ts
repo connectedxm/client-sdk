@@ -2426,10 +2426,10 @@ export interface BaseEventPackage {
   description: string;
   price: number;
   isActive: boolean;
+  passes: BaseEventPackagePass[];
 }
 
 export interface EventPackage extends BaseEventPackage {
-  passes: BasePass[];
   createdAt: string;
   updatedAt: string;
 }
@@ -2452,12 +2452,10 @@ export interface BaseAttendeePackage {
   packageId: string;
   package: BaseEventPackage;
   status: keyof typeof PurchaseStatus;
-  amtPaid: number;
-  amtRefunded: number;
+  createdAt: string;
 }
 
 export interface AttendeePackage extends BaseAttendeePackage {
   passes: BasePass[];
-  createdAt: string;
   updatedAt: string;
 }

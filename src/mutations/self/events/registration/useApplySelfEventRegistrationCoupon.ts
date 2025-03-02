@@ -13,12 +13,19 @@ export interface SelectSelfEventRegistrationCouponParams
   passes: {
     id: string;
     ticketId: string;
+    couponId?: string;
+    packageId?: string;
+  }[];
+  packages: {
+    id: string;
+    packageId: string;
   }[];
 }
 
 export const SelectSelfEventRegistrationCoupon = async ({
   eventId,
   passes,
+  packages,
   couponCode,
   clientApiParams,
   queryClient,
@@ -28,7 +35,7 @@ export const SelectSelfEventRegistrationCoupon = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<BaseCoupon>>(
     `/self/events/${eventId}/registration/coupon`,
-    { passes, couponCode }
+    { passes, packages, couponCode }
   );
 
   if (queryClient && data.status === "ok") {
