@@ -1,4 +1,4 @@
-import type { ConnectedXMResponse, PassType } from "@interfaces";
+import type { ConnectedXMResponse, EventPackage, PassType } from "@interfaces";
 import { EVENT_QUERY_KEY } from "../../events/useGetEvent";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -39,7 +39,7 @@ export const GetSelfEventRegistrationPassTypes = async ({
   passTypeId,
   clientApiParams,
 }: GetSelfEventRegistrationPassTypesProps): Promise<
-  ConnectedXMResponse<PassType[]>
+  ConnectedXMResponse<{ passTypes: PassType[]; packages: EventPackage[] }>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/passTypes`, {
