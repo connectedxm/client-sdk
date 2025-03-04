@@ -2459,3 +2459,31 @@ export interface AttendeePackage extends BaseAttendeePackage {
   passes: BasePass[];
   updatedAt: string;
 }
+
+export interface BaseEventSponsorshipLevel {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  sponsorsPerRow: number;
+}
+
+export interface EventSponsorshipLevel extends BaseEventSponsorshipLevel {
+  sponsors: BaseEventSponsorship[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventSponsorship {
+  id: string;
+  name: string;
+  description: string | null;
+  url: string | null;
+  account: BaseAccount | null;
+  image: BaseImage | null;
+}
+
+export interface EventSponsorship extends BaseEventSponsorship {
+  createdAt: string;
+  updatedAt: string;
+}
