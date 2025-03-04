@@ -1,4 +1,4 @@
-import type { Event } from "@interfaces";
+import type { BaseEvent } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -8,8 +8,6 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENTS_QUERY_KEY = (past?: boolean): QueryKey => {
@@ -45,10 +43,8 @@ export const GetEvents = async ({
   orderBy,
   search,
   past,
-  queryClient,
   clientApiParams,
-  locale,
-}: GetEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
+}: GetEventsProps): Promise<ConnectedXMResponse<BaseEvent[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events`, {
     params: {
@@ -59,15 +55,6 @@ export const GetEvents = async ({
       past: past !== undefined ? past : undefined,
     },
   });
-
-  if (queryClient) {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (eventId) => EVENT_QUERY_KEY(eventId),
-      locale
-    );
-  }
 
   return data;
 };

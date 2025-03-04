@@ -1,4 +1,4 @@
-import type { ConnectedXMResponse, Event } from "@interfaces";
+import type { BaseEvent, ConnectedXMResponse } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -6,8 +6,6 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -38,10 +36,8 @@ export const GetFeaturedEvents = async ({
   pageParam,
   pageSize,
   orderBy,
-  queryClient,
   clientApiParams,
-  locale,
-}: GetFeaturedEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
+}: GetFeaturedEventsProps): Promise<ConnectedXMResponse<BaseEvent[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/featured`, {
     params: {
@@ -50,15 +46,6 @@ export const GetFeaturedEvents = async ({
       orderBy: orderBy || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (eventId) => EVENT_QUERY_KEY(eventId),
-      locale
-    );
-  }
 
   return data;
 };
