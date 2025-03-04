@@ -398,12 +398,15 @@ export interface Event extends BaseEvent {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   faqSections: BaseFaqSection[];
+  sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
+  backgroundImage: BaseImage | null;
   _count: {
     activations: number;
     sessions: number;
     speakers: number;
     sponsors: number;
+    sponsorshipLevels: number;
   };
 }
 
@@ -2427,6 +2430,8 @@ export interface BaseEventPackage {
   price: number;
   isActive: boolean;
   passes: BaseEventPackagePass[];
+  image: BaseImage | null;
+  sortOrder: number;
 }
 
 export interface EventPackage extends BaseEventPackage {
