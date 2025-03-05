@@ -42,7 +42,7 @@
     "tsup": "^8.0.1",
     "typescript": "^5.4.2",
     "vitest": "^3.0.7"
-git   },
+  },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
