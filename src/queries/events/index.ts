@@ -22,3 +22,5 @@ export * from "./useGetEventActivationsLeaderboard";
 export * from "./useGetEventActivationSummary";
 export * from "./useGetEventSponsorshipLevels";
 export * from "./useGetEventSponsorship";
+export * from "./useGetEventImages";
+export * from "./useGetEventImage";

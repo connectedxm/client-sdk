@@ -401,12 +401,14 @@ export interface Event extends BaseEvent {
   sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
   backgroundImage: BaseImage | null;
+  galleryImages: EventGalleryImage[];
   _count: {
     activations: number;
     sessions: number;
     speakers: number;
     sponsors: number;
     sponsorshipLevels: number;
+    galleryImages: number;
   };
 }
 
@@ -2489,6 +2491,19 @@ export interface BaseEventSponsorship {
 }
 
 export interface EventSponsorship extends BaseEventSponsorship {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventGalleryImage {
+  id: string;
+  name: string;
+  description: string | null;
+  imageId: string;
+  image: BaseImage;
+}
+
+export interface EventGalleryImage extends BaseEventGalleryImage {
   createdAt: string;
   updatedAt: string;
 }
