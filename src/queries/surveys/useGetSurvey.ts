@@ -31,9 +31,7 @@ export interface GetSurveyProps extends SingleQueryParams {
 export const GetSurvey = async ({
   surveyId,
   clientApiParams,
-}: GetSurveyProps): Promise<
-  ConnectedXMResponse<Survey & { _count?: { submissions: number } }>
-> => {
+}: GetSurveyProps): Promise<ConnectedXMResponse<Survey>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/surveys/${surveyId}`);
 

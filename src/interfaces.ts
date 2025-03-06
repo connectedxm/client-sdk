@@ -2577,6 +2577,7 @@ export interface SurveyQuestionResposne extends BaseSurveyQuestionResponse {}
 export interface BaseSurveySubmission {
   id: string;
   responses: BaseSurveyQuestionResponse[];
+  status: PurchaseStatus;
 }
 
 export interface SurveySubmission extends BaseSurveySubmission {}

@@ -4,17 +4,15 @@ import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
-import { SELF_QUERY_KEY } from "../self/useGetSelf";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SURVEY_QUERY_KEY } from "./useGetSurvey";
+import { SURVEY_SUBMISSIONS_QUERY_KEY } from "./useGetSurveySubmissions";
 
 export const SURVEY_SUBMISSION_QUERY_KEY = (
   surveyId: string,
   submissionId: string
 ): QueryKey => [
-  ...SELF_QUERY_KEY(),
-  ...SURVEY_QUERY_KEY(surveyId),
+  ...SURVEY_SUBMISSIONS_QUERY_KEY(surveyId),
   "SUBMISSIONS",
   submissionId,
 ];
