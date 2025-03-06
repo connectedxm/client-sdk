@@ -16,6 +16,7 @@ export * from "./listings";
 export * from "./interests";
 export * from "./threads";
 export * from "./integrations";
+export * from "./surveys";
 
 export * from "./useConnectedInfiniteQuery";
 export * from "./useConnectedSingleQuery";

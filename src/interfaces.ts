@@ -2136,6 +2136,7 @@ export enum OrganizationModuleType {
   invoices = "invoices",
   announcements = "announcements",
   bookings = "bookings",
+  surveys = "surveys",
 }
 
 export enum PaymentIntegrationType {
@@ -2495,6 +2496,99 @@ export interface EventSponsorship extends BaseEventSponsorship {
   updatedAt: string;
 }
 
+export interface BaseSurvey {
+  id: string;
+  name: string;
+}
+
+export interface Survey extends BaseSurvey {
+  description: string | null;
+  image: BaseImage | null;
+  requireAuth: boolean;
+  submissionsPerAccount: number;
+}
+
+export interface BaseSurveySection {
+  id: string;
+  name: string;
+  description: string | null;
+  sortOrder: number;
+}
+
+export interface SurveySection extends BaseSurveySection {
+  questions: SurveyQuestion[];
+}
+
+export enum SurveyQuestionType {
+  text = "text",
+  textarea = "textarea",
+  number = "number",
+  time = "time",
+  date = "date",
+  toggle = "toggle",
+  select = "select",
+  radio = "radio",
+  checkbox = "checkbox",
+  search = "search",
+  file = "file",
+}
+
+export interface BaseSurveyQuestion {
+  id: string;
+  featured: boolean;
+  type: SurveyQuestionType;
+  name: string;
+  required: boolean;
+  description: string | null;
+  label: string | null;
+  placeholder: string | null;
+  default: string | null;
+  mutable: boolean;
+  min: string | null;
+  max: string | null;
+  validation: string | null;
+  validationMessage: string | null;
+  sortOrder: number;
+  choices: BaseSurveyQuestionChoice[];
+}
+
+export interface SurveyQuestion extends BaseSurveyQuestion {}
+
+export interface BaseSurveyQuestionChoice {
+  id: string;
+  value: string;
+  text: string | null;
+  supply: number | null;
+  description: string | null;
+  sortOrder: number;
+  subQuestions: SurveyQuestion[] | { questionId: string }[];
+}
+
+export interface SurveyQuestionChoice extends BaseSurveyQuestionChoice {}
+
+export interface BaseSurveyQuestionResponse {
+  questionId: string;
+  question: BaseSurveyQuestion;
+  value: string;
+}
+
+export interface SurveyQuestionResposne extends BaseSurveyQuestionResponse {}
+
+export interface BaseSurveySubmission {
+  id: string;
+  responses: BaseSurveyQuestionResponse[];
+  status: PurchaseStatus;
+}
+
+export interface SurveySubmission extends BaseSurveySubmission {}
+
+export interface BaseSurveyQuestionSearchValue {
+  id: string;
+  value: string;
+}
+
+export interface SurveyQuestionSearchValue
+  extends BaseSurveyQuestionSearchValue {}
 export interface BaseEventGalleryImage {
   id: string;
   name: string;
