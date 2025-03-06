@@ -7,22 +7,19 @@ import useConnectedSingleQuery, {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const SELF_SURVEY_QUERY_KEY = (surveyId: string): QueryKey => [
+export const SURVEY_QUERY_KEY = (surveyId: string): QueryKey => [
   "SURVEYS",
   surveyId,
 ];
 
-export const SET_SELF_SURVEY_QUERY_DATA = (
+export const SET_SURVEY_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_SURVEY_QUERY_KEY>,
+  keyParams: Parameters<typeof SURVEY_QUERY_KEY>,
   response: Awaited<ReturnType<typeof GetSurvey>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
-    [
-      ...SELF_SURVEY_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
+    [...SURVEY_QUERY_KEY(...keyParams), ...GetBaseSingleQueryKeys(...baseKeys)],
     response
   );
 };
@@ -38,7 +35,7 @@ export const GetSurvey = async ({
   ConnectedXMResponse<Survey & { _count?: { submissions: number } }>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/surveys/${surveyId}/submission`);
+  const { data } = await clientApi.get(`/surveys/${surveyId}`);
 
   return data;
 };
@@ -48,7 +45,7 @@ export const useGetSurvey = (
   options: SingleQueryOptions<ReturnType<typeof GetSurvey>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetSurvey>>(
-    SELF_SURVEY_QUERY_KEY(surveyId),
+    SURVEY_QUERY_KEY(surveyId),
     (params: SingleQueryParams) =>
       GetSurvey({
         surveyId,

@@ -4,50 +4,47 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_SURVEY_SUBMISSION_QUERY_KEY } from "@src/queries/surveys/useGetSurveySubmission";
+import { SURVEY_SUBMISSION_QUERY_KEY } from "@src/queries";
 
-export interface UpdateSubmitSurveyParams extends MutationParams {
+export interface SubmitSurveyParams extends MutationParams {
   surveyId: string;
   submissionId: string;
-  passes: {
-    id: string;
-    responses: { questionId: string; value: string }[];
-  }[];
+  responses: { questionId: string; value: string }[];
 }
 
-export const UpdateSubmitSurvey = async ({
+export const SubmitSurvey = async ({
   surveyId,
   submissionId,
-  passes,
+  responses,
   clientApiParams,
   queryClient,
-}: UpdateSubmitSurveyParams): Promise<ConnectedXMResponse<null>> => {
+}: SubmitSurveyParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/surveys/${surveyId}/submissions/${submissionId}/submit`,
-    passes
+    responses
   );
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: SELF_SURVEY_SUBMISSION_QUERY_KEY(surveyId),
+      queryKey: SURVEY_SUBMISSION_QUERY_KEY(surveyId, submissionId),
     });
   }
 
   return data;
 };
 
-export const useUpdateSubmitSurvey = (
+export const useSubmitSurvey = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateSubmitSurvey>>,
-      Omit<UpdateSubmitSurveyParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof SubmitSurvey>>,
+      Omit<SubmitSurveyParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateSubmitSurveyParams,
+    SubmitSurveyParams,
     Awaited<ConnectedXMResponse<null>>
-  >(UpdateSubmitSurvey, options);
+  >(SubmitSurvey, options);
 };

@@ -2134,6 +2134,7 @@ export enum OrganizationModuleType {
   invoices = "invoices",
   announcements = "announcements",
   bookings = "bookings",
+  surveys = "surveys",
 }
 
 export enum PaymentIntegrationType {
@@ -2564,18 +2565,24 @@ export interface BaseSurveyQuestionChoice {
 export interface SurveyQuestionChoice extends BaseSurveyQuestionChoice {}
 
 export interface BaseSurveyQuestionResponse {
-  id: string;
   questionId: string;
   question: BaseSurveyQuestion;
-  fileId: string | null;
   value: string;
 }
 
 export interface SurveyQuestionResposne extends BaseSurveyQuestionResponse {}
 
 export interface BaseSurveySubmission {
-  id: true;
-  responses: BaseSurveyQuestionResponse;
+  id: string;
+  responses: BaseSurveyQuestionResponse[];
 }
 
 export interface SurveySubmission extends BaseSurveySubmission {}
+
+export interface BaseSurveyQuestionSearchValue {
+  id: string;
+  value: string;
+}
+
+export interface SurveyQuestionSearchValue
+  extends BaseSurveyQuestionSearchValue {}
