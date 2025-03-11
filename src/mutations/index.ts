@@ -12,5 +12,6 @@ export * from "./listings";
 export * from "./storage";
 export * from "./threads";
 export * from "./integrations";
+export * from "./surveys";
 
 export * from "./useConnectedMutation";
