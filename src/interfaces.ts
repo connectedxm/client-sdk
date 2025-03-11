@@ -2499,6 +2499,7 @@ export interface EventSponsorship extends BaseEventSponsorship {
 
 export interface BaseSurvey {
   id: string;
+  slug: string;
   name: string;
 }
 
