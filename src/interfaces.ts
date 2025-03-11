@@ -2143,6 +2143,7 @@ export enum PaymentIntegrationType {
   stripe = "stripe",
   paypal = "paypal",
   braintree = "braintree",
+  manual = "manual",
 }
 
 export interface OrganizationConfig {
@@ -2498,6 +2499,7 @@ export interface EventSponsorship extends BaseEventSponsorship {
 
 export interface BaseSurvey {
   id: string;
+  slug: string;
   name: string;
 }
 
