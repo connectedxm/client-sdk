@@ -397,12 +397,17 @@ export interface Event extends BaseEvent {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   faqSections: BaseFaqSection[];
+  sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
+  backgroundImage: BaseImage | null;
+  galleryImages: EventGalleryImage[];
   _count: {
     activations: number;
     sessions: number;
     speakers: number;
     sponsors: number;
+    sponsorshipLevels: number;
+    galleryImages: number;
   };
 }
 
@@ -650,11 +655,13 @@ export interface BasePass {
   responses: BaseRegistrationQuestionResponse[];
   couponId: string | null;
   coupon: BaseCoupon | null;
+  packageId: string | null;
   sessions: BaseSessionPass[];
   createdAt: string;
 }
 
 export interface Pass extends BasePass {
+  package: BaseAttendeePackage | null;
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
@@ -1394,6 +1401,7 @@ export interface Registration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount;
   passes: BasePass[];
+  packages: BaseAttendeePackage[];
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
@@ -1405,6 +1413,7 @@ export interface ListingRegistration extends BaseRegistration {
   couponId: string | null;
   coupon: BaseCoupon | null;
   passes: BasePass[];
+  packages: BaseAttendeePackage[];
   payments: Payment[];
   createdAt: string;
 }
@@ -2029,12 +2038,14 @@ export enum OrganizationModuleType {
   invoices = "invoices",
   announcements = "announcements",
   bookings = "bookings",
+  surveys = "surveys",
 }
 
 export enum PaymentIntegrationType {
   stripe = "stripe",
   paypal = "paypal",
   braintree = "braintree",
+  manual = "manual",
 }
 
 export interface OrganizationConfig {
@@ -2316,4 +2327,181 @@ export interface BookingDaySlots {
 export interface BookingSpaceSlot {
   time: string;
   supply: number | null;
+}
+
+export interface BaseEventPackage {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  isActive: boolean;
+  passes: BaseEventPackagePass[];
+  image: BaseImage | null;
+  sortOrder: number;
+}
+
+export interface EventPackage extends BaseEventPackage {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventPackagePass {
+  id: string;
+  passTypeId: string;
+  passType: BasePassType;
+  quantity: number;
+}
+
+export interface EventPackagePass extends BaseEventPackagePass {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseAttendeePackage {
+  id: string;
+  attendeeId: string;
+  packageId: string;
+  package: BaseEventPackage;
+  status: keyof typeof PurchaseStatus;
+  createdAt: string;
+}
+
+export interface AttendeePackage extends BaseAttendeePackage {
+  passes: BasePass[];
+  updatedAt: string;
+}
+
+export interface BaseEventSponsorshipLevel {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  sponsorsPerRow: number;
+}
+
+export interface EventSponsorshipLevel extends BaseEventSponsorshipLevel {
+  sponsors: BaseEventSponsorship[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseEventSponsorship {
+  id: string;
+  name: string;
+  description: string | null;
+  url: string | null;
+  account: BaseAccount | null;
+  image: BaseImage | null;
+}
+
+export interface EventSponsorship extends BaseEventSponsorship {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseSurvey {
+  id: string;
+  slug: string;
+  name: string;
+}
+
+export interface Survey extends BaseSurvey {
+  description: string | null;
+  image: BaseImage | null;
+  requireAuth: boolean;
+  submissionsPerAccount: number;
+}
+
+export interface BaseSurveySection {
+  id: string;
+  name: string;
+  description: string | null;
+  sortOrder: number;
+}
+
+export interface SurveySection extends BaseSurveySection {
+  questions: SurveyQuestion[];
+}
+
+export enum SurveyQuestionType {
+  text = "text",
+  textarea = "textarea",
+  number = "number",
+  time = "time",
+  date = "date",
+  toggle = "toggle",
+  select = "select",
+  radio = "radio",
+  checkbox = "checkbox",
+  search = "search",
+  file = "file",
+}
+
+export interface BaseSurveyQuestion {
+  id: string;
+  featured: boolean;
+  type: SurveyQuestionType;
+  name: string;
+  required: boolean;
+  description: string | null;
+  label: string | null;
+  placeholder: string | null;
+  default: string | null;
+  mutable: boolean;
+  min: string | null;
+  max: string | null;
+  validation: string | null;
+  validationMessage: string | null;
+  sortOrder: number;
+  choices: BaseSurveyQuestionChoice[];
+}
+
+export interface SurveyQuestion extends BaseSurveyQuestion {}
+
+export interface BaseSurveyQuestionChoice {
+  id: string;
+  value: string;
+  text: string | null;
+  supply: number | null;
+  description: string | null;
+  sortOrder: number;
+  subQuestions: SurveyQuestion[] | { questionId: string }[];
+}
+
+export interface SurveyQuestionChoice extends BaseSurveyQuestionChoice {}
+
+export interface BaseSurveyQuestionResponse {
+  questionId: string;
+  question: BaseSurveyQuestion;
+  value: string;
+}
+
+export interface SurveyQuestionResposne extends BaseSurveyQuestionResponse {}
+
+export interface BaseSurveySubmission {
+  id: string;
+  responses: BaseSurveyQuestionResponse[];
+  status: PurchaseStatus;
+}
+
+export interface SurveySubmission extends BaseSurveySubmission {}
+
+export interface BaseSurveyQuestionSearchValue {
+  id: string;
+  value: string;
+}
+
+export interface SurveyQuestionSearchValue
+  extends BaseSurveyQuestionSearchValue {}
+export interface BaseEventGalleryImage {
+  id: string;
+  name: string;
+  description: string | null;
+  imageId: string;
+  image: BaseImage;
+}
+
+export interface EventGalleryImage extends BaseEventGalleryImage {
+  createdAt: string;
+  updatedAt: string;
 }

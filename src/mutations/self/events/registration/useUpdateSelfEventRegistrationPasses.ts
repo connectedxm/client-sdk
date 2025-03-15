@@ -14,12 +14,19 @@ import {
 export interface UpdateSelfEventRegistrationPassesParams
   extends MutationParams {
   eventId: string;
-  passes: { id: string; ticketId: string }[];
+  passes: {
+    id: string;
+    ticketId: string;
+    couponId?: string;
+    packageId?: string;
+  }[];
+  packages: { id: string; packageId: string }[];
 }
 
 export const UpdateSelfEventRegistrationPasses = async ({
   eventId,
   passes,
+  packages,
   clientApiParams,
   queryClient,
 }: UpdateSelfEventRegistrationPassesParams): Promise<
@@ -28,7 +35,7 @@ export const UpdateSelfEventRegistrationPasses = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/self/events/${eventId}/registration/passes`,
-    passes
+    { passes, packages }
   );
 
   if (queryClient && data.status === "ok") {
