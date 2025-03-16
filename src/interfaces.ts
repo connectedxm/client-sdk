@@ -1972,6 +1972,8 @@ export interface GroupThread extends Thread {
 }
 
 export interface BaseThreadMember {
+  id: string;
+  threadId: string;
   role: keyof typeof ThreadMemberRole;
   lastReadAt: string | null;
   account: BaseAccount;
@@ -1983,6 +1985,7 @@ export interface ThreadMember extends BaseThreadMember {
 
 export interface BaseThreadMessage {
   id: string;
+  threadId: string;
   type: ThreadMessageType;
   body: string;
   sentAt: string;
@@ -1999,6 +2002,8 @@ export interface ThreadMessage extends BaseThreadMessage {
 
 export interface BaseThreadMessageReaction {
   id: string;
+  threadId: string;
+  messageId: string;
   accountId: string;
   emojiName: string;
 }
