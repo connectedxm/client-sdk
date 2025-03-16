@@ -1,5 +1,4 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
@@ -7,28 +6,13 @@ import {
 
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const ACCOUNT_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNTS_QUERY_KEY(),
   accountId,
 ];
-
-export const SET_ACCOUNT_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof ACCOUNT_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetAccount>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...ACCOUNT_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetAccountProps extends SingleQueryParams {
   accountId: string;

@@ -9,7 +9,6 @@ import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
-import { SET_THREAD_QUERY_DATA } from "../threads";
 
 export const GROUP_THREAD_QUERY_KEY = (groupId: string): QueryKey => [
   ...GROUP_QUERY_KEY(groupId),
@@ -23,16 +22,11 @@ export interface GetGroupThreadProps extends SingleQueryParams {
 export const GetGroupThread = async ({
   groupId,
   clientApiParams,
-  queryClient,
 }: GetGroupThreadProps): Promise<ConnectedXMResponse<Thread>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get<ConnectedXMResponse<Thread>>(
     `/groups/${groupId}/thread`
   );
-
-  if (queryClient && data.status === "ok") {
-    SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
-  }
 
   return data;
 };

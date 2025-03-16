@@ -1,9 +1,9 @@
 import { InfiniteData, QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "..";
-import { produce } from "immer";
+import { Draft, produce } from "immer";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 
-export const AppendInfiniteQuery = <TData>(
+export const PrependInfiniteQuery = <TData>(
   queryClient: QueryClient,
   key: QueryKey,
   locale: string,
@@ -29,7 +29,7 @@ export const AppendInfiniteQuery = <TData>(
   );
 };
 
-export const PrependInfiniteQuery = <TData>(
+export const AppendInfiniteQuery = <TData>(
   queryClient: QueryClient,
   key: QueryKey,
   locale: string,
@@ -45,9 +45,9 @@ export const PrependInfiniteQuery = <TData>(
             draft?.pages?.[0]?.data?.length > 0 &&
             newData
           ) {
-            draft?.pages?.[0]?.data?.push(newData as any);
+            draft?.pages?.[0]?.data?.push(newData as Draft<TData>);
           } else {
-            draft.pages[0].data = [newData as any];
+            draft.pages[0].data = [newData as Draft<TData>];
           }
         }
       });
@@ -59,7 +59,7 @@ export const UpdateInfiniteQueryItem = <TData>(
   queryClient: QueryClient,
   key: QueryKey,
   locale: string,
-  updatedData: TData,
+  updatedData: (item: Draft<TData>) => Draft<TData>,
   findFn: (item: TData) => boolean
 ) => {
   queryClient.setQueryData(
@@ -71,7 +71,7 @@ export const UpdateInfiniteQueryItem = <TData>(
             if (page?.data) {
               const index = page.data.findIndex((item: any) => findFn(item));
               if (index !== -1) {
-                page.data[index] = updatedData as any;
+                page.data[index] = updatedData(page.data[index]!);
                 break;
               }
             }

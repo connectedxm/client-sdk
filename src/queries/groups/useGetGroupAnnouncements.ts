@@ -1,13 +1,11 @@
 import { Announcement } from "@interfaces";
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -15,21 +13,6 @@ export const GROUP_ANNOUNCEMENTS_QUERY_KEY = (groupId: string): QueryKey => [
   ...GROUP_QUERY_KEY(groupId),
   "ANNOUNCEMENTS",
 ];
-
-export const SET_GROUP_ANNOUNCEMENTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof GROUP_ANNOUNCEMENTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetGroupAnnouncements>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...GROUP_ANNOUNCEMENTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetGroupAnnouncementsProps extends InfiniteQueryParams {
   groupId: string;

@@ -2,18 +2,12 @@ import { Activity } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import {
-  ACTIVITIES_QUERY_KEY,
-  ACTIVITY_QUERY_KEY,
-} from "@src/queries/activities";
+import { ACTIVITIES_QUERY_KEY } from "@src/queries/activities";
 import { MANAGED_CHANNEL_CONTENT_QUERY_KEY } from "./useGetManagedChannelContent";
 
 export const MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
@@ -23,21 +17,6 @@ export const MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
   ...ACTIVITIES_QUERY_KEY(),
   ...MANAGED_CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
 ];
-
-export const SET_MANAGED_CONTENT_ACTIVITIES_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetManagedChannelContentActivities>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...MANAGED_CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetManagedChannelContentActivitiesParams
   extends InfiniteQueryParams {
@@ -52,9 +31,7 @@ export const GetManagedChannelContentActivities = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetManagedChannelContentActivitiesParams): Promise<
   ConnectedXMResponse<Activity[]>
 > => {
@@ -70,14 +47,6 @@ export const GetManagedChannelContentActivities = async ({
       },
     }
   );
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
 
   return data;
 };

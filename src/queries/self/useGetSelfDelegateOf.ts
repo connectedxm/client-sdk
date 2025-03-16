@@ -4,9 +4,7 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
@@ -23,9 +21,7 @@ export const GetSelfDelegateOf = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetSelfDelegateOfProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/delegateof`, {
@@ -36,15 +32,6 @@ export const GetSelfDelegateOf = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
 
   return data;
 };

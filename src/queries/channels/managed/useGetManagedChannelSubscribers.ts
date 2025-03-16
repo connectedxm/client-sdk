@@ -2,11 +2,9 @@ import { ChannelSubscriber } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../../useConnectedInfiniteQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { MANAGED_CHANNEL_QUERY_KEY } from "./useGetManagedChannel";
@@ -14,21 +12,6 @@ import { MANAGED_CHANNEL_QUERY_KEY } from "./useGetManagedChannel";
 export const MANAGED_CHANNEL_SUBSCRIBERS_QUERY_KEY = (
   channelId: string
 ): QueryKey => [...MANAGED_CHANNEL_QUERY_KEY(channelId), "SUBSCRIBERS"];
-
-export const SET_MANAGED_CHANNEL_SUBSCRIBERS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof MANAGED_CHANNEL_SUBSCRIBERS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetManagedChannelSubscribers>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...MANAGED_CHANNEL_SUBSCRIBERS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetManagedChannelSubscribersParams
   extends InfiniteQueryParams {

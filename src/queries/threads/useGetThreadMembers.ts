@@ -1,12 +1,10 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { BaseGroup, ThreadMember, ThreadMemberRole } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { THREAD_QUERY_KEY } from "./useGetThread";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -22,21 +20,6 @@ export const THREAD_MEMBERS_QUERY_KEY = (
   }
 
   return keys;
-};
-
-export const SET_THREAD_MEMBERS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof THREAD_MEMBERS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetThreadMembers>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...THREAD_MEMBERS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
 };
 
 export interface GetThreadMembersProps extends InfiniteQueryParams {

@@ -1,12 +1,11 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
 import type { EventEmail, EventEmailType } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_QUERY_KEY } from "./useGetListing";
@@ -15,21 +14,6 @@ export const LISTING_EMAIL_QUERY_KEY = (
   eventId: string,
   type: EventEmailType
 ): QueryKey => [...LISTING_QUERY_KEY(eventId), type];
-
-export const SET_LISTING_EMAIL_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof LISTING_EMAIL_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventListingEmail>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...LISTING_EMAIL_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetSelfEventListingEmailProps extends SingleQueryParams {
   eventId: string;

@@ -1,10 +1,21 @@
 import { MessageEffect } from "../WSMessageBus";
 import { ConnectedXMResponse, Thread, ThreadMessage } from "@src/interfaces";
 import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
-import { SET_THREAD_MESSAGE_QUERY_DATA } from "@src/queries/threads/useGetThreadMessage";
-import { AppendInfiniteQuery } from "@src/utilities";
+import {
+  AppendInfiniteQuery,
+  PrependInfiniteQuery,
+  SetSingleQueryData,
+  UpdateInfiniteQueryItem,
+} from "@src/utilities";
 import { GetBaseSingleQueryKeys } from "@src/queries/useConnectedSingleQuery";
 import { THREAD_QUERY_KEY } from "@src/queries/threads/useGetThread";
+import {
+  DIRECT_THREADS_QUERY_KEY,
+  GROUP_THREADS_QUERY_KEY,
+  PRIVATE_THREADS_QUERY_KEY,
+  PUBLIC_THREADS_QUERY_KEY,
+  THREAD_MESSAGE_QUERY_KEY,
+} from "@src/queries";
 
 const ThreadMessageCreatedEffect: MessageEffect<ThreadMessage> = (
   queryClient,
@@ -13,17 +24,14 @@ const ThreadMessageCreatedEffect: MessageEffect<ThreadMessage> = (
 ) => {
   console.log("ThreadMessageCreatedEffect", newMessage);
 
-  SET_THREAD_MESSAGE_QUERY_DATA(
+  SetSingleQueryData<ThreadMessage>(
     queryClient,
-    [newMessage.threadId, newMessage.id],
-    {
-      status: "ok",
-      message: "Cached from WebSocket",
-      data: newMessage,
-    }
+    THREAD_MESSAGE_QUERY_KEY(newMessage.threadId, newMessage.id),
+    locale,
+    newMessage
   );
 
-  AppendInfiniteQuery<ThreadMessage>(
+  PrependInfiniteQuery<ThreadMessage>(
     queryClient,
     THREAD_MESSAGES_QUERY_KEY(newMessage.threadId),
     locale,
@@ -31,21 +39,36 @@ const ThreadMessageCreatedEffect: MessageEffect<ThreadMessage> = (
   );
 
   // Update the thread query data
-  queryClient.setQueryData(
-    [
-      ...THREAD_QUERY_KEY(newMessage.threadId),
-      ...GetBaseSingleQueryKeys(locale),
-    ],
-    (oldData: ConnectedXMResponse<Thread>) => {
-      return {
-        ...oldData,
-        data: {
-          ...oldData.data,
-          lastMessageAt: newMessage.sentAt,
-          lastMessage: newMessage.body,
-        },
-      } as ConnectedXMResponse<Thread>;
-    }
+  UpdateInfiniteQueryItem<Thread>(
+    queryClient,
+    PRIVATE_THREADS_QUERY_KEY(),
+    locale,
+    (thread) => ({ ...thread, lastMessageAt: newMessage.sentAt }),
+    (thread) => thread.id === newMessage.threadId
+  );
+
+  UpdateInfiniteQueryItem<Thread>(
+    queryClient,
+    PUBLIC_THREADS_QUERY_KEY(),
+    locale,
+    (thread) => ({ ...thread, lastMessageAt: newMessage.sentAt }),
+    (thread) => thread.id === newMessage.threadId
+  );
+
+  UpdateInfiniteQueryItem<Thread>(
+    queryClient,
+    DIRECT_THREADS_QUERY_KEY(),
+    locale,
+    (thread) => ({ ...thread, lastMessageAt: newMessage.sentAt }),
+    (thread) => thread.id === newMessage.threadId
+  );
+
+  UpdateInfiniteQueryItem<Thread>(
+    queryClient,
+    GROUP_THREADS_QUERY_KEY(),
+    locale,
+    (thread) => ({ ...thread, lastMessageAt: newMessage.sentAt }),
+    (thread) => thread.id === newMessage.threadId
   );
 };
 

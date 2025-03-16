@@ -1,10 +1,9 @@
 import { ConnectedXMResponse, SurveySection } from "@src/interfaces";
 import useConnectedSingleQuery, {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SURVEY_SUBMISSION_QUERY_KEY } from "./useGetSurveySubmission";
 
@@ -15,21 +14,6 @@ export const SURVEY_SUBMISSION_SECTIONS_QUERY_KEY = (
   ...SURVEY_SUBMISSION_QUERY_KEY(surveyId, submissionId),
   "SECTIONS",
 ];
-
-export const SET_SURVEY_SUBMISSION_SECTIONS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof SURVEY_SUBMISSION_SECTIONS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSurveySubmissionSections>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...SURVEY_SUBMISSION_SECTIONS_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetSurveySubmissionSectionsProps extends SingleQueryParams {
   surveyId: string;

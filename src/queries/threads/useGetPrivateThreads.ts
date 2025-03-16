@@ -1,32 +1,17 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Thread, ThreadStatus } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CacheIndividualQueries } from "@src/utilities";
-import { THREAD_QUERY_KEY } from "./useGetThread";
 
 export const PRIVATE_THREADS_QUERY_KEY = (status?: string): QueryKey => {
   const keys = ["THREADS"];
   if (status) keys.push(status);
   return keys;
-};
-
-export const SET_PRIVATE_THREADS_QUERY_DATA = (
-  client: QueryClient,
-  response: Awaited<ReturnType<typeof GetPrivateThreads>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [...PRIVATE_THREADS_QUERY_KEY(), ...GetBaseInfiniteQueryKeys(...baseKeys)],
-    setFirstPageData(response)
-  );
 };
 
 export interface GetPrivateThreadsProps extends InfiniteQueryParams {
@@ -37,10 +22,8 @@ export const GetPrivateThreads = async ({
   pageParam,
   pageSize,
   orderBy,
-  queryClient,
   search,
   status,
-  locale,
   clientApiParams,
 }: GetPrivateThreadsProps): Promise<ConnectedXMResponse<Thread[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -53,15 +36,6 @@ export const GetPrivateThreads = async ({
       status: status || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (threadId) => THREAD_QUERY_KEY(threadId),
-      locale
-    );
-  }
 
   return data;
 };

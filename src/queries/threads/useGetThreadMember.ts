@@ -1,9 +1,8 @@
-import { QueryClient, QueryKey, SetDataOptions } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ThreadMember } from "@interfaces";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
@@ -14,23 +13,6 @@ export const THREAD_MEMBER_QUERY_KEY = (
   accountId: string
 ): QueryKey => {
   return [...THREAD_MEMBERS_QUERY_KEY(threadId), accountId];
-};
-
-export const SET_THREAD_MEMBER_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof THREAD_MEMBER_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetThreadMember>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
-  options?: SetDataOptions
-) => {
-  client.setQueryData(
-    [
-      ...THREAD_MEMBER_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response,
-    options
-  );
 };
 
 export interface GetThreadMemberProps {

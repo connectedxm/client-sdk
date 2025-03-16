@@ -2,16 +2,12 @@ import { Content } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { CHANNEL_QUERY_KEY } from "../useGetChannel";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_CONTENT_QUERY_KEY } from "./useGetChannelContent";
 
 export const CHANNEL_CONTENTS_QUERY_KEY = (
   channelId: string,
@@ -25,21 +21,6 @@ export const CHANNEL_CONTENTS_QUERY_KEY = (
   if (type) key.push(type);
 
   return key;
-};
-
-export const SET_CHANNEL_CONTENTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof CHANNEL_CONTENTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannelContents>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...CHANNEL_CONTENTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
 };
 
 export interface GetChannelContentsParams extends InfiniteQueryParams {
@@ -58,9 +39,7 @@ export const GetChannelContents = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetChannelContentsParams): Promise<ConnectedXMResponse<Content[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/channels/${channelId}/contents`, {
@@ -74,14 +53,6 @@ export const GetChannelContents = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (contentId) => CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
-      locale
-    );
-  }
 
   return data;
 };

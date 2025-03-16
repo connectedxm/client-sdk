@@ -1,36 +1,18 @@
 import { ConnectedXMResponse, ThreadMessage } from "@interfaces";
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "@src/queries/useConnectedInfiniteQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { CacheIndividualQueries } from "@src/utilities";
 import { THREAD_MESSAGE_QUERY_KEY } from "./useGetThreadMessage";
 
 export const THREAD_MESSAGE_REPLIES_QUERY_KEY = (
   threadId: string,
   messageId: string
 ): QueryKey => [...THREAD_MESSAGE_QUERY_KEY(threadId, messageId), "REPLIES"];
-
-export const SET_THREAD_MESSAGE_REPLIES_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof THREAD_MESSAGE_REPLIES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetThreadMessageReplies>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...THREAD_MESSAGE_REPLIES_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetThreadMessageRepliesProps extends InfiniteQueryParams {
   threadId: string;
@@ -44,9 +26,7 @@ export const GetThreadMessageReplies = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetThreadMessageRepliesProps): Promise<
   ConnectedXMResponse<ThreadMessage[]>
 > => {
@@ -62,15 +42,6 @@ export const GetThreadMessageReplies = async ({
       },
     }
   );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (messageId) => THREAD_MESSAGE_QUERY_KEY(threadId, messageId),
-      locale
-    );
-  }
 
   return data;
 };
