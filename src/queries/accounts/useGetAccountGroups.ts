@@ -1,15 +1,11 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Group } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { GROUP_QUERY_KEY } from "../groups/useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -17,21 +13,6 @@ export const ACCOUNT_GROUPS_QUERY_KEY = (accountId: string): QueryKey => [
   ...ACCOUNT_QUERY_KEY(accountId),
   "GROUPS",
 ];
-
-export const SET_ACCOUNT_GROUPS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof ACCOUNT_GROUPS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetAccountGroups>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...ACCOUNT_GROUPS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetAccountGroupsProps extends InfiniteQueryParams {
   accountId: string;
@@ -43,9 +24,7 @@ export const GetAccountGroups = async ({
   orderBy,
   search,
   accountId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetAccountGroupsProps): Promise<ConnectedXMResponse<Group[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/${accountId}/groups`, {
@@ -56,14 +35,6 @@ export const GetAccountGroups = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_QUERY_KEY(groupId),
-      locale
-    );
-  }
 
   return data;
 };

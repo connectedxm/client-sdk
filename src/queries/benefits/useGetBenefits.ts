@@ -1,31 +1,14 @@
 import { Benefit } from "@interfaces";
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const BENEFITS_QUERY_KEY = (): QueryKey => ["BENEFITS"];
-
-export const SET_BENEFITS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof BENEFITS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetBenefits>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...BENEFITS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetBenefitsProps extends InfiniteQueryParams {}
 

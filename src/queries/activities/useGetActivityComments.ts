@@ -1,13 +1,10 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ACTIVITY_QUERY_KEY } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -16,21 +13,6 @@ export const ACTIVITY_COMMENTS_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITY_QUERY_KEY(activityId),
   "ACTIVITY_COMMENTS",
 ];
-
-export const SET_ACTIVITY_COMMENTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof ACTIVITY_COMMENTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetActivityComments>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...ACTIVITY_COMMENTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetActivityCommentsProps extends InfiniteQueryParams {
   activityId: string;
@@ -42,9 +24,7 @@ export const GetActivityComments = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetActivityCommentsProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/activities/${activityId}/comments`, {
@@ -55,14 +35,6 @@ export const GetActivityComments = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
 
   return data;
 };

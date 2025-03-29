@@ -2,35 +2,16 @@ import { ChannelCollection } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { MANAGED_CHANNEL_QUERY_KEY } from "../useGetManagedChannel";
-import { MANAGED_CHANNEL_COLLECTION_QUERY_KEY } from "./useGetManagedChannelCollection";
 
 export const MANAGED_CHANNEL_COLLECTIONS_QUERY_KEY = (
   channelId: string
 ): QueryKey => [...MANAGED_CHANNEL_QUERY_KEY(channelId), "COLLECTIONS"];
-
-export const SET_MANAGED_CHANNEL_COLLECTIONS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof MANAGED_CHANNEL_COLLECTIONS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetManagedChannelCollections>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...MANAGED_CHANNEL_COLLECTIONS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetManagedChannelCollectionsParams
   extends InfiniteQueryParams {
@@ -43,9 +24,7 @@ export const GetManagedChannelCollections = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetManagedChannelCollectionsParams): Promise<
   ConnectedXMResponse<ChannelCollection[]>
 > => {
@@ -61,16 +40,6 @@ export const GetManagedChannelCollections = async ({
       },
     }
   );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (collectionId) =>
-        MANAGED_CHANNEL_COLLECTION_QUERY_KEY(channelId, collectionId),
-      locale
-    );
-  }
 
   return data;
 };

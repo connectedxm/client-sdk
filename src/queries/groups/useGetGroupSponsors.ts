@@ -1,37 +1,18 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
+import { QueryKey } from "@tanstack/react-query";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACCOUNT_QUERY_KEY } from "../accounts";
 
 export const GROUP_SPONSORS_QUERY_KEY = (groupId: string): QueryKey => [
   ...GROUP_QUERY_KEY(groupId),
   "SPONSORS",
 ];
-
-export const SET_GROUP_SPONSORS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof GROUP_SPONSORS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetGroupSponsors>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...GROUP_SPONSORS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetGroupSponsorsProps extends InfiniteQueryParams {
   groupId: string;
@@ -43,9 +24,7 @@ export const GetGroupSponsors = async ({
   orderBy,
   search,
   groupId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetGroupSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/groups/${groupId}/sponsors`, {
@@ -56,14 +35,6 @@ export const GetGroupSponsors = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
 
   return data;
 };

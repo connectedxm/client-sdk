@@ -2,11 +2,9 @@ import { Content } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -22,21 +20,6 @@ export const CONTENTS_QUERY_KEY = (
   if (interest) key.push(interest);
   if (typeof past !== "undefined") key.push(past ? "PAST" : "UPCOMING");
   return key;
-};
-
-export const SET_CONTENTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof CONTENTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetContents>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...CONTENTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
 };
 
 export interface GetContentsParams extends InfiniteQueryParams {

@@ -1,12 +1,11 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import type { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_PUSH_DEVICES_QUERY_KEY } from "./useGetSelfPushDevices";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
@@ -14,21 +13,6 @@ export const SELF_PUSH_DEVICE_QUERY_KEY = (pushDeviceId: string): QueryKey => [
   ...SELF_PUSH_DEVICES_QUERY_KEY(),
   pushDeviceId,
 ];
-
-export const SET_PUSH_DEVICE_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof SELF_PUSH_DEVICE_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfPushDevice>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...SELF_PUSH_DEVICE_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetSelfPushDeviceProps extends SingleQueryParams {
   pushDeviceId: string;

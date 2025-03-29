@@ -1,14 +1,10 @@
 import type { ConnectedXMResponse, Event } from "@interfaces";
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { EVENT_QUERY_KEY } from "../events/useGetEvent";
+import { QueryKey } from "@tanstack/react-query";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -23,21 +19,6 @@ export const SERIES_EVENTS_QUERY_KEY = (
   return keys;
 };
 
-export const SET_SERIES_EVENTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof SERIES_EVENTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSeriesEvents>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...SERIES_EVENTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
-
 export interface GetSeriesEventsProps extends InfiniteQueryParams {
   seriesId: string;
   past?: boolean;
@@ -50,9 +31,7 @@ export const GetSeriesEvents = async ({
   orderBy,
   search,
   past,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetSeriesEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/series/${seriesId}/events`, {
@@ -64,15 +43,6 @@ export const GetSeriesEvents = async ({
       past: past !== undefined ? past : undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (eventId) => EVENT_QUERY_KEY(eventId),
-      locale
-    );
-  }
 
   return data;
 };

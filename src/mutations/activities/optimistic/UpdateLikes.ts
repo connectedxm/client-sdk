@@ -12,7 +12,6 @@ export const UpdateLikesSingle = (
       if (!draft?.data) {
         return;
       }
-
       draft.data._count.likes += increment ? 1 : -1;
       draft.data.likes = increment
         ? [{ createdAt: new Date().toISOString() }]

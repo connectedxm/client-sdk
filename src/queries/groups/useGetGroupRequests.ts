@@ -1,17 +1,13 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { GroupRequest, GroupRequestStatus } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
+import { QueryKey } from "@tanstack/react-query";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { GROUP_REQUEST_QUERY_KEY } from "./useGetGroupRequest";
 
 export const GROUP_REQUESTS_QUERY_KEY = (
   groupId: string,
@@ -26,21 +22,6 @@ export const GROUP_REQUESTS_QUERY_KEY = (
   return keys;
 };
 
-export const SET_GROUP_REQUESTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof GROUP_REQUESTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetGroupRequests>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...GROUP_REQUESTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
-
 export interface GetGroupRequestsProps extends InfiniteQueryParams {
   groupId: string;
   status?: keyof typeof GroupRequestStatus;
@@ -53,9 +34,7 @@ export const GetGroupRequests = async ({
   search,
   status,
   groupId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetGroupRequestsProps): Promise<ConnectedXMResponse<GroupRequest[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/groups/${groupId}/requests`, {
@@ -67,14 +46,6 @@ export const GetGroupRequests = async ({
       status: status || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_REQUEST_QUERY_KEY(groupId, data.data.id),
-      locale
-    );
-  }
 
   return data;
 };

@@ -5,12 +5,10 @@ import {
   useConnectedInfiniteQuery,
 } from "../../useConnectedInfiniteQuery";
 
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { SELF_LEAD_QUERY_KEY } from "./useGetSelfLead";
 
 export const SELF_LEADS_QUERY_KEY = (
   status?: keyof typeof LeadStatus
@@ -32,9 +30,7 @@ export const GetSelfLeads = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetSelfLeadsProps): Promise<ConnectedXMResponse<Lead[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
@@ -47,15 +43,6 @@ export const GetSelfLeads = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => SELF_LEAD_QUERY_KEY(activityId),
-      locale
-    );
-  }
 
   return data;
 };

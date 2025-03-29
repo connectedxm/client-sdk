@@ -1,28 +1,15 @@
 import { ConnectedXMResponse, Survey } from "@src/interfaces";
 import useConnectedSingleQuery, {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const SURVEY_QUERY_KEY = (surveyId: string): QueryKey => [
   "SURVEYS",
   surveyId,
 ];
-
-export const SET_SURVEY_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof SURVEY_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSurvey>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [...SURVEY_QUERY_KEY(...keyParams), ...GetBaseSingleQueryKeys(...baseKeys)],
-    response
-  );
-};
 
 export interface GetSurveyProps extends SingleQueryParams {
   surveyId: string;

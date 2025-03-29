@@ -1,33 +1,17 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
 import type { ConnectedXMResponse, Invoice } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const INVOICE_QUERY_KEY = (invoiceId: string): QueryKey => [
   "INVOICES",
   invoiceId,
 ];
-
-export const SET_INVOICE_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof INVOICE_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetInvoice>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...INVOICE_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetInvoiceProps extends SingleQueryParams {
   invoiceId: string;

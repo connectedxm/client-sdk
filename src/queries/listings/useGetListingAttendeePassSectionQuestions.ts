@@ -1,10 +1,9 @@
 import { ConnectedXMResponse, RegistrationSection } from "@src/interfaces";
 import useConnectedSingleQuery, {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_ATTENDEE_QUERY_KEY } from "./useGetListingAttendee";
 
@@ -17,23 +16,6 @@ export const LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY = (
   passId,
   "SECTIONS",
 ];
-
-export const SET_LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<
-    typeof LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY
-  >,
-  response: Awaited<ReturnType<typeof GetListingAttendeePassQuestionSections>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetListingAttendeePassQuestionSectionsProps
   extends SingleQueryParams {

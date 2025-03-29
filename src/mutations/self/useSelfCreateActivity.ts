@@ -17,7 +17,6 @@ import useConnectedMutation, {
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
-import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
 
 export interface CreateActivity {
@@ -79,10 +78,8 @@ export const SelfCreateActivity = async ({
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...ACTIVITY_COMMENTS_QUERY_KEY(activity.commentedId),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        ACTIVITY_COMMENTS_QUERY_KEY(activity.commentedId),
+        clientApiParams.locale,
         data.data
       );
     }
@@ -91,24 +88,21 @@ export const SelfCreateActivity = async ({
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
-            data.data.content.channel.slug,
-            activity.contentId
-          ),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+          data.data.content.channel.slug,
+          activity.contentId
+        ),
+        clientApiParams.locale,
         data.data
       );
+
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
-            data.data.content.channel.id,
-            activity.contentId
-          ),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+          data.data.content.channel.id,
+          activity.contentId
+        ),
+        clientApiParams.locale,
         data.data
       );
     }
@@ -117,10 +111,8 @@ export const SelfCreateActivity = async ({
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...EVENT_ACTIVITIES_QUERY_KEY(activity.eventId),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        EVENT_ACTIVITIES_QUERY_KEY(activity.eventId),
+        clientApiParams.locale,
         data.data
       );
     }
@@ -129,10 +121,8 @@ export const SelfCreateActivity = async ({
       nested = true;
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...GROUP_ACTIVITIES_QUERY_KEY(activity.groupId),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        GROUP_ACTIVITIES_QUERY_KEY(activity.groupId),
+        clientApiParams.locale,
         data.data
       );
     }
@@ -140,10 +130,8 @@ export const SelfCreateActivity = async ({
     if (!nested) {
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...ACTIVITIES_QUERY_KEY(),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        ACTIVITIES_QUERY_KEY(),
+        clientApiParams.locale,
         data.data
       );
     }

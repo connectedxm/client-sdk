@@ -1,5 +1,4 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
@@ -7,7 +6,7 @@ import {
 
 import type { SingleActivity } from "@interfaces";
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -15,21 +14,6 @@ export const ACTIVITY_QUERY_KEY = (activityId: string): QueryKey => [
   ...ACTIVITIES_QUERY_KEY(),
   activityId,
 ];
-
-export const SET_ACTIVITY_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof ACTIVITY_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetActivity>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...ACTIVITY_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetActivityProps extends SingleQueryParams {
   activityId: string;

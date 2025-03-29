@@ -1,5 +1,4 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
@@ -7,28 +6,13 @@ import {
 
 import type { ConnectedXMResponse, EventListing } from "@interfaces";
 import { LISTINGS_QUERY_KEY } from "./useGetListings";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const LISTING_QUERY_KEY = (eventId: string): QueryKey => [
   ...LISTINGS_QUERY_KEY(false),
   eventId,
 ];
-
-export const SET_LISTING_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof LISTING_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventListing>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...LISTING_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetSelfEventListingProps extends SingleQueryParams {
   eventId: string;

@@ -1,16 +1,11 @@
 import type { Account } from "@interfaces";
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { GetEventSessions } from "./useGetEventSessions";
-import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -18,21 +13,6 @@ export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
   "REGISTRANTS",
 ];
-
-export const SET_EVENT_REGISTRANTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof EVENT_REGISTRANTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetEventSessions>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...EVENT_REGISTRANTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetEventRegistrantsProps extends InfiniteQueryParams {
   eventId: string;
@@ -44,9 +24,7 @@ export const GetEventRegistrants = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetEventRegistrantsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/registrants`, {
@@ -57,15 +35,6 @@ export const GetEventRegistrants = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
 
   return data;
 };

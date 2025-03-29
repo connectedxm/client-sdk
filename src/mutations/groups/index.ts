@@ -16,3 +16,4 @@ export * from "./usePromoteGroupMember";
 export * from "./useCreateGroupAnnouncement";
 export * from "./useReinviteGroupInvitation";
 export * from "./useRejectGroupInvitation";
+export * from "./useJoinGroupThread";

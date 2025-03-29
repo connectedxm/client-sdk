@@ -1,12 +1,10 @@
 import type { BaseEvent, ConnectedXMResponse } from "@interfaces";
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { EVENTS_QUERY_KEY } from "./useGetEvents";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -15,27 +13,13 @@ export const EVENTS_FEATURED_QUERY_KEY = (): QueryKey => [
   "FEATURED",
 ];
 
-export const SET_EVENTS_FEATURED_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof EVENTS_FEATURED_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetFeaturedEvents>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...EVENTS_FEATURED_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
-
 export interface GetFeaturedEventsProps extends InfiniteQueryParams {}
 
 export const GetFeaturedEvents = async ({
   pageParam,
   pageSize,
   orderBy,
+  search,
   clientApiParams,
 }: GetFeaturedEventsProps): Promise<ConnectedXMResponse<BaseEvent[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -44,6 +28,7 @@ export const GetFeaturedEvents = async ({
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
+      search: search || undefined,
     },
   });
 

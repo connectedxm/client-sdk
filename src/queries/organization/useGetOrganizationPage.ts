@@ -1,5 +1,4 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
@@ -7,7 +6,7 @@ import {
 
 import type { ConnectedXMResponse, Page } from "@interfaces";
 import { ORGANIZATION_QUERY_KEY } from "./useGetOrganization";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const ORGANIZATION_PAGE_QUERY_KEY = (type: PageType): QueryKey => [
@@ -15,21 +14,6 @@ export const ORGANIZATION_PAGE_QUERY_KEY = (type: PageType): QueryKey => [
   "PAGE",
   type,
 ];
-
-export const SET_ORGANIZATION_PAGE_QUERY_DATA = (
-  queryClient: QueryClient,
-  keyParams: Parameters<typeof ORGANIZATION_PAGE_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetOrganizationPage>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  queryClient.setQueryData(
-    [
-      ...ORGANIZATION_PAGE_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export type PageType = "about" | "team" | "privacy" | "terms";
 

@@ -2,35 +2,16 @@ import { Channel } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { MANAGED_CHANNEL_QUERY_KEY } from "./useGetManagedChannel";
 
 export const MANAGED_CHANNELS_QUERY_KEY = (): QueryKey => [
   "CHANNELS",
   "MANAGED",
 ];
-
-export const SET_MANAGED_CHANNELS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof MANAGED_CHANNELS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetManagedChannels>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...MANAGED_CHANNELS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetManagedChannelsParams extends InfiniteQueryParams {}
 
@@ -39,9 +20,7 @@ export const GetManagedChannels = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetManagedChannelsParams): Promise<ConnectedXMResponse<Channel[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/channels/managed`, {
@@ -52,14 +31,6 @@ export const GetManagedChannels = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (channelId) => MANAGED_CHANNEL_QUERY_KEY(channelId),
-      locale
-    );
-  }
 
   return data;
 };

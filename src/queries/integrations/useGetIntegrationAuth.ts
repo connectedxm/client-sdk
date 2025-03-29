@@ -1,12 +1,11 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
 import type { IntegrationDetails, IntegrationType } from "@interfaces";
-import { QueryClient, SetDataOptions, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { INTEGRATION_QUERY_KEY } from "./useGetIntegration";
@@ -20,23 +19,6 @@ interface IntegrationAuth {
 export const INTEGRATION_AUTH_QUERY_KEY = (
   integrationType: keyof typeof IntegrationType
 ): QueryKey => ["INTEGRATION", integrationType, "AUTH"];
-
-export const SET_INTEGRATION_AUTH_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof INTEGRATION_AUTH_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetIntegrationAuth>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"],
-  options?: SetDataOptions
-) => {
-  client.setQueryData(
-    [
-      ...INTEGRATION_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response,
-    options
-  );
-};
 
 export interface GetIntegrationAuthProps extends SingleQueryParams {
   integrationType: keyof typeof IntegrationType;
