@@ -281,6 +281,9 @@ export interface Activity extends BaseActivity {
   reshares?: {
     id: string;
   }[]; // if you have resahred = Array > 0
+  reports: {
+    id: string;
+  }[]; // if you have reports = Array > 0
   _count: {
     likes: number;
     comments: number;
@@ -2602,4 +2605,28 @@ export interface BaseEventGalleryImage {
 export interface EventGalleryImage extends BaseEventGalleryImage {
   createdAt: string;
   updatedAt: string;
+}
+
+export interface BaseActivityReport {
+  id: string;
+  activityId: string;
+  accountId: string;
+  createdAt: string;
+}
+
+export interface ActivityReport extends BaseActivityReport {
+  activity: BaseActivity;
+  account: BaseAccount;
+}
+
+export interface BaseBlockedAccount {
+  id: string;
+  blockerId: true;
+  accountId: true;
+  createdAt: string;
+}
+
+export interface BlockedAccount extends BaseBlockedAccount {
+  account: BaseAccount;
+  blocker: BaseAccount;
 }
