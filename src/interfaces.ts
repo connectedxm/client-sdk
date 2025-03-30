@@ -193,6 +193,10 @@ export interface Account extends BaseAccount {
   discord: string | null;
   video: string | null;
   timezone: string | null;
+  blockedByAccounts: {
+    id: string;
+    createdAt: string;
+  }[];
   createdAt: string;
 }
 
@@ -283,16 +287,13 @@ export interface Activity extends BaseActivity {
   }[]; // if you have resahred = Array > 0
   reports: {
     id: string;
+    createdAt: string;
   }[]; // if you have reports = Array > 0
   _count: {
     likes: number;
     comments: number;
     reshares: number;
   };
-}
-export interface SingleActivity extends Activity {
-  html: string;
-  text: string;
 }
 
 export const isTypeActivity = (

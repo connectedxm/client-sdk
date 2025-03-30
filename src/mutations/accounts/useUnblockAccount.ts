@@ -2,8 +2,9 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { ConnectedXMResponse } from "@src/interfaces";
+import { Account, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ACCOUNTS_QUERY_KEY, SET_ACCOUNT_QUERY_DATA } from "@src/queries";
 
 export interface UnblockAccountParams extends MutationParams {
   accountId: string;
@@ -11,12 +12,23 @@ export interface UnblockAccountParams extends MutationParams {
 
 export const UnblockAccount = async ({
   accountId,
+  queryClient,
   clientApiParams,
-}: UnblockAccountParams): Promise<ConnectedXMResponse<null>> => {
+}: UnblockAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/accounts/${accountId}/unblock`
   );
+
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({
+      queryKey: ACCOUNTS_QUERY_KEY(),
+    });
+
+    SET_ACCOUNT_QUERY_DATA(queryClient, [accountId], data, [
+      clientApiParams.locale,
+    ]);
+  }
 
   return data;
 };

@@ -4,20 +4,22 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SET_ACTIVITY_QUERY_DATA, ACTIVITIES_QUERY_KEY } from "@src/queries";
+import { ACTIVITIES_QUERY_KEY, SET_ACTIVITY_QUERY_DATA } from "@src/queries";
 
-export interface ReportActivityParams extends MutationParams {
+export interface RemoveActivityReportParams extends MutationParams {
   activityId: string;
+  reportId: string;
 }
 
-export const ReportActivity = async ({
+export const RemoveActivityReport = async ({
   activityId,
+  reportId,
   queryClient,
   clientApiParams,
-}: ReportActivityParams): Promise<ConnectedXMResponse<Activity>> => {
+}: RemoveActivityReportParams): Promise<ConnectedXMResponse<Activity>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
-    `/activities/${activityId}/report`
+  const { data } = await clientApi.delete<ConnectedXMResponse<Activity>>(
+    `/activities/${activityId}/report/${reportId}`
   );
 
   if (queryClient && data.status === "ok") {
@@ -33,17 +35,17 @@ export const ReportActivity = async ({
   return data;
 };
 
-export const useReportActivity = (
+export const useRemoveActivityReport = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof ReportActivity>>,
-      Omit<ReportActivityParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof RemoveActivityReport>>,
+      Omit<RemoveActivityReportParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    ReportActivityParams,
-    Awaited<ReturnType<typeof ReportActivity>>
-  >(ReportActivity, options);
+    RemoveActivityReportParams,
+    Awaited<ReturnType<typeof RemoveActivityReport>>
+  >(RemoveActivityReport, options);
 };
