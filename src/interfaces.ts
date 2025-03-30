@@ -193,6 +193,10 @@ export interface Account extends BaseAccount {
   discord: string | null;
   video: string | null;
   timezone: string | null;
+  blockedByAccounts: {
+    id: string;
+    createdAt: string;
+  }[];
   createdAt: string;
 }
 
@@ -281,15 +285,15 @@ export interface Activity extends BaseActivity {
   reshares?: {
     id: string;
   }[]; // if you have resahred = Array > 0
+  reports: {
+    id: string;
+    createdAt: string;
+  }[]; // if you have reports = Array > 0
   _count: {
     likes: number;
     comments: number;
     reshares: number;
   };
-}
-export interface SingleActivity extends Activity {
-  html: string;
-  text: string;
 }
 
 export const isTypeActivity = (
@@ -2602,4 +2606,28 @@ export interface BaseEventGalleryImage {
 export interface EventGalleryImage extends BaseEventGalleryImage {
   createdAt: string;
   updatedAt: string;
+}
+
+export interface BaseActivityReport {
+  id: string;
+  activityId: string;
+  accountId: string;
+  createdAt: string;
+}
+
+export interface ActivityReport extends BaseActivityReport {
+  activity: BaseActivity;
+  account: BaseAccount;
+}
+
+export interface BaseBlockedAccount {
+  id: string;
+  blockerId: true;
+  accountId: true;
+  createdAt: string;
+}
+
+export interface BlockedAccount extends BaseBlockedAccount {
+  account: BaseAccount;
+  blocker: BaseAccount;
 }
