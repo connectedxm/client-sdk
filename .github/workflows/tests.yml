@@ -1,4 +1,9 @@
-name: Test & Build
+name: Tests
+
+permissions:
+  contents: read
+  pull-requests: read
+
 on:
   push:
     branches:
