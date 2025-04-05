@@ -193,7 +193,7 @@ export interface Account extends BaseAccount {
   discord: string | null;
   video: string | null;
   timezone: string | null;
-  blockedByAccounts: {
+  blockedByAccounts?: {
     id: string;
     createdAt: string;
   }[];
@@ -285,7 +285,7 @@ export interface Activity extends BaseActivity {
   reshares?: {
     id: string;
   }[]; // if you have resahred = Array > 0
-  reports: {
+  reports?: {
     id: string;
     createdAt: string;
   }[]; // if you have reports = Array > 0
