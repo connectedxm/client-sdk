@@ -2201,6 +2201,17 @@ export interface OrganizationConfig {
     };
   };
   MODULES: Record<keyof typeof OrganizationModuleType, OrganizationModule>;
+  CUSTOM_MODULES: {
+    name: string;
+    url: string;
+    iconName: string;
+    color: string;
+    position: "top" | "bottom";
+    translations: {
+      locale: string;
+      name: string;
+    }[];
+  }[];
   SOCIAL: {
     facebook: string | null;
     instagram: string | null;
