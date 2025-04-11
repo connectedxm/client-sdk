@@ -1240,14 +1240,9 @@ export interface BaseGroupMembership {
 
 export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
-  following: boolean;
-  activityEmailNotification: boolean;
   activityPushNotification: boolean;
   announcementEmailNotification: boolean;
   announcementPushNotification: boolean;
-  eventEmailNotification: boolean;
-  eventPushNotification: boolean;
-  chatPushNotification: boolean;
   createdAt: string;
   updatedAt: string;
 }
