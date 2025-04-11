@@ -18,7 +18,8 @@
     "test": "vitest run",
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "release": "npm run lint && npm run test && npm run build",
-    "local": "npm run release && npm pack"
+    "local": "npm run release && npm pack",
+    "upgrade": "ncu -i --format group"
   },
   "dependencies": {
     "axios": "^1.8.4",
@@ -31,19 +32,19 @@
     "react-use-websocket": "^4.0.0"
   },
   "devDependencies": {
-    "@swc/core": "^1.11.16",
-    "@tanstack/react-query": "^5.71.1",
+    "@swc/core": "^1.11.20",
+    "@tanstack/react-query": "^5.72.2",
     "@types/react": "^18.2.47",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.18.1",
     "eslint": "^8.0.1",
-    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.0",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.2",
+    "typescript": "^5.8.3",
     "vitest": "^3.1.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.38.0"
+    "@rollup/rollup-linux-x64-gnu": "4.39.0"
   }
 }
