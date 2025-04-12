@@ -1436,6 +1436,7 @@ export interface BasePayment {
   salesTax: number;
   salesTaxRate: string | null;
   chargedAmt: number;
+  currency: string;
   last4: string | null;
   stripeId: string | null;
   createdAt: string;
@@ -2223,6 +2224,7 @@ export interface OrganizationConfig {
   PAYMENT: {
     TYPE: PaymentIntegrationType | "none";
     CONNECTION_ID: string | null;
+    CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
   GOOGLE_SERVICES: string;
