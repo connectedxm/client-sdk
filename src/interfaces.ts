@@ -2165,7 +2165,6 @@ export interface OrganizationConfig {
   CHAT_URL:
     | "wss://websocket.connected.dev"
     | "wss://staging-websocket.connected.dev";
-  SHOP_URL: string | null;
   APPLE_APPSTORE_LINK: string | null;
   GOOGLE_PLAYSTORE_LINK: string | null;
   NAME: string;
