@@ -1946,6 +1946,7 @@ export interface BasePaymentIntent {
   secret: string;
   referenceId: string;
   amount: number;
+  currency: string;
   metadata: Record<string, any>;
   eventId: string | null;
   registrationId: string | null;
