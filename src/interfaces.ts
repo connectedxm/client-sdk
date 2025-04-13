@@ -1791,6 +1791,7 @@ export interface BaseSubscriptionProductPrice {
   id: string;
   active: boolean;
   amount: number;
+  currency: string;
   interval: "day" | "week" | "month" | "year";
   intervalCount: number;
   maxAmount: number;
