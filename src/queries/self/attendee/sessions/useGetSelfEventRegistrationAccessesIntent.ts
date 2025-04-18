@@ -11,38 +11,34 @@ export const SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY = (
   eventId: string,
   sessionId: string,
   addressId: string,
-  sessionPassIds: string[]
+  accessIds: string[]
 ) => [
   ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
   sessionId,
   addressId,
   "SESSION_PASSES_INTENT",
-  ...sessionPassIds,
+  ...accessIds,
 ];
 
-export type SessionPassesInput = {
+export type AccessesInput = {
   passId: string;
-  responses: {
-    questionId: string;
-    value: string;
-  }[];
 }[];
 
-export interface GetSelfEventAttendeeSessionPassesIntentProps
+export interface GetSelfEventAttendeeAccessesIntentProps
   extends SingleQueryParams {
   eventId: string;
   sessionId: string;
   addressId: string;
-  sessionPasses: SessionPassesInput;
+  accesses: AccessesInput;
 }
 
-export const GetSelfEventAttendeeSessionPassesIntent = async ({
+export const GetSelfEventAttendeeAccessesIntent = async ({
   eventId,
   sessionId,
   addressId,
-  sessionPasses,
+  accesses,
   clientApiParams,
-}: GetSelfEventAttendeeSessionPassesIntentProps): Promise<
+}: GetSelfEventAttendeeAccessesIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -50,39 +46,39 @@ export const GetSelfEventAttendeeSessionPassesIntent = async ({
     `/self/events/${eventId}/attendee/sessions/${sessionId}/intent`,
     {
       addressId,
-      sessionPasses,
+      accesses,
     }
   );
 
   return data;
 };
 
-export const useGetSelfEventAttendeeSessionPassesIntent = (
+export const useGetSelfEventAttendeeAccessesIntent = (
   eventId: string,
   sessionId: string,
   addressId: string,
-  sessionPasses: SessionPassesInput,
+  accesses: AccessesInput,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventAttendeeSessionPassesIntent>
+    ReturnType<typeof GetSelfEventAttendeeAccessesIntent>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventAttendeeSessionPassesIntent>
+    ReturnType<typeof GetSelfEventAttendeeAccessesIntent>
   >(
     SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY(
       eventId,
       sessionId,
       addressId,
-      sessionPasses.map(({ passId }) => passId)
+      accesses.map(({ passId }) => passId)
     ),
     (params) =>
-      GetSelfEventAttendeeSessionPassesIntent({
+      GetSelfEventAttendeeAccessesIntent({
         eventId,
         sessionId,
         addressId,
-        sessionPasses,
+        accesses,
         ...params,
       }),
     {
@@ -95,7 +91,7 @@ export const useGetSelfEventAttendeeSessionPassesIntent = (
         !!eventId &&
         !!sessionId &&
         !!addressId &&
-        !!sessionPasses &&
+        !!accesses &&
         (options?.enabled ?? true),
     }
   );
