@@ -1,1 +1,1 @@
-export * from "./useGetSelfEventRegistrationSessionPassesIntent";
+export * from "./useGetSelfEventRegistrationAccessesIntent";

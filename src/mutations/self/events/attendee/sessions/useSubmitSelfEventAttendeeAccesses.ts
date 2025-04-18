@@ -10,29 +10,29 @@ import {
 } from "@src/queries";
 import {
   SELF_EVENT_ATTENDEE_QUERY_KEY,
-  SessionPassesInput,
+  AccessesInput,
 } from "@src/queries/self/attendee";
 
-export interface SubmitSelfEventRegistrationSessionPassesParams
+export interface SubmitSelfEventRegistrationAccessesParams
   extends MutationParams {
   eventId: string;
   sessionId: string;
-  sessionPasses: SessionPassesInput;
+  accesses: AccessesInput;
 }
 
-export const SubmitSelfEventRegistrationSessionPasses = async ({
+export const SubmitSelfEventRegistrationAccesses = async ({
   eventId,
   sessionId,
-  sessionPasses,
+  accesses,
   clientApiParams,
   queryClient,
-}: SubmitSelfEventRegistrationSessionPassesParams): Promise<
+}: SubmitSelfEventRegistrationAccessesParams): Promise<
   ConnectedXMResponse<null>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/self/events/${eventId}/attendee/sessions/${sessionId}/submit`,
-    sessionPasses
+    accesses
   );
 
   if (queryClient && data.status === "ok") {
@@ -50,12 +50,12 @@ export const SubmitSelfEventRegistrationSessionPasses = async ({
   return data;
 };
 
-export const useSubmitSelfEventRegistrationSessionPasses = (
+export const useSubmitSelfEventRegistrationAccesses = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SubmitSelfEventRegistrationSessionPasses>>,
+      Awaited<ReturnType<typeof SubmitSelfEventRegistrationAccesses>>,
       Omit<
-        SubmitSelfEventRegistrationSessionPassesParams,
+        SubmitSelfEventRegistrationAccessesParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -63,7 +63,7 @@ export const useSubmitSelfEventRegistrationSessionPasses = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SubmitSelfEventRegistrationSessionPassesParams,
-    Awaited<ReturnType<typeof SubmitSelfEventRegistrationSessionPasses>>
-  >(SubmitSelfEventRegistrationSessionPasses, options);
+    SubmitSelfEventRegistrationAccessesParams,
+    Awaited<ReturnType<typeof SubmitSelfEventRegistrationAccesses>>
+  >(SubmitSelfEventRegistrationAccesses, options);
 };
