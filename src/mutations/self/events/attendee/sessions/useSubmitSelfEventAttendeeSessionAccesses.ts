@@ -13,20 +13,20 @@ import {
   AccessesInput,
 } from "@src/queries/self/attendee";
 
-export interface SubmitSelfEventRegistrationAccessesParams
+export interface SubmitSelfEventRegistrationSessionAccessesParams
   extends MutationParams {
   eventId: string;
   sessionId: string;
   accesses: AccessesInput;
 }
 
-export const SubmitSelfEventRegistrationAccesses = async ({
+export const SubmitSelfEventRegistrationSessionAccesses = async ({
   eventId,
   sessionId,
   accesses,
   clientApiParams,
   queryClient,
-}: SubmitSelfEventRegistrationAccessesParams): Promise<
+}: SubmitSelfEventRegistrationSessionAccessesParams): Promise<
   ConnectedXMResponse<null>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -50,12 +50,12 @@ export const SubmitSelfEventRegistrationAccesses = async ({
   return data;
 };
 
-export const useSubmitSelfEventRegistrationAccesses = (
+export const useSubmitSelfEventRegistrationSessionAccesses = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SubmitSelfEventRegistrationAccesses>>,
+      Awaited<ReturnType<typeof SubmitSelfEventRegistrationSessionAccesses>>,
       Omit<
-        SubmitSelfEventRegistrationAccessesParams,
+        SubmitSelfEventRegistrationSessionAccessesParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -63,7 +63,7 @@ export const useSubmitSelfEventRegistrationAccesses = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SubmitSelfEventRegistrationAccessesParams,
-    Awaited<ReturnType<typeof SubmitSelfEventRegistrationAccesses>>
-  >(SubmitSelfEventRegistrationAccesses, options);
+    SubmitSelfEventRegistrationSessionAccessesParams,
+    Awaited<ReturnType<typeof SubmitSelfEventRegistrationSessionAccesses>>
+  >(SubmitSelfEventRegistrationSessionAccesses, options);
 };

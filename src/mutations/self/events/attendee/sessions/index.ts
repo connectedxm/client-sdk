@@ -1,1 +1,1 @@
-export * from "./useSubmitSelfEventAttendeeAccesses";
+export * from "./useSubmitSelfEventAttendeeSessionAccesses";

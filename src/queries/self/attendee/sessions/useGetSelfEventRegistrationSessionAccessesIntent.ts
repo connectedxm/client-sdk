@@ -24,7 +24,7 @@ export type AccessesInput = {
   passId: string;
 }[];
 
-export interface GetSelfEventAttendeeAccessesIntentProps
+export interface GetSelfEventAttendeeSessionAccessesIntentProps
   extends SingleQueryParams {
   eventId: string;
   sessionId: string;
@@ -32,13 +32,13 @@ export interface GetSelfEventAttendeeAccessesIntentProps
   accesses: AccessesInput;
 }
 
-export const GetSelfEventAttendeeAccessesIntent = async ({
+export const GetSelfEventAttendeeSessionAccessesIntent = async ({
   eventId,
   sessionId,
   addressId,
   accesses,
   clientApiParams,
-}: GetSelfEventAttendeeAccessesIntentProps): Promise<
+}: GetSelfEventAttendeeSessionAccessesIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -53,19 +53,19 @@ export const GetSelfEventAttendeeAccessesIntent = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeAccessesIntent = (
+export const useGetSelfEventAttendeeSessionAccessesIntent = (
   eventId: string,
   sessionId: string,
   addressId: string,
   accesses: AccessesInput,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventAttendeeAccessesIntent>
+    ReturnType<typeof GetSelfEventAttendeeSessionAccessesIntent>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventAttendeeAccessesIntent>
+    ReturnType<typeof GetSelfEventAttendeeSessionAccessesIntent>
   >(
     SELF_EVENT_ATTENDEE_SESSION_PASSES_INTENT_QUERY_KEY(
       eventId,
@@ -74,7 +74,7 @@ export const useGetSelfEventAttendeeAccessesIntent = (
       accesses.map(({ passId }) => passId)
     ),
     (params) =>
-      GetSelfEventAttendeeAccessesIntent({
+      GetSelfEventAttendeeSessionAccessesIntent({
         eventId,
         sessionId,
         addressId,
