@@ -661,7 +661,7 @@ export interface BasePass {
   couponId: string | null;
   coupon: BaseCoupon | null;
   packageId: string | null;
-  accesses: BaseAccess[];
+  accesses: BaseEventSessionAccess[];
   createdAt: string;
 }
 
@@ -952,14 +952,14 @@ export interface SessionLocation extends BaseSessionLocation {
   updatedAt: string | null;
 }
 
-export interface BaseAccess {
+export interface BaseEventSessionAccess {
   id: string;
   canceled: boolean;
   sessionId: string;
   session: BaseSession;
 }
 
-export interface Access extends BaseAccess {
+export interface EventSessionAccess extends BaseEventSessionAccess {
   pass: BasePass;
   createdAt: string;
   updatedAt: string;
