@@ -17,7 +17,7 @@ export const DeleteActivity = async ({
 }: DeleteActivityParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
-    `/self/activities/${activityId}`
+    `/activities/${activityId}`
   );
 
   if (queryClient && data.status === "ok") {
