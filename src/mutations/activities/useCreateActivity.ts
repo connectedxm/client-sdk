@@ -18,13 +18,12 @@ import {
   Activity,
   ConnectedXMResponse,
   ActivityEntityType,
+  MarkType,
 } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
-
-export type MarkType = "bold" | "italic" | "underline" | "strike";
 
 export interface BaseActivityEntityInput {
   type: ActivityEntityType;

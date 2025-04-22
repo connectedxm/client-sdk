@@ -2,6 +2,15 @@ export enum IntegrationType {
   snagtag = "snagtag",
 }
 
+export enum ActivityEntityType {
+  mention = "mention",
+  interest = "interest",
+  link = "link",
+  segment = "segment",
+}
+
+export type MarkType = "bold" | "italic" | "underline" | "strike";
+
 export interface IntegrationDetails {
   type: keyof typeof IntegrationType;
   name: string;
@@ -285,13 +294,6 @@ export interface Activity extends BaseActivity {
     likes: number;
     comments: number;
   };
-}
-
-export enum ActivityEntityType {
-  mention = "mention",
-  interest = "interest",
-  link = "link",
-  segment = "segment",
 }
 
 export interface BaseActivityEntity {

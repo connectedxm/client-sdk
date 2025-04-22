@@ -10,8 +10,6 @@ export * from "./useDeleteSelf";
 export * from "./useDeleteSelfPushDevice";
 export * from "./useRemoveSelfDelegate";
 export * from "./useRemoveSelfEventSession";
-export * from "../activities/useCreateActivity";
-export * from "../activities/useDeleteActivity";
 export * from "./useSelfUpdateGroupMembership";
 export * from "./useUpdateSelf";
 export * from "./useUpdateSelfImage";
