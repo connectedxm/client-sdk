@@ -33,7 +33,7 @@ export const UnlikeActivity = async ({
 
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.delete<ConnectedXMResponse<Activity>>(
-    `/self/activities/${activityId}/likes`
+    `/activities/${activityId}/likes`
   );
 
   return data;
