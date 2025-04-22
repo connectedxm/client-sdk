@@ -258,23 +258,18 @@ export interface AccountShare extends Account {
 export interface BaseActivity {
   id: string;
   message: string;
-  readMore: boolean;
   image: BaseImage | null;
   video: BaseVideo | null;
-  linkPreview: LinkPreview | null;
   account: BaseAccount;
   createdAt: string;
 }
 
 export interface Activity extends BaseActivity {
-  html: string;
-  text: string;
   group: BaseGroup | null;
   event: BaseEvent | null;
-  interests: BaseInterest[] | null;
   content: BaseContent | null;
   commented: BaseActivity | null;
-  reshared: BaseActivity | null;
+  entities: BaseActivityEntity[] | null;
   updatedAt: string;
   likes?: {
     createdAt: string;
@@ -282,9 +277,6 @@ export interface Activity extends BaseActivity {
   comments?: {
     id: string;
   }[]; // if you have commented = Array > 0
-  reshares?: {
-    id: string;
-  }[]; // if you have resahred = Array > 0
   reports?: {
     id: string;
     createdAt: string;
@@ -292,9 +284,27 @@ export interface Activity extends BaseActivity {
   _count: {
     likes: number;
     comments: number;
-    reshares: number;
   };
 }
+
+enum ActivityEntityType {
+  mention = "mention",
+  interest = "interest",
+  link = "link",
+  segment = "segment",
+}
+
+export interface BaseActivityEntity {
+  type: ActivityEntityType;
+  startIndex: number;
+  endIndex: number;
+  marks: string[];
+  account: BaseAccount | null;
+  interest: BaseInterest | null;
+  linkPreview: BaseLinkPreview | null;
+}
+
+export interface ActivityEntity extends BaseActivityEntity {}
 
 export const isTypeActivity = (
   activity: BaseActivity | Activity
@@ -1656,7 +1666,7 @@ export const isTypeEventActivationCompletion = (
   );
 };
 
-export interface LinkPreview {
+export interface BaseLinkPreview {
   id: number;
   activityId: string;
   url: string;
@@ -1671,6 +1681,8 @@ export interface LinkPreview {
   video: string | null;
   favicon: string | null;
 }
+
+export interface LinkPreview extends BaseLinkPreview {}
 
 export interface StreamInput {
   cloudflareId: string;

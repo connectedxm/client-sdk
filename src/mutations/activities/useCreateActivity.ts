@@ -9,7 +9,7 @@ import {
 import {
   UpdateCommentsInfinite,
   UpdateCommentsSingle,
-} from "../activities/optimistic/UpdateComments";
+} from "./optimistic/UpdateComments";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -20,33 +20,26 @@ import { AppendInfiniteQuery } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
 
-export interface CreateActivity {
+interface ActivityCreateParams {
   message: string;
-  contentId?: string;
+  entities: any[];
+  imageId?: string;
+  videoId?: string;
   eventId?: string;
   groupId?: string;
+  contentId?: string;
   commentedId?: string;
-  videoId?: string;
 }
 
-export interface CreateInterest {
-  name: string;
-  imageId?: string;
+export interface CreateActivityParams extends MutationParams {
+  activity: ActivityCreateParams;
 }
 
-export interface SelfCreateActivityParams extends MutationParams {
-  activity: CreateActivity;
-  base64Image?: any;
-  interests?: CreateInterest[];
-}
-
-export const SelfCreateActivity = async ({
+export const CreateActivity = async ({
   activity,
-  base64Image,
-  interests,
   clientApiParams,
   queryClient,
-}: SelfCreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
+}: CreateActivityParams): Promise<ConnectedXMResponse<Activity>> => {
   if (queryClient) {
     if (activity.commentedId) {
       UpdateCommentsSingle(true, queryClient, [
@@ -65,11 +58,7 @@ export const SelfCreateActivity = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
     `/self/activities`,
-    {
-      activity,
-      imageUri: base64Image ?? undefined,
-      interests: interests ?? undefined,
-    }
+    activity
   );
 
   if (queryClient && data.status === "ok") {
@@ -152,17 +141,17 @@ export const SelfCreateActivity = async ({
   return data;
 };
 
-export const useSelfCreateActivity = (
+export const useCreateActivity = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelfCreateActivity>>,
-      Omit<SelfCreateActivityParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof CreateActivity>>,
+      Omit<CreateActivityParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    SelfCreateActivityParams,
-    Awaited<ReturnType<typeof SelfCreateActivity>>
-  >(SelfCreateActivity, options);
+    CreateActivityParams,
+    Awaited<ReturnType<typeof CreateActivity>>
+  >(CreateActivity, options);
 };
