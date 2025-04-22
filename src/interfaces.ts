@@ -671,7 +671,7 @@ export interface BasePass {
   couponId: string | null;
   coupon: BaseCoupon | null;
   packageId: string | null;
-  sessions: BaseSessionPass[];
+  accesses: BaseEventSessionAccess[];
   createdAt: string;
 }
 
@@ -932,7 +932,6 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
-  questions: BaseSessionQuestion[];
   supply?: number | null;
 }
 
@@ -963,43 +962,14 @@ export interface SessionLocation extends BaseSessionLocation {
   updatedAt: string | null;
 }
 
-export interface BaseSessionQuestion {
-  id: string;
-  name: string;
-  label: string | null;
-  description: string | null;
-  required: boolean;
-}
-
-export interface SessionQuestion extends BaseSessionQuestion {
-  createdAt: string | null;
-  updatedAt: string | null;
-}
-
-export interface BaseSessionQuestionResponse {
-  id: string;
-  value: string;
-}
-
-export interface SessionQuestionResponse extends BaseSessionQuestionResponse {
-  createdAt: string;
-  updatedAt: string;
-}
-
-export enum SessionPassStatus {
-  draft = "draft",
-  ready = "ready",
-  canceled = "canceled",
-}
-
-export interface BaseSessionPass {
+export interface BaseEventSessionAccess {
   id: string;
   canceled: boolean;
   sessionId: string;
   session: BaseSession;
 }
 
-export interface SessionPass extends BaseSessionPass {
+export interface EventSessionAccess extends BaseEventSessionAccess {
   pass: BasePass;
   createdAt: string;
   updatedAt: string;
