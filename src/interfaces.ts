@@ -287,7 +287,7 @@ export interface Activity extends BaseActivity {
   };
 }
 
-enum ActivityEntityType {
+export enum ActivityEntityType {
   mention = "mention",
   interest = "interest",
   link = "link",

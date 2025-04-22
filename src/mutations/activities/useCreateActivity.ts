@@ -14,15 +14,53 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { Activity, ConnectedXMResponse } from "@src/interfaces";
+import {
+  Activity,
+  ConnectedXMResponse,
+  ActivityEntityType,
+} from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
 
+export type MarkType = "bold" | "italic" | "underline" | "strike";
+
+export interface BaseActivityEntityInput {
+  type: ActivityEntityType;
+  startIndex: number;
+  endIndex: number;
+  marks: MarkType[];
+}
+
+export interface MentionInput extends BaseActivityEntityInput {
+  type: ActivityEntityType.mention;
+  accountId: string;
+}
+
+export interface LinkInput extends BaseActivityEntityInput {
+  type: ActivityEntityType.link;
+  url: string;
+}
+
+export interface InterestInput extends BaseActivityEntityInput {
+  type: ActivityEntityType.interest;
+  interestId: string;
+}
+
+export interface SegmentInput extends BaseActivityEntityInput {
+  type: ActivityEntityType.segment;
+}
+
+export type ActivityEntityInput =
+  | MentionInput
+  | LinkInput
+  | InterestInput
+  | SegmentInput;
+
 interface ActivityCreateParams {
   message: string;
-  entities: any[];
+  entities: ActivityEntityInput[];
   imageId?: string;
   videoId?: string;
   eventId?: string;
