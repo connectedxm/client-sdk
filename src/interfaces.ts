@@ -968,14 +968,92 @@ export interface BaseEventSessionAccess {
   id: string;
   canceled: boolean;
   sessionId: string;
+  passId: string;
   session: BaseSession;
 }
 
 export interface EventSessionAccess extends BaseEventSessionAccess {
+  responses: EventSessionQuestionResponse[];
   pass: BasePass;
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BaseEventSessionSection {
+  id: string;
+  name: string;
+  description: string | null;
+  sortOrder: number;
+}
+
+export interface EventSessionSection extends BaseEventSessionSection {
+  questions: EventSessionQuestion[];
+}
+
+export enum EventSessionQuestionType {
+  text = "text",
+  textarea = "textarea",
+  number = "number",
+  time = "time",
+  date = "date",
+  toggle = "toggle",
+  select = "select",
+  radio = "radio",
+  checkbox = "checkbox",
+  search = "search",
+  file = "file",
+}
+
+export interface BaseEventSessionQuestion {
+  id: string;
+  featured: boolean;
+  type: EventSessionQuestionType;
+  name: string;
+  required: boolean;
+  description: string | null;
+  label: string | null;
+  placeholder: string | null;
+  default: string | null;
+  mutable: boolean;
+  min: string | null;
+  max: string | null;
+  validation: string | null;
+  validationMessage: string | null;
+  sortOrder: number;
+  choices: BaseEventSessionQuestionChoice[];
+}
+
+export interface EventSessionQuestion extends BaseEventSessionQuestion {}
+
+export interface BaseEventSessionQuestionChoice {
+  id: string;
+  value: string;
+  text: string | null;
+  supply: number | null;
+  description: string | null;
+  sortOrder: number;
+  subQuestions: EventSessionQuestion[] | { questionId: string }[];
+}
+
+export interface EventSessionQuestionChoice
+  extends BaseEventSessionQuestionChoice {}
+
+export interface BaseEventSessionQuestionResponse {
+  questionId: string;
+  question: BaseEventSessionQuestion;
+  value: string;
+}
+
+export interface EventSessionQuestionResponse
+  extends BaseEventSessionQuestionResponse {}
+
+export interface BaseEventSessionQuestionSearchValue {
+  id: string;
+  value: string;
+}
+
+export interface EventSessionQuestionSearchValue
+  extends BaseEventSessionQuestionSearchValue {}
 
 export interface BaseEventPage {
   id: string;
@@ -2589,6 +2667,7 @@ export interface BaseSurveyQuestionSearchValue {
 
 export interface SurveyQuestionSearchValue
   extends BaseSurveyQuestionSearchValue {}
+
 export interface BaseEventGalleryImage {
   id: string;
   name: string;

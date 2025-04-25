@@ -25,3 +25,4 @@ export * from "./useGetEventSponsorship";
 export * from "./useGetEventMedia";
 export * from "./useGetEventImages";
 export * from "./useGetEventImage";
+export * from "./useGetEventSessionQuestionSearchValues";
