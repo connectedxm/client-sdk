@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, BaseVideo } from "@src/interfaces";
+import { ConnectedXMResponse, BaseImage } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -19,10 +19,10 @@ export interface UploadImageParams extends MutationParams {
 export const UploadImage = async ({
   image,
   clientApiParams,
-}: UploadImageParams): Promise<ConnectedXMResponse<BaseVideo>> => {
+}: UploadImageParams): Promise<ConnectedXMResponse<BaseImage>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
-  const { data } = await clientApi.post<ConnectedXMResponse<BaseVideo>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<BaseImage>>(
     `/storage/images/upload`,
     image
   );

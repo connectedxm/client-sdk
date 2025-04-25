@@ -39,7 +39,7 @@ export interface MentionInput extends BaseActivityEntityInput {
 
 export interface LinkInput extends BaseActivityEntityInput {
   type: ActivityEntityType.link;
-  url: string;
+  href: string;
 }
 
 export interface InterestInput extends BaseActivityEntityInput {
@@ -94,7 +94,7 @@ export const CreateActivity = async ({
 
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
-    `/self/activities`,
+    `/activities`,
     activity
   );
 
