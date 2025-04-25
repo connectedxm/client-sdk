@@ -6,12 +6,12 @@ import useConnectedMutation, {
 
 import {
   ADD_SELF_RELATIONSHIP,
+  GROUP_QUERY_KEY,
   GROUPS_QUERY_KEY,
-  SET_GROUP_QUERY_DATA,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface CreateGroup {
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
+interface CreateGroupInput {
   name: string;
   description: string;
   access: keyof typeof GroupAccess;
@@ -20,7 +20,7 @@ interface CreateGroup {
 }
 
 export interface CreateGroupParams extends MutationParams {
-  group: CreateGroup;
+  group: CreateGroupInput;
   imageDataUri?: string;
 }
 
@@ -37,10 +37,17 @@ export const CreateGroup = async ({
   });
 
   if (queryClient && data.status === "ok") {
-    SET_GROUP_QUERY_DATA(queryClient, [data.data.id], data);
     queryClient.invalidateQueries({
       queryKey: GROUPS_QUERY_KEY(),
     });
+
+    SetSingleQueryData(
+      queryClient,
+      GROUP_QUERY_KEY(data.data.id),
+      clientApiParams.locale,
+      data
+    );
+
     ADD_SELF_RELATIONSHIP(
       queryClient,
       [clientApiParams.locale],

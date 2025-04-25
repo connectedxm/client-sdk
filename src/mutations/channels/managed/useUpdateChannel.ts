@@ -5,10 +5,8 @@ import useConnectedMutation, {
 } from "../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import {
-  SET_CHANNEL_QUERY_DATA,
-  SET_MANAGED_CHANNEL_QUERY_DATA,
-} from "@src/queries";
+import { CHANNEL_QUERY_KEY, MANAGED_CHANNEL_QUERY_KEY } from "@src/queries";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface UpdateChannel {
   name?: string;
@@ -46,8 +44,20 @@ export const UpdateChannel = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_MANAGED_CHANNEL_QUERY_DATA(queryClient, [channelId], data);
-    if (data.data) SET_CHANNEL_QUERY_DATA(queryClient, [channelId], data);
+    SetSingleQueryData(
+      queryClient,
+      MANAGED_CHANNEL_QUERY_KEY(channelId),
+      clientApiParams.locale,
+      data.data
+    );
+    if (data.data) {
+      SetSingleQueryData(
+        queryClient,
+        CHANNEL_QUERY_KEY(channelId),
+        clientApiParams.locale,
+        data.data
+      );
+    }
   }
 
   return data;

@@ -1,6 +1,6 @@
 {
   "name": "@connectedxm/client",
-  "version": "2.2.3",
+  "version": "2.3.0-beta.1",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "type": "module",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
-    "immer": "^10.1.1",
+    "immer": "^10.1.1"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.0.0",

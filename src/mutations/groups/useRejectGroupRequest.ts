@@ -6,10 +6,11 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  GROUP_REQUEST_QUERY_KEY,
   GROUP_REQUESTS_QUERY_KEY,
   REMOVE_SELF_RELATIONSHIP,
-  SET_GROUP_REQUEST_QUERY_DATA,
 } from "@src/queries";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface RejectGroupRequestParams extends MutationParams {
   groupId: string;
@@ -28,7 +29,12 @@ export const RejectGroupRequest = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_GROUP_REQUEST_QUERY_DATA(queryClient, [groupId, data.data.id], data);
+    SetSingleQueryData(
+      queryClient,
+      GROUP_REQUEST_QUERY_KEY(groupId, data.data.id),
+      clientApiParams.locale,
+      data
+    );
 
     queryClient.invalidateQueries({
       queryKey: GROUP_REQUESTS_QUERY_KEY(groupId),

@@ -4,17 +4,18 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
-import { SET_THREAD_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
+import { THREAD_QUERY_KEY } from "@src/queries";
 
-interface UpdateThread {
+interface UpdateThreadInput {
   subject?: string;
   imageId?: string;
 }
 
 export interface UpdateThreadParams extends MutationParams {
   threadId: string;
-  thread: UpdateThread;
+  thread: UpdateThreadInput;
 }
 
 export const UpdateThread = async ({
@@ -30,7 +31,12 @@ export const UpdateThread = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
+    SetSingleQueryData(
+      queryClient,
+      THREAD_QUERY_KEY(data.data.id),
+      clientApiParams.locale,
+      data
+    );
   }
 
   return data;

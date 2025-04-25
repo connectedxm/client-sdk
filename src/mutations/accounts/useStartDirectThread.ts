@@ -4,10 +4,9 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
-import { SET_THREAD_QUERY_DATA, DIRECT_THREADS_QUERY_KEY } from "@src/queries";
+import { DIRECT_THREADS_QUERY_KEY, THREAD_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
-interface StartDirectThread {}
+import { SetSingleQueryData } from "@src/utilities";
 
 export interface StartDirectThreadParams extends MutationParams {
   accountId: string;
@@ -24,7 +23,12 @@ export const StartDirectThread = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
+    SetSingleQueryData(
+      queryClient,
+      THREAD_QUERY_KEY(accountId),
+      clientApiParams.locale,
+      data.data
+    );
     queryClient.invalidateQueries({
       queryKey: DIRECT_THREADS_QUERY_KEY(),
     });

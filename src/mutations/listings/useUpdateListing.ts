@@ -6,9 +6,10 @@ import useConnectedMutation, {
 import {
   EVENTS_QUERY_KEY,
   EVENT_QUERY_KEY,
-  SET_LISTING_QUERY_DATA,
+  LISTING_QUERY_KEY,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface UpdateListing {
   eventType?: keyof typeof EventType;
@@ -62,9 +63,12 @@ export const UpdateListing = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_LISTING_QUERY_DATA(queryClient, [eventId], data, [
+    SetSingleQueryData(
+      queryClient,
+      LISTING_QUERY_KEY(eventId),
       clientApiParams.locale,
-    ]);
+      data
+    );
     queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY() });
     queryClient.invalidateQueries({ queryKey: EVENT_QUERY_KEY(eventId) });
   }

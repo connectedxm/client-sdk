@@ -4,8 +4,9 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
-import { SET_THREAD_QUERY_DATA, PRIVATE_THREADS_QUERY_KEY } from "@src/queries";
+import { PRIVATE_THREADS_QUERY_KEY, THREAD_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 export interface CreateThreadParams extends MutationParams {
   subject: string;
   accountIds: string[];
@@ -33,7 +34,12 @@ export const CreateThread = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
+    SetSingleQueryData(
+      queryClient,
+      THREAD_QUERY_KEY(data.data.id),
+      clientApiParams.locale,
+      data
+    );
     queryClient.invalidateQueries({
       queryKey: PRIVATE_THREADS_QUERY_KEY(),
     });

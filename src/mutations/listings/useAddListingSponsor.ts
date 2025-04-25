@@ -3,8 +3,9 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_SPONSORS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
+import { EVENT_SPONSORS_QUERY_KEY, LISTING_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities";
 
 export interface AddListingSponsorParams extends MutationParams {
   eventId: string;
@@ -26,10 +27,16 @@ export const AddListingSponsor = async ({
   );
 
   if (queryClient && data.status === "ok") {
+    SetSingleQueryData(
+      queryClient,
+      LISTING_QUERY_KEY(eventId),
+      clientApiParams.locale,
+      data
+    );
+
     queryClient.invalidateQueries({
       queryKey: EVENT_SPONSORS_QUERY_KEY(eventId),
     });
-    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
   }
 
   return data;
