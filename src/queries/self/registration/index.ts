@@ -6,3 +6,5 @@ export * from "./useGetSelfEventRegistrationQuestions";
 
 export * from "./useGetSelfEventTicketCouponIntent";
 export * from "./useGetSelfEventRegistrationIntent";
+
+export * from "./sessions";
