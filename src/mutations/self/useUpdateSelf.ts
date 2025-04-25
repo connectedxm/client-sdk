@@ -30,6 +30,7 @@ export interface UpdateSelfParams extends MutationParams {
   discord?: string | null;
   video?: string | null;
   website?: string | null;
+  locale?: string | null;
 }
 
 export const UpdateSelf = async ({

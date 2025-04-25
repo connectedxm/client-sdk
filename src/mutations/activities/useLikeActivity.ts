@@ -33,7 +33,7 @@ export const LikeActivity = async ({
 
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
-    `/self/activities/${activityId}/likes`
+    `/activities/${activityId}/likes`
   );
 
   return data;

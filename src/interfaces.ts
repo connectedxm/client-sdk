@@ -2,6 +2,15 @@ export enum IntegrationType {
   snagtag = "snagtag",
 }
 
+export enum ActivityEntityType {
+  mention = "mention",
+  interest = "interest",
+  link = "link",
+  segment = "segment",
+}
+
+export type MarkType = "bold" | "italic" | "underline" | "strike";
+
 export interface IntegrationDetails {
   type: keyof typeof IntegrationType;
   name: string;
@@ -193,6 +202,10 @@ export interface Account extends BaseAccount {
   discord: string | null;
   video: string | null;
   timezone: string | null;
+  blockedByAccounts?: {
+    id: string;
+    createdAt: string;
+  }[];
   createdAt: string;
 }
 
@@ -252,23 +265,18 @@ export interface AccountShare extends Account {
 export interface BaseActivity {
   id: string;
   message: string;
-  readMore: boolean;
   image: BaseImage | null;
   video: BaseVideo | null;
-  linkPreview: LinkPreview | null;
   account: BaseAccount;
   createdAt: string;
 }
 
 export interface Activity extends BaseActivity {
-  html: string;
-  text: string;
   group: BaseGroup | null;
   event: BaseEvent | null;
-  interests: BaseInterest[] | null;
   content: BaseContent | null;
   commented: BaseActivity | null;
-  reshared: BaseActivity | null;
+  entities: BaseActivityEntity[] | null;
   updatedAt: string;
   likes?: {
     createdAt: string;
@@ -276,19 +284,27 @@ export interface Activity extends BaseActivity {
   comments?: {
     id: string;
   }[]; // if you have commented = Array > 0
-  reshares?: {
+  reports?: {
     id: string;
-  }[]; // if you have resahred = Array > 0
+    createdAt: string;
+  }[]; // if you have reports = Array > 0
   _count: {
     likes: number;
     comments: number;
-    reshares: number;
   };
 }
-export interface SingleActivity extends Activity {
-  html: string;
-  text: string;
+
+export interface BaseActivityEntity {
+  type: ActivityEntityType;
+  startIndex: number;
+  endIndex: number;
+  marks: string[];
+  account: BaseAccount | null;
+  interest: BaseInterest | null;
+  linkPreview: BaseLinkPreview | null;
 }
+
+export interface ActivityEntity extends BaseActivityEntity {}
 
 export const isTypeActivity = (
   activity: BaseActivity | Activity
@@ -656,7 +672,7 @@ export interface BasePass {
   couponId: string | null;
   coupon: BaseCoupon | null;
   packageId: string | null;
-  sessions: BaseSessionPass[];
+  accesses: BaseEventSessionAccess[];
   createdAt: string;
 }
 
@@ -917,7 +933,6 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
-  questions: BaseSessionQuestion[];
   supply?: number | null;
 }
 
@@ -948,43 +963,14 @@ export interface SessionLocation extends BaseSessionLocation {
   updatedAt: string | null;
 }
 
-export interface BaseSessionQuestion {
-  id: string;
-  name: string;
-  label: string | null;
-  description: string | null;
-  required: boolean;
-}
-
-export interface SessionQuestion extends BaseSessionQuestion {
-  createdAt: string | null;
-  updatedAt: string | null;
-}
-
-export interface BaseSessionQuestionResponse {
-  id: string;
-  value: string;
-}
-
-export interface SessionQuestionResponse extends BaseSessionQuestionResponse {
-  createdAt: string;
-  updatedAt: string;
-}
-
-export enum SessionPassStatus {
-  draft = "draft",
-  ready = "ready",
-  canceled = "canceled",
-}
-
-export interface BaseSessionPass {
+export interface BaseEventSessionAccess {
   id: string;
   canceled: boolean;
   sessionId: string;
   session: BaseSession;
 }
 
-export interface SessionPass extends BaseSessionPass {
+export interface EventSessionAccess extends BaseEventSessionAccess {
   pass: BasePass;
   createdAt: string;
   updatedAt: string;
@@ -1235,8 +1221,8 @@ export interface BaseGroupMembership {
 
 export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
-  following: boolean;
   lastThreadsReadAt: string | null;
+  following: boolean;
   activityEmailNotification: boolean;
   activityPushNotification: boolean;
   announcementEmailNotification: boolean;
@@ -1436,6 +1422,7 @@ export interface BasePayment {
   salesTax: number;
   salesTaxRate: string | null;
   chargedAmt: number;
+  currency: string;
   last4: string | null;
   stripeId: string | null;
   createdAt: string;
@@ -1652,7 +1639,7 @@ export const isTypeEventActivationCompletion = (
   );
 };
 
-export interface LinkPreview {
+export interface BaseLinkPreview {
   id: number;
   activityId: string;
   url: string;
@@ -1667,6 +1654,8 @@ export interface LinkPreview {
   video: string | null;
   favicon: string | null;
 }
+
+export interface LinkPreview extends BaseLinkPreview {}
 
 export interface StreamInput {
   cloudflareId: string;
@@ -1746,6 +1735,7 @@ export interface BaseSubscriptionProductPrice {
   id: string;
   active: boolean;
   amount: number;
+  currency: string;
   interval: "day" | "week" | "month" | "year";
   intervalCount: number;
   maxAmount: number;
@@ -1901,6 +1891,7 @@ export interface BasePaymentIntent {
   secret: string;
   referenceId: string;
   amount: number;
+  currency: string;
   metadata: Record<string, any>;
   eventId: string | null;
   registrationId: string | null;
@@ -2108,6 +2099,17 @@ export interface OrganizationConfig {
     };
   };
   MODULES: Record<keyof typeof OrganizationModuleType, OrganizationModule>;
+  CUSTOM_MODULES: {
+    name: string;
+    url: string;
+    iconName: string;
+    color: string;
+    position: "top" | "bottom";
+    translations: {
+      locale: string;
+      name: string;
+    }[];
+  }[];
   SOCIAL: {
     facebook: string | null;
     instagram: string | null;
@@ -2120,6 +2122,7 @@ export interface OrganizationConfig {
   PAYMENT: {
     TYPE: PaymentIntegrationType | "none";
     CONNECTION_ID: string | null;
+    CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
   GOOGLE_SERVICES: string;
@@ -2509,4 +2512,28 @@ export interface BaseEventGalleryImage {
 export interface EventGalleryImage extends BaseEventGalleryImage {
   createdAt: string;
   updatedAt: string;
+}
+
+export interface BaseActivityReport {
+  id: string;
+  activityId: string;
+  accountId: string;
+  createdAt: string;
+}
+
+export interface ActivityReport extends BaseActivityReport {
+  activity: BaseActivity;
+  account: BaseAccount;
+}
+
+export interface BaseBlockedAccount {
+  id: string;
+  blockerId: true;
+  accountId: true;
+  createdAt: string;
+}
+
+export interface BlockedAccount extends BaseBlockedAccount {
+  account: BaseAccount;
+  blocker: BaseAccount;
 }
