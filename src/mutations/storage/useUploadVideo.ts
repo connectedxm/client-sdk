@@ -7,13 +7,17 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UploadVideoParams extends MutationParams {
   dataUri: string;
-  name?: string;
+  source: "activity" | "content";
+  name: string;
+  minutes: number;
 }
 
 export const UploadVideo = async ({
-  clientApiParams,
   dataUri,
+  source,
   name,
+  minutes,
+  clientApiParams,
 }: UploadVideoParams): Promise<ConnectedXMResponse<BaseVideo>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
@@ -21,7 +25,9 @@ export const UploadVideo = async ({
     `/storage/videos`,
     {
       dataUri,
+      source,
       name,
+      minutes,
     }
   );
 

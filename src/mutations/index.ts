@@ -13,5 +13,6 @@ export * from "./storage";
 export * from "./threads";
 export * from "./integrations";
 export * from "./surveys";
+export * from "./insterests";
 
 export * from "./useConnectedMutation";
