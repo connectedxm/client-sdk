@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-case-declarations */
 import React from "react";
 import { QueryClient } from "@tanstack/react-query";
 import WSMessageBus, { type IncomingWSMessage } from "./socket/WSMessageBus";

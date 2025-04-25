@@ -7,14 +7,20 @@ import reactHooksPlugin from "eslint-plugin-react-hooks";
 export default [
   eslint.configs.recommended,
   {
-    files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
       },
+      globals: {
+        window: true,
+        document: true,
+        console: true,
+        WebSocket: true,
+      },
     },
+    files: ["**/*.ts", "**/*.tsx"],
     plugins: {
       "@typescript-eslint": tseslint,
       react: reactPlugin,
