@@ -935,6 +935,9 @@ export interface Session extends BaseSession {
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   streamInput: StreamInput | null;
   supply?: number | null;
+  _count: {
+    sections: number;
+  };
 }
 
 export const isTypeSession = (
@@ -966,7 +969,7 @@ export interface SessionLocation extends BaseSessionLocation {
 
 export interface BaseEventSessionAccess {
   id: string;
-  canceled: boolean;
+  status: PurchaseStatus;
   sessionId: string;
   passId: string;
   session: BaseSession;
