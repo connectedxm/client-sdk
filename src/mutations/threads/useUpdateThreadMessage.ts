@@ -4,7 +4,8 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SET_THREAD_MESSAGE_QUERY_DATA } from "@src/queries";
+import { THREAD_MESSAGE_QUERY_KEY } from "@src/queries";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface UpdateThreadMessageParams extends MutationParams {
   threadId: string;
@@ -26,9 +27,12 @@ export const UpdateThreadMessage = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_THREAD_MESSAGE_QUERY_DATA(queryClient, [threadId, messageId], data, [
+    SetSingleQueryData(
+      queryClient,
+      THREAD_MESSAGE_QUERY_KEY(threadId, messageId),
       clientApiParams.locale,
-    ]);
+      data
+    );
   }
 
   return data;

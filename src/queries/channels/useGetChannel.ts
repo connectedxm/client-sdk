@@ -1,11 +1,10 @@
 import useConnectedSingleQuery, {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 import { Channel } from "@interfaces";
 import { CHANNELS_QUERY_KEY } from "./useGetChannels";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -13,21 +12,6 @@ export const CHANNEL_QUERY_KEY = (channelId: string): QueryKey => [
   ...CHANNELS_QUERY_KEY(),
   channelId,
 ];
-
-export const SET_CHANNEL_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof CHANNEL_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannel>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...CHANNEL_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetChannelParams extends SingleQueryParams {
   channelId: string;

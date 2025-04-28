@@ -7,6 +7,7 @@ import {
   QueryKey,
 } from "@tanstack/react-query";
 import { MutationParams } from ".";
+import ConnectedWebsocket from "./ConnectedWebsocket";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -15,6 +16,10 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connected.dev"
     | "https://staging-client-api.connected.dev"
     | "http://localhost:4001";
+  socketUrl:
+    | "wss://websocket.connected.dev"
+    | "wss://staging-websocket.connected.dev"
+    | "ws://localhost:4002";
   authenticated: boolean | null;
   setAuthenticated: (authenticated: boolean) => void;
   getToken: () => Promise<string | undefined>;
@@ -67,17 +72,20 @@ export const ConnectedXMProvider = ({
   getToken,
   ...state
 }: ConnectedXMProviderProps) => {
+  const [ssr, setSSR] = React.useState<boolean>(true);
+  const [token, setToken] = React.useState<string | undefined>(undefined);
   const [authenticated, setAuthenticated] = React.useState<boolean | null>(
     null
   );
-  const [ssr, setSSR] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     if (!authenticated) {
       getToken().then((token) => {
         if (token) {
+          setToken(token);
           setAuthenticated(true);
         } else {
+          setToken(undefined);
           setAuthenticated(false);
         }
       });
@@ -100,7 +108,15 @@ export const ConnectedXMProvider = ({
             queryClient,
           }}
         >
-          {children}
+          <ConnectedWebsocket
+            queryClient={queryClient}
+            organizationId={state.organizationId}
+            locale={state.locale}
+            socketUrl={state.socketUrl}
+            token={token}
+          >
+            {children}
+          </ConnectedWebsocket>
         </ConnectedXMClientContext.Provider>
       </QueryClientProvider>
     );
@@ -116,7 +132,15 @@ export const ConnectedXMProvider = ({
         queryClient,
       }}
     >
-      {children}
+      <ConnectedWebsocket
+        queryClient={queryClient}
+        organizationId={state.organizationId}
+        locale={state.locale}
+        socketUrl={state.socketUrl}
+        token={token}
+      >
+        {children}
+      </ConnectedWebsocket>
     </ConnectedXMClientContext.Provider>
   );
 };

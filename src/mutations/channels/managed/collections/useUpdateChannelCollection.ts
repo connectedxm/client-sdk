@@ -6,18 +6,19 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  CHANNEL_COLLECTION_QUERY_KEY,
   CHANNEL_COLLECTIONS_QUERY_KEY,
-  SET_CHANNEL_COLLECTION_QUERY_DATA,
 } from "@src/queries/channels";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
-export interface UpdateChannelCollection {
+export interface UpdateChannelCollectionInput {
   name?: string;
   description?: string;
 }
 
 export interface UpdateChannelCollectionParams extends MutationParams {
   channelId: string;
-  collection: UpdateChannelCollection;
+  collection: UpdateChannelCollectionInput;
   collectionId: string;
 }
 
@@ -37,12 +38,13 @@ export const UpdateChannelCollection = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_CHANNEL_COLLECTION_QUERY_DATA(
+    SetSingleQueryData(
       queryClient,
-      [channelId, collectionId],
-      data,
-      [clientApiParams.locale]
+      CHANNEL_COLLECTION_QUERY_KEY(channelId, collectionId),
+      clientApiParams.locale,
+      data.data
     );
+
     queryClient.invalidateQueries({
       queryKey: CHANNEL_COLLECTIONS_QUERY_KEY(channelId),
     });

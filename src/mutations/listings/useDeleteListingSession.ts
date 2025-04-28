@@ -3,8 +3,9 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_SESSIONS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
+import { EVENT_SESSIONS_QUERY_KEY, LISTING_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface DeleteListingSessionParams extends MutationParams {
   eventId: string;
@@ -26,7 +27,12 @@ export const DeleteListingSession = async ({
     queryClient.invalidateQueries({
       queryKey: EVENT_SESSIONS_QUERY_KEY(eventId),
     });
-    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
+    SetSingleQueryData(
+      queryClient,
+      LISTING_QUERY_KEY(eventId),
+      clientApiParams.locale,
+      data
+    );
   }
 
   return data;

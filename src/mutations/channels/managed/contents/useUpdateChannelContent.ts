@@ -6,15 +6,16 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  CHANNEL_CONTENT_QUERY_KEY,
   CHANNEL_CONTENTS_QUERY_KEY,
+  MANAGED_CHANNEL_CONTENT_QUERY_KEY,
   MANAGED_CHANNEL_CONTENTS_QUERY_KEY,
-  SET_CHANNEL_CONTENT_QUERY_DATA,
-  SET_MANAGED_CHANNEL_CONTENT_QUERY_DATA,
 } from "@src/queries";
-import { SET_CONTENT_QUERY_DATA } from "@src/queries/contents/useGetContent";
+import { CONTENT_QUERY_KEY } from "@src/queries/contents/useGetContent";
 import { CONTENTS_QUERY_KEY } from "@src/queries/contents/useGetContents";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
-export interface UpdateChannelContent {
+export interface UpdateChannelContentInput {
   visible?: boolean;
   title?: string;
   description?: string | null;
@@ -36,7 +37,7 @@ export interface UpdateChannelContent {
 export interface UpdateChannelContentParams extends MutationParams {
   channelId: string;
   contentId: string;
-  content: UpdateChannelContent;
+  content: UpdateChannelContentInput;
   imageDataUri?: string;
 }
 
@@ -58,18 +59,27 @@ export const UpdateChannelContent = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_MANAGED_CHANNEL_CONTENT_QUERY_DATA(
+    SetSingleQueryData(
       queryClient,
-      [channelId, contentId],
-      data,
-      [clientApiParams.locale]
+      MANAGED_CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
+      clientApiParams.locale,
+      data.data
     );
-    SET_CHANNEL_CONTENT_QUERY_DATA(queryClient, [channelId, contentId], data, [
+
+    SetSingleQueryData(
+      queryClient,
+      CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
       clientApiParams.locale,
-    ]);
-    SET_CONTENT_QUERY_DATA(queryClient, [contentId], data, [
+      data.data
+    );
+
+    SetSingleQueryData(
+      queryClient,
+      CONTENT_QUERY_KEY(contentId),
       clientApiParams.locale,
-    ]);
+      data.data
+    );
+
     queryClient.invalidateQueries({
       queryKey: MANAGED_CHANNEL_CONTENTS_QUERY_KEY(channelId),
     });

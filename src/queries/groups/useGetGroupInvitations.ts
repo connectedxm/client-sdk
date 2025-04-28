@@ -1,12 +1,10 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { GroupInvitation, GroupInvitationStatus } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -22,21 +20,6 @@ export const GROUP_INVITATIONS_QUERY_KEY = (
   }
 
   return keys;
-};
-
-export const SET_GROUP_INVITATIONS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof GROUP_INVITATIONS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetGroupInvitations>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...GROUP_INVITATIONS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
 };
 
 export interface GetGroupInvitationsProps extends InfiniteQueryParams {

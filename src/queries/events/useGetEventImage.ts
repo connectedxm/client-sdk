@@ -1,5 +1,4 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
@@ -7,7 +6,7 @@ import {
 
 import type { EventGalleryImage } from "@interfaces";
 import { EVENT_IMAGES_QUERY_KEY } from "./useGetEventImages";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -15,21 +14,6 @@ export const EVENT_IMAGE_QUERY_KEY = (
   eventId: string,
   galleryImageId: string
 ): QueryKey => [...EVENT_IMAGES_QUERY_KEY(eventId), galleryImageId];
-
-export const SET_EVENT_IMAGE_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof EVENT_IMAGE_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetEventImage>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...EVENT_IMAGE_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetEventImageProps extends SingleQueryParams {
   eventId: string;

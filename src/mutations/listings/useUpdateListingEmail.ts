@@ -8,7 +8,8 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SET_LISTING_EMAIL_QUERY_DATA } from "@src/queries/listings/useGetListingEmail";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
+import { LISTING_EMAIL_QUERY_KEY } from "@src/queries";
 
 interface UpdateEmail {
   body?: string;
@@ -35,7 +36,12 @@ export const UpdateListingEmail = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_LISTING_EMAIL_QUERY_DATA(queryClient, [eventId, type], data);
+    SetSingleQueryData(
+      queryClient,
+      LISTING_EMAIL_QUERY_KEY(eventId, type),
+      clientApiParams.locale,
+      data
+    );
   }
 
   return data;

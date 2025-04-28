@@ -4,7 +4,8 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Account, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACCOUNTS_QUERY_KEY, SET_ACCOUNT_QUERY_DATA } from "@src/queries";
+import { ACCOUNT_QUERY_KEY, ACCOUNTS_QUERY_KEY } from "@src/queries";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface BlockAccountParams extends MutationParams {
   accountId: string;
@@ -25,9 +26,12 @@ export const BlockAccount = async ({
       queryKey: ACCOUNTS_QUERY_KEY(),
     });
 
-    SET_ACCOUNT_QUERY_DATA(queryClient, [accountId], data, [
+    SetSingleQueryData(
+      queryClient,
+      ACCOUNT_QUERY_KEY(accountId),
       clientApiParams.locale,
-    ]);
+      data.data
+    );
   }
 
   return data;

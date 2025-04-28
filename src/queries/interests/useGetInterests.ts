@@ -1,31 +1,14 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { Interest } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const INTERESTS_QUERY_KEY = (): QueryKey => ["INTERESTS"];
-
-export const SET_INTERESTS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof INTERESTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetInterests>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...INTERESTS_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
 
 export interface GetInterestsProps extends InfiniteQueryParams {}
 

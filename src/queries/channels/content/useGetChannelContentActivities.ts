@@ -2,13 +2,9 @@ import { Activity } from "@interfaces";
 import {
   useConnectedInfiniteQuery,
   InfiniteQueryParams,
-  GetBaseInfiniteQueryKeys,
-  setFirstPageData,
   InfiniteQueryOptions,
 } from "../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { ACTIVITY_QUERY_KEY } from "../../activities/useGetActivity";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACTIVITIES_QUERY_KEY } from "../../activities";
@@ -22,21 +18,6 @@ export const CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY = (
   ...CHANNEL_CONTENT_QUERY_KEY(channelId, contentId),
 ];
 
-export const SET_CONTENT_ACTIVITIES_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetChannelContentActivities>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
-};
-
 export interface GetChannelContentActivitiesParams extends InfiniteQueryParams {
   channelId: string;
   contentId: string;
@@ -49,9 +30,7 @@ export const GetChannelContentActivities = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetChannelContentActivitiesParams): Promise<
   ConnectedXMResponse<Activity[]>
 > => {
@@ -67,14 +46,6 @@ export const GetChannelContentActivities = async ({
       },
     }
   );
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
 
   return data;
 };

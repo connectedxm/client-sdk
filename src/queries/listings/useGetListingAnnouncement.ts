@@ -1,11 +1,10 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 import type { Announcement } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_ANNOUNCEMENTS_QUERY_KEY } from "./useGetListingAnnouncements";
@@ -14,21 +13,6 @@ export const LISTING_ANNOUNCEMENT_QUERY_KEY = (
   eventId: string,
   announcementId: string
 ): QueryKey => [LISTING_ANNOUNCEMENTS_QUERY_KEY(eventId), announcementId];
-
-export const SET_LISTING_ANNOUNCEMENT_QUERY_KEY = (
-  client: QueryClient,
-  keyParams: Parameters<typeof LISTING_ANNOUNCEMENT_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventListingAnnouncement>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...LISTING_ANNOUNCEMENT_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetSelfEventListingAnnouncementProps
   extends SingleQueryParams {

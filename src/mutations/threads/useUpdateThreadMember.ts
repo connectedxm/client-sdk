@@ -20,7 +20,7 @@ export const UpdateThreadMember = async ({
   queryClient,
 }: UpdateThreadMemberParams): Promise<ConnectedXMResponse<ThreadMember>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.patch<ConnectedXMResponse<ThreadMember>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<ThreadMember>>(
     `/threads/${threadId}/members/${accountId}`,
     {
       role,

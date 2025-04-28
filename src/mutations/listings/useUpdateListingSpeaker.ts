@@ -3,8 +3,9 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { EVENT_SPEAKERS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
+import { EVENT_SPEAKERS_QUERY_KEY, LISTING_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface UpdateListingSpeakerParams extends MutationParams {
   eventId: string;
@@ -40,7 +41,12 @@ export const UpdateListingSpeaker = async ({
     queryClient.invalidateQueries({
       queryKey: EVENT_SPEAKERS_QUERY_KEY(eventId),
     });
-    SET_LISTING_QUERY_DATA(queryClient, [eventId], data);
+    SetSingleQueryData(
+      queryClient,
+      LISTING_QUERY_KEY(eventId),
+      clientApiParams.locale,
+      data
+    );
   }
 
   return data;

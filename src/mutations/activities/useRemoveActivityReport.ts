@@ -4,7 +4,8 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACTIVITIES_QUERY_KEY, SET_ACTIVITY_QUERY_DATA } from "@src/queries";
+import { ACTIVITIES_QUERY_KEY, ACTIVITY_QUERY_KEY } from "@src/queries";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 
 export interface RemoveActivityReportParams extends MutationParams {
   activityId: string;
@@ -27,9 +28,12 @@ export const RemoveActivityReport = async ({
       queryKey: ACTIVITIES_QUERY_KEY(),
     });
 
-    SET_ACTIVITY_QUERY_DATA(queryClient, [activityId], data, [
+    SetSingleQueryData(
+      queryClient,
+      ACTIVITY_QUERY_KEY(activityId),
       clientApiParams.locale,
-    ]);
+      data.data
+    );
   }
 
   return data;

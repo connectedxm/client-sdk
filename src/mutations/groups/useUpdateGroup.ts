@@ -4,9 +4,9 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
-import { GROUPS_QUERY_KEY, SET_GROUP_QUERY_DATA } from "@src/queries";
+import { GROUP_QUERY_KEY, GROUPS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
 export interface UpdateGroupParams extends MutationParams {
   groupId: string;
   group: {
@@ -36,7 +36,12 @@ export const UpdateGroup = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_GROUP_QUERY_DATA(queryClient, [data.data.id], data);
+    SetSingleQueryData(
+      queryClient,
+      GROUP_QUERY_KEY(data.data.id),
+      clientApiParams.locale,
+      data
+    );
     queryClient.invalidateQueries({
       queryKey: GROUPS_QUERY_KEY(),
     });

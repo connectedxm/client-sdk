@@ -1,33 +1,17 @@
 import {
-  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
 import type { ConnectedXMResponse, EventSponsorshipLevel } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 
 export const EVENT_SPONSORSHIP_LEVELS_QUERY_KEY = (
   eventId: string
 ): QueryKey => [...EVENT_QUERY_KEY(eventId), "SPONSORSHIPS"];
-
-export const SET_EVENT_SPONSORSHIP_LEVELS_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof EVENT_SPONSORSHIP_LEVELS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetEventSponsorshipLevels>>,
-  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...EVENT_SPONSORSHIP_LEVELS_QUERY_KEY(...keyParams),
-      ...GetBaseSingleQueryKeys(...baseKeys),
-    ],
-    response
-  );
-};
 
 export interface GetEventSponsorshipLevelsProps extends SingleQueryParams {
   eventId: string;

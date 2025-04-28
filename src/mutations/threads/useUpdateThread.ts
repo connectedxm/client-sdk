@@ -1,54 +1,42 @@
-import {
-  Thread,
-  ThreadAccessLevel,
-  ConnectedXMResponse,
-} from "@src/interfaces";
+import { Thread, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
 
-import { THREADS_QUERY_KEY, SET_THREAD_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SetSingleQueryData } from "@src/utilities/SingleQueryHelpers";
+import { THREAD_QUERY_KEY } from "@src/queries";
 
-interface UpdateThread {
-  id: string;
-  name?: string;
-  description?: string;
+interface UpdateThreadInput {
+  subject?: string;
   imageId?: string;
-  featured?: boolean;
-  eventId?: string;
-  groupId?: string;
-  access?: keyof typeof ThreadAccessLevel;
 }
 
 export interface UpdateThreadParams extends MutationParams {
   threadId: string;
-  thread: UpdateThread;
-  imageDataUri?: string;
+  thread: UpdateThreadInput;
 }
 
 export const UpdateThread = async ({
   threadId,
   thread,
-  imageDataUri,
   clientApiParams,
   queryClient,
 }: UpdateThreadParams): Promise<ConnectedXMResponse<Thread>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.patch<ConnectedXMResponse<Thread>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<Thread>>(
     `/threads/${threadId}`,
-    {
-      thread,
-      imageDataUri,
-    }
+    thread
   );
 
   if (queryClient && data.status === "ok") {
-    SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
-    queryClient.invalidateQueries({
-      queryKey: THREADS_QUERY_KEY(),
-    });
+    SetSingleQueryData(
+      queryClient,
+      THREAD_QUERY_KEY(data.data.id),
+      clientApiParams.locale,
+      data
+    );
   }
 
   return data;
