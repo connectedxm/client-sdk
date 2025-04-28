@@ -1,6 +1,6 @@
 {
   "name": "@connectedxm/client",
-  "version": "2.2.3",
+  "version": "2.3.3",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "type": "module",
@@ -24,13 +24,23 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
-    "immer": "^10.1.1",
-    "local": "^0.3.3"
+    "immer": "^10.1.1"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.0.0",
-    "react": "^19.0.0",
-    "react-use-websocket": "^4.0.0"
+    "@types/react": "^18.0.0 || ^19.0.0",
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "@types/react": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@swc/core": "^1.11.21",
@@ -41,6 +51,7 @@
     "eslint": "^9.24.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "react": "^19.1.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^3.1.1"
