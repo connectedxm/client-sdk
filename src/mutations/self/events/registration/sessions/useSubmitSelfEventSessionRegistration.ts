@@ -27,7 +27,7 @@ export const SubmitSelfEventSessionRegistration = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.removeQueries({
+    queryClient.invalidateQueries({
       queryKey: SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY(eventId, sessionId),
     });
     queryClient.invalidateQueries({
