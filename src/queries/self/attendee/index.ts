@@ -9,4 +9,3 @@ export * from "./useGetSelfEventAttendee";
 export * from "./useGetSelfEventAttendeePassQuestionSections";
 export * from "./useGetSelfEventAttendeePassAddOns";
 export * from "./useGetSelfEventAttendeeTransferAccounts";
-export * from "./sessions";
