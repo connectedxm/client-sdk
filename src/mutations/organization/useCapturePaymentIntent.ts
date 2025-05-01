@@ -2,7 +2,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { Activity, ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
+import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
   ADD_SELF_RELATIONSHIP,
@@ -23,9 +23,9 @@ export const CapturePaymentIntent = async ({
   paymentDetails,
   clientApiParams,
   queryClient,
-}: CapturePaymentIntentParams): Promise<ConnectedXMResponse<Activity>> => {
+}: CapturePaymentIntentParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<Activity>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/organization/intents/${intent.id}/capture`,
     {
       nonce: paymentDetails?.nonce || undefined,
@@ -34,6 +34,10 @@ export const CapturePaymentIntent = async ({
   );
 
   if (queryClient && data.status === "ok") {
+    queryClient.removeQueries({
+      predicate: ({ queryKey }) => queryKey.includes("INTENT"),
+    });
+
     if (intent.eventId) {
       queryClient.removeQueries({
         queryKey: ["SELF", "REGISTRATION"],
@@ -51,6 +55,10 @@ export const CapturePaymentIntent = async ({
         "events",
         intent.eventId
       );
+
+      queryClient.invalidateQueries({
+        predicate: ({ queryKey }) => queryKey.includes("SESSION_REGISTRATION"),
+      });
     }
 
     if (intent.invoiceId) {

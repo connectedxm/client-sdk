@@ -6,3 +6,5 @@ export * from "./useUpdateSelfEventRegistrationAddOns";
 export * from "./useUpdateSelfEventRegistrationReservations";
 export * from "./useUpdateSelfEventRegistrationResponses";
 export * from "./useSubmitSelfEventRegistration";
+
+export * from "./sessions";
