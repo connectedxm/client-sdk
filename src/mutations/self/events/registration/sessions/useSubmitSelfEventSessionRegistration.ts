@@ -4,7 +4,10 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY } from "@src/queries/self/registration/sessions";
+import {
+  SELF_EVENT_SESSION_REGISTRATION_AVAILABLE_PASSES_QUERY_KEY,
+  SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY,
+} from "@src/queries/self/registration/sessions";
 import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "@src/queries";
 
 export interface SubmitSelfEventSessionRegistrationParams
@@ -32,6 +35,12 @@ export const SubmitSelfEventSessionRegistration = async ({
     });
     queryClient.invalidateQueries({
       queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_SESSION_REGISTRATION_AVAILABLE_PASSES_QUERY_KEY(
+        eventId,
+        sessionId
+      ),
     });
   }
 
