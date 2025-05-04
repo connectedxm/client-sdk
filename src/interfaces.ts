@@ -2297,7 +2297,6 @@ export interface OrganizationConfig {
     CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
-  GOOGLE_SERVICES: string;
 }
 export interface OrganizationModule {
   requireAuth: boolean;
