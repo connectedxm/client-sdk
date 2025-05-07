@@ -233,6 +233,7 @@ export interface Self extends Omit<Account, "_count"> {
   shareCode: string;
   chatToken?: string;
   locale: string;
+  termsAccepted: string | null;
   _count: {
     chatChannels: number;
     notifications: number;
