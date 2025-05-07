@@ -823,7 +823,7 @@ export interface ManagedCouponPass {
   id: string;
   status: PurchaseStatus;
   coupon: BaseCoupon;
-  registration: {
+  attendee: {
     account: BaseAccount;
   };
   createdAt: string;
