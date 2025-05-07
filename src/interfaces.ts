@@ -974,10 +974,10 @@ export interface BaseEventSessionAccess {
   sessionId: string;
   passId: string;
   session: BaseSession;
+  responses: EventSessionQuestionResponse[];
 }
 
 export interface EventSessionAccess extends BaseEventSessionAccess {
-  responses: EventSessionQuestionResponse[];
   pass: BasePass;
   createdAt: string;
   updatedAt: string;
@@ -1513,6 +1513,7 @@ export interface Payment extends BasePayment {
   addOns: BaseEventAddOn[];
   purchases: BasePass[];
   coupons: BaseCoupon[];
+  accesses: BaseEventSessionAccess[];
 }
 
 export enum LeadStatus {
