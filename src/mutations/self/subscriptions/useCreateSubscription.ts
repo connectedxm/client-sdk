@@ -11,7 +11,6 @@ export interface CreateSubscriptionParams extends MutationParams {
 }
 
 export interface CreateSubscriptionResponse {
-  type: string;
   clientSecret: string;
 }
 
