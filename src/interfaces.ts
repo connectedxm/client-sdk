@@ -379,7 +379,6 @@ export enum EventType {
 }
 
 export interface Event extends BaseEvent {
-  approved: boolean;
   eventType: EventType;
   longDescription: string | null;
   externalUrl: string | null;
