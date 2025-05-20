@@ -3,13 +3,13 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "../../../useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
-import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
+import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "../useGetSelfEventAttendee";
 
-export const SELF_EVENT_ATTENDEE_PASS_SESSIONS_QUERY_KEY = (
+export const SELF_EVENT_ATTENDEE_PASS_AVAILABLE_SESSIONS_QUERY_KEY = (
   eventId: string,
   passId: string
 ): QueryKey => [
@@ -19,58 +19,62 @@ export const SELF_EVENT_ATTENDEE_PASS_SESSIONS_QUERY_KEY = (
   "AVAILABLE_SESSIONS",
 ];
 
-export const SET_SELF_EVENT_ATTENDEE_PASS_SESSIONS_QUERY_DATA = (
+export const SET_SELF_EVENT_ATTENDEE_PASS_AVAILABLE_SESSIONS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_ATTENDEE_PASS_SESSIONS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventAttendeePassSessions>>,
+  keyParams: Parameters<
+    typeof SELF_EVENT_ATTENDEE_PASS_AVAILABLE_SESSIONS_QUERY_KEY
+  >,
+  response: Awaited<
+    ReturnType<typeof GetSelfEventAttendeePassAvailableSessions>
+  >,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_ATTENDEE_PASS_SESSIONS_QUERY_KEY(...keyParams),
+      ...SELF_EVENT_ATTENDEE_PASS_AVAILABLE_SESSIONS_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventAttendeePassSessionsProps
+export interface GetSelfEventAttendeePassAvailableSessionsProps
   extends SingleQueryParams {
   eventId: string;
   passId: string;
 }
 
-export const GetSelfEventAttendeePassSessions = async ({
+export const GetSelfEventAttendeePassAvailableSessions = async ({
   eventId,
   passId,
   clientApiParams,
-}: GetSelfEventAttendeePassSessionsProps): Promise<
+}: GetSelfEventAttendeePassAvailableSessionsProps): Promise<
   ConnectedXMResponse<Session[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/attendee/passes/${passId}/sessions`,
+    `/self/events/${eventId}/attendee/passes/${passId}/available/sessions`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventAttendeePassSessions = (
+export const useGetSelfEventAttendeePassAvailableSessions = (
   eventId: string,
   passId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventAttendeePassSessions>
+    ReturnType<typeof GetSelfEventAttendeePassAvailableSessions>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventAttendeePassSessions>
+    ReturnType<typeof GetSelfEventAttendeePassAvailableSessions>
   >(
-    SELF_EVENT_ATTENDEE_PASS_SESSIONS_QUERY_KEY(eventId, passId),
+    SELF_EVENT_ATTENDEE_PASS_AVAILABLE_SESSIONS_QUERY_KEY(eventId, passId),
     (params: SingleQueryParams) =>
-      GetSelfEventAttendeePassSessions({
+      GetSelfEventAttendeePassAvailableSessions({
         eventId,
         passId,
         ...params,
