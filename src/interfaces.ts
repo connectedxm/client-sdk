@@ -2255,6 +2255,7 @@ export interface OrganizationConfig {
   APP_ICON: string | null;
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;
+  SPLASH_SCREEN_COLOR: string;
   DEFAULT_LOCALE: string;
   LOCALES: string[];
   LANGUAGES: Partial<Record<string, Record<string, string>>>;
@@ -2305,6 +2306,7 @@ export interface OrganizationModule {
   enabledTiers: string[];
   editable: boolean;
   editableTiers: string[];
+  options: object;
 }
 
 export interface OrganizationOAuth {
