@@ -2306,7 +2306,7 @@ export interface OrganizationModule {
   enabledTiers: string[];
   editable: boolean;
   editableTiers: string[];
-  options: object;
+  options: any;
 }
 
 export interface OrganizationOAuth {
