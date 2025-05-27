@@ -385,7 +385,6 @@ export interface Event extends BaseEvent {
   meetingUrl: string | null;
   venue: string | null;
   venueMap: BaseImage | null;
-  location: string | null;
   address1: string | null;
   address2: string | null;
   city: string | null;
@@ -2306,7 +2305,7 @@ export interface OrganizationModule {
   enabledTiers: string[];
   editable: boolean;
   editableTiers: string[];
-  options: Record<string, string>;
+  options: Record<string, boolean>;
 }
 
 export interface OrganizationOAuth {
