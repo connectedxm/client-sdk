@@ -1,4 +1,4 @@
-import { Activity } from "@interfaces";
+import type { EventMediaItem } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -6,71 +6,79 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const EVENT_MEDIA_QUERY_KEY = (
+export const EVENT_MEDIA_ITEMS_QUERY_KEY = (
   eventId: string,
-  type?: "images" | "videos"
-): QueryKey => [...EVENT_QUERY_KEY(eventId), "MEDIA", type || "all"];
+  type?: string
+): QueryKey => {
+  const key = [...EVENT_QUERY_KEY(eventId), "MEDIA_ITEMS"];
+  if (type) {
+    key.push(type);
+  }
+  return key;
+};
 
-export const SET_EVENT_MEDIA_QUERY_DATA = (
+export const SET_EVENT_MEDIA_ITEMS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof EVENT_MEDIA_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetEventMedia>>,
+  keyParams: Parameters<typeof EVENT_MEDIA_ITEMS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventMediaItems>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...EVENT_MEDIA_QUERY_KEY(...keyParams),
+      ...EVENT_MEDIA_ITEMS_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetEventMediaProps extends InfiniteQueryParams {
+export interface GetEventMediaItemsProps extends InfiniteQueryParams {
   eventId: string;
-  type?: "images" | "videos";
+  type?: "image" | "video" | "file";
 }
 
-export const GetEventMedia = async ({
+export const GetEventMediaItems = async ({
   eventId,
   type,
   pageParam,
-  pageSize,
   orderBy,
   search,
   clientApiParams,
-}: GetEventMediaProps): Promise<ConnectedXMResponse<Activity[]>> => {
+}: GetEventMediaItemsProps): Promise<ConnectedXMResponse<EventMediaItem[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/media`, {
     params: {
-      type: type || undefined,
       page: pageParam || undefined,
-      pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      type: type || undefined,
     },
   });
   return data;
 };
 
-export const useGetEventMedia = (
+export const useGetEventMediaItems = (
   eventId: string = "",
-  type?: "images" | "videos",
+  type?: "image" | "video" | "file",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
-  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventMedia>>> = {}
+  options: InfiniteQueryOptions<
+    Awaited<ReturnType<typeof GetEventMediaItems>>
+  > = {}
 ) => {
-  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventMedia>>>(
-    EVENT_MEDIA_QUERY_KEY(eventId, type),
+  return useConnectedInfiniteQuery<
+    Awaited<ReturnType<typeof GetEventMediaItems>>
+  >(
+    EVENT_MEDIA_ITEMS_QUERY_KEY(eventId, type),
     (params: InfiniteQueryParams) =>
-      GetEventMedia({ eventId, type, ...params }),
+      GetEventMediaItems({ eventId, type, ...params }),
     params,
     {
       ...options,

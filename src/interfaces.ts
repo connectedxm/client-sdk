@@ -385,7 +385,6 @@ export interface Event extends BaseEvent {
   meetingUrl: string | null;
   venue: string | null;
   venueMap: BaseImage | null;
-  location: string | null;
   address1: string | null;
   address2: string | null;
   city: string | null;
@@ -417,14 +416,14 @@ export interface Event extends BaseEvent {
   sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
   backgroundImage: BaseImage | null;
-  galleryImages: EventGalleryImage[];
+  media: EventMediaItem[];
   _count: {
     activations: number;
     sessions: number;
     speakers: number;
     sponsors: number;
     sponsorshipLevels: number;
-    galleryImages: number;
+    media: number;
   };
 }
 
@@ -2306,7 +2305,7 @@ export interface OrganizationModule {
   enabledTiers: string[];
   editable: boolean;
   editableTiers: string[];
-  options: Record<string, string>;
+  options: Record<string, boolean>;
 }
 
 export interface OrganizationOAuth {
@@ -2676,15 +2675,20 @@ export interface BaseSurveyQuestionSearchValue {
 export interface SurveyQuestionSearchValue
   extends BaseSurveyQuestionSearchValue {}
 
-export interface BaseEventGalleryImage {
+export interface BaseEventMediaItem {
   id: string;
   name: string;
   description: string | null;
   imageId: string;
   image: BaseImage;
+  videoId: string;
+  video: BaseVideo;
+  fileId: number;
+  file: BaseFile;
 }
 
-export interface EventGalleryImage extends BaseEventGalleryImage {
+export interface EventMediaItem extends BaseEventMediaItem {
+  allowedPassTypes: BasePassType[];
   createdAt: string;
   updatedAt: string;
 }
