@@ -1741,8 +1741,12 @@ export interface BaseLinkPreview {
 export interface LinkPreview extends BaseLinkPreview {}
 
 export interface StreamInput {
+  id: string;
   cloudflareId: string;
   connected: boolean;
+  name: string;
+  threads: BaseThread[]; // most recent thread [0]
+  image: BaseImage | null;
 }
 
 export interface BaseChatChannel {
@@ -2049,39 +2053,34 @@ export interface BaseFile {
 
 export interface File extends BaseFile {}
 
-export enum ThreadInvitationStatus {
+export enum ThreadCircleAccountRole {
+  member = "member",
+  manager = "manager",
   invited = "invited",
-  rejected = "rejected",
 }
 
-export interface ThreadInvitation {
+export interface BaseThreadCircle {
   id: string;
-  organizationId: string;
-  threadId: string;
-  thread: BaseThread;
-  status: ThreadInvitationStatus;
-  role: ThreadMemberRole;
-  invitedById: string;
-  invitedBy: BaseAccount;
-  invitedId: string;
-  invited: BaseAccount;
+  name: string;
   createdAt: string;
   updatedAt: string;
 }
 
+export interface ThreadCircle extends BaseThreadCircle {}
+
+export interface BaseThreadCircleAccount {
+  accountId: string;
+  role: ThreadCircleAccountRole;
+  account: BaseAccount;
+}
+
+export interface ThreadCircleAccount extends BaseThreadCircleAccount {}
+
 export interface BaseThread {
   id: string;
-  name: string;
-}
-
-export enum ThreadAccessLevel {
-  public = "public",
-  private = "private",
-}
-
-export enum ThreadMemberRole {
-  member = "member",
-  moderator = "moderator",
+  subject: string;
+  image: BaseImage | null;
+  lastMessageAt: string | null;
 }
 
 export enum ThreadMessageType {
@@ -2090,90 +2089,57 @@ export enum ThreadMessageType {
   system = "system",
 }
 
-export interface ThreadMessageReaction {
-  id: string;
-  organizationId: string;
-  threadId: string;
-  messageId: string;
-  message: BaseThreadMessage;
-  accountId: string;
+export interface Thread extends BaseThread {
+  viewers: {
+    accountId: string;
+    lastReadAt: string | null;
+  }[];
+}
+
+export interface BaseThreadViewer {
+  lastReadAt: string | null;
+  notifications: boolean;
   account: BaseAccount;
-  emojiName: string;
-  createdAt: string;
-  updatedAt: string;
+}
+
+export interface ThreadViewer extends BaseThreadViewer {
+  status: string;
 }
 
 export interface BaseThreadMessage {
   id: string;
-  organizationId: string;
-  threadId: string;
-  body: string;
-  createdAt: string;
-  replyToId: string | null;
-  reactions: ThreadMessageReaction[];
-  account: BaseAccount;
-}
-
-export interface ThreadMessage {
-  id: string;
-  organizationId: string;
-  threadId: string;
-  thread: BaseThread;
-  accountId: string;
-  account: BaseAccount;
   type: ThreadMessageType;
-  body: string;
-  reactions: ThreadMessageReaction[];
-  replyToId: string | null;
-  replyTo: BaseThreadMessage | null;
-  replies: BaseThreadMessage[];
-  mentions: BaseAccount[];
-  files: BaseFile[];
-  images: BaseImage[];
-  videos: BaseVideo[];
   editedAt: string | null;
+  body: string;
   sentAt: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BaseThreadMember {}
-
-export interface ThreadMember extends BaseThreadMember {
-  id: string;
-  organizationId: string;
-  threadId: string;
-  thread: BaseThread;
   accountId: string;
-  account: BaseAccount;
-  role: ThreadMemberRole;
-  accepted: boolean;
-  lastReadAt: string | null;
-  notifications: boolean;
-  createdAt: string;
-  updatedAt: string;
+  viewer: BaseThreadViewer;
 }
-export interface Thread extends BaseThread {
-  organizationId: string;
-  organization: BaseOrganization;
-  featured: boolean;
-  visible: boolean;
-  access: ThreadAccessLevel;
+
+export interface ThreadMessage extends BaseThreadMessage {
+  reactions: BaseThreadMessageReaction[];
+}
+
+export interface BaseThreadMessageEntity {
+  type: ActivityEntityType;
+  startIndex: number;
+  endIndex: number;
+  marks: string[];
+  account: BaseAccount | null;
+  linkPreview: BaseLinkPreview | null;
+}
+
+export interface ThreadMessageEntity extends BaseThreadMessageEntity {}
+
+export interface BaseThreadMessageReaction {
   id: string;
-  name: string;
-  description: string | null;
-  lastMessageAt: string | null;
-  groupId: string | null;
-  group: BaseGroup | null;
-  eventId: string | null;
-  event: BaseEvent | null;
-  members: ThreadMember[];
-  messages: ThreadMessage[];
-  invitations: ThreadInvitation[];
-  image: BaseImage | null;
-  imageId: string | null;
+  accountId: string;
+  emojiName: string;
+}
+
+export interface ThreadMessageReaction extends BaseThreadMessageReaction {
+  account: BaseAccount;
   createdAt: string;
-  updatedAt: string;
 }
 
 export enum DefaultAuthAction {
