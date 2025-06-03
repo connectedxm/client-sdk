@@ -1,66 +1,45 @@
+import { GetClientAPI } from "@src/ClientAPI";
+import { ConnectedXMResponse } from "@src/interfaces";
 import {
-  Thread,
-  ThreadAccessLevel,
-  ConnectedXMResponse,
-} from "@src/interfaces";
-import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
-
-import { THREADS_QUERY_KEY, SET_THREAD_QUERY_DATA } from "@src/queries";
-import { GetClientAPI } from "@src/ClientAPI";
-
-interface UpdateThread {
-  id: string;
-  name?: string;
-  description?: string;
-  imageId?: string;
-  featured?: boolean;
-  eventId?: string;
-  groupId?: string;
-  access?: keyof typeof ThreadAccessLevel;
-}
+} from "@src/mutations/useConnectedMutation";
+import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
+import { Thread } from "@src/interfaces";
+import { SET_THREAD_QUERY_DATA } from "@src/queries/threads/useGetThread";
 
 export interface UpdateThreadParams extends MutationParams {
   threadId: string;
-  thread: UpdateThread;
-  imageDataUri?: string;
+  subject?: string;
+  imageId?: string | null;
 }
 
 export const UpdateThread = async ({
   threadId,
-  thread,
-  imageDataUri,
+  subject,
+  imageId,
   clientApiParams,
   queryClient,
 }: UpdateThreadParams): Promise<ConnectedXMResponse<Thread>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.patch<ConnectedXMResponse<Thread>>(
-    `/threads/${threadId}`,
-    {
-      thread,
-      imageDataUri,
-    }
-  );
+  const { data } = await clientApi.put(`/threads/${threadId}`, {
+    subject,
+    imageId,
+  });
 
   if (queryClient && data.status === "ok") {
-    SET_THREAD_QUERY_DATA(queryClient, [data.data.id], data);
-    queryClient.invalidateQueries({
-      queryKey: THREADS_QUERY_KEY(),
-    });
+    SET_THREAD_QUERY_DATA(queryClient, [threadId], data, [
+      clientApiParams.locale,
+    ]);
   }
 
   return data;
 };
 
 export const useUpdateThread = (
-  options: Omit<
-    MutationOptions<
-      Awaited<ReturnType<typeof UpdateThread>>,
-      Omit<UpdateThreadParams, "queryClient" | "clientApiParams">
-    >,
-    "mutationFn"
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateThread>>,
+    Omit<UpdateThreadParams, "queryClient" | "clientApiParams">
   > = {}
 ) => {
   return useConnectedMutation<

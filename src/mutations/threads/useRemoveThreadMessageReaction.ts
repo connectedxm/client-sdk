@@ -1,35 +1,34 @@
 import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse } from "@src/interfaces";
-import useConnectedMutation, {
+import {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { THREAD_MESSAGE_QUERY_KEY } from "@src/queries";
+import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
+import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
 
 export interface RemoveThreadMessageReactionParams extends MutationParams {
   threadId: string;
   messageId: string;
-  emojiName: string;
+  reactionId: string;
 }
 
 export const RemoveThreadMessageReaction = async ({
   threadId,
   messageId,
-  emojiName,
+  reactionId,
   clientApiParams,
   queryClient,
 }: RemoveThreadMessageReactionParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
-    `/threads/${threadId}/messages/${messageId}/reactions`,
-    {
-      data: { emojiName },
-    }
+  const { data } = await clientApi.delete(
+    `/threads/${threadId}/messages/${messageId}/reactions/${reactionId}`
   );
 
   if (queryClient && data.status === "ok") {
+    // Invalidate the messages list to refetch with updated reactions
     queryClient.invalidateQueries({
-      queryKey: THREAD_MESSAGE_QUERY_KEY(threadId, messageId),
+      queryKey: THREAD_MESSAGES_QUERY_KEY(threadId),
     });
   }
 
@@ -37,12 +36,9 @@ export const RemoveThreadMessageReaction = async ({
 };
 
 export const useRemoveThreadMessageReaction = (
-  options: Omit<
-    MutationOptions<
-      Awaited<ReturnType<typeof RemoveThreadMessageReaction>>,
-      Omit<RemoveThreadMessageReactionParams, "queryClient" | "clientApiParams">
-    >,
-    "mutationFn"
+  options: MutationOptions<
+    Awaited<ReturnType<typeof RemoveThreadMessageReaction>>,
+    Omit<RemoveThreadMessageReactionParams, "queryClient" | "clientApiParams">
   > = {}
 ) => {
   return useConnectedMutation<

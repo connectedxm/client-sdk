@@ -1,15 +1,17 @@
 import { GetClientAPI } from "@src/ClientAPI";
-import { ConnectedXMResponse, ThreadMessage } from "@src/interfaces";
-import useConnectedMutation, {
+import { ConnectedXMResponse } from "@src/interfaces";
+import {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SET_THREAD_MESSAGE_QUERY_DATA } from "@src/queries";
+import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
+import { ThreadMessage } from "@src/interfaces";
+import { SET_THREAD_MESSAGE_QUERY_DATA } from "@src/queries/threads/useGetThreadMessage";
 
 export interface UpdateThreadMessageParams extends MutationParams {
   threadId: string;
   messageId: string;
-  body: string;
+  body?: string;
 }
 
 export const UpdateThreadMessage = async ({
@@ -20,9 +22,11 @@ export const UpdateThreadMessage = async ({
   queryClient,
 }: UpdateThreadMessageParams): Promise<ConnectedXMResponse<ThreadMessage>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<ThreadMessage>>(
+  const { data } = await clientApi.put(
     `/threads/${threadId}/messages/${messageId}`,
-    { body }
+    {
+      body,
+    }
   );
 
   if (queryClient && data.status === "ok") {
@@ -35,12 +39,9 @@ export const UpdateThreadMessage = async ({
 };
 
 export const useUpdateThreadMessage = (
-  options: Omit<
-    MutationOptions<
-      Awaited<ReturnType<typeof UpdateThreadMessage>>,
-      Omit<UpdateThreadMessageParams, "queryClient" | "clientApiParams">
-    >,
-    "mutationFn"
+  options: MutationOptions<
+    Awaited<ReturnType<typeof UpdateThreadMessage>>,
+    Omit<UpdateThreadMessageParams, "queryClient" | "clientApiParams">
   > = {}
 ) => {
   return useConnectedMutation<
