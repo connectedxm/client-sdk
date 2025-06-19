@@ -24,7 +24,7 @@ export const GetSelfFeed = async ({
   clientApiParams,
 }: GetSelfFeedProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/feed`, {
+  const { data } = await clientApi.get(`/self/activities/feed`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,

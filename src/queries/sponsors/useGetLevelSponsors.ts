@@ -43,7 +43,7 @@ export const GetLevelSponsors = async ({
   clientApiParams,
 }: GetLevelSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/levels/${levelId}/sponsors`, {
+  const { data } = await clientApi.get(`/levels/${levelId}/accounts`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,

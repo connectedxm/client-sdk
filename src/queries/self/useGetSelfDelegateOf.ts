@@ -24,7 +24,7 @@ export const GetSelfDelegateOf = async ({
   clientApiParams,
 }: GetSelfDelegateOfProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/delegate-of`, {
+  const { data } = await clientApi.get(`/self/delegateof`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,

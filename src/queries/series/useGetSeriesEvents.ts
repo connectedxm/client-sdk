@@ -47,6 +47,7 @@ export const GetSeriesEvents = async ({
   pageSize,
   orderBy,
   search,
+  past,
   clientApiParams,
 }: GetSeriesEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -56,6 +57,7 @@ export const GetSeriesEvents = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      past: past !== undefined ? past : undefined,
     },
   });
 

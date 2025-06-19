@@ -23,7 +23,7 @@ export const GetGroupsRequested = async ({
   clientApiParams,
 }: GetGroupsRequestedProps): Promise<ConnectedXMResponse<Group[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/groups/requests`, {
+  const { data } = await clientApi.get(`/groups/requested`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
