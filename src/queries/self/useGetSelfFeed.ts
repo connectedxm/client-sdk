@@ -3,11 +3,9 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Activity, ConnectedXMResponse } from "@interfaces";
-import { SELF_QUERY_KEY } from "./useGetSelf";
-import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryKey } from "@tanstack/react-query";
+import { ConnectedXMResponse, Activity } from "@interfaces";
+import { SELF_QUERY_KEY } from "./useGetSelf";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
@@ -23,9 +21,7 @@ export const GetSelfFeed = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetSelfFeedProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/activities/feed`, {
@@ -36,15 +32,6 @@ export const GetSelfFeed = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
 
   return data;
 };

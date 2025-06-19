@@ -9,8 +9,6 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { EVENT_PAGE_QUERY_KEY } from "./useGetEventPage";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_PAGES_QUERY_KEY = (eventId: string): QueryKey => [
@@ -43,9 +41,7 @@ export const GetEventPages = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetEventPagesProps): Promise<ConnectedXMResponse<BaseEventPage[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/pages`, {
@@ -56,16 +52,6 @@ export const GetEventPages = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (pageId) => EVENT_PAGE_QUERY_KEY(eventId, pageId),
-      locale
-    );
-  }
-
   return data;
 };
 

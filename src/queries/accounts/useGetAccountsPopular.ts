@@ -7,8 +7,6 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";
@@ -45,9 +43,7 @@ export const GetAccountsPopular = async ({
   orderBy,
   search,
   accountType,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetAccountsPopularProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/popular`, {
@@ -59,15 +55,6 @@ export const GetAccountsPopular = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
-
   return data;
 };
 

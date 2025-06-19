@@ -7,9 +7,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Activity, ConnectedXMResponse } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
-import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACTIVITIES_QUERY_KEY } from "../activities";
 
@@ -43,9 +41,7 @@ export const GetAccountActivities = async ({
   orderBy,
   search,
   accountId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetAccountActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/${accountId}/activities`, {
@@ -56,15 +52,6 @@ export const GetAccountActivities = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
-
   return data;
 };
 

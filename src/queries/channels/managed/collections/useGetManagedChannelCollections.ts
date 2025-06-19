@@ -6,12 +6,10 @@ import {
   setFirstPageData,
   InfiniteQueryOptions,
 } from "../../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { MANAGED_CHANNEL_QUERY_KEY } from "../useGetManagedChannel";
-import { MANAGED_CHANNEL_COLLECTION_QUERY_KEY } from "./useGetManagedChannelCollection";
 
 export const MANAGED_CHANNEL_COLLECTIONS_QUERY_KEY = (
   channelId: string
@@ -43,9 +41,7 @@ export const GetManagedChannelCollections = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetManagedChannelCollectionsParams): Promise<
   ConnectedXMResponse<ChannelCollection[]>
 > => {
@@ -61,17 +57,6 @@ export const GetManagedChannelCollections = async ({
       },
     }
   );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (collectionId) =>
-        MANAGED_CHANNEL_COLLECTION_QUERY_KEY(channelId, collectionId),
-      locale
-    );
-  }
-
   return data;
 };
 

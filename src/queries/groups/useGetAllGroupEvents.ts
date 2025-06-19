@@ -8,9 +8,8 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GetClientAPI } from "@src/ClientAPI";
-import { EVENT_QUERY_KEY, EVENTS_QUERY_KEY } from "../events";
+import { EVENTS_QUERY_KEY } from "../events";
 
 export const ALL_GROUP_EVENTS = (past?: boolean): QueryKey => [
   ...EVENTS_QUERY_KEY(past),
@@ -42,9 +41,7 @@ export const GetAllGroupEvents = async ({
   orderBy,
   search,
   past,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetAllGroupEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/groups/events`, {
@@ -56,16 +53,6 @@ export const GetAllGroupEvents = async ({
       past: past !== undefined ? past : undefined,
     },
   });
-
-  if (queryClient) {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (eventId) => EVENT_QUERY_KEY(eventId),
-      locale
-    );
-  }
-
   return data;
 };
 

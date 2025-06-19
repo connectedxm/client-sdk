@@ -6,9 +6,7 @@ import {
   setFirstPageData,
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { BOOKING_QUERY_KEY } from "./useGetBooking";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -53,9 +51,7 @@ export const GetBookings = async ({
   search,
   past,
   placeId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetBookingsParams): Promise<ConnectedXMResponse<Booking[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/bookings`, {
@@ -68,14 +64,6 @@ export const GetBookings = async ({
       placeId: placeId || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (bookingId) => BOOKING_QUERY_KEY(bookingId),
-      locale
-    );
-  }
   return data;
 };
 

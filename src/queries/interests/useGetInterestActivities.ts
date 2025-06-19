@@ -5,9 +5,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Activity, ConnectedXMResponse } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { INTEREST_QUERY_KEY } from "./useGetInterest";
-import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACTIVITIES_QUERY_KEY } from "../activities";
 
@@ -21,14 +19,12 @@ export interface GetInterestActivitiesProps extends InfiniteQueryParams {
 }
 
 export const GetInterestActivities = async ({
+  interest,
   pageParam,
   pageSize,
   orderBy,
   search,
-  interest,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetInterestActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/interests/${interest}/activities`, {
@@ -39,14 +35,6 @@ export const GetInterestActivities = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
 
   return data;
 };

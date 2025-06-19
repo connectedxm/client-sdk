@@ -7,7 +7,6 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -42,9 +41,7 @@ export const GetAccountFollowers = async ({
   orderBy,
   search,
   accountId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetAccountFollowersProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/${accountId}/followers`, {
@@ -55,15 +52,6 @@ export const GetAccountFollowers = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
-
   return data;
 };
 

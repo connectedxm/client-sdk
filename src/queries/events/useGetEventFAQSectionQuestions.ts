@@ -6,9 +6,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { EVENT_FAQ_SECTION_QUESTION_QUERY_KEY } from "./useGetEventFAQSectionQuestion";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -48,9 +46,7 @@ export const GetEventFaqs = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetEventFaqsProps): Promise<ConnectedXMResponse<Faq[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
@@ -64,17 +60,6 @@ export const GetEventFaqs = async ({
       },
     }
   );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (faqId) =>
-        EVENT_FAQ_SECTION_QUESTION_QUERY_KEY(eventId, sectionId, faqId),
-      locale
-    );
-  }
-
   return data;
 };
 

@@ -7,11 +7,9 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Account } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACCOUNT_QUERY_KEY } from "../accounts";
 
 export const GROUP_SPONSORS_QUERY_KEY = (groupId: string): QueryKey => [
   ...GROUP_QUERY_KEY(groupId),
@@ -43,9 +41,7 @@ export const GetGroupSponsors = async ({
   orderBy,
   search,
   groupId,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetGroupSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/groups/${groupId}/sponsors`, {
@@ -56,15 +52,6 @@ export const GetGroupSponsors = async ({
       search: search || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
-
   return data;
 };
 
