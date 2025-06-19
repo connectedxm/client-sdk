@@ -24,6 +24,7 @@ export const GetSelfEvents = async ({
   pageSize,
   orderBy,
   search,
+  past,
   clientApiParams,
 }: GetSelfEventsProps): Promise<ConnectedXMResponse<Event[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -33,6 +34,7 @@ export const GetSelfEvents = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      past: past || false,
     },
   });
 

@@ -40,6 +40,7 @@ export const GetGroups = async ({
   pageSize,
   orderBy,
   search,
+  access,
   clientApiParams,
 }: GetGroupsProps): Promise<ConnectedXMResponse<Group[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -49,6 +50,7 @@ export const GetGroups = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      access: access || undefined,
     },
   });
 

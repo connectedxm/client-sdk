@@ -22,6 +22,7 @@ export interface GetGroupsInvitedProps extends InfiniteQueryParams {
 }
 
 export const GetGroupsInvited = async ({
+  rejected,
   pageParam,
   pageSize,
   orderBy,
@@ -35,6 +36,7 @@ export const GetGroupsInvited = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      rejected: rejected !== undefined ? rejected : undefined,
     },
   });
 
