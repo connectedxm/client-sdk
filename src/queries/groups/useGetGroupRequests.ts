@@ -7,7 +7,6 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { GroupRequest, GroupRequestStatus } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -66,17 +65,7 @@ export const GetGroupRequests = async ({
       search: search || undefined,
       status: status || undefined,
     },
-  });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_REQUEST_QUERY_KEY(groupId, data.data.id),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetGroupRequests = (

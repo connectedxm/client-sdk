@@ -9,7 +9,6 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_PAGE_QUERY_KEY } from "./useGetEventPage";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -55,18 +54,7 @@ export const GetEventPages = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (pageId) => EVENT_PAGE_QUERY_KEY(eventId, pageId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetEventPages = (

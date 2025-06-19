@@ -4,7 +4,6 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { SELF_QUERY_KEY } from "../self/useGetSelf";
 import { LISTING_QUERY_KEY } from "./useGetListing";
 import { QueryKey } from "@tanstack/react-query";
@@ -40,15 +39,6 @@ export const GetSelfEventListings = async ({
       past: typeof past == "boolean" ? past : undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (eventId) => LISTING_QUERY_KEY(eventId),
-      locale
-    );
-  }
 
   return data;
 };

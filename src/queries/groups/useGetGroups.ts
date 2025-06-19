@@ -6,10 +6,9 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
+import { GROUP_QUERY_KEY } from "./useGetGroup";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const GROUPS_QUERY_KEY = (access?: "public" | "private"): QueryKey => {
@@ -42,7 +41,6 @@ export const GetGroups = async ({
   pageSize,
   orderBy,
   search,
-  access,
   queryClient,
   clientApiParams,
   locale,
@@ -54,17 +52,8 @@ export const GetGroups = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      access: access || undefined,
     },
   });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_QUERY_KEY(groupId),
-      locale
-    );
-  }
 
   return data;
 };

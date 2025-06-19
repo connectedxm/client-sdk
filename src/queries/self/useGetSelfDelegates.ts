@@ -4,10 +4,9 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEY } from "../accounts/useGetAccount";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
@@ -36,15 +35,6 @@ export const GetSelfDelegates = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (accountId) => ACCOUNT_QUERY_KEY(accountId),
-      locale
-    );
-  }
 
   return data;
 };

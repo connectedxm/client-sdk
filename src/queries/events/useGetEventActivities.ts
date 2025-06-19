@@ -6,7 +6,6 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ACTIVITY_QUERY_KEY } from "../activities/useGetActivity";
@@ -56,17 +55,7 @@ export const GetEventActivities = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetEventActivities = (

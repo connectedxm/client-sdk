@@ -6,7 +6,6 @@ import {
   setFirstPageData,
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { BOOKING_QUERY_KEY } from "./useGetBooking";
 import { ConnectedXMResponse } from "@interfaces";
@@ -67,16 +66,7 @@ export const GetBookings = async ({
       past: past !== undefined ? past : undefined,
       placeId: placeId || undefined,
     },
-  });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (bookingId) => BOOKING_QUERY_KEY(bookingId),
-      locale
-    );
-  }
-  return data;
+  });return data;
 };
 
 export const useGetBookings = (

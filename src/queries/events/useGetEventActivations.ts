@@ -8,7 +8,6 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { ConnectedXMResponse, EventActivation } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { EVENT_ACTIVATION_QUERY_KEY } from "./useGetEventActivation";
 
@@ -56,18 +55,7 @@ export const GetEventActivations = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activationId) => EVENT_ACTIVATION_QUERY_KEY(eventId, activationId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetEventActivations = (

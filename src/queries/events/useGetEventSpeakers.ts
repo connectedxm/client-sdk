@@ -7,7 +7,6 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_SPEAKER_QUERY_KEY } from "./useGetEventSpeaker";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -54,18 +53,7 @@ export const GetEventSpeakers = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (speakerId) => EVENT_SPEAKER_QUERY_KEY(eventId, speakerId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetEventSpeakers = (

@@ -6,7 +6,6 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_FAQ_SECTION_QUESTION_QUERY_KEY } from "./useGetEventFAQSectionQuestion";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
@@ -63,19 +62,7 @@ export const GetEventFaqs = async ({
         search: search || undefined,
       },
     }
-  );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (faqId) =>
-        EVENT_FAQ_SECTION_QUESTION_QUERY_KEY(eventId, sectionId, faqId),
-      locale
-    );
-  }
-
-  return data;
+  );return data;
 };
 
 export const useGetEventFaqs = (

@@ -8,7 +8,6 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { EVENT_QUERY_KEY, EVENTS_QUERY_KEY } from "../events";
 
@@ -55,18 +54,7 @@ export const GetAllGroupEvents = async ({
       search: search || undefined,
       past: past !== undefined ? past : undefined,
     },
-  });
-
-  if (queryClient) {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (eventId) => EVENT_QUERY_KEY(eventId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetAllGroupEvents = (

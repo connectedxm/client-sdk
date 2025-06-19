@@ -8,7 +8,6 @@ import {
 import { Group } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GROUP_QUERY_KEY } from "../groups/useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -55,17 +54,7 @@ export const GetAccountGroups = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_QUERY_KEY(groupId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetAccountGroups = (

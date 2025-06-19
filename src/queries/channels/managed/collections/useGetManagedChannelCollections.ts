@@ -6,7 +6,6 @@ import {
   setFirstPageData,
   InfiniteQueryOptions,
 } from "../../../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -60,19 +59,7 @@ export const GetManagedChannelCollections = async ({
         search: search || undefined,
       },
     }
-  );
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (collectionId) =>
-        MANAGED_CHANNEL_COLLECTION_QUERY_KEY(channelId, collectionId),
-      locale
-    );
-  }
-
-  return data;
+  );return data;
 };
 
 export const useGetManagedChannelCollections = (

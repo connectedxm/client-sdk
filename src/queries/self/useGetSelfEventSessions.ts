@@ -4,10 +4,9 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_SESSION_QUERY_KEY } from "../events/useGetEventSession";
 import { SELF_EVENTS_QUERY_KEY } from "./useGetSelfEvents";
-import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
@@ -41,15 +40,6 @@ export const GetSelfEventSessions = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (sessionId) => EVENT_SESSION_QUERY_KEY(eventId, sessionId),
-      locale
-    );
-  }
 
   return data;
 };

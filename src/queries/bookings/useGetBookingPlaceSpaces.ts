@@ -8,7 +8,6 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { BOOKING_PLACE_QUERY_KEY } from "./useGetBookingPlace";
 import { ConnectedXMResponse, BookingSpace } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { BOOKING_PLACE_SPACE_QUERY_KEY } from "./useGetBookingPlaceSpace";
 
@@ -56,18 +55,7 @@ export const GetBookingPlacesSpaces = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (spaceId) => BOOKING_PLACE_SPACE_QUERY_KEY(bookingId, spaceId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetBookingPlacesSpaces = (

@@ -6,7 +6,6 @@ import {
 } from "../../useConnectedInfiniteQuery";
 import { SELF_QUERY_KEY } from "../useGetSelf";
 import { Subscription, SubscriptionStatus } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities";
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "./useGetSelfSubscription";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
@@ -43,15 +42,6 @@ export const GetSelfSubscriptions = async ({
       status: status || undefined,
     },
   });
-
-  if (queryClient) {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (subscriptionId: string) => SELF_SUBSCRIPTION_QUERY_KEY(subscriptionId),
-      locale
-    );
-  }
 
   return data;
 };

@@ -7,7 +7,6 @@ import {
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { EVENT_FAQ_SECTION_QUERY_KEY } from "./useGetEventFAQSection";
 import { ConnectedXMResponse } from "@interfaces";
@@ -55,18 +54,7 @@ export const GetEventFaqSections = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (sectionId) => EVENT_FAQ_SECTION_QUERY_KEY(eventId, sectionId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetEventFaqSections = (

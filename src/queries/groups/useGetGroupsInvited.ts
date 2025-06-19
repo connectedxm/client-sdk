@@ -4,11 +4,11 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryKey } from "@tanstack/react-query";
-import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
+import { GROUP_QUERY_KEY } from "./useGetGroup";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { useConnectedXM } from "@src/hooks";
 import { GROUPS_QUERY_KEY } from "./useGetGroups";
 
 export const GROUPS_INVITED_QUERY_KEY = (rejected?: boolean): QueryKey => {
@@ -24,7 +24,6 @@ export interface GetGroupsInvitedProps extends InfiniteQueryParams {
 }
 
 export const GetGroupsInvited = async ({
-  rejected,
   pageParam,
   pageSize,
   orderBy,
@@ -34,24 +33,14 @@ export const GetGroupsInvited = async ({
   locale,
 }: GetGroupsInvitedProps): Promise<ConnectedXMResponse<Group[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/groups/invited`, {
+  const { data } = await clientApi.get(`/self/groups/invites`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      rejected,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_QUERY_KEY(groupId),
-      locale
-    );
-  }
 
   return data;
 };

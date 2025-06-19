@@ -6,7 +6,6 @@ import {
   setFirstPageData,
   InfiniteQueryOptions,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { BOOKING_PLACE_QUERY_KEY } from "./useGetBookingPlace";
 import { ConnectedXMResponse } from "@interfaces";
@@ -48,17 +47,7 @@ export const GetBookingPlaces = async ({
       orderBy: orderBy || undefined,
       search: search || undefined,
     },
-  });
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (bookingPlaceId) => BOOKING_PLACE_QUERY_KEY(bookingPlaceId),
-      locale
-    );
-  }
-
-  return data;
+  });return data;
 };
 
 export const useGetBookingPlaces = (

@@ -7,7 +7,6 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, SponsorshipLevel } from "@interfaces";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { LEVEL_QUERY_KEY } from "./useGetLevel";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -48,15 +47,6 @@ export const GetLevels = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (levelId) => LEVEL_QUERY_KEY(levelId),
-      locale
-    );
-  }
 
   return data;
 };
