@@ -1,4 +1,8 @@
-import { ConnectedXMResponse, ChatChannel } from "@interfaces";
+import {
+  ConnectedXMResponse,
+  ChatChannel,
+  ChatChannelMember,
+} from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -39,7 +43,9 @@ export const GetSelfChatChannels = async ({
   orderBy,
   search,
   clientApiParams,
-}: GetSelfChatChannelsProps): Promise<ConnectedXMResponse<ChatChannel[]>> => {
+}: GetSelfChatChannelsProps): Promise<
+  ConnectedXMResponse<ChatChannelMember[]>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/chat/channels`, {
     params: {
