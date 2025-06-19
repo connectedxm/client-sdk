@@ -3,11 +3,9 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
+import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_QUERY_KEY } from "./useGetSelf";
-import { SELF_PUSH_DEVICE_QUERY_KEY } from "./useGetSelfPushDevice";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnectedXM } from "@src/hooks";
 
@@ -23,9 +21,7 @@ export const GetSelfPushDevices = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetSelfPushDevicesProps): Promise<ConnectedXMResponse<PushDevice[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/push-devices`, {
@@ -36,15 +32,6 @@ export const GetSelfPushDevices = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (pushDeviceId) => SELF_PUSH_DEVICE_QUERY_KEY(pushDeviceId),
-      locale
-    );
-  }
 
   return data;
 };

@@ -7,8 +7,6 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { Activity } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { ACTIVITY_QUERY_KEY } from "./useGetActivity";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -36,9 +34,7 @@ export const GetActivities = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/activities`, {
@@ -49,16 +45,6 @@ export const GetActivities = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (activityId) => ACTIVITY_QUERY_KEY(activityId),
-      locale
-    );
-  }
-
   return data;
 };
 

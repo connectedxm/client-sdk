@@ -4,10 +4,8 @@ import {
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
-import { QueryKey } from "@tanstack/react-query";
-import { GROUP_QUERY_KEY } from "./useGetGroup";
 import { ConnectedXMResponse } from "@interfaces";
+import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { GROUPS_QUERY_KEY } from "./useGetGroups";
 
@@ -22,12 +20,10 @@ export const GetGroupsRequested = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetGroupsRequestedProps): Promise<ConnectedXMResponse<Group[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/groups/requested`, {
+  const { data } = await clientApi.get(`/self/groups/requests`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -35,15 +31,6 @@ export const GetGroupsRequested = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (groupId) => GROUP_QUERY_KEY(groupId),
-      locale
-    );
-  }
 
   return data;
 };

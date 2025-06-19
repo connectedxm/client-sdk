@@ -6,11 +6,9 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ACCOUNT_QUERY_KEY } from "../accounts";
 
 export const EVENT_SPONSORS_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
@@ -42,9 +40,7 @@ export const GetEventSponsors = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetEventSponsorsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/sponsors`, {
@@ -55,16 +51,6 @@ export const GetEventSponsors = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (sponsorId) => ACCOUNT_QUERY_KEY(sponsorId),
-      locale
-    );
-  }
-
   return data;
 };
 

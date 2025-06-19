@@ -6,9 +6,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { CacheIndividualQueries } from "@src/utilities/CacheIndividualQueries";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { INTEGRATION_QUERY_KEY } from "./useGetIntegration";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -39,9 +37,7 @@ export const GetIntegrations = async ({
   pageSize,
   orderBy,
   search,
-  queryClient,
   clientApiParams,
-  locale,
 }: GetIntegrationsProps): Promise<ConnectedXMResponse<Integration[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/integrations`, {
@@ -52,16 +48,6 @@ export const GetIntegrations = async ({
       search: search || undefined,
     },
   });
-
-  if (queryClient && data.status === "ok") {
-    CacheIndividualQueries(
-      data,
-      queryClient,
-      (integrationId) => INTEGRATION_QUERY_KEY(integrationId),
-      locale
-    );
-  }
-
   return data;
 };
 
