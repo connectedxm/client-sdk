@@ -2217,6 +2217,7 @@ export interface OrganizationConfig {
     LIGHT: string;
     DARK?: string;
   };
+  APP_NAME: string;
   APP_ICON: string | null;
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;

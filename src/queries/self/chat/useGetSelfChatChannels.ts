@@ -1,8 +1,4 @@
-import {
-  ConnectedXMResponse,
-  ChatChannel,
-  ChatChannelMember,
-} from "@interfaces";
+import { ConnectedXMResponse, ChatChannelMember } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
