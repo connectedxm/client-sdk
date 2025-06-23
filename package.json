@@ -1,6 +1,6 @@
 {
   "name": "@connectedxm/client",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "type": "module",
@@ -10,8 +10,8 @@
   },
   "license": "MIT",
   "private": false,
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vitest",
