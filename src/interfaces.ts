@@ -337,6 +337,7 @@ export interface BaseGroup {
   slug: string;
   name: string;
   image: BaseImage | null;
+  squareImage: BaseImage | null;
   access: GroupAccess;
 }
 
@@ -364,6 +365,7 @@ export interface BaseEvent {
   eventStart: string;
   eventEnd: string;
   image: BaseImage | null;
+  squareImage: BaseImage | null;
 }
 
 export enum EventSource {
@@ -1387,6 +1389,7 @@ export interface BaseContent {
   description: string | null;
   imageUrl: string | null;
   image: BaseImage | null;
+  squareImage: BaseImage | null;
   audio: BaseFile | null;
   video: BaseVideo | null;
   duration: string | null;
