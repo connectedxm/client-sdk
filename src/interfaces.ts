@@ -2212,6 +2212,7 @@ export interface OrganizationConfig {
   PRIMARY_MODULE: PrimaryModule;
   PRIMARY_COLOR: string;
   SECONDARY_COLOR: string;
+  CLIENT_THEME: string;
   LOGO: {
     LIGHT: string;
     DARK?: string;
