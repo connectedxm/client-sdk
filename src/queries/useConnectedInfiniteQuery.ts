@@ -28,7 +28,6 @@ export interface InfiniteQueryOptions<
       TQueryData,
       AxiosError<ConnectedXMResponse<null>>,
       InfiniteData<TQueryData, number>,
-      TQueryData,
       QueryKey,
       number
     >,
