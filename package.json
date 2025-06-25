@@ -1,6 +1,6 @@
 {
   "name": "@connectedxm/client",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "type": "module",
@@ -11,13 +11,13 @@
   "license": "MIT",
   "private": false,
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vitest",
     "lint": "npx tsc && eslint src/**/*.ts",
     "test": "vitest run",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format esm --dts",
     "release": "npm run lint && npm run test && npm run build",
     "local": "npm run release && npm pack",
     "upgrade": "ncu -i --format group"
