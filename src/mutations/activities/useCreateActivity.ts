@@ -181,7 +181,7 @@ export const CreateActivity = async ({
 
       const slugKey = [
         ...EVENT_ACTIVITIES_QUERY_KEY(data.data.event?.slug || ""),
-        ...GetBaseSingleQueryKeys(clientApiParams.locale),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
       AppendInfiniteQuery<Activity>(
@@ -206,7 +206,7 @@ export const CreateActivity = async ({
 
       const slugKey = [
         ...GROUP_ACTIVITIES_QUERY_KEY(data.data.group?.slug || ""),
-        ...GetBaseSingleQueryKeys(clientApiParams.locale),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
       AppendInfiniteQuery<Activity>(
