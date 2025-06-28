@@ -103,6 +103,7 @@ export const CreateActivity = async ({
 
     if (activity.commentedId) {
       nested = true;
+
       AppendInfiniteQuery<Activity>(
         queryClient,
         [
@@ -115,50 +116,107 @@ export const CreateActivity = async ({
 
     if (activity.contentId && data.data.content) {
       nested = true;
+
+      const iDIDKey = [
+        ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+          data.data.content.channel.id,
+          activity.contentId
+        ),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
+      const slugIDKey = [
+        ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+          data.data.content.channel.slug,
+          activity.contentId
+        ),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
+      const iDSlugKey = [
+        ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+          data.data.content.channel.id,
+          data.data.content.slug
+        ),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
+      const slugSlugKey = [
+        ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
+          data.data.content.channel.slug,
+          data.data.content.slug
+        ),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
-            data.data.content.channel.slug,
-            activity.contentId
-          ),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        iDIDKey,
         data.data
       );
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY(
-            data.data.content.channel.id,
-            activity.contentId
-          ),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        iDSlugKey,
+        data.data
+      );
+      AppendInfiniteQuery<Activity>(
+        queryClient,
+        slugIDKey,
+        data.data
+      );
+      AppendInfiniteQuery<Activity>(
+        queryClient,
+        slugSlugKey,
         data.data
       );
     }
 
     if (activity.eventId) {
       nested = true;
+
+      const iDKey = [
+        ...EVENT_ACTIVITIES_QUERY_KEY(activity.eventId),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
+      const slugKey = [
+        ...EVENT_ACTIVITIES_QUERY_KEY(data.data.event?.slug || ""),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...EVENT_ACTIVITIES_QUERY_KEY(activity.eventId),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        iDKey,
+        data.data,
+      );
+      AppendInfiniteQuery<Activity>(
+        queryClient,
+        slugKey,
         data.data
       );
     }
 
     if (activity.groupId) {
       nested = true;
+
+      const iDKey = [
+        ...GROUP_ACTIVITIES_QUERY_KEY(activity.groupId),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
+      const slugKey = [
+        ...GROUP_ACTIVITIES_QUERY_KEY(data.data.group?.slug || ""),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ];
+
       AppendInfiniteQuery<Activity>(
         queryClient,
-        [
-          ...GROUP_ACTIVITIES_QUERY_KEY(activity.groupId),
-          ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
-        ],
+        iDKey,
+        data.data
+      );
+      AppendInfiniteQuery<Activity>(
+        queryClient,
+        slugKey,
         data.data
       );
     }
