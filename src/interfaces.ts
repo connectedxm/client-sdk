@@ -1330,6 +1330,7 @@ export interface BaseChannel {
   description: string | null;
   image: BaseImage;
   subscriberCount: number;
+  private: boolean;
   creatorId: string | null;
   _count: {
     contents: number;
