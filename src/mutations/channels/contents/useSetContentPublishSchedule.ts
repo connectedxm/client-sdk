@@ -12,7 +12,6 @@ export interface SetContentPublishScheduleParams extends MutationParams {
   date: string;
   email?: boolean;
   push?: boolean;
-  visible?: boolean;
 }
 
 export const SetContentPublishSchedule = async ({
@@ -21,7 +20,6 @@ export const SetContentPublishSchedule = async ({
   date,
   email,
   push,
-  visible,
   clientApiParams,
 }: SetContentPublishScheduleParams): Promise<ConnectedXMResponse<Content>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -31,7 +29,6 @@ export const SetContentPublishSchedule = async ({
       date,
       email,
       push,
-      visible,
     }
   );
 

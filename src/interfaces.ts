@@ -1396,7 +1396,6 @@ export interface BaseContent {
   duration: string | null;
   channel: BaseChannel;
   published: string | null;
-  visible: boolean;
 }
 
 export interface Content extends BaseContent {
