@@ -24,9 +24,9 @@ export const DeleteChannelCollection = async ({
   ConnectedXMResponse<ChannelCollection>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<ChannelCollection>>(
-    `/channels/${channelId}/collections/${collectionId}`
-  );
+  const { data } = await clientApi.delete<
+    ConnectedXMResponse<ChannelCollection>
+  >(`/channels/${channelId}/collections/${collectionId}`);
 
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({

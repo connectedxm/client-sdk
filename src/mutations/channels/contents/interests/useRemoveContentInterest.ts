@@ -19,7 +19,7 @@ export const RemoveContentInterest = async ({
   clientApiParams,
 }: RemoveContentInterestParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<null>>(
+  const { data } = await clientApi.delete<ConnectedXMResponse<null>>(
     `/channels/${channelId}/contents/${contentId}/interests/${interestId}`
   );
 
