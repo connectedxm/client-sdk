@@ -1396,12 +1396,10 @@ export interface BaseContent {
   duration: string | null;
   channel: BaseChannel;
   published: string | null;
-  visible: boolean;
 }
 
 export interface Content extends BaseContent {
   body: string | null;
-  editor: string | null;
   externalUrl: string | null;
   appleUrl: string | null;
   spotifyUrl: string | null;
