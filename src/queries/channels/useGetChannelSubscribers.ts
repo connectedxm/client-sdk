@@ -16,7 +16,7 @@ export const CHANNEL_SUBSCRIBERS_QUERY_KEY = (channelId: string): QueryKey => [
   "SUBSCRIBERS",
 ];
 
-export const SET_MANAGED_CHANNEL_SUBSCRIBERS_QUERY_DATA = (
+export const SET_CHANNEL_SUBSCRIBERS_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof CHANNEL_SUBSCRIBERS_QUERY_KEY>,
   response: Awaited<ReturnType<typeof GetChannelSubscribers>>,
