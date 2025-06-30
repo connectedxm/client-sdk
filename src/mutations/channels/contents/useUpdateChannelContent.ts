@@ -12,7 +12,6 @@ import {
 import { CONTENTS_QUERY_KEY } from "@src/queries/contents";
 
 export interface UpdateChannelContentPayload {
-  visible?: boolean;
   title?: string;
   description?: string | null;
   duration?: string | null;

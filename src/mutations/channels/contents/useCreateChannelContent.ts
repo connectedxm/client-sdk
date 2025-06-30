@@ -9,7 +9,6 @@ import { CHANNEL_CONTENTS_QUERY_KEY } from "@src/queries";
 
 export interface CreateChannelContentPayload {
   title: string;
-  visible?: boolean;
   description?: string | null;
   duration?: string | null;
   body?: string | null;
