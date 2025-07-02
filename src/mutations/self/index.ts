@@ -13,6 +13,7 @@ export * from "./useRemoveSelfEventSession";
 export * from "./useSelfUpdateGroupMembership";
 export * from "./useUpdateSelf";
 export * from "./useUpdateSelfImage";
+export * from "./useUpdateSelfBanner";
 export * from "./useUpdateSelfNotificationPreferences";
 export * from "./useUpdateSelfPushDevice";
 export * from "./useAddSelfInterests";
