@@ -2231,6 +2231,7 @@ export interface OrganizationConfig {
   AUTH: {
     LAYOUT: "default" | "social";
     DEFAULT_ACTION: DefaultAuthAction;
+    EMAIL: boolean;
     FACEBOOK: boolean;
     GOOGLE: boolean;
     APPLE: boolean;
