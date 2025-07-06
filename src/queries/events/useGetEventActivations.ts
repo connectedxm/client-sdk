@@ -7,13 +7,23 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { ConnectedXMResponse, EventActivation } from "@interfaces";
+import {
+  ConnectedXMResponse,
+  EventActivation,
+  TicketEventAccessLevel,
+} from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const EVENT_ACTIVATIONS_QUERY_KEY = (eventId: string): QueryKey => [
-  ...EVENT_QUERY_KEY(eventId),
-  "ACTIVATIONS",
-];
+export const EVENT_ACTIVATIONS_QUERY_KEY = (
+  eventId: string,
+  accessLevel?: keyof typeof TicketEventAccessLevel
+): QueryKey => {
+  const key = [...EVENT_QUERY_KEY(eventId), "ACTIVATIONS"];
+  if (accessLevel) {
+    key.push(accessLevel);
+  }
+  return key;
+};
 
 export const SET_EVENT_ACTIVATIONS_QUERY_DATA = (
   client: QueryClient,
@@ -32,10 +42,12 @@ export const SET_EVENT_ACTIVATIONS_QUERY_DATA = (
 
 export interface GetEventActivationsProps extends InfiniteQueryParams {
   eventId: string;
+  accessLevel?: keyof typeof TicketEventAccessLevel;
 }
 
 export const GetEventActivations = async ({
   eventId,
+  accessLevel,
   pageParam,
   pageSize,
   orderBy,
@@ -51,6 +63,7 @@ export const GetEventActivations = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      accessLevel: accessLevel || undefined,
     },
   });
   return data;
@@ -58,6 +71,7 @@ export const GetEventActivations = async ({
 
 export const useGetEventActivations = (
   eventId: string = "",
+  accessLevel?: keyof typeof TicketEventAccessLevel,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -69,9 +83,9 @@ export const useGetEventActivations = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventActivations>>
   >(
-    EVENT_ACTIVATIONS_QUERY_KEY(eventId),
+    EVENT_ACTIVATIONS_QUERY_KEY(eventId, accessLevel),
     (params: InfiniteQueryParams) =>
-      GetEventActivations({ eventId, ...params }),
+      GetEventActivations({ eventId, accessLevel, ...params }),
     params,
     {
       ...options,
