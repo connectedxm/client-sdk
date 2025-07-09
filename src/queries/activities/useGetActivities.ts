@@ -1,35 +1,26 @@
 import {
-  GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
-  setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Activity } from "@interfaces";
-import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { ConnectedXMResponse } from "@interfaces";
+import { QueryKey } from "@tanstack/react-query";
+import { ConnectedXMResponse, Activity } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const ACTIVITIES_QUERY_KEY = (): QueryKey => ["ACTIVITIES"];
-
-export const SET_ACTIVITIES_QUERY_DATA = (
-  client: QueryClient,
-  keyParams: Parameters<typeof ACTIVITIES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetActivities>>,
-  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
-) => {
-  client.setQueryData(
-    [
-      ...ACTIVITIES_QUERY_KEY(...keyParams),
-      ...GetBaseInfiniteQueryKeys(...baseKeys),
-    ],
-    setFirstPageData(response)
-  );
+export const ACTIVITIES_QUERY_KEY = (featured?: boolean): QueryKey => {
+  const key = ["ACTIVITIES"];
+  if (featured) {
+    key.push("FEATURED");
+  }
+  return key;
 };
 
-export interface GetActivitiesProps extends InfiniteQueryParams {}
+export interface GetActivitiesProps extends InfiniteQueryParams {
+  featured?: boolean;
+}
 
 export const GetActivities = async ({
+  featured,
   pageParam,
   pageSize,
   orderBy,
@@ -43,12 +34,15 @@ export const GetActivities = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      featured: featured || undefined,
     },
   });
+
   return data;
 };
 
 export const useGetActivities = (
+  featured?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -56,11 +50,9 @@ export const useGetActivities = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetActivities>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetActivities>>>(
-    ACTIVITIES_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetActivities(params),
+    ACTIVITIES_QUERY_KEY(featured),
+    (params: InfiniteQueryParams) => GetActivities({ featured, ...params }),
     params,
-    {
-      ...options,
-    }
+    options
   );
 };

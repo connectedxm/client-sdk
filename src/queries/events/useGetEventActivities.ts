@@ -12,10 +12,16 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACTIVITIES_QUERY_KEY } from "../activities";
 
-export const EVENT_ACTIVITIES_QUERY_KEY = (eventId: string): QueryKey => [
-  ...ACTIVITIES_QUERY_KEY(),
-  ...EVENT_QUERY_KEY(eventId),
-];
+export const EVENT_ACTIVITIES_QUERY_KEY = (
+  eventId: string,
+  featured?: boolean
+): QueryKey => {
+  const key = [...ACTIVITIES_QUERY_KEY(), ...EVENT_QUERY_KEY(eventId)];
+  if (featured) {
+    key.push("FEATURED");
+  }
+  return key;
+};
 
 export const SET_EVENT_ACTIVITIES_QUERY_DATA = (
   client: QueryClient,
@@ -34,6 +40,7 @@ export const SET_EVENT_ACTIVITIES_QUERY_DATA = (
 
 export interface GetEventActivitiesProps extends InfiniteQueryParams {
   eventId: string;
+  featured?: boolean;
 }
 
 export const GetEventActivities = async ({
@@ -43,6 +50,7 @@ export const GetEventActivities = async ({
   orderBy,
   search,
   clientApiParams,
+  featured,
 }: GetEventActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/activities`, {
@@ -51,6 +59,7 @@ export const GetEventActivities = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      featured: featured || undefined,
     },
   });
   return data;
@@ -58,6 +67,7 @@ export const GetEventActivities = async ({
 
 export const useGetEventActivities = (
   eventId: string = "",
+  featured?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -69,8 +79,9 @@ export const useGetEventActivities = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventActivities>>
   >(
-    EVENT_ACTIVITIES_QUERY_KEY(eventId),
-    (params: InfiniteQueryParams) => GetEventActivities({ eventId, ...params }),
+    EVENT_ACTIVITIES_QUERY_KEY(eventId, featured),
+    (params: InfiniteQueryParams) =>
+      GetEventActivities({ eventId, featured, ...params }),
     params,
     {
       ...options,

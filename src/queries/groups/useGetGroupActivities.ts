@@ -12,10 +12,16 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACTIVITIES_QUERY_KEY } from "../activities";
 
-export const GROUP_ACTIVITIES_QUERY_KEY = (groupId: string): QueryKey => [
-  ...ACTIVITIES_QUERY_KEY(),
-  ...GROUP_QUERY_KEY(groupId),
-];
+export const GROUP_ACTIVITIES_QUERY_KEY = (
+  groupId: string,
+  featured?: boolean
+): QueryKey => {
+  const key = [...ACTIVITIES_QUERY_KEY(), ...GROUP_QUERY_KEY(groupId)];
+  if (featured) {
+    key.push("FEATURED");
+  }
+  return key;
+};
 
 export const SET_GROUP_ACTIVITIES_QUERY_DATA = (
   client: QueryClient,
@@ -34,6 +40,7 @@ export const SET_GROUP_ACTIVITIES_QUERY_DATA = (
 
 export interface GetGroupActivitiesProps extends InfiniteQueryParams {
   groupId: string;
+  featured?: boolean;
 }
 
 export const GetGroupActivities = async ({
@@ -42,6 +49,7 @@ export const GetGroupActivities = async ({
   orderBy,
   search,
   groupId,
+  featured,
   clientApiParams,
 }: GetGroupActivitiesProps): Promise<ConnectedXMResponse<Activity[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -51,6 +59,7 @@ export const GetGroupActivities = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      featured: featured || undefined,
     },
   });
   return data;
@@ -58,6 +67,7 @@ export const GetGroupActivities = async ({
 
 export const useGetGroupActivities = (
   groupId: string = "",
+  featured?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -69,8 +79,9 @@ export const useGetGroupActivities = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetGroupActivities>>
   >(
-    GROUP_ACTIVITIES_QUERY_KEY(groupId),
-    (params: InfiniteQueryParams) => GetGroupActivities({ groupId, ...params }),
+    GROUP_ACTIVITIES_QUERY_KEY(groupId, featured),
+    (params: InfiniteQueryParams) =>
+      GetGroupActivities({ groupId, featured, ...params }),
     params,
     {
       ...options,
