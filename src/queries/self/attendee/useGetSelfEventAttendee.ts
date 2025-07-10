@@ -37,7 +37,9 @@ export interface GetSelfEventAttendeeProps extends SingleQueryParams {
 export const GetSelfEventAttendee = async ({
   eventId,
   clientApiParams,
-}: GetSelfEventAttendeeProps): Promise<ConnectedXMResponse<Registration>> => {
+}: GetSelfEventAttendeeProps): Promise<
+  ConnectedXMResponse<Registration | null>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/self/events/${eventId}/attendee`);
 
