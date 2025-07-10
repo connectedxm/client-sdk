@@ -2281,11 +2281,11 @@ export interface OrganizationModule {
 
 export interface OrganizationOAuth {
   name: string;
-  btnText?: string;
-  icon?: string;
+  btnText?: string | null;
+  icon?: string | null;
   color: string;
   textColor: string;
-  borderColor?: string;
+  borderColor?: string | null;
 }
 
 export interface BaseSchedule {
