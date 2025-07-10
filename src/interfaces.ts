@@ -925,6 +925,7 @@ export interface BaseSession {
   sortOrder: number | null;
   nonSession: boolean;
   registrationEnabled: boolean;
+  registrationEnd: string | null;
   price: number | null;
 }
 
