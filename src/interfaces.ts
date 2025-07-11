@@ -407,7 +407,7 @@ export interface Event extends BaseEvent {
   registrations: BaseRegistration[];
   androidAppLink: string | null;
   pages: BaseEventPage[];
-  streamInputs: StreamInput[];
+  streamInputs: BaseStreamInput[];
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
