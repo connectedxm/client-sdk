@@ -407,7 +407,7 @@ export interface Event extends BaseEvent {
   registrations: BaseRegistration[];
   androidAppLink: string | null;
   pages: BaseEventPage[];
-  streamInputs: StreamInput[];
+  streamInputs: BaseStreamInput[];
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
@@ -913,6 +913,20 @@ export const isTypeSpeaker = (
   return (speaker as Omit<Speaker, keyof BaseSpeaker>).website !== undefined;
 };
 
+export interface BaseStreamInput {
+  id: string;
+  connected: boolean;
+  name: string;
+  public: boolean;
+  image: BaseImage | null;
+}
+
+export interface StreamInput extends BaseStreamInput {
+  cloudflareId: string | null;
+  threads: BaseThread[];
+  eventId: string;
+}
+
 export interface BaseSession {
   id: string;
   slug: string;
@@ -935,7 +949,7 @@ export interface Session extends BaseSession {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
-  streamInput: StreamInput | null;
+  streamInput: BaseStreamInput | null;
   supply?: number | null;
   _count: {
     sections: number;
@@ -1742,15 +1756,6 @@ export interface BaseLinkPreview {
 }
 
 export interface LinkPreview extends BaseLinkPreview {}
-
-export interface StreamInput {
-  id: string;
-  cloudflareId: string;
-  connected: boolean;
-  name: string;
-  threads: BaseThread[]; // most recent thread [0]
-  image: BaseImage | null;
-}
 
 export interface BaseChatChannel {
   id: number;
