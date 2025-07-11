@@ -9,7 +9,7 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const STREAM_QUERY_KEY = (streamId: string): QueryKey => [
-  "streams",
+  "STREAMS",
   streamId,
 ];
 
