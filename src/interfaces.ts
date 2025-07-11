@@ -922,7 +922,7 @@ export interface BaseStreamInput {
 }
 
 export interface StreamInput extends BaseStreamInput {
-  cloudflareId: string | null;
+  cloudflareId: string;
   threads: BaseThread[];
   eventId: string;
 }
