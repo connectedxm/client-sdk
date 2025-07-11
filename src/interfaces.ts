@@ -924,6 +924,7 @@ export interface BaseStreamInput {
 export interface StreamInput extends BaseStreamInput {
   cloudflareId: string | null;
   threads: BaseThread[];
+  eventId: string;
 }
 
 export interface BaseSession {
