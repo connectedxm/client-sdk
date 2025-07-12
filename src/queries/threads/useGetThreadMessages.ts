@@ -1,10 +1,12 @@
 import { ConnectedXMResponse, ThreadMessage } from "@interfaces";
 import {
+  CursorQueryParams,
+  CursorQueryOptions,
+  useConnectedCursorQuery,
+} from "@src/queries/useConnectedCursorQuery";
+import {
   GetBaseInfiniteQueryKeys,
-  InfiniteQueryOptions,
-  InfiniteQueryParams,
   setFirstPageData,
-  useConnectedInfiniteQuery,
 } from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { THREAD_QUERY_KEY } from "./useGetThread";
@@ -31,24 +33,22 @@ export const SET_THREAD_MESSAGES_QUERY_DATA = (
   );
 };
 
-export interface GetThreadMessagesProps extends InfiniteQueryParams {
+export interface GetThreadMessagesProps extends CursorQueryParams {
   threadId: string;
 }
 
 export const GetThreadMessages = async ({
   threadId,
-  pageParam,
+  cursor,
   pageSize,
-  orderBy,
   search,
   clientApiParams,
 }: GetThreadMessagesProps): Promise<ConnectedXMResponse<ThreadMessage[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/threads/${threadId}/messages`, {
     params: {
-      page: pageParam || undefined,
+      cursor: cursor || undefined,
       pageSize: pageSize || undefined,
-      orderBy: orderBy || undefined,
       search: search || undefined,
     },
   });
@@ -59,18 +59,16 @@ export const GetThreadMessages = async ({
 export const useGetThreadMessages = (
   threadId: string = "",
   params: Omit<
-    InfiniteQueryParams,
-    "pageParam" | "queryClient" | "clientApiParams"
+    CursorQueryParams,
+    "cursor" | "queryClient" | "clientApiParams"
   > = {},
-  options: InfiniteQueryOptions<
+  options: CursorQueryOptions<
     Awaited<ReturnType<typeof GetThreadMessages>>
   > = {}
 ) => {
   const { authenticated } = useConnectedXM();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetThreadMessages>>
-  >(
+  return useConnectedCursorQuery<Awaited<ReturnType<typeof GetThreadMessages>>>(
     THREAD_MESSAGES_QUERY_KEY(threadId),
     (params: Omit<GetThreadMessagesProps, "threadId">) =>
       GetThreadMessages({ ...params, threadId }),

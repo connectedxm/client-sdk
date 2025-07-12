@@ -23,3 +23,4 @@ export * from "./streams";
 
 export * from "./useConnectedInfiniteQuery";
 export * from "./useConnectedSingleQuery";
+export * from "./useConnectedCursorQuery";

@@ -5,8 +5,8 @@ export function MergeInfinitePages<TData>(
   data: InfiniteData<ConnectedXMResponse<TData[]>>
 ) {
   return data.pages.reduce(
-    (sessions: TData[], page: ConnectedXMResponse<TData[]>) => {
-      return [...sessions, ...page.data];
+    (items: TData[], page: ConnectedXMResponse<TData[]>) => {
+      return [...items, ...page.data];
     },
     []
   );

@@ -37,6 +37,7 @@ export interface ConnectedXMResponse<TData> {
   data: TData;
   count?: number;
   url?: string;
+  cursor?: string | number | null;
 }
 
 export interface BaseImage {
