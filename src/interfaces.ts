@@ -681,6 +681,7 @@ export interface BasePass {
 
 export interface Pass extends BasePass {
   package: BaseAttendeePackage | null;
+  matches: BaseMatch[];
   updatedAt: string;
   amtPaid: number;
   amtRefunded: number;
@@ -2670,6 +2671,25 @@ export interface EventMediaItem extends BaseEventMediaItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BaseRound {
+  id: string;
+  number: number;
+  event: BaseEvent | null;
+  session: BaseSession | null;
+}
+
+export interface Round extends BaseRound {}
+
+export interface BaseMatch {
+  id: string;
+  number: number;
+  title: string | null;
+  description: string | null;
+  round: BaseRound;
+}
+
+export interface Match extends BaseMatch {}
 
 export interface BaseActivityReport {
   id: string;
