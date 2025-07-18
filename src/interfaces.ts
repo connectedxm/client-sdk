@@ -403,6 +403,7 @@ export interface Event extends BaseEvent {
   registrationStart: string;
   registrationEnd: string;
   publicRegistrants: boolean;
+  activityFeedEnabled: boolean;
   chatBotNumber: string | null;
   iosAppLink: string | null;
   registrations: BaseRegistration[];
