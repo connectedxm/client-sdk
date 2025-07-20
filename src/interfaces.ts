@@ -346,6 +346,7 @@ export interface Group extends BaseGroup {
   description: string;
   externalUrl: string | null;
   active: boolean;
+  streamInputs: BaseStreamInput[];
   createdAt: string;
   _count: {
     members: number;
@@ -928,6 +929,7 @@ export interface StreamInput extends BaseStreamInput {
   cloudflareId: string;
   threads: BaseThread[];
   eventId: string;
+  groupId: string;
 }
 
 export interface BaseSession {
