@@ -9,6 +9,11 @@ export enum ActivityEntityType {
   segment = "segment",
 }
 
+export enum SessionAccess {
+  public = "PUBLIC",
+  private = "PRIVATE",
+}
+
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
 export interface IntegrationDetails {
@@ -946,6 +951,7 @@ export interface BaseSession {
   registrationEnabled: boolean;
   registrationEnd: string | null;
   price: number | null;
+  access: SessionAccess;
 }
 
 export interface Session extends BaseSession {
