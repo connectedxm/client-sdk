@@ -13,6 +13,7 @@ export * from "./useGetEventSession";
 export * from "./useGetEventSessions";
 export * from "./useGetEventSpeaker";
 export * from "./useGetEventSpeakers";
+export * from "./useGetEventSpeakerSessions";
 export * from "./useGetEventSponsors";
 export * from "./useGetFeaturedEvents";
 export * from "./useGetEventActivation";
