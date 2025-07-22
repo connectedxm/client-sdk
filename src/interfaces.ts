@@ -2192,6 +2192,7 @@ export enum PaymentIntegrationType {
   stripe = "stripe",
   paypal = "paypal",
   braintree = "braintree",
+  authorizenet = "authorizenet",
   manual = "manual",
 }
 
