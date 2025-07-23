@@ -12,7 +12,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 export interface CreateSupportTicketParams extends MutationParams {
   type: keyof typeof SupportTicketType;
   email: string;
-  request: any;
+  request: string;
   eventId?: string;
   productId?: string;
 }
