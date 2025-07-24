@@ -1699,6 +1699,12 @@ export const isTypeBenefit = (
   return (benefit as Omit<Benefit, keyof BaseBenefit>).createdAt !== undefined;
 };
 
+export enum EventActivationType {
+  public = "public",
+  private = "private",
+  protected = "protected",
+}
+
 export interface BaseEventActivation {
   id: string;
   slug: string;
@@ -1707,16 +1713,16 @@ export interface BaseEventActivation {
   maxPoints: number;
   startAfter: string;
   image: BaseImage | null;
+  type: EventActivationType;
+  accessLevel: TicketEventAccessLevel;
 }
 
 export interface EventActivation extends BaseEventActivation {
   event: BaseEvent;
-  manager: BaseAccount | null;
   longDescription: string | null;
-  protected: boolean;
+  completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
   createdAt: string;
   updatedAt: string;
-  completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
 }
 
 export const isTypeEventActivation = (
@@ -1730,16 +1736,16 @@ export const isTypeEventActivation = (
 
 export interface BaseEventActivationCompletion {
   id: string;
-  eventId: string;
   earnedPoints: number;
   createdAt: string;
 }
 
 export interface EventActivationCompletion
   extends BaseEventActivationCompletion {
+  eventId: string;
   eventActivationId: string;
   eventActivation: BaseEventActivation;
-  account: BaseAccount;
+  pass: BasePass;
   updatedAt: string;
 }
 
