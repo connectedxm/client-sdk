@@ -7,22 +7,14 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import {
-  ConnectedXMResponse,
-  EventActivation,
-  TicketEventAccessLevel,
-} from "@interfaces";
+import { ConnectedXMResponse, EventActivation } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_ACTIVATIONS_QUERY_KEY = (
   eventId: string,
-  passId: string,
-  accessLevel?: keyof typeof TicketEventAccessLevel
+  passId: string
 ): QueryKey => {
   const key = [...EVENT_QUERY_KEY(eventId), "ACTIVATIONS", passId];
-  if (accessLevel) {
-    key.push(accessLevel);
-  }
   return key;
 };
 
@@ -44,13 +36,11 @@ export const SET_EVENT_ACTIVATIONS_QUERY_DATA = (
 export interface GetEventActivationsProps extends InfiniteQueryParams {
   eventId: string;
   passId: string;
-  accessLevel?: keyof typeof TicketEventAccessLevel;
 }
 
 export const GetEventActivations = async ({
   eventId,
   passId,
-  accessLevel,
   pageParam,
   pageSize,
   orderBy,
@@ -68,7 +58,6 @@ export const GetEventActivations = async ({
         pageSize: pageSize || undefined,
         orderBy: orderBy || undefined,
         search: search || undefined,
-        accessLevel: accessLevel || undefined,
       },
     }
   );
@@ -78,7 +67,6 @@ export const GetEventActivations = async ({
 export const useGetEventActivations = (
   eventId: string = "",
   passId: string = "",
-  accessLevel?: keyof typeof TicketEventAccessLevel,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -90,9 +78,9 @@ export const useGetEventActivations = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventActivations>>
   >(
-    EVENT_ACTIVATIONS_QUERY_KEY(eventId, passId, accessLevel),
+    EVENT_ACTIVATIONS_QUERY_KEY(eventId, passId),
     (params: InfiniteQueryParams) =>
-      GetEventActivations({ eventId, passId, accessLevel, ...params }),
+      GetEventActivations({ eventId, passId, ...params }),
     params,
     {
       ...options,
