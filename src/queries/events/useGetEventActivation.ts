@@ -13,8 +13,9 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_ACTIVATION_QUERY_KEY = (
   eventId: string,
+  passId: string,
   activationId: string
-): QueryKey => [...EVENT_ACTIVATIONS_QUERY_KEY(eventId), activationId];
+): QueryKey => [...EVENT_ACTIVATIONS_QUERY_KEY(eventId, passId), activationId];
 
 export const SET_EVENT_ACTIVATION_QUERY_DATA = (
   client: QueryClient,
@@ -33,32 +34,37 @@ export const SET_EVENT_ACTIVATION_QUERY_DATA = (
 
 export interface GetEventActivationProps extends SingleQueryParams {
   eventId: string;
+  passId: string;
   activationId: string;
 }
 
 export const GetEventActivation = async ({
   eventId,
+  passId,
   activationId,
   clientApiParams,
 }: GetEventActivationProps): Promise<ConnectedXMResponse<EventActivation>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/events/${eventId}/activations/${activationId}`
+    `/events/${eventId}/activations/${passId}/${activationId}`
   );
   return data;
 };
 
 export const useGetEventActivation = (
   eventId: string = "",
+  passId: string = "",
   activationId: string,
   options: SingleQueryOptions<ReturnType<typeof GetEventActivation>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventActivation>>(
-    EVENT_ACTIVATION_QUERY_KEY(eventId, activationId),
-    (params) => GetEventActivation({ eventId, activationId, ...params }),
+    EVENT_ACTIVATION_QUERY_KEY(eventId, passId, activationId),
+    (params) =>
+      GetEventActivation({ eventId, passId, activationId, ...params }),
     {
       ...options,
-      enabled: !!eventId && !!activationId && (options?.enabled ?? true),
+      enabled:
+        !!eventId && !!passId && !!activationId && (options?.enabled ?? true),
     }
   );
 };

@@ -16,9 +16,13 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_ACTIVATIONS_QUERY_KEY = (
   eventId: string,
+  passId?: string,
   accessLevel?: keyof typeof TicketEventAccessLevel
 ): QueryKey => {
   const key = [...EVENT_QUERY_KEY(eventId), "ACTIVATIONS"];
+  if (passId) {
+    key.push(passId);
+  }
   if (accessLevel) {
     key.push(accessLevel);
   }
@@ -42,11 +46,13 @@ export const SET_EVENT_ACTIVATIONS_QUERY_DATA = (
 
 export interface GetEventActivationsProps extends InfiniteQueryParams {
   eventId: string;
+  passId?: string;
   accessLevel?: keyof typeof TicketEventAccessLevel;
 }
 
 export const GetEventActivations = async ({
   eventId,
+  passId,
   accessLevel,
   pageParam,
   pageSize,
@@ -57,20 +63,24 @@ export const GetEventActivations = async ({
   ConnectedXMResponse<EventActivation[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/events/${eventId}/activations`, {
-    params: {
-      page: pageParam || undefined,
-      pageSize: pageSize || undefined,
-      orderBy: orderBy || undefined,
-      search: search || undefined,
-      accessLevel: accessLevel || undefined,
-    },
-  });
+  const { data } = await clientApi.get(
+    `/events/${eventId}/activations/${passId}`,
+    {
+      params: {
+        page: pageParam || undefined,
+        pageSize: pageSize || undefined,
+        orderBy: orderBy || undefined,
+        search: search || undefined,
+        accessLevel: accessLevel || undefined,
+      },
+    }
+  );
   return data;
 };
 
 export const useGetEventActivations = (
   eventId: string = "",
+  passId?: string,
   accessLevel?: keyof typeof TicketEventAccessLevel,
   params: Omit<
     InfiniteQueryParams,
@@ -83,13 +93,13 @@ export const useGetEventActivations = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventActivations>>
   >(
-    EVENT_ACTIVATIONS_QUERY_KEY(eventId, accessLevel),
+    EVENT_ACTIVATIONS_QUERY_KEY(eventId, passId, accessLevel),
     (params: InfiniteQueryParams) =>
-      GetEventActivations({ eventId, accessLevel, ...params }),
+      GetEventActivations({ eventId, passId, accessLevel, ...params }),
     params,
     {
       ...options,
-      enabled: !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && !!passId && (options?.enabled ?? true),
     }
   );
 };
