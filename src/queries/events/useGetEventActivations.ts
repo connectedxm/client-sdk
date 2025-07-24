@@ -16,13 +16,10 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_ACTIVATIONS_QUERY_KEY = (
   eventId: string,
-  passId?: string,
+  passId: string,
   accessLevel?: keyof typeof TicketEventAccessLevel
 ): QueryKey => {
-  const key = [...EVENT_QUERY_KEY(eventId), "ACTIVATIONS"];
-  if (passId) {
-    key.push(passId);
-  }
+  const key = [...EVENT_QUERY_KEY(eventId), "ACTIVATIONS", passId];
   if (accessLevel) {
     key.push(accessLevel);
   }
@@ -46,7 +43,7 @@ export const SET_EVENT_ACTIVATIONS_QUERY_DATA = (
 
 export interface GetEventActivationsProps extends InfiniteQueryParams {
   eventId: string;
-  passId?: string;
+  passId: string;
   accessLevel?: keyof typeof TicketEventAccessLevel;
 }
 
@@ -80,7 +77,7 @@ export const GetEventActivations = async ({
 
 export const useGetEventActivations = (
   eventId: string = "",
-  passId?: string,
+  passId: string = "",
   accessLevel?: keyof typeof TicketEventAccessLevel,
   params: Omit<
     InfiniteQueryParams,
