@@ -1220,6 +1220,14 @@ export enum SupportTicketType {
   feedback = "feedback",
 }
 
+export enum SupportTicketState {
+  new = "new",
+  awaitingAdmin = "awaitingAdmin",
+  awaitingClient = "awaitingClient",
+  resolved = "resolved",
+  spam = "spam",
+}
+
 export interface SupportTicket extends BaseSupportTicket {
   type: SupportTicketType;
   email: string;
@@ -1227,7 +1235,7 @@ export interface SupportTicket extends BaseSupportTicket {
   account: BaseAccount | null;
   event: BaseEvent | null;
   ticket: BasePassType | null;
-  status: string;
+  state: SupportTicketState;
   createdAt: string;
   updatedAt: string;
 }
