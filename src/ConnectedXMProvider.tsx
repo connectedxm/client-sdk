@@ -1,11 +1,7 @@
 import { AxiosError } from "axios";
 import React from "react";
 import { ConnectedXMResponse } from "./interfaces";
-import {
-  QueryClient,
-  QueryClientProvider,
-  QueryKey,
-} from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { MutationParams } from ".";
 
 export interface ConnectedXMClientContextState {
@@ -15,8 +11,7 @@ export interface ConnectedXMClientContextState {
     | "https://client-api.connected.dev"
     | "https://staging-client-api.connected.dev"
     | "http://localhost:4001";
-  authenticated: boolean | null;
-  setAuthenticated: (authenticated: boolean) => void;
+  authenticated: boolean;
   getToken: () => Promise<string | undefined>;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
   locale: string;
@@ -48,74 +43,16 @@ export const ConnectedXMClientContext =
   );
 
 export interface ConnectedXMProviderProps
-  extends Omit<
-    ConnectedXMClientContextState,
-    | "token"
-    | "setToken"
-    | "executeAs"
-    | "setExecuteAs"
-    | "websocket"
-    | "authenticated"
-    | "setAuthenticated"
-  > {
+  extends ConnectedXMClientContextState {
   children: React.ReactNode;
 }
 
 export const ConnectedXMProvider = ({
-  queryClient,
   children,
-  getToken,
   ...state
 }: ConnectedXMProviderProps) => {
-  const [authenticated, setAuthenticated] = React.useState<boolean | null>(
-    null
-  );
-  const [ssr, setSSR] = React.useState<boolean>(true);
-
-  React.useEffect(() => {
-    if (!authenticated) {
-      getToken().then((token) => {
-        if (token) {
-          setAuthenticated(true);
-        } else {
-          setAuthenticated(false);
-        }
-      });
-    }
-  }, [authenticated, getToken]);
-
-  React.useEffect(() => {
-    setSSR(false);
-  }, []);
-
-  if (ssr) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <ConnectedXMClientContext.Provider
-          value={{
-            ...state,
-            getToken,
-            authenticated,
-            setAuthenticated,
-            queryClient,
-          }}
-        >
-          {children}
-        </ConnectedXMClientContext.Provider>
-      </QueryClientProvider>
-    );
-  }
-
   return (
-    <ConnectedXMClientContext.Provider
-      value={{
-        ...state,
-        getToken,
-        authenticated,
-        setAuthenticated,
-        queryClient,
-      }}
-    >
+    <ConnectedXMClientContext.Provider value={state}>
       {children}
     </ConnectedXMClientContext.Provider>
   );
