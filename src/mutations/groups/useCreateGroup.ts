@@ -11,7 +11,7 @@ import {
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-interface CreateGroup {
+interface CreateGroupData {
   name: string;
   description: string;
   access: keyof typeof GroupAccess;
@@ -20,7 +20,7 @@ interface CreateGroup {
 }
 
 export interface CreateGroupParams extends MutationParams {
-  group: CreateGroup;
+  group: CreateGroupData;
   imageDataUri?: string;
 }
 
