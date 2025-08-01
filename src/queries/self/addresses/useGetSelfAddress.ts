@@ -7,7 +7,7 @@ import {
 import type { AccountAddress, ConnectedXMResponse } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_ADDRESSES_QUERY_KEY } from "./useGetSelfAddresses";
 
 export const SELF_ADDRESS_QUERY_KEY = (addressId: string): QueryKey => {
@@ -34,7 +34,7 @@ export const useGetSelfAddress = (
   addressId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfAddress>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfAddress>>(
     SELF_ADDRESS_QUERY_KEY(addressId),

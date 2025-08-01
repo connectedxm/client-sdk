@@ -6,7 +6,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { ACTIVITIES_QUERY_KEY } from "../activities";
 
 export const SELF_GROUP_ACTIVITIES_QUERY_KEY = (): QueryKey => [
@@ -44,7 +44,7 @@ export const useGetSelfGroupActivities = (
     Awaited<ReturnType<typeof GetSelfGroupActivities>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfGroupActivities>>

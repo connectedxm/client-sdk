@@ -7,7 +7,7 @@ import {
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SURVEY_QUERY_KEY } from "./useGetSurvey";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_QUERY_KEY } from "../self";
 
 export const SURVEY_SUBMISSIONS_QUERY_KEY = (
@@ -65,7 +65,7 @@ export const useGetSurveySubmissions = (
     Awaited<ReturnType<typeof GetSurveySubmissions>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSurveySubmissions>>
   >(

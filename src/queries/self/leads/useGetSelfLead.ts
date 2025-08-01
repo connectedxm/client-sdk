@@ -7,7 +7,7 @@ import {
 import type { Lead, ConnectedXMResponse } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_LEADS_QUERY_KEY } from "./useGetSelfLeads";
 
 export const SELF_LEAD_QUERY_KEY = (leadId: string): QueryKey => {
@@ -34,7 +34,7 @@ export const useGetSelfLead = (
   leadId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetSelfLead>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfLead>>(
     SELF_LEAD_QUERY_KEY(leadId),

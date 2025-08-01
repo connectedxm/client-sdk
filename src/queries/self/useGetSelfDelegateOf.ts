@@ -7,7 +7,7 @@ import {
 import { QueryKey } from "@tanstack/react-query";
 import { SELF_QUERY_KEY } from "./useGetSelf";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_DELEGATE_OF_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -45,7 +45,7 @@ export const useGetSelfDelegateOf = (
     Awaited<ReturnType<typeof GetSelfDelegateOf>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfDelegateOf>>

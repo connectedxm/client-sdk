@@ -7,7 +7,7 @@ import {
 import { QueryKey } from "@tanstack/react-query";
 import { SELF_EVENTS_QUERY_KEY } from "./useGetSelfEvents";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_EVENT_SESSIONS_QUERY_KEY = (eventId: string): QueryKey => [
   ...SELF_EVENTS_QUERY_KEY(false),
@@ -51,7 +51,7 @@ export const useGetSelfEventSessions = (
     Awaited<ReturnType<typeof GetSelfEventSessions>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventSessions>>

@@ -9,7 +9,7 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SELF_QUERY_KEY } from "../useGetSelf";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_CHAT_CHANNELS_QUERY_KEY = (): QueryKey => [
   ...SELF_QUERY_KEY(),
@@ -64,7 +64,7 @@ export const useGetSelfChatChannels = (
     Awaited<ReturnType<typeof GetSelfChatChannels>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfChatChannels>>

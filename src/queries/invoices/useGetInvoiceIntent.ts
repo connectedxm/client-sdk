@@ -5,7 +5,7 @@ import useConnectedSingleQuery, {
 import { INVOICE_QUERY_KEY } from "./useGetInvoice";
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_INVOICE_INTENT_QUERY_KEY = (
   invoiceId: string,
@@ -38,7 +38,7 @@ export const useGetInvoiceIntent = (
   addressId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetInvoiceIntent>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetInvoiceIntent>>(
     SELF_INVOICE_INTENT_QUERY_KEY(invoiceId, addressId),

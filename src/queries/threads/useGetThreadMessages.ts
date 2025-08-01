@@ -11,7 +11,7 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { THREAD_QUERY_KEY } from "./useGetThread";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const THREAD_MESSAGES_QUERY_KEY = (threadId: string): QueryKey => [
   ...THREAD_QUERY_KEY(threadId),
@@ -66,7 +66,7 @@ export const useGetThreadMessages = (
     Awaited<ReturnType<typeof GetThreadMessages>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedCursorQuery<Awaited<ReturnType<typeof GetThreadMessages>>>(
     THREAD_MESSAGES_QUERY_KEY(threadId),

@@ -6,7 +6,7 @@ import useConnectedSingleQuery, {
 } from "../../useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 
 export const SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY = (
@@ -59,7 +59,7 @@ export const useGetSelfEventRegistrationQuestions = (
     ReturnType<typeof GetSelfEventRegistrationQuestions>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationQuestions>

@@ -7,7 +7,7 @@ import {
 import type { ConnectedXMResponse, LeadStatus } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_LEADS_QUERY_KEY } from "./useGetSelfLeads";
 
 export const SELF_LEAD_COUNTS_QUERY_KEY = (): QueryKey => {
@@ -32,7 +32,7 @@ export const GetSelfLeadCounts = async ({
 export const useGetSelfLeadCounts = (
   options: SingleQueryOptions<ReturnType<typeof GetSelfLeadCounts>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfLeadCounts>>(
     SELF_LEAD_COUNTS_QUERY_KEY(),
