@@ -6,4 +6,4 @@ export * from "./mutations";
 
 export * from "./ClientAPI";
 
-export { ConnectedXMProvider } from "./ConnectedProvider";
+export { ConnectedProvider } from "./ConnectedProvider";

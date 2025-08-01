@@ -1,15 +1,14 @@
 import { AxiosError } from "axios";
 import React from "react";
 import { ConnectedXMResponse } from "./interfaces";
+import { MutationParams } from "./mutations";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { MutationParams } from ".";
-import useWebSocket from "react-use-websocket";
-import useWSProcessor, { WSMessage } from "./websockets/useWebsocketProcessor";
-
-interface SendWSMessage {
-  type: string;
-  body: object;
-}
+import type UseWebSocket from "react-use-websocket";
+import {
+  ReceivedWSMessage,
+  SendWSMessage,
+  useConnectedWebsocket,
+} from "./websockets";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -25,9 +24,9 @@ export interface ConnectedXMClientContextState {
   authenticated: boolean;
   getToken: () => Promise<string | undefined>;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
-  lastWSMessage: WSMessage | null;
-  sendWSMessage: (message: SendWSMessage) => void;
   locale: string;
+  sendWSMessage: (message: SendWSMessage) => void;
+  lastWSMessage: ReceivedWSMessage | null;
   onNotAuthorized?: (
     error: AxiosError<ConnectedXMResponse<any>>,
     key: QueryKey,
@@ -55,88 +54,27 @@ export const ConnectedXMClientContext =
     {} as ConnectedXMClientContextState
   );
 
-export interface ConnectedXMProviderProps
+export interface ConnectedProviderProps
   extends Omit<
     ConnectedXMClientContextState,
     "sendWSMessage" | "lastWSMessage"
   > {
+  useWebSocket: typeof UseWebSocket;
   children: React.ReactNode;
 }
 
-export const ConnectedXMProvider = ({
+export const ConnectedProvider = ({
   children,
+  useWebSocket,
   ...state
-}: ConnectedXMProviderProps) => {
-  const { authenticated, locale, getToken, websocketUrl, organizationId } =
-    state;
-
-  const [socketUrl, setSocketUrl] = React.useState<string | null>(null);
-  const [messageHistory, setMessageHistory] = React.useState<WSMessage[]>([]);
-  const [lastWSMessage, setLastMessage] = React.useState<WSMessage | null>(
-    null
+}: ConnectedProviderProps) => {
+  const { sendWSMessage, lastWSMessage } = useConnectedWebsocket(
+    useWebSocket,
+    state
   );
-
-  React.useEffect(() => {
-    const getSocketUrl = async () => {
-      const token = await getToken();
-      if (!token) return null;
-      setSocketUrl(
-        `${websocketUrl}?organization=${organizationId}&authorization=${token}`
-      );
-    };
-
-    if (authenticated) {
-      getSocketUrl();
-    }
-  }, [authenticated, getToken, websocketUrl, organizationId]);
-
-  const { sendJsonMessage, lastMessage } = useWebSocket(
-    socketUrl,
-    {
-      shouldReconnect: () => true,
-      reconnectInterval: (attemptNumber) =>
-        Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
-      reconnectAttempts: 5, // Max reconnect attempts
-      heartbeat: {
-        interval: 25000,
-        message: JSON.stringify({ type: "heartbeat" }),
-        returnMessage: JSON.stringify({ type: "pulse" }),
-        timeout: 60000,
-      },
-    },
-    !!authenticated
-  );
-
-  React.useEffect(() => {
-    if (!lastMessage) return;
-    const newMessage: WSMessage = JSON.parse(lastMessage.data);
-
-    if (messageHistory.length > 0) {
-      if (
-        messageHistory[messageHistory.length - 1]?.timestamp ===
-        newMessage.timestamp
-      ) {
-        return;
-      }
-    }
-
-    setMessageHistory((prev) => [...prev, newMessage]);
-    setLastMessage(newMessage);
-  }, [lastMessage, messageHistory]);
-
-  const sendWSMessage = (message: SendWSMessage) => {
-    sendJsonMessage(message);
-  };
-
-  useWSProcessor({ lastWSMessage, locale });
-
   return (
     <ConnectedXMClientContext.Provider
-      value={{
-        ...state,
-        lastWSMessage,
-        sendWSMessage,
-      }}
+      value={{ ...state, sendWSMessage, lastWSMessage }}
     >
       {children}
     </ConnectedXMClientContext.Provider>

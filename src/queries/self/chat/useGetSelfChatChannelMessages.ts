@@ -12,7 +12,7 @@ import {
   SET_SELF_CHAT_CHANNEL_QUERY_DATA,
 } from "./useGetSelfChatChannel";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY = (
   channelId: string
@@ -89,7 +89,7 @@ export const useGetSelfChatChannelMessages = (
     Awaited<ReturnType<typeof GetSelfChatChannelMessages>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfChatChannelMessages>>

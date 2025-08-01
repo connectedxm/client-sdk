@@ -1,7 +1,7 @@
 import { Account, ConnectedXMResponse } from "@src/interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -73,7 +73,7 @@ export const useGetSelfEventAttendeeTransferAccounts = (
     ReturnType<typeof GetSelfEventAttendeeTransferAccounts>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventAttendeeTransferAccounts>

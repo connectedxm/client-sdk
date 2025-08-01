@@ -5,7 +5,7 @@ import useConnectedSingleQuery, {
 } from "../../useConnectedSingleQuery";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
 
 export const SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY = (
@@ -69,7 +69,7 @@ export const useGetSelfEventAttendeePassAddOnsIntent = (
     ReturnType<typeof GetSelfEventAttendeePassAddOnsIntent>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventAttendeePassAddOnsIntent>

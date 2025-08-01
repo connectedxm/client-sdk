@@ -1,7 +1,7 @@
 import { ConnectedXMResponse, TransferLog } from "@src/interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -54,7 +54,7 @@ export const useGetSelfEventAttendeeTransfersLogs = (
     Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>

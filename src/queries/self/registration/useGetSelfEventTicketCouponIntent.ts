@@ -5,7 +5,7 @@ import useConnectedSingleQuery, {
 import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_EVENT_TICKET_COUPON_INTENT_QUERY_KEY = (
   eventId: string,
@@ -59,7 +59,7 @@ export const useGetSelfEventTicketCouponIntent = (
     ReturnType<typeof GetSelfEventTicketCouponIntent>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventTicketCouponIntent>

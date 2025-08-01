@@ -8,7 +8,7 @@ import {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import type { ConnectedXMResponse, ThreadCircleAccount } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { THREAD_CIRCLE_QUERY_KEY } from "./useGetThreadCircle";
 
 export const THREAD_CIRCLE_ACCOUNTS_QUERY_KEY = (
@@ -72,7 +72,7 @@ export const useGetThreadCircleAccounts = (
     Awaited<ReturnType<typeof GetThreadCircleAccounts>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetThreadCircleAccounts>>
