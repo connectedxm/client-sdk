@@ -9,7 +9,7 @@ import { GroupMembership, ConnectedXMResponse } from "@interfaces";
 import { SELF_GROUP_MEMBERSHIPS_QUERY_KEY } from "./useGetSelfGroupMemberships";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_GROUP_MEMBERSHIP_QUERY_KEY = (groupId: string): QueryKey => [
   ...SELF_GROUP_MEMBERSHIPS_QUERY_KEY(),
@@ -50,7 +50,7 @@ export const useGetSelfGroupMembership = (
   groupId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfGroupMembership>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfGroupMembership>>(
     SELF_GROUP_MEMBERSHIP_QUERY_KEY(groupId),

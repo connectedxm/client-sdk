@@ -1,5 +1,5 @@
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { useConnectedXM } from "../hooks";
+import { useConnected } from "@src/hooks";
 import { AxiosError } from "axios";
 import { ConnectedXMResponse, CUSTOM_ERROR_CODES } from "..";
 import { ClientApiParams } from "@src/ClientAPI";
@@ -39,7 +39,7 @@ export const useConnectedSingleQuery = <TQueryData = unknown>(
     organizationId,
     getToken,
     getExecuteAs,
-  } = useConnectedXM();
+  } = useConnected();
 
   // prettier-ignore
   return useQuery<

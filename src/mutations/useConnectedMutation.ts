@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { ConnectedXMResponse, useConnectedXM } from "..";
+import { ConnectedXMResponse, useConnected } from "..";
 import { ClientApiParams } from "@src/ClientAPI";
 
 export interface MutationParams {
@@ -41,7 +41,7 @@ export const useConnectedMutation = <
     organizationId,
     getExecuteAs,
     onMutationError,
-  } = useConnectedXM();
+  } = useConnected();
   const queryClient = useQueryClient();
 
   return useMutation<

@@ -1,4 +1,4 @@
-export * from "./useConnectedXM";
+export * from "./useConnected";
 export * from "./useIsAccountFollowing";
 export * from "./useGroupStatus";
 export * from "./useIsEventRegistered";

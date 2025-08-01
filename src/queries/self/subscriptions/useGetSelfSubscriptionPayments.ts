@@ -6,7 +6,7 @@ import {
 } from "../../useConnectedInfiniteQuery";
 import { SELF_SUBSCRIPTION_QUERY_KEY } from "./useGetSelfSubscription";
 import { ConnectedXMResponse, Payment } from "@interfaces";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_SUBSCRIPTION_PAYMENTS_QUERY_KEY = (
   subscriptionId: string
@@ -51,7 +51,7 @@ export const useGetSelfSubscriptionPayments = (
     Awaited<ReturnType<typeof GetSelfSubscriptionPayments>>
   > = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSelfSubscriptionPayments>>

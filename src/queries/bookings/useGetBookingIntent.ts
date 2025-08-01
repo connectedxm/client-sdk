@@ -5,7 +5,7 @@ import useConnectedSingleQuery, {
 import { BOOKING_QUERY_KEY } from "./useGetBooking";
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 
 export const SELF_BOOKING_INTENT_QUERY_KEY = (
   bookingId: string,
@@ -38,7 +38,7 @@ export const useGetBookingIntent = (
   addressId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetBookingIntent>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetBookingIntent>>(
     SELF_BOOKING_INTENT_QUERY_KEY(bookingId, addressId),

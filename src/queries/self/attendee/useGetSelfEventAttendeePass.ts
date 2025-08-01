@@ -11,7 +11,7 @@ import useConnectedSingleQuery, {
 } from "../../useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { useConnectedXM } from "@src/hooks";
+import { useConnected } from "@src/hooks";
 import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
 
 interface ResponseWithQuestion extends RegistrationQuestionResponse {
@@ -67,7 +67,7 @@ export const useGetSelfEventAttendeePass = (
   passId: string,
   options: SingleQueryOptions<ReturnType<typeof GetSelfEventAttendeePass>> = {}
 ) => {
-  const { authenticated } = useConnectedXM();
+  const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetSelfEventAttendeePass>>(
     SELF_EVENT_ATTENDEE_PASS_QUERY_KEY(eventId, passId),

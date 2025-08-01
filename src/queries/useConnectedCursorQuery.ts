@@ -6,7 +6,7 @@ import {
   useInfiniteQuery,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
-import { useConnectedXM } from "../hooks";
+import { useConnected } from "../hooks";
 import { AxiosError } from "axios";
 import { ClientApiParams } from "@src/ClientAPI";
 import { CUSTOM_ERROR_CODES } from "@src/utilities";
@@ -61,7 +61,7 @@ export const useConnectedCursorQuery = <
     organizationId,
     getExecuteAs,
     queryClient,
-  } = useConnectedXM();
+  } = useConnected();
 
   const getNextPageParam = (lastPage: TQueryData): string | number | null => {
     if (lastPage.cursor) {
