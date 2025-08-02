@@ -8,9 +8,10 @@ import {
 import type { ConnectedXMResponse, Invoice } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
+import { INVOICES_QUERY_KEY } from "./useGetInvoices";
 
 export const INVOICE_QUERY_KEY = (invoiceId: string): QueryKey => [
-  "INVOICES",
+  ...INVOICES_QUERY_KEY(),
   invoiceId,
 ];
 

@@ -1911,7 +1911,6 @@ export interface SubscriptionProductPrice extends BaseSubscriptionProductPrice {
 }
 
 export enum InvoiceStatus {
-  draft = "draft",
   sent = "sent",
   paid = "paid",
   void = "void",
@@ -1921,9 +1920,11 @@ export interface BaseInvoice {
   id: string;
   alternateId: number;
   title: string;
+  description: string | null;
   sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
+  taxable: boolean;
 }
 
 export interface Invoice extends BaseInvoice {
@@ -1936,6 +1937,7 @@ export interface Invoice extends BaseInvoice {
   connectionId?: string;
   secret?: string;
   account: Self | null;
+  event: BaseEvent | null;
   organization: BaseOrganization;
   notes: string | null;
 }
