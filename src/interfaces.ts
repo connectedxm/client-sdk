@@ -1544,6 +1544,8 @@ export interface BasePayment {
 }
 
 export interface Payment extends BasePayment {
+  refunds: BasePayment[];
+  refunded: BasePayment | null;
   addOns: BaseEventAddOn[];
   purchases: BasePass[];
   coupons: BaseCoupon[];
