@@ -449,6 +449,11 @@ export interface RegistrationEventDetails extends BaseEvent {
   registrationLimit: number;
   registrationStart: string;
   registrationEnd: string;
+  allowMultipleRegistrations: boolean;
+  allowSplitPayment: boolean;
+  splitPaymentPercentage: number;
+  splitPaymentNetDays: number | null;
+  splitPaymentDueDate: string | null;
   tickets: {
     enableCoupons: boolean;
   }[];
