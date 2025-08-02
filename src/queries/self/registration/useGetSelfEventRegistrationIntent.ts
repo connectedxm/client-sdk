@@ -9,11 +9,15 @@ import { useConnected } from "@src/hooks";
 
 export const SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY = (
   eventId: string,
-  addressId?: string
+  addressId?: string,
+  split?: boolean
 ) => {
   const key = [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), "INTENT"];
   if (addressId) {
     key.push(addressId);
+  }
+  if (split) {
+    key.push("SPLIT");
   }
   return key;
 };
@@ -21,11 +25,13 @@ export const SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY = (
 export interface GetSelfEventRegistrationIntentProps extends SingleQueryParams {
   eventId: string;
   addressId: string;
+  split: boolean;
 }
 
 export const GetSelfEventRegistrationIntent = async ({
   eventId,
   addressId,
+  split,
   clientApiParams,
 }: GetSelfEventRegistrationIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
@@ -36,6 +42,7 @@ export const GetSelfEventRegistrationIntent = async ({
     {
       params: {
         addressId,
+        split: split ? "true" : "false",
       },
     }
   );
@@ -45,6 +52,7 @@ export const GetSelfEventRegistrationIntent = async ({
 export const useGetSelfEventRegistrationIntent = (
   eventId: string = "",
   addressId: string = "",
+  split: boolean = false,
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventRegistrationIntent>
   > = {}
@@ -54,9 +62,9 @@ export const useGetSelfEventRegistrationIntent = (
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventRegistrationIntent>
   >(
-    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, addressId),
+    SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, addressId, split),
     (params) =>
-      GetSelfEventRegistrationIntent({ eventId, addressId, ...params }),
+      GetSelfEventRegistrationIntent({ eventId, addressId, split, ...params }),
     {
       staleTime: Infinity,
       retry: false,
