@@ -276,7 +276,12 @@ export interface BaseActivity {
   message: string;
   image: BaseImage | null;
   video: BaseVideo | null;
+  giphyId: string | null;
   account: BaseAccount;
+  groupId: string | null;
+  eventId: string | null;
+  contentId: string | null;
+  commentedId: string | null;
   createdAt: string;
 }
 
