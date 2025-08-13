@@ -1,6 +1,6 @@
 {
   "name": "@connectedxm/client",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "type": "module",

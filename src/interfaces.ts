@@ -427,6 +427,7 @@ export interface Event extends BaseEvent {
   reservationDescription: string | null;
   backgroundImage: BaseImage | null;
   media: EventMediaItem[];
+  options: object | null;
   _count: {
     activations: number;
     sessions: number;
@@ -2247,6 +2248,7 @@ export interface OrganizationConfig {
     | "wss://staging-websocket.connected.dev";
   APPLE_APPSTORE_LINK: string | null;
   GOOGLE_PLAYSTORE_LINK: string | null;
+  GOOGLE_TAG_MANAGER_ID: string | null;
   NAME: string;
   DESCRIPTION: string;
   PRIMARY_MODULE: PrimaryModule;
