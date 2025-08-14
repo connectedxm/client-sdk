@@ -421,7 +421,6 @@ export interface Event extends BaseEvent {
   updatedAt: string;
   sessions: BaseSession[];
   speakers: BaseSpeaker[];
-  sponsors: BaseAccount[];
   faqSections: BaseFaqSection[];
   sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
@@ -432,7 +431,6 @@ export interface Event extends BaseEvent {
     activations: number;
     sessions: number;
     speakers: number;
-    sponsors: number;
     sponsorshipLevels: number;
     media: number;
   };
