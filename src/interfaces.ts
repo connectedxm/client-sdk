@@ -14,6 +14,12 @@ export enum SessionAccess {
   private = "PRIVATE",
 }
 
+export enum EventAgendaVisibility {
+  everyone = "everyone",
+  registered = "registered",
+  hidden = "hidden",
+}
+
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
 export interface IntegrationDetails {
@@ -416,6 +422,8 @@ export interface Event extends BaseEvent {
   publicRegistrants: boolean;
   activityFeedEnabled: boolean;
   chatBotNumber: string | null;
+  sessionsVisibility: EventAgendaVisibility;
+  speakersVisibility: EventAgendaVisibility;
   iosAppLink: string | null;
   registrations: BaseRegistration[];
   androidAppLink: string | null;
@@ -424,8 +432,6 @@ export interface Event extends BaseEvent {
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
-  sessions: BaseSession[];
-  speakers: BaseSpeaker[];
   faqSections: BaseFaqSection[];
   sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
@@ -442,7 +448,7 @@ export interface Event extends BaseEvent {
 }
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
-  return (event as Omit<Event, keyof BaseEvent>).sessions !== undefined;
+  return (event as Omit<Event, keyof BaseEvent>).eventType !== undefined;
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
