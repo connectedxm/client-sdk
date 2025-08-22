@@ -5,7 +5,7 @@ import {
   setFirstPageData,
   useConnectedInfiniteQuery,
 } from "../useConnectedInfiniteQuery";
-import { Group } from "@interfaces";
+import { GroupMembership } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";
 import { ConnectedXMResponse } from "@interfaces";
@@ -42,7 +42,7 @@ export const GetAccountGroups = async ({
   search,
   accountId,
   clientApiParams,
-}: GetAccountGroupsProps): Promise<ConnectedXMResponse<Group[]>> => {
+}: GetAccountGroupsProps): Promise<ConnectedXMResponse<GroupMembership[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/${accountId}/groups`, {
     params: {
