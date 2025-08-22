@@ -2161,8 +2161,8 @@ export interface BasePaymentIntent {
     type: string;
   };
   taxIntegration: {
-    connectionId: true;
-    type: true;
+    connectionId: string;
+    type: string;
   } | null;
 }
 export interface PaymentIntent extends BasePaymentIntent {
