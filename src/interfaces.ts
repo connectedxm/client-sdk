@@ -1598,21 +1598,21 @@ export interface BasePaymentLineItem {
   discount: number;
   taxable: boolean;
   // PARENT
-  eventId: string;
-  accountId: string;
-  addOnId: string;
-  sessionId: string;
-  placeId: string;
-  spaceId: string;
+  eventId: string | null;
+  accountId: string | null;
+  addOnId: string | null;
+  sessionId: string | null;
+  placeId: string | null;
+  spaceId: string | null;
   // ITEM IDS
-  passId: string;
-  packageId: string;
-  passAddOnId: string;
-  reservationId: string;
-  accessId: string;
-  invoiceId: string;
-  bookingId: string;
-  subscriptionId: string;
+  passId: string | null;
+  packageId: string | null;
+  passAddOnId: string | null;
+  reservationId: string | null;
+  accessId: string | null;
+  invoiceId: string | null;
+  bookingId: string | null;
+  subscriptionId: string | null;
   paymentId: number;
 }
 
