@@ -690,7 +690,7 @@ export interface BasePass {
   attendee: BaseRegistration;
   ticketId: string;
   ticket: BasePassType;
-  passAddOns: PassAddOn[];
+  passAddOns: BasePassAddon[];
   reservationId: string | null;
   reservation: BaseEventRoomTypeReservation | null;
   responses: BaseRegistrationQuestionResponse[];
@@ -705,15 +705,16 @@ export interface Pass extends BasePass {
   package: BaseAttendeePackage | null;
   matches: BaseMatch[];
   updatedAt: string;
-  amtPaid: number;
-  amtRefunded: number;
   payerId: string | null;
 }
 
-export interface PassAddOn {
+export interface BasePassAddon {
   addOnId: string;
   addOn: BaseEventAddOn;
+  createdAt: string;
 }
+
+export interface PassAddOn extends BasePassAddon {}
 
 export interface ListingPass extends BasePass {
   attendee: BaseRegistration & {
@@ -1542,29 +1543,89 @@ enum RegistrationPaymentType {
 export interface BasePayment {
   id: string;
   type: RegistrationPaymentType;
+  source: string;
   address1: string;
   address2: string;
   city: string;
   state: string;
   country: string;
   zip: string;
-  subTotal: number;
   salesTax: number;
   salesTaxRate: string | null;
-  chargedAmt: number;
   currency: string;
   last4: string | null;
   stripeId: string | null;
+  lineItems: BasePaymentLineItem[];
   createdAt: string;
 }
 
 export interface Payment extends BasePayment {
   refunds: BasePayment[];
   refunded: BasePayment | null;
-  addOns: BaseEventAddOn[];
-  purchases: BasePass[];
-  coupons: BaseCoupon[];
-  accesses: BaseEventSessionAccess[];
+  integration: { type: string };
+  event: BaseEvent | null;
+  registration: BaseRegistration | null;
+  passType: BasePassType | null;
+  pass: BasePass | null;
+  session: BaseSession | null;
+  place: BaseBookingPlace | null;
+  space: BaseBookingSpace | null;
+  membership: BaseSubscriptionProduct | null;
+  coupon: BaseCoupon | null;
+  lineItems: PaymentLineItem[];
+}
+
+export enum PaymentLineItemType {
+  pass = "pass",
+  package = "package",
+  reservation = "reservation",
+  addOn = "addOn",
+  access = "access",
+  invoice = "invoice",
+  booking = "booking",
+  coupon = "coupon",
+  subscription = "subscription",
+}
+
+export interface BasePaymentLineItem {
+  id: string;
+  type: keyof typeof PaymentLineItemType;
+  name: string;
+  quantity: number;
+  amount: number;
+  paid: number;
+  refunded: number;
+  discount: number;
+  taxable: boolean;
+  // PARENT
+  eventId: string;
+  accountId: string;
+  addOnId: string;
+  sessionId: string;
+  placeId: string;
+  spaceId: string;
+  // ITEM IDS
+  passId: string;
+  packageId: string;
+  passAddOnId: string;
+  reservationId: string;
+  accessId: string;
+  invoiceId: string;
+  bookingId: string;
+  subscriptionId: string;
+  paymentId: number;
+}
+
+export interface PaymentLineItem extends BasePaymentLineItem {
+  pass: BasePass | null;
+  package: BaseAttendeePackage | null;
+  passAddOn: BasePassAddon | null;
+  reservation: BaseEventRoomTypeReservation | null;
+  access: BaseEventSessionAccess | null;
+  invoice: BaseInvoice | null;
+  booking: BaseBooking | null;
+  subscription: BaseSubscription | null;
+  payment: BasePayment | null;
 }
 
 export enum LeadStatus {
@@ -1946,7 +2007,7 @@ export interface BaseInvoice {
 
 export interface Invoice extends BaseInvoice {
   lineItems: BaseInvoiceLineItem[];
-  payments: BasePayment[];
+  lineItem: PaymentLineItem | null;
   createdAt: string;
   updatedAt: string;
   type?: string;
@@ -2063,8 +2124,18 @@ export interface InvitableAccount extends Account {
   }[];
 }
 
+export enum PaymentIntentSource {
+  registration = "registration",
+  invoice = "invoice",
+  pass = "pass",
+  coupon = "coupon",
+  session = "session",
+  booking = "booking",
+}
+
 export interface BasePaymentIntent {
   id: string;
+  source: PaymentIntentSource;
   integrationId: string;
   accountId: string;
   description: string | null;
@@ -2082,17 +2153,27 @@ export interface BasePaymentIntent {
   country: string;
   state: string;
   zip: string;
+  coupon: BaseCoupon | null;
+  lineItems: BasePaymentLineItem[];
   createdAt: string;
-}
-export interface PaymentIntent extends BasePaymentIntent {
   integration: {
     connectionId: string;
     type: string;
   };
+  taxIntegration: {
+    connectionId: true;
+    type: true;
+  } | null;
+}
+export interface PaymentIntent extends BasePaymentIntent {
   account: BaseAccount;
+  event: BaseEvent | null;
+  session: BaseSession | null;
   registration: BaseRegistration | null;
-  invoice: BaseInvoice | null;
-  booking: BaseBooking | null;
+  pass: BasePass | null;
+  passType: BasePassType | null;
+  place: BaseBookingPlace | null;
+  space: BaseBookingSpace | null;
 }
 export interface BaseFile {
   id: number;
@@ -2228,6 +2309,7 @@ export enum OrganizationModuleType {
 }
 
 export enum PaymentIntegrationType {
+  free = "free",
   stripe = "stripe",
   paypal = "paypal",
   braintree = "braintree",

@@ -15,7 +15,7 @@ export interface UpdateSelfEventRegistrationPurchaseAddOnParams
   eventId: string;
   passes: {
     id: string;
-    addOns: { id: string }[];
+    passAddOns: { id: string; addOnId: string }[];
   }[];
 }
 
