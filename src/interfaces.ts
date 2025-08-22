@@ -469,6 +469,7 @@ export interface RegistrationEventDetails extends BaseEvent {
   }[];
   _count: {
     sections: number;
+    followups: number
     coupons: number;
     addOns: number;
     roomTypes: number;
@@ -556,12 +557,28 @@ export interface RegistrationQuestionResponse
 
 export interface BaseRegistrationSection {
   id: string;
+  eventId: string;
   name: string;
   description: string | null;
   sortOrder: number;
 }
 
 export interface RegistrationSection extends BaseRegistrationSection {
+  accountTiers: BaseAccountTier[];
+  eventTickets: BasePassType[];
+  eventAddOns: BaseEventAddOn[];
+  questions: RegistrationQuestion[];
+}
+
+export interface BaseRegistrationFollowup {
+  id: string;
+  eventId: string;
+  name: string;
+  description: string | null;
+  sortOrder: number;
+}
+
+export interface RegistrationFollowup extends BaseRegistrationFollowup {
   accountTiers: BaseAccountTier[];
   eventTickets: BasePassType[];
   eventAddOns: BaseEventAddOn[];
