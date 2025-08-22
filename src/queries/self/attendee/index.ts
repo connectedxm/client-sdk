@@ -7,6 +7,8 @@ export * from "./useGetSelfEventAttendeeCoupons";
 export * from "./useGetSelfEventAttendeeTransfersLogs";
 export * from "./useGetSelfEventAttendee";
 export * from "./useGetSelfEventAttendeePassQuestionSections";
+export * from "./useGetSelfEventAttendeePassQuestionFollowups";
+export * from "./useGetSelfEventAttendeePassQuestionFollowup";
 export * from "./useGetSelfEventAttendeePassAddOns";
 export * from "./useGetSelfEventAttendeeTransferAccounts";
 
