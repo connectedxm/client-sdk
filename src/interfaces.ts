@@ -469,7 +469,7 @@ export interface RegistrationEventDetails extends BaseEvent {
   }[];
   _count: {
     sections: number;
-    followups: number
+    followups: number;
     coupons: number;
     addOns: number;
     roomTypes: number;
@@ -721,6 +721,7 @@ export interface BasePass {
 export interface Pass extends BasePass {
   package: BaseAttendeePackage | null;
   matches: BaseMatch[];
+  lineItem: PaymentLineItem | null;
   updatedAt: string;
   payerId: string | null;
 }
