@@ -1614,6 +1614,7 @@ export interface BasePaymentLineItem {
   paid: number;
   refunded: number;
   discount: number;
+  deferred: number;
   taxable: boolean;
   // PARENT
   eventId: string | null;
