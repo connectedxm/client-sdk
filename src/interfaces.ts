@@ -1614,6 +1614,7 @@ export interface BasePaymentLineItem {
   paid: number;
   refunded: number;
   discount: number;
+  deferred: number;
   taxable: boolean;
   // PARENT
   eventId: string | null;
@@ -2159,7 +2160,6 @@ export interface BasePaymentIntent {
   description: string | null;
   secret: string;
   referenceId: string;
-  amount: number;
   currency: string;
   metadata: Record<string, any>;
   eventId: string | null;
