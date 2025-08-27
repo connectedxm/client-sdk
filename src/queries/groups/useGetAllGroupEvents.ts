@@ -11,7 +11,7 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { EVENTS_QUERY_KEY } from "../events";
 
-export const ALL_GROUP_EVENTS = (past?: boolean): QueryKey => [
+export const ALL_GROUP_EVENTS = (past?: true): QueryKey => [
   ...EVENTS_QUERY_KEY(past),
   "GROUPS_EVENTS",
 ];
@@ -57,7 +57,7 @@ export const GetAllGroupEvents = async ({
 };
 
 export const useGetAllGroupEvents = (
-  past: boolean = false,
+  past?: true,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
