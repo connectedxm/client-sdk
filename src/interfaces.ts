@@ -340,6 +340,26 @@ export interface BaseLike {
 
 export interface Like extends BaseLike {}
 
+export interface ActivityLike extends BaseLike {
+  account: BaseAccount & {
+    banner: BaseImage | null;
+    chatConnected: boolean;
+    accountTiers: BaseAccountTier[];
+  };
+  activity: BaseActivity & {
+    message: string;
+    featured: boolean;
+    image: BaseImage | null;
+    video: BaseVideo | null;
+    giphyId: string | null;
+    account: BaseAccount;
+    groupId: string | null;
+    eventId: string | null;
+    commentedId: string | null;
+    contentId: string | null;
+  };
+}
+
 // export const isTypeLike = (like: BaseLike | Like): like is Like => {
 //   return (like as Omit<Like, keyof BaseLike>).createdAt !== undefined;
 // };
