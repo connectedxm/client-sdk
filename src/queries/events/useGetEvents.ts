@@ -10,10 +10,13 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const EVENTS_QUERY_KEY = (past?: boolean): QueryKey => {
+export const EVENTS_QUERY_KEY = (past?: boolean, featured?: boolean): QueryKey => {
   const keys = ["EVENTS"];
   if (typeof past !== "undefined") {
     keys.push(past ? "PAST" : "UPCOMING");
+  }
+  if (typeof featured !== "undefined") {
+    keys.push(featured ? "FEATURED" : "ALL");
   }
   return keys;
 };
@@ -35,6 +38,7 @@ export const SET_EVENTS_QUERY_DATA = (
 
 export interface GetEventsProps extends InfiniteQueryParams {
   past?: boolean;
+  featured?: boolean;
 }
 
 export const GetEvents = async ({
@@ -43,6 +47,7 @@ export const GetEvents = async ({
   orderBy,
   search,
   past,
+  featured,
   clientApiParams,
 }: GetEventsProps): Promise<ConnectedXMResponse<BaseEvent[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -52,7 +57,8 @@ export const GetEvents = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      past: past !== undefined ? past : undefined,
+      past: past !== undefined ? (past ? "true" : "false") : undefined,
+      featured: featured !== undefined ? (featured ? "true" : "false") : undefined,
     },
   });
 
@@ -60,7 +66,8 @@ export const GetEvents = async ({
 };
 
 export const useGetEvents = (
-  past: boolean = false,
+  past?: boolean,
+  featured?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -68,8 +75,8 @@ export const useGetEvents = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEvents>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEvents>>>(
-    EVENTS_QUERY_KEY(past),
-    (params: InfiniteQueryParams) => GetEvents({ past, ...params }),
+    EVENTS_QUERY_KEY(past, featured),
+    (params: InfiniteQueryParams) => GetEvents({ past, featured, ...params }),
     params,
     options
   );
