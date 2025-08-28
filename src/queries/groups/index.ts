@@ -13,4 +13,3 @@ export * from "./useGetGroupInvitations";
 export * from "./useGetGroupsFeatured";
 export * from "./useGetGroupsInvited";
 export * from "./useGetGroupsRequested";
-export * from "./useGetAllGroupEvents";
