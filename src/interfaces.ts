@@ -179,15 +179,9 @@ export const isTypeAccountTier = (
   );
 };
 
-export enum AccountType {
-  account = "account",
-  team = "team",
-}
-
 export interface BaseAccount {
   id: string;
   username: string;
-  accountType: AccountType;
   firstName: string | null;
   lastName: string | null;
   title: string | null;
@@ -1214,23 +1208,6 @@ export interface BaseComplimentaryTicket {
 
 export interface ComplimentaryTicket extends BaseComplimentaryTicket {}
 
-enum PageType {
-  about = "about",
-  privacy = "privacy",
-  terms = "terms",
-  team = "team",
-}
-
-export interface BasePage {
-  type: PageType;
-  title: string | null;
-  subtitle: string | null;
-  html: string | null;
-  updatedAt: string;
-}
-
-export interface Page extends BasePage {}
-
 export interface BaseFaq {
   id: string;
   slug: string;
@@ -1350,37 +1327,6 @@ export const isTypeAdvertisement = (
 export interface AdvertisementClick {}
 
 export interface AdvertisementView {}
-
-export interface BaseTeamMember {
-  id: string;
-  slug: string;
-  firstName: string | null;
-  lastName: string | null;
-  title: true;
-  image: BaseImage | null;
-}
-
-export interface TeamMember extends BaseTeamMember {
-  nickName: true;
-  email: true;
-  phone: true;
-  bio: true;
-  linkedIn: true;
-  facebook: true;
-  instagram: true;
-  twitter: true;
-  tikTok: true;
-  discord: true;
-  startDate: true;
-}
-
-export const isTypeTeamMember = (
-  teamMember: BaseTeamMember | TeamMember
-): teamMember is TeamMember => {
-  return (
-    (teamMember as Omit<TeamMember, keyof BaseTeamMember>).email !== undefined
-  );
-};
 
 export enum GroupMembershipRole {
   member = "member",
@@ -2877,4 +2823,21 @@ export interface BaseBlockedAccount {
 export interface BlockedAccount extends BaseBlockedAccount {
   account: BaseAccount;
   blocker: BaseAccount;
+}
+
+export interface BaseLogin {
+  userPoolId: string;
+  username: string;
+  sub: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  internalRefId: string | null;
+  status: string;
+  enabled: boolean;
+  verified: boolean;
+}
+
+export interface Login extends BaseLogin {
+  accounts: BaseAccount[];
 }
