@@ -1,4 +1,4 @@
-import type { Account, AccountType } from "@interfaces";
+import type { Account } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -11,10 +11,8 @@ import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";
 
-export const ACCOUNTS_POPULAR_QUERY_KEY = (
-  accountType?: keyof typeof AccountType
-): QueryKey => {
-  const keys = [...ACCOUNTS_QUERY_KEY(accountType), "POPULAR"];
+export const ACCOUNTS_POPULAR_QUERY_KEY = (): QueryKey => {
+  const keys = [...ACCOUNTS_QUERY_KEY(), "POPULAR"];
   return keys;
 };
 
@@ -33,22 +31,18 @@ export const SET_ACCOUNTS_POPULAR_QUERY_DATA = (
   );
 };
 
-export interface GetAccountsPopularProps extends InfiniteQueryParams {
-  accountType?: keyof typeof AccountType;
-}
+export interface GetAccountsPopularProps extends InfiniteQueryParams {}
 
 export const GetAccountsPopular = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
-  accountType,
   clientApiParams,
 }: GetAccountsPopularProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts/popular`, {
     params: {
-      accountType: accountType || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
@@ -59,7 +53,6 @@ export const GetAccountsPopular = async ({
 };
 
 export const useGetAccountsPopular = (
-  accountType?: keyof typeof AccountType,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -71,9 +64,8 @@ export const useGetAccountsPopular = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetAccountsPopular>>
   >(
-    ACCOUNTS_POPULAR_QUERY_KEY(accountType),
-    (params: InfiniteQueryParams) =>
-      GetAccountsPopular({ ...params, accountType }),
+    ACCOUNTS_POPULAR_QUERY_KEY(),
+    (params: InfiniteQueryParams) => GetAccountsPopular(params),
     params,
     {
       ...options,

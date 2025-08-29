@@ -11,8 +11,6 @@ export * from "./useGetSelfActivities";
 export * from "./useGetSelfAnnouncement";
 export * from "./useGetSelfGroupMembership";
 export * from "./useGetSelfGroupMemberships";
-export * from "./useGetSelfDelegateOf";
-export * from "./useGetSelfDelegates";
 export * from "./useGetSelfEvents";
 export * from "./useGetSelfEventSessions";
 export * from "./useGetSelfInterests";

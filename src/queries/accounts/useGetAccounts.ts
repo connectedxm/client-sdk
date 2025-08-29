@@ -1,4 +1,4 @@
-import type { Account, AccountType } from "@interfaces";
+import type { Account } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -10,13 +10,8 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const ACCOUNTS_QUERY_KEY = (
-  accountType?: keyof typeof AccountType
-): QueryKey => {
+export const ACCOUNTS_QUERY_KEY = (): QueryKey => {
   const keys = ["ACCOUNTS"];
-  if (accountType) {
-    keys.push(accountType);
-  }
   return keys;
 };
 
@@ -35,22 +30,18 @@ export const SET_ACCOUNTS_QUERY_DATA = (
   );
 };
 
-export interface GetAccountsProps extends InfiniteQueryParams {
-  accountType?: keyof typeof AccountType;
-}
+export interface GetAccountsProps extends InfiniteQueryParams {}
 
 export const GetAccounts = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
-  accountType,
   clientApiParams,
 }: GetAccountsProps): Promise<ConnectedXMResponse<Account[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/accounts`, {
     params: {
-      accountType: accountType || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
@@ -61,7 +52,6 @@ export const GetAccounts = async ({
 };
 
 export const useGetAccounts = (
-  accountType?: keyof typeof AccountType,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -69,8 +59,8 @@ export const useGetAccounts = (
   options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetAccounts>>> = {}
 ) => {
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetAccounts>>>(
-    ACCOUNTS_QUERY_KEY(accountType),
-    (params: InfiniteQueryParams) => GetAccounts({ ...params, accountType }),
+    ACCOUNTS_QUERY_KEY(),
+    (params: InfiniteQueryParams) => GetAccounts(params),
     params,
     {
       ...options,
