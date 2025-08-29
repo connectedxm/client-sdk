@@ -11,6 +11,7 @@ export const ERR_INTEGRATION_PERMISSION_DENIED = 459;
 export const ERR_KNOWN_ERROR = 460;
 export const ERR_PRIVATE_CHANNEL = 461;
 export const ERR_BANNED_USER = 462;
+export const ERR_NO_ACCOUNT_SELECTED = 463;
 
 export const CUSTOM_ERROR_CODES = [
   ERR_NOT_GROUP_MEMBER,
@@ -23,6 +24,7 @@ export const CUSTOM_ERROR_CODES = [
   ERR_KNOWN_ERROR,
   ERR_PRIVATE_CHANNEL,
   ERR_BANNED_USER,
+  ERR_NO_ACCOUNT_SELECTED,
 ];
 
 export const GetErrorMessage = (
