@@ -4,8 +4,9 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { LOGIN_QUERY_KEY } from "@src/queries";
 
-export interface CreateLoginAccountParams extends MutationParams {
+export interface CreateLoginAccountAccount {
   featured?: boolean;
   email: string;
   firstName?: string;
@@ -31,15 +32,24 @@ export interface CreateLoginAccountParams extends MutationParams {
   termsAccepted?: Date;
 }
 
+export interface CreateLoginAccountParams extends MutationParams {
+  account: CreateLoginAccountAccount;
+}
+
 export const CreateLoginAccount = async ({
   clientApiParams,
-  ...accountData
+  queryClient,
+  account,
 }: CreateLoginAccountParams): Promise<ConnectedXMResponse<Account>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Account>>(
     `/login/account`,
-    accountData
+    account
   );
+
+  if (queryClient) {
+    queryClient.invalidateQueries({ queryKey: LOGIN_QUERY_KEY() });
+  }
 
   return data;
 };
