@@ -234,6 +234,7 @@ export interface SelfRelationships {
 
 export interface Self extends Omit<Account, "_count"> {
   email: string | null;
+  verified: boolean;
   phone: string | null;
   dietaryRestrictions: string | null;
   shareCode: string;
@@ -2839,5 +2840,5 @@ export interface BaseLogin {
 }
 
 export interface Login extends BaseLogin {
-  accounts: BaseAccount[];
+  accounts: Self[];
 }
