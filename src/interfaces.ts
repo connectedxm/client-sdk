@@ -2827,6 +2827,7 @@ export interface BlockedAccount extends BaseBlockedAccount {
 }
 
 export interface BaseLogin {
+  id: string;
   userPoolId: string;
   username: string;
   sub: string;

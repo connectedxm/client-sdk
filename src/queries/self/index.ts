@@ -20,3 +20,4 @@ export * from "./useGetSelfNotifications";
 export * from "./useGetSelfPushDevice";
 export * from "./useGetSelfPushDevices";
 export * from "./useGetSelfGroupActivities";
+export * from "./useGetSelfLogins";
