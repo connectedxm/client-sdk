@@ -2388,6 +2388,7 @@ export interface OrganizationConfig {
     CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
+  OPTIONS: Record<string, any>;
 }
 export interface OrganizationModule {
   requireAuth: boolean;
