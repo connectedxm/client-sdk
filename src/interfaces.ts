@@ -1678,11 +1678,6 @@ export interface NotificationPreferences {
   groupRequestAcceptedPush: boolean;
 }
 
-export enum PushDeviceAppType {
-  EVENTXM = "EVENTXM",
-  COMMUNITYXM = "COMMUNITYXM",
-}
-
 export enum PushService {
   apn = "apn",
   firebase = "firebase",
@@ -1693,13 +1688,10 @@ export enum PushService {
 export interface PushDevice {
   id: string;
   deviceToken: string | null;
-  accountId: string | null;
-  account: BaseAccount | null;
   name: string | null;
   model: string | null;
   brand: string | null;
   manufacturer: string | null;
-  appType: PushDeviceAppType;
   pushService: PushService;
   createdAt: string;
 }
