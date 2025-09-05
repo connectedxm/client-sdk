@@ -556,6 +556,29 @@ export interface BaseRegistrationQuestionSearchValue {
 export interface RegistrationQuestionSearchValue
   extends BaseRegistrationQuestionSearchValue {}
 
+export interface BaseSearchListValue {
+  id: string;
+  value: string;
+  top: boolean;
+}
+
+export interface SearchListValue extends BaseSearchListValue {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseSearchList {
+  id: string;
+  name: string;
+  values: BaseSearchListValue[];
+}
+
+export interface SearchList extends BaseSearchList {
+  values: SearchListValue[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BaseRegistrationQuestionResponse {
   questionId: string;
   question: BaseRegistrationQuestion;
