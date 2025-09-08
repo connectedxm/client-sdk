@@ -8,6 +8,7 @@ export * from "./channels";
 export * from "./contents";
 export * from "./events";
 export * from "./organization";
+export * from "./searchlists";
 export * from "./self";
 export * from "./series";
 export * from "./sponsors";

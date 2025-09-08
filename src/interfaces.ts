@@ -516,6 +516,7 @@ export interface BaseRegistrationQuestion {
   label: string | null;
   placeholder: string | null;
   default: string | null;
+  searchListId: string | null;
   span: number;
   mutable: boolean;
   min: string | null;
@@ -548,13 +549,28 @@ export interface BaseRegistrationQuestionChoice {
 export interface RegistrationQuestionChoice
   extends BaseRegistrationQuestionChoice {}
 
-export interface BaseRegistrationQuestionSearchValue {
+export interface BaseSearchListValue {
   id: string;
   value: string;
+  top: boolean;
 }
 
-export interface RegistrationQuestionSearchValue
-  extends BaseRegistrationQuestionSearchValue {}
+export interface SearchListValue extends BaseSearchListValue {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BaseSearchList {
+  id: string;
+  name: string;
+  values: BaseSearchListValue[];
+}
+
+export interface SearchList extends BaseSearchList {
+  values: SearchListValue[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface BaseRegistrationQuestionResponse {
   questionId: string;
@@ -1094,6 +1110,7 @@ export interface BaseEventSessionQuestion {
   label: string | null;
   placeholder: string | null;
   default: string | null;
+  searchListId: string | null;
   mutable: boolean;
   min: string | null;
   max: string | null;
@@ -1128,14 +1145,6 @@ export interface BaseEventSessionQuestionResponse {
 
 export interface EventSessionQuestionResponse
   extends BaseEventSessionQuestionResponse {}
-
-export interface BaseEventSessionQuestionSearchValue {
-  id: string;
-  value: string;
-}
-
-export interface EventSessionQuestionSearchValue
-  extends BaseEventSessionQuestionSearchValue {}
 
 export interface BaseEventPage {
   id: string;
@@ -2711,6 +2720,7 @@ export interface BaseSurveyQuestion {
   label: string | null;
   placeholder: string | null;
   default: string | null;
+  searchListId: string | null;
   mutable: boolean;
   min: string | null;
   max: string | null;
@@ -2749,14 +2759,6 @@ export interface BaseSurveySubmission {
 }
 
 export interface SurveySubmission extends BaseSurveySubmission {}
-
-export interface BaseSurveyQuestionSearchValue {
-  id: string;
-  value: string;
-}
-
-export interface SurveyQuestionSearchValue
-  extends BaseSurveyQuestionSearchValue {}
 
 export interface BaseEventMediaItem {
   id: string;
