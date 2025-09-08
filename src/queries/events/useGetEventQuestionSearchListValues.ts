@@ -67,8 +67,8 @@ export const useGetEventQuestionSearchListValues = (
       GetEventQuestionSearchListValues({
         eventId,
         questionId,
-        ...queryParams,
         ...params,
+        ...queryParams,
       }),
     params,
     {

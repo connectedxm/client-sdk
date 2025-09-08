@@ -83,8 +83,8 @@ export const useGetEventSessionQuestionSearchListValues = (
         eventId,
         sessionId,
         questionId,
-        ...queryParams,
         ...params,
+        ...queryParams,
       }),
     params,
     {

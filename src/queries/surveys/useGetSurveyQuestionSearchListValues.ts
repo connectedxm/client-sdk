@@ -67,8 +67,8 @@ export const useGetSurveyQuestionSearchListValues = (
       GetSurveyQuestionSearchListValues({
         surveyId,
         questionId,
-        ...queryParams,
         ...params,
+        ...queryParams,
       }),
     params,
     {

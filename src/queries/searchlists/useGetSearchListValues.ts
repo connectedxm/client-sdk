@@ -26,7 +26,9 @@ export const GetSearchListValues = async ({
   search,
   top,
   clientApiParams,
-}: GetSearchListValuesProps): Promise<ConnectedXMResponse<SearchListValue[]>> => {
+}: GetSearchListValuesProps): Promise<
+  ConnectedXMResponse<SearchListValue[]>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/searchlists/${searchListId}/values`, {
     params: {
@@ -57,8 +59,8 @@ export const useGetSearchListValues = (
     (queryParams: InfiniteQueryParams) =>
       GetSearchListValues({
         searchListId,
-        ...queryParams,
         ...params,
+        ...queryParams,
       }),
     params,
     {
