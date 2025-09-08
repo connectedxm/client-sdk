@@ -1,4 +1,4 @@
-import type { PurchaseStatus, SearchListValue } from "@interfaces";
+import type { PurchaseStatus, SurveySubmission } from "@interfaces";
 import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
@@ -39,7 +39,7 @@ export const GetSurveySubmissions = async ({
   search,
   clientApiParams,
 }: GetSurveySubmissionsProps): Promise<
-  ConnectedXMResponse<SearchListValue[]>
+  ConnectedXMResponse<SurveySubmission[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/surveys/${surveyId}/submissions`, {
