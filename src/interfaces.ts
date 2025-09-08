@@ -548,14 +548,6 @@ export interface BaseRegistrationQuestionChoice {
 export interface RegistrationQuestionChoice
   extends BaseRegistrationQuestionChoice {}
 
-export interface BaseRegistrationQuestionSearchValue {
-  id: string;
-  value: string;
-}
-
-export interface RegistrationQuestionSearchValue
-  extends BaseRegistrationQuestionSearchValue {}
-
 export interface BaseSearchListValue {
   id: string;
   value: string;
@@ -1151,14 +1143,6 @@ export interface BaseEventSessionQuestionResponse {
 
 export interface EventSessionQuestionResponse
   extends BaseEventSessionQuestionResponse {}
-
-export interface BaseEventSessionQuestionSearchValue {
-  id: string;
-  value: string;
-}
-
-export interface EventSessionQuestionSearchValue
-  extends BaseEventSessionQuestionSearchValue {}
 
 export interface BaseEventPage {
   id: string;
@@ -2772,14 +2756,6 @@ export interface BaseSurveySubmission {
 }
 
 export interface SurveySubmission extends BaseSurveySubmission {}
-
-export interface BaseSurveyQuestionSearchValue {
-  id: string;
-  value: string;
-}
-
-export interface SurveyQuestionSearchValue
-  extends BaseSurveyQuestionSearchValue {}
 
 export interface BaseEventMediaItem {
   id: string;
