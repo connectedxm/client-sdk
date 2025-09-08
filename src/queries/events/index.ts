@@ -21,7 +21,3 @@ export * from "./useGetEventSponsorshipLevels";
 export * from "./useGetEventSponsorship";
 export * from "./useGetEventMediaItems";
 export * from "./useGetEventMediaItem";
-export * from "./useGetEventQuestionSearchList";
-export * from "./useGetEventQuestionSearchListValues";
-export * from "./useGetEventSessionQuestionSearchList";
-export * from "./useGetEventSessionQuestionSearchListValues";
