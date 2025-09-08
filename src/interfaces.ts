@@ -563,11 +563,9 @@ export interface SearchListValue extends BaseSearchListValue {
 export interface BaseSearchList {
   id: string;
   name: string;
-  values: BaseSearchListValue[];
 }
 
 export interface SearchList extends BaseSearchList {
-  values: SearchListValue[];
   createdAt: string;
   updatedAt: string;
 }
