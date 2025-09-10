@@ -552,7 +552,6 @@ export interface RegistrationQuestionChoice
 export interface BaseSearchListValue {
   id: string;
   value: string;
-  top: boolean;
 }
 
 export interface SearchListValue extends BaseSearchListValue {
