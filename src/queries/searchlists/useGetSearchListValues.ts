@@ -15,7 +15,6 @@ export const SEARCH_LIST_VALUES_QUERY_KEY = (searchListId: string) => [
 
 export interface GetSearchListValuesProps extends InfiniteQueryParams {
   searchListId: string;
-  top?: boolean;
 }
 
 export const GetSearchListValues = async ({
@@ -24,7 +23,6 @@ export const GetSearchListValues = async ({
   pageSize,
   orderBy,
   search,
-  top,
   clientApiParams,
 }: GetSearchListValuesProps): Promise<
   ConnectedXMResponse<SearchListValue[]>
@@ -36,7 +34,6 @@ export const GetSearchListValues = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      top: top || undefined,
     },
   });
   return data;
@@ -47,7 +44,7 @@ export const useGetSearchListValues = (
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
-  > & { top?: boolean } = {},
+  > = {},
   options: InfiniteQueryOptions<
     Awaited<ReturnType<typeof GetSearchListValues>>
   > = {}
