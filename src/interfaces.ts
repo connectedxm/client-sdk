@@ -241,6 +241,7 @@ export interface Self extends Omit<Account, "_count"> {
   chatToken?: string;
   locale: string;
   termsAccepted: string | null;
+  internalRefId: string | null;
   _count: {
     chatChannels: number;
     notifications: number;
