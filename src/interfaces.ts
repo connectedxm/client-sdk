@@ -241,6 +241,7 @@ export interface Self extends Omit<Account, "_count"> {
   chatToken?: string;
   locale: string;
   termsAccepted: string | null;
+  internalRefId: string | null;
   _count: {
     chatChannels: number;
     notifications: number;
@@ -2342,6 +2343,7 @@ export interface OrganizationConfig {
   ADAPTIVE_ICON: string | null;
   SPLASH_SCREEN: string | null;
   SPLASH_SCREEN_COLOR: string;
+  INTERNAL_REF_ID_NAME: string;
   DEFAULT_LOCALE: string;
   LOCALES: string[];
   LANGUAGES: Partial<Record<string, Record<string, string>>>;
@@ -2357,6 +2359,7 @@ export interface OrganizationConfig {
       PHONE: boolean;
       TITLE: boolean;
       COMPANY: boolean;
+      INTERNAL_REF_ID: boolean;
     };
   };
   MODULES: Record<keyof typeof OrganizationModuleType, OrganizationModule>;

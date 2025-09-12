@@ -17,6 +17,7 @@ export interface CreateLoginAccountAccount {
   phone?: string;
   title?: string;
   company?: string;
+  internalRefId?: string;
   bio?: string;
   website?: string;
   video?: string;
