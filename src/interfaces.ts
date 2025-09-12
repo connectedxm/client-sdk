@@ -1514,6 +1514,9 @@ export interface Registration extends BaseRegistration {
   payments: Payment[];
   coupons: ManagedCoupon[];
   createdAt: string;
+  _count: {
+    fromTransferLogs: number;
+  };
 }
 
 export interface ListingRegistration extends BaseRegistration {
