@@ -453,7 +453,7 @@ export interface Event extends BaseEvent {
   reservationDescription: string | null;
   backgroundImage: BaseImage | null;
   media: EventMediaItem[];
-  options: object | null;
+  options: Record<string, any> | null;
   _count: {
     activations: number;
     sessions: number;
@@ -2392,7 +2392,7 @@ export interface OrganizationConfig {
     CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
-  OPTIONS: object | null;
+  OPTIONS: Record<string, any> | null;
 }
 export interface OrganizationModule {
   requireAuth: boolean;
@@ -2400,7 +2400,7 @@ export interface OrganizationModule {
   enabledTiers: string[];
   editable: boolean;
   editableTiers: string[];
-  options: Record<string, boolean>;
+  options: Record<string, any>;
 }
 
 export interface OrganizationOAuth {
