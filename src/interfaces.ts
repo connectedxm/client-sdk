@@ -20,7 +20,14 @@ export enum EventAgendaVisibility {
   hidden = "hidden",
 }
 
+export enum LocationQuestionOption {
+  country = "country",
+  countryState = "countryState",
+  countryStateCity = "countryStateCity",
+}
+
 export type MarkType = "bold" | "italic" | "underline" | "strike";
+
 
 export interface IntegrationDetails {
   type: keyof typeof IntegrationType;
@@ -525,6 +532,7 @@ export interface BaseRegistrationQuestion {
   max: string | null;
   validation: string | null;
   validationMessage: string | null;
+  locationOption: LocationQuestionOption | null;
   choices: BaseRegistrationQuestionChoice[];
 }
 
@@ -1121,6 +1129,7 @@ export interface BaseEventSessionQuestion {
   max: string | null;
   validation: string | null;
   validationMessage: string | null;
+  locationOption: LocationQuestionOption | null;
   sortOrder: number;
   choices: BaseEventSessionQuestionChoice[];
   price: number | null;
@@ -2740,6 +2749,7 @@ export interface BaseSurveyQuestion {
   max: string | null;
   validation: string | null;
   validationMessage: string | null;
+  locationOption: LocationQuestionOption | null;
   sortOrder: number;
   choices: BaseSurveyQuestionChoice[];
 }
