@@ -504,6 +504,7 @@ export enum RegistrationQuestionType {
   checkbox = "checkbox",
   search = "search",
   file = "file",
+  location = "location",
 }
 
 export interface BaseRegistrationQuestion {
@@ -1096,6 +1097,7 @@ export enum EventSessionQuestionType {
   search = "search",
   file = "file",
   quantity = "quantity",
+  location = "location",
 }
 
 export interface BaseEventSessionQuestion {
@@ -2711,6 +2713,7 @@ export enum SurveyQuestionType {
   checkbox = "checkbox",
   search = "search",
   file = "file",
+  location = "location",
 }
 
 export interface BaseSurveyQuestion {
