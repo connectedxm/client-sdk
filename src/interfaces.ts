@@ -682,6 +682,8 @@ export interface BasePassType {
   maxCouponQuantity: number | null;
   sortOrder: number;
   overrideStartDate: string | null;
+  taxCode: string | null;
+  taxIncluded: boolean;
 }
 
 export interface PassType extends BasePassType {
@@ -1015,6 +1017,9 @@ export interface BaseSession {
   registrationEnd: string | null;
   price: number | null;
   access: SessionAccess;
+  eventId: string;
+  taxCode: string | null;
+  taxIncluded: boolean;
 }
 
 export interface Session extends BaseSession {
@@ -1545,8 +1550,6 @@ export interface BasePayment {
   state: string;
   country: string;
   zip: string;
-  salesTax: number;
-  salesTaxRate: string | null;
   currency: string;
   last4: string | null;
   stripeId: string | null;
@@ -1592,7 +1595,9 @@ export interface BasePaymentLineItem {
   refunded: number;
   discount: number;
   deferred: number;
-  taxable: boolean;
+  salesTax: number;
+  taxCode: string | null;
+  taxIncluded: boolean;
   // PARENT
   eventId: string | null;
   accountId: string | null;
@@ -1990,7 +1995,6 @@ export interface BaseInvoice {
   sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
-  taxable: boolean;
 }
 
 export interface Invoice extends BaseInvoice {
@@ -2031,6 +2035,8 @@ export interface BaseEventAddOn {
   supply: number | null;
   price: number;
   pricePerNight: boolean;
+  taxCode: string | null;
+  taxIncluded: boolean;
   sortOrder: number;
   eventId: string;
   image: BaseImage | null;
@@ -2135,8 +2141,6 @@ export interface BasePaymentIntent {
   registrationId: string | null;
   invoiceId: string | null;
   bookingId: string | null;
-  salesTax: number;
-  salesTaxRate: number;
   country: string;
   state: string;
   zip: string;
@@ -2444,6 +2448,8 @@ export interface BaseEventRoomType {
   minEnd: string | null;
   defaultEnd: string | null;
   maxEnd: string | null;
+  taxCode: string | null;
+  taxIncluded: boolean;
   sortOrder: number;
   passTypes: BaseEventRoomTypePassTypeDetails[];
   addOns: BaseEventRoomTypeAddOnDetails[];
@@ -2614,6 +2620,8 @@ export interface BaseEventPackage {
   passes: BaseEventPackagePass[];
   image: BaseImage | null;
   sortOrder: number;
+  taxCode: string | null;
+  taxIncluded: boolean;
 }
 
 export interface EventPackage extends BaseEventPackage {
