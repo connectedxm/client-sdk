@@ -407,6 +407,7 @@ export interface BaseEvent {
   eventEnd: string;
   image: BaseImage | null;
   squareImage: BaseImage | null;
+  series: BaseSeries | null;
 }
 
 export enum EventSource {
@@ -1907,10 +1908,12 @@ export interface ChatChannelMember extends BaseChatChannelMember {
 }
 export interface BaseSeries {
   id: string;
-  sortOrder: number;
   name: string;
   slug: string;
   description: string | null;
+  longDescription: string | null;
+  startDate: string;
+  endDate: string;
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
