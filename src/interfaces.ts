@@ -1912,8 +1912,8 @@ export interface BaseSeries {
   slug: string;
   description: string | null;
   longDescription: string | null;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
