@@ -290,6 +290,7 @@ export interface BaseActivity {
   groupId: string | null;
   eventId: string | null;
   featured: boolean;
+  pinned: boolean;
   contentId: string | null;
   commentedId: string | null;
   createdAt: string;
