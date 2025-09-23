@@ -289,6 +289,7 @@ export interface BaseActivity {
   account: BaseAccount;
   groupId: string | null;
   eventId: string | null;
+  pinned: boolean;
   contentId: string | null;
   commentedId: string | null;
   createdAt: string;
