@@ -28,7 +28,6 @@ export enum LocationQuestionOption {
 
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
-
 export interface IntegrationDetails {
   type: keyof typeof IntegrationType;
   name: string;
@@ -532,6 +531,7 @@ export interface BaseRegistrationQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
@@ -1129,6 +1129,7 @@ export interface BaseEventSessionQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
@@ -1583,6 +1584,7 @@ export interface Payment extends BasePayment {
   space: BaseBookingSpace | null;
   membership: BaseSubscriptionProduct | null;
   coupon: BaseCoupon | null;
+  invoice: BaseInvoice | null;
   lineItems: PaymentLineItem[];
 }
 
@@ -1624,7 +1626,6 @@ export interface BasePaymentLineItem {
   passAddOnId: string | null;
   reservationId: string | null;
   accessId: string | null;
-  invoiceId: string | null;
   bookingId: string | null;
   subscriptionId: string | null;
   paymentId: number;
@@ -2014,7 +2015,6 @@ export interface BaseInvoice {
 
 export interface Invoice extends BaseInvoice {
   lineItems: BaseInvoiceLineItem[];
-  lineItem: PaymentLineItem | null;
   createdAt: string;
   updatedAt: string;
   type?: string;
@@ -2025,6 +2025,7 @@ export interface Invoice extends BaseInvoice {
   event: BaseEvent | null;
   organization: BaseOrganization;
   notes: string | null;
+  payments: BasePayment[];
 }
 
 export interface BaseInvoiceLineItem {
@@ -2751,6 +2752,7 @@ export interface BaseSurveyQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
