@@ -2015,7 +2015,6 @@ export interface BaseInvoice {
 
 export interface Invoice extends BaseInvoice {
   lineItems: BaseInvoiceLineItem[];
-  lineItem: PaymentLineItem | null;
   createdAt: string;
   updatedAt: string;
   type?: string;
@@ -2026,6 +2025,7 @@ export interface Invoice extends BaseInvoice {
   event: BaseEvent | null;
   organization: BaseOrganization;
   notes: string | null;
+  payments: BasePayment[];
 }
 
 export interface BaseInvoiceLineItem {
