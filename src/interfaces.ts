@@ -289,6 +289,7 @@ export interface BaseActivity {
   account: BaseAccount;
   groupId: string | null;
   eventId: string | null;
+  pinned: boolean;
   contentId: string | null;
   commentedId: string | null;
   createdAt: string;
@@ -531,6 +532,7 @@ export interface BaseRegistrationQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
@@ -1128,6 +1130,7 @@ export interface BaseEventSessionQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
@@ -1912,8 +1915,8 @@ export interface BaseSeries {
   slug: string;
   description: string | null;
   longDescription: string | null;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
@@ -2750,6 +2753,7 @@ export interface BaseSurveyQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
