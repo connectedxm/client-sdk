@@ -28,7 +28,6 @@ export enum LocationQuestionOption {
 
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
-
 export interface IntegrationDetails {
   type: keyof typeof IntegrationType;
   name: string;
@@ -1585,6 +1584,7 @@ export interface Payment extends BasePayment {
   space: BaseBookingSpace | null;
   membership: BaseSubscriptionProduct | null;
   coupon: BaseCoupon | null;
+  invoice: BaseInvoice | null;
   lineItems: PaymentLineItem[];
 }
 
@@ -1626,7 +1626,6 @@ export interface BasePaymentLineItem {
   passAddOnId: string | null;
   reservationId: string | null;
   accessId: string | null;
-  invoiceId: string | null;
   bookingId: string | null;
   subscriptionId: string | null;
   paymentId: number;
