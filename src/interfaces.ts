@@ -532,6 +532,7 @@ export interface BaseRegistrationQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
@@ -1129,6 +1130,7 @@ export interface BaseEventSessionQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
@@ -2751,6 +2753,7 @@ export interface BaseSurveyQuestion {
   mutable: boolean;
   min: string | null;
   max: string | null;
+  masked: boolean;
   validation: string | null;
   validationMessage: string | null;
   locationOption: LocationQuestionOption | null;
