@@ -695,6 +695,8 @@ export interface BasePassType {
   overrideStartDate: string | null;
   taxCode: string | null;
   taxIncluded: boolean;
+  requiredTicketId: string | null;
+  requiredTicket: BasePassType | null;
 }
 
 export interface PassType extends BasePassType {
