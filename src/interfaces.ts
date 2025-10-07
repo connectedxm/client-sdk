@@ -26,6 +26,17 @@ export enum LocationQuestionOption {
   countryStateCity = "countryStateCity",
 }
 
+export enum ActivityPreferences {
+  all = "all",
+  featured = "featured",
+  none = "none",
+}
+
+export type OrganizationActivityPreferences = Exclude<
+  ActivityPreferences,
+  ActivityPreferences.all
+>;
+
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
 export interface IntegrationDetails {
@@ -1697,16 +1708,20 @@ export interface NotificationPreferences {
   chatPush: boolean;
   chatUnreadPush: boolean;
   chatUnreadEmail: boolean;
+  organizationActivityPush: OrganizationActivityPreferences;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
+  groupActivityPush: ActivityPreferences;
   groupAnnouncementEmail: boolean;
   groupAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
+  eventActivityPush: ActivityPreferences;
   eventAnnouncementPush: boolean;
   groupInvitationEmail: boolean;
   groupInvitationPush: boolean;
   groupRequestAcceptedEmail: boolean;
   groupRequestAcceptedPush: boolean;
+  contentActivityPush: ActivityPreferences;
 }
 
 export enum PushService {
