@@ -1,5 +1,6 @@
 export * from "./useApplySelfEventRegistrationCoupon";
 export * from "./useRemoveSelfEventRegistrationCoupon";
+export * from "./useSelfUpdateEventNotifications";
 export * from "./useUpdateSelfEventRegistrationPassResponse";
 export * from "./useUpdateSelfEventRegistrationPasses";
 export * from "./useUpdateSelfEventRegistrationAddOns";

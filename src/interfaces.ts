@@ -32,10 +32,10 @@ export enum ActivityPreferences {
   none = "none",
 }
 
-export type OrganizationActivityPreferences = Exclude<
-  ActivityPreferences,
-  ActivityPreferences.all
->;
+export enum OrganizationActivityPreferences {
+  featured = "featured",
+  none = "none",
+}
 
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
@@ -1536,6 +1536,7 @@ interface BaseRegistration {
   alternateId: number;
   accountId: string;
   eventId: string;
+  activityPushNotification: ActivityPreferences;
 }
 
 export interface Registration extends BaseRegistration {
