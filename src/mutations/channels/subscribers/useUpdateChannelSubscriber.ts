@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, ChannelSubscriber } from "@src/interfaces";
+import { ConnectedXMResponse, ChannelSubscriber, ActivityPreferences } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -6,14 +6,15 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 
-interface UpdateChannelSubscriber {
+interface UpdateChannelSubscriberPayload {
   contentEmailNotification?: boolean;
   contentPushNotification?: boolean;
+  activityPushPreference?: ActivityPreferences;
 }
 
 export interface UpdateChannelSubscriberParams extends MutationParams {
   channelId: string;
-  channelSubscriber: UpdateChannelSubscriber;
+  channelSubscriber: UpdateChannelSubscriberPayload;
 }
 
 export const UpdateChannelSubscriber = async ({
