@@ -1435,6 +1435,7 @@ export interface BaseChannelSubscriber {
   accountId: string;
   contentEmailNotification: boolean;
   contentPushNotification: boolean;
+  activityPushPreference: ActivityPreferences;
   updatedAt: string;
   createdAt: string;
 }
@@ -1712,17 +1713,14 @@ export interface NotificationPreferences {
   organizationActivityPush: OrganizationActivityPreferences;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
-  groupActivityPush: ActivityPreferences;
   groupAnnouncementEmail: boolean;
   groupAnnouncementPush: boolean;
   eventAnnouncementEmail: boolean;
-  eventActivityPush: ActivityPreferences;
   eventAnnouncementPush: boolean;
   groupInvitationEmail: boolean;
   groupInvitationPush: boolean;
   groupRequestAcceptedEmail: boolean;
   groupRequestAcceptedPush: boolean;
-  contentActivityPush: ActivityPreferences;
 }
 
 export enum PushService {

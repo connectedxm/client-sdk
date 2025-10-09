@@ -4,7 +4,6 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import {
-  ActivityPreferences,
   ConnectedXMResponse,
   NotificationPreferences,
   OrganizationActivityPreferences,
@@ -26,9 +25,6 @@ export interface UpdateSelfNotificationPreferencesParams
   chatUnreadPush?: boolean;
   chatUnreadEmail?: boolean;
   organizationActivityPush?: OrganizationActivityPreferences;
-  groupActivityPush?: ActivityPreferences;
-  eventActivityPush?: ActivityPreferences;
-  contentActivityPush?: ActivityPreferences;
   eventAnnouncementPush?: boolean;
   eventAnnouncementEmail?: boolean;
   organizationAnnouncementPush?: boolean;
