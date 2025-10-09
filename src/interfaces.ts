@@ -468,6 +468,7 @@ export interface Event extends BaseEvent {
     speakers: number;
     sponsorshipLevels: number;
     media: number;
+    roomTypes: number;
   };
 }
 
