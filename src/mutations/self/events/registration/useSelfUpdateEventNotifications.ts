@@ -43,7 +43,7 @@ export const SelfUpdateEventNotifications = async ({
 
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/notifications`,
+    `/self/events/${eventId}/registration/preferences`,
     { activityPushPreference }
   );
 

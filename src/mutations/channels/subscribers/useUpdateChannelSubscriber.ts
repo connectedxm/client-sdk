@@ -6,20 +6,18 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 
-interface UpdateChannelSubscriberPayload {
+export interface UpdateChannelSubscriberParams extends MutationParams {
+  channelId: string;
   contentEmailNotification?: boolean;
   contentPushNotification?: boolean;
   activityPushPreference?: ActivityPreferences;
 }
 
-export interface UpdateChannelSubscriberParams extends MutationParams {
-  channelId: string;
-  channelSubscriber: UpdateChannelSubscriberPayload;
-}
-
 export const UpdateChannelSubscriber = async ({
   channelId,
-  channelSubscriber,
+  contentEmailNotification,
+  contentPushNotification,
+  activityPushPreference,
   clientApiParams,
 }: UpdateChannelSubscriberParams): Promise<
   ConnectedXMResponse<ChannelSubscriber>
@@ -27,7 +25,11 @@ export const UpdateChannelSubscriber = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<ChannelSubscriber>>(
     `/channels/${channelId}/subscribers`,
-    channelSubscriber
+    {
+      contentEmailNotification,
+      contentPushNotification,
+      activityPushPreference,
+    }
   );
 
   return data;
