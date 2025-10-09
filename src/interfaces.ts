@@ -1381,7 +1381,7 @@ export interface BaseGroupMembership {
 
 export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
-  activityPushNotification: boolean;
+  activityPushPreference: ActivityPreferences;
   announcementEmailNotification: boolean;
   announcementPushNotification: boolean;
   createdAt: string;
@@ -1536,7 +1536,7 @@ interface BaseRegistration {
   alternateId: number;
   accountId: string;
   eventId: string;
-  activityPushNotification: ActivityPreferences;
+  activityPushPreference: ActivityPreferences;
 }
 
 export interface Registration extends BaseRegistration {

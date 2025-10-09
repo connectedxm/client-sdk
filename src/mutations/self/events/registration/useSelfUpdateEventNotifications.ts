@@ -12,12 +12,12 @@ import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
 export interface SelfUpdateEventNotificationsParams extends MutationParams {
   eventId: string;
-  activityPushNotification: ActivityPreferences;
+  activityPushPreference: ActivityPreferences;
 }
 
 export const SelfUpdateEventNotifications = async ({
   eventId,
-  activityPushNotification,
+  activityPushPreference,
   clientApiParams,
   queryClient,
 }: SelfUpdateEventNotificationsParams): Promise<
@@ -32,7 +32,7 @@ export const SelfUpdateEventNotifications = async ({
             ...oldData,
             data: {
               ...oldData.data,
-              activityPushNotification,
+              activityPushPreference,
             },
           };
         }
@@ -44,7 +44,7 @@ export const SelfUpdateEventNotifications = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<Registration>>(
     `/self/events/${eventId}/registration/notifications`,
-    { activityPushNotification }
+    { activityPushPreference }
   );
 
   return data;
