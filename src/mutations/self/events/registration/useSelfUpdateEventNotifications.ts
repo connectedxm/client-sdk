@@ -12,9 +12,9 @@ import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
 export interface SelfUpdateEventNotificationsParams extends MutationParams {
   eventId: string;
-  activityNotificationPreference: ActivityPreference;
-  announcementPushNotification: boolean;
-  announcementEmailNotification: boolean;
+  activityNotificationPreference?: ActivityPreference;
+  announcementPushNotification?: boolean;
+  announcementEmailNotification?: boolean;
 }
 
 export const SelfUpdateEventNotifications = async ({

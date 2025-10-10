@@ -13,9 +13,9 @@ import { SELF_GROUP_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 export interface SelfUpdateGroupMembershipNotificationsParams
   extends MutationParams {
   groupId: string;
-  activityNotificationPreference: ActivityPreference;
-  announcementPushNotification: boolean;
-  announcementEmailNotification: boolean;
+  activityNotificationPreference?: ActivityPreference;
+  announcementPushNotification?: boolean;
+  announcementEmailNotification?: boolean;
 }
 
 export const SelfUpdateGroupMembershipNotifications = async ({
