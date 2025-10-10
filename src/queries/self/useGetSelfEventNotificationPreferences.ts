@@ -18,25 +18,36 @@ export interface EventNotificationPreference {
   announcementEmailNotification: boolean;
 }
 
-export const SELF_EVENT_NOTIFICATION_PREFERENCES_QUERY_KEY = (): QueryKey => [
+export const SELF_EVENT_NOTIFICATION_PREFERENCES_QUERY_KEY = (
+  excludePast?: boolean
+): QueryKey => [
   ...SELF_QUERY_KEY(),
   "EVENT_NOTIFICATION_PREFERENCES",
+  excludePast ? "EXCLUDE_PAST" : "ALL",
 ];
 
 export interface GetSelfEventNotificationPreferencesProps
-  extends SingleQueryParams {}
+  extends SingleQueryParams {
+  excludePast?: boolean;
+}
 
 export const GetSelfEventNotificationPreferences = async ({
   clientApiParams,
+  excludePast,
 }: GetSelfEventNotificationPreferencesProps): Promise<
   ConnectedXMResponse<EventNotificationPreference[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/events/notificationPreferences`);
+  const { data } = await clientApi.get(`/self/events/notificationPreferences`, {
+    params: {
+      excludePast: excludePast || undefined,
+    },
+  });
   return data;
 };
 
 export const useGetSelfEventNotificationPreferences = (
+  excludePast: boolean = false,
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventNotificationPreferences>
   > = {}
@@ -46,8 +57,9 @@ export const useGetSelfEventNotificationPreferences = (
   return useConnectedSingleQuery<
     ReturnType<typeof GetSelfEventNotificationPreferences>
   >(
-    SELF_EVENT_NOTIFICATION_PREFERENCES_QUERY_KEY(),
-    (params: any) => GetSelfEventNotificationPreferences({ ...params }),
+    SELF_EVENT_NOTIFICATION_PREFERENCES_QUERY_KEY(excludePast),
+    (params: any) =>
+      GetSelfEventNotificationPreferences({ ...params, excludePast }),
     {
       ...options,
       enabled: !!authenticated && (options?.enabled ?? true),
