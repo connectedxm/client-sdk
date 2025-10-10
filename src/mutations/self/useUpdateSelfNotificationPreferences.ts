@@ -6,7 +6,7 @@ import useConnectedMutation, {
 import {
   ConnectedXMResponse,
   NotificationPreferences,
-  OrganizationActivityPreferences,
+  OrganizationActivityPreference,
 } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -24,13 +24,9 @@ export interface UpdateSelfNotificationPreferencesParams
   chatPush?: boolean;
   chatUnreadPush?: boolean;
   chatUnreadEmail?: boolean;
-  organizationActivityPush?: OrganizationActivityPreferences;
-  eventAnnouncementPush?: boolean;
-  eventAnnouncementEmail?: boolean;
+  activityNotificationPreference?: OrganizationActivityPreference;
   organizationAnnouncementPush?: boolean;
   organizationAnnouncementEmail?: boolean;
-  groupAnnouncementPush?: boolean;
-  groupAnnouncementEmail?: boolean;
 }
 
 export const UpdateSelfNotificationPreferences = async ({

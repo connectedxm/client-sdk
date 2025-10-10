@@ -2,34 +2,35 @@ import { GetClientAPI } from "@src/ClientAPI";
 import {
   ActivityPreference,
   ConnectedXMResponse,
-  Registration,
+  GroupMembership,
 } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
+import { SELF_GROUP_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 
-export interface SelfUpdateEventNotificationsParams extends MutationParams {
-  eventId: string;
+export interface SelfUpdateGroupMembershipNotificationsParams
+  extends MutationParams {
+  groupId: string;
   activityNotificationPreference: ActivityPreference;
   announcementPushNotification: boolean;
   announcementEmailNotification: boolean;
 }
 
-export const SelfUpdateEventNotifications = async ({
-  eventId,
+export const SelfUpdateGroupMembershipNotifications = async ({
+  groupId,
   activityNotificationPreference,
   announcementPushNotification,
   announcementEmailNotification,
   clientApiParams,
   queryClient,
-}: SelfUpdateEventNotificationsParams): Promise<
-  ConnectedXMResponse<Registration>
+}: SelfUpdateGroupMembershipNotificationsParams): Promise<
+  ConnectedXMResponse<GroupMembership>
 > => {
   if (queryClient) {
     queryClient.setQueryData(
-      [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), clientApiParams.locale],
+      [...SELF_GROUP_MEMBERSHIP_QUERY_KEY(groupId), clientApiParams.locale],
       (oldData: any) => {
         if (oldData?.data) {
           return {
@@ -48,20 +49,24 @@ export const SelfUpdateEventNotifications = async ({
   }
 
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<Registration>>(
-    `/self/events/${eventId}/registration/preferences`,
-    { activityNotificationPreference, announcementPushNotification, announcementEmailNotification }
+  const { data } = await clientApi.put<ConnectedXMResponse<GroupMembership>>(
+    `/self/groups/${groupId}`,
+    {
+      activityNotificationPreference,
+      announcementPushNotification,
+      announcementEmailNotification,
+    }
   );
 
   return data;
 };
 
-export const useSelfUpdateEventNotifications = (
+export const useSelfUpdateGroupMembershipNotifications = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelfUpdateEventNotifications>>,
+      Awaited<ReturnType<typeof SelfUpdateGroupMembershipNotifications>>,
       Omit<
-        SelfUpdateEventNotificationsParams,
+        SelfUpdateGroupMembershipNotificationsParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -69,7 +74,7 @@ export const useSelfUpdateEventNotifications = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SelfUpdateEventNotificationsParams,
-    Awaited<ReturnType<typeof SelfUpdateEventNotifications>>
-  >(SelfUpdateEventNotifications, options);
+    SelfUpdateGroupMembershipNotificationsParams,
+    Awaited<ReturnType<typeof SelfUpdateGroupMembershipNotifications>>
+  >(SelfUpdateGroupMembershipNotifications, options);
 };
