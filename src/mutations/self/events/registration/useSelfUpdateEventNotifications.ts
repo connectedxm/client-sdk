@@ -8,7 +8,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
+import {
+  SELF_EVENT_REGISTRATION_QUERY_KEY,
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
+} from "@src/queries";
 
 export interface SelfUpdateEventNotificationsParams extends MutationParams {
   eventId: string;
@@ -56,6 +59,16 @@ export const SelfUpdateEventNotifications = async ({
       announcementEmailNotification,
     }
   );
+
+  // Invalidate the attendee query to ensure UI updates
+  if (queryClient) {
+    queryClient.invalidateQueries({
+      queryKey: [
+        ...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
+        clientApiParams.locale,
+      ],
+    });
+  }
 
   return data;
 };

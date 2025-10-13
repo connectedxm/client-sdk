@@ -7,7 +7,10 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../useConnectedMutation";
-import { SELF_CHANNEL_SUBSCRIBER_QUERY_KEY } from "@src/queries";
+import {
+  SELF_CHANNEL_SUBSCRIBER_QUERY_KEY,
+  CHANNEL_SUBSCRIBERS_QUERY_KEY,
+} from "@src/queries";
 
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -57,6 +60,13 @@ export const UpdateChannelSubscriber = async ({
       activityNotificationPreference,
     }
   );
+
+  // Invalidate channel subscribers queries to ensure UI updates
+  if (queryClient) {
+    queryClient.invalidateQueries({
+      queryKey: CHANNEL_SUBSCRIBERS_QUERY_KEY(channelId),
+    });
+  }
 
   return data;
 };
