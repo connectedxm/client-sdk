@@ -7,6 +7,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../../useConnectedMutation";
+import { SELF_CHANNEL_SUBSCRIBER_QUERY_KEY } from "@src/queries";
 
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -23,9 +24,30 @@ export const UpdateChannelSubscriber = async ({
   contentPushNotification,
   activityNotificationPreference,
   clientApiParams,
+  queryClient,
 }: UpdateChannelSubscriberParams): Promise<
   ConnectedXMResponse<ChannelSubscriber>
 > => {
+  if (queryClient) {
+    queryClient.setQueryData(
+      [...SELF_CHANNEL_SUBSCRIBER_QUERY_KEY(channelId), clientApiParams.locale],
+      (oldData: any) => {
+        if (oldData?.data) {
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              contentEmailNotification,
+              contentPushNotification,
+              activityNotificationPreference,
+            },
+          };
+        }
+        return oldData;
+      }
+    );
+  }
+
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<ChannelSubscriber>>(
     `/channels/${channelId}/subscribers`,
