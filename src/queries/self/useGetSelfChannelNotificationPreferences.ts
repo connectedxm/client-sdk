@@ -33,7 +33,7 @@ export const GetSelfChannelNotificationPreferences = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/channels/notificationPreferences`
+    `/self/notificationPreferences/channels`
   );
   return data;
 };

@@ -38,7 +38,7 @@ export const GetSelfEventNotificationPreferences = async ({
   ConnectedXMResponse<EventNotificationPreference[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/events/notificationPreferences`, {
+  const { data } = await clientApi.get(`/self/notificationPreferences/registrations`, {
     params: {
       excludePast: excludePast || undefined,
     },

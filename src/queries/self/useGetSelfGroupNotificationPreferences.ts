@@ -32,7 +32,7 @@ export const GetSelfGroupNotificationPreferences = async ({
   ConnectedXMResponse<GroupNotificationPreference[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/groups/notificationPreferences`);
+  const { data } = await clientApi.get(`/self/notificationPreferences/groups`);
   return data;
 };
 
