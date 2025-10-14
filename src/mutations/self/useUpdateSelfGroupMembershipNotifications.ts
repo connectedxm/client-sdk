@@ -10,7 +10,7 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 import { SELF_GROUP_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 
-export interface SelfUpdateGroupMembershipNotificationsParams
+export interface UpdateSelfGroupMembershipNotificationsParams
   extends MutationParams {
   groupId: string;
   activityNotificationPreference?: ActivityPreference;
@@ -18,14 +18,14 @@ export interface SelfUpdateGroupMembershipNotificationsParams
   announcementEmailNotification?: boolean;
 }
 
-export const SelfUpdateGroupMembershipNotifications = async ({
+export const UpdateSelfGroupMembershipNotifications = async ({
   groupId,
   activityNotificationPreference,
   announcementPushNotification,
   announcementEmailNotification,
   clientApiParams,
   queryClient,
-}: SelfUpdateGroupMembershipNotificationsParams): Promise<
+}: UpdateSelfGroupMembershipNotificationsParams): Promise<
   ConnectedXMResponse<GroupMembership>
 > => {
   if (queryClient) {
@@ -61,12 +61,12 @@ export const SelfUpdateGroupMembershipNotifications = async ({
   return data;
 };
 
-export const useSelfUpdateGroupMembershipNotifications = (
+export const useUpdateSelfGroupMembershipNotifications = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelfUpdateGroupMembershipNotifications>>,
+      Awaited<ReturnType<typeof UpdateSelfGroupMembershipNotifications>>,
       Omit<
-        SelfUpdateGroupMembershipNotificationsParams,
+        UpdateSelfGroupMembershipNotificationsParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -74,7 +74,7 @@ export const useSelfUpdateGroupMembershipNotifications = (
   > = {}
 ) => {
   return useConnectedMutation<
-    SelfUpdateGroupMembershipNotificationsParams,
-    Awaited<ReturnType<typeof SelfUpdateGroupMembershipNotifications>>
-  >(SelfUpdateGroupMembershipNotifications, options);
+    UpdateSelfGroupMembershipNotificationsParams,
+    Awaited<ReturnType<typeof UpdateSelfGroupMembershipNotifications>>
+  >(UpdateSelfGroupMembershipNotifications, options);
 };
