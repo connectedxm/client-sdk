@@ -1,4 +1,8 @@
-import { GroupMembership, ConnectedXMResponse } from "@src/interfaces";
+import {
+  GroupMembership,
+  ConnectedXMResponse,
+  ActivityPreference,
+} from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -8,28 +12,51 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfGroupMembershipParams extends MutationParams {
   groupId: string;
-  membership: Partial<GroupMembership>;
+  membership?: Partial<GroupMembership>;
+  activityNotificationPreference?: ActivityPreference;
+  announcementPushNotification?: boolean;
+  announcementEmailNotification?: boolean;
 }
 
 export const UpdateSelfGroupMembership = async ({
   groupId,
   membership,
+  activityNotificationPreference,
+  announcementPushNotification,
+  announcementEmailNotification,
   clientApiParams,
   queryClient,
 }: UpdateSelfGroupMembershipParams): Promise<
   ConnectedXMResponse<GroupMembership>
 > => {
+  // Prepare the update payload
+  const updatePayload = {
+    ...membership,
+    ...(activityNotificationPreference !== undefined && {
+      activityNotificationPreference,
+    }),
+    ...(announcementPushNotification !== undefined && {
+      announcementPushNotification,
+    }),
+    ...(announcementEmailNotification !== undefined && {
+      announcementEmailNotification,
+    }),
+  };
+
   if (queryClient) {
     queryClient.setQueryData(
       [...SELF_GROUP_MEMBERSHIP_QUERY_KEY(groupId), clientApiParams.locale],
-      (data: any) => {
-        return {
-          ...data,
-          data: {
-            ...data.data,
-            ...membership,
-          },
-        };
+      (oldData: any) => {
+        if (oldData?.data) {
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              ...updatePayload,
+            },
+          };
+        }
+        return oldData;
       }
     );
   }
@@ -37,7 +64,7 @@ export const UpdateSelfGroupMembership = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<GroupMembership>>(
     `/self/groups/${groupId}`,
-    membership
+    updatePayload
   );
 
   return data;
