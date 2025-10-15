@@ -13,21 +13,21 @@ import {
   SELF_EVENT_ATTENDEE_QUERY_KEY,
 } from "@src/queries";
 
-export interface UpdateSelfEventNotificationsParams extends MutationParams {
+export interface UpdateSelfEventRegistrationParams extends MutationParams {
   eventId: string;
   activityNotificationPreference?: ActivityPreference;
   announcementPushNotification?: boolean;
   announcementEmailNotification?: boolean;
 }
 
-export const UpdateSelfEventNotifications = async ({
+export const UpdateSelfEventRegistration = async ({
   eventId,
   activityNotificationPreference,
   announcementPushNotification,
   announcementEmailNotification,
   clientApiParams,
   queryClient,
-}: UpdateSelfEventNotificationsParams): Promise<
+}: UpdateSelfEventRegistrationParams): Promise<
   ConnectedXMResponse<Registration>
 > => {
   if (queryClient) {
@@ -73,12 +73,12 @@ export const UpdateSelfEventNotifications = async ({
   return data;
 };
 
-export const useUpdateSelfEventNotifications = (
+export const useUpdateSelfEventRegistration = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof UpdateSelfEventNotifications>>,
+      Awaited<ReturnType<typeof UpdateSelfEventRegistration>>,
       Omit<
-        UpdateSelfEventNotificationsParams,
+        UpdateSelfEventRegistrationParams,
         "queryClient" | "clientApiParams"
       >
     >,
@@ -86,7 +86,7 @@ export const useUpdateSelfEventNotifications = (
   > = {}
 ) => {
   return useConnectedMutation<
-    UpdateSelfEventNotificationsParams,
-    Awaited<ReturnType<typeof UpdateSelfEventNotifications>>
-  >(UpdateSelfEventNotifications, options);
+    UpdateSelfEventRegistrationParams,
+    Awaited<ReturnType<typeof UpdateSelfEventRegistration>>
+  >(UpdateSelfEventRegistration, options);
 };
