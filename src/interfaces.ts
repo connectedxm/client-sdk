@@ -479,6 +479,7 @@ export interface Event extends BaseEvent {
     speakers: number;
     sponsorshipLevels: number;
     media: number;
+    roomTypes: number;
   };
 }
 
@@ -706,8 +707,6 @@ export interface BasePassType {
   overrideStartDate: string | null;
   taxCode: string | null;
   taxIncluded: boolean;
-  requiredTicketId: string | null;
-  requiredTicket: BasePassType | null;
 }
 
 export interface PassType extends BasePassType {
