@@ -6,17 +6,17 @@ import useConnectedMutation, {
 import { SELF_GROUP_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface SelfUpdateGroupMembershipParams extends MutationParams {
+export interface UpdateSelfGroupMembershipParams extends MutationParams {
   groupId: string;
   membership: Partial<GroupMembership>;
 }
 
-export const SelfUpdateGroupMembership = async ({
+export const UpdateSelfGroupMembership = async ({
   groupId,
   membership,
   clientApiParams,
   queryClient,
-}: SelfUpdateGroupMembershipParams): Promise<
+}: UpdateSelfGroupMembershipParams): Promise<
   ConnectedXMResponse<GroupMembership>
 > => {
   if (queryClient) {
@@ -43,17 +43,17 @@ export const SelfUpdateGroupMembership = async ({
   return data;
 };
 
-export const useSelfUpdateGroupMembership = (
+export const useUpdateSelfGroupMembership = (
   options: Omit<
     MutationOptions<
-      Awaited<ReturnType<typeof SelfUpdateGroupMembership>>,
-      Omit<SelfUpdateGroupMembershipParams, "queryClient" | "clientApiParams">
+      Awaited<ReturnType<typeof UpdateSelfGroupMembership>>,
+      Omit<UpdateSelfGroupMembershipParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
 ) => {
   return useConnectedMutation<
-    SelfUpdateGroupMembershipParams,
+    UpdateSelfGroupMembershipParams,
     Awaited<ConnectedXMResponse<GroupMembership>>
-  >(SelfUpdateGroupMembership, options);
+  >(UpdateSelfGroupMembership, options);
 };
