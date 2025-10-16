@@ -1402,10 +1402,10 @@ export interface BaseChannel {
   name: string;
   description: string | null;
   image: BaseImage;
-  subscriberCount: number;
   private: boolean;
   creatorId: string | null;
   _count: {
+    subscribers: number;
     contents: number;
   };
 }
