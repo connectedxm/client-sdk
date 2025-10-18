@@ -229,6 +229,7 @@ export interface Account extends BaseAccount {
     id: string;
     createdAt: string;
   }[];
+  attributes: AccountAttributeValue[]; // includes public attributes
   createdAt: string;
 }
 
@@ -237,6 +238,33 @@ export const isTypeAccount = (
 ): account is Account => {
   return (account as Omit<Account, keyof BaseAccount>).bio !== undefined;
 };
+
+export enum AccountAttributeType {
+  text = "text",
+  number = "number",
+  date = "date",
+  boolean = "boolean",
+}
+
+export interface BaseAccountAttribute {
+  name: string;
+  label: string;
+  type: AccountAttributeType;
+  description: string;
+  required: boolean;
+  editable: boolean;
+}
+
+export interface AccountAttribute extends BaseAccountAttribute {}
+
+export interface BaseAccountAttributeValue {
+  id: string;
+  attributeId: string;
+  attribute: BaseAccountAttribute;
+  value: string;
+}
+
+export interface AccountAttributeValue extends BaseAccountAttributeValue {}
 
 export interface SelfRelationships {
   accounts: Record<string, boolean>;
@@ -259,6 +287,7 @@ export interface Self extends Omit<Account, "_count"> {
   locale: string;
   termsAccepted: string | null;
   internalRefId: string | null;
+  attributes: AccountAttributeValue[]; // includes non-public attributes
   _count: {
     chatChannels: number;
     notifications: number;
@@ -2425,6 +2454,15 @@ export interface OrganizationConfig {
     CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
+  ATTRIBUTES: {
+    id: string;
+    name: string;
+    label: string;
+    type: AccountAttributeType;
+    editable: boolean;
+    required: boolean;
+    public: boolean;
+  }[];
   OPTIONS: Record<string, any> | null;
 }
 export interface OrganizationModule {
