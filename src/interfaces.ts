@@ -26,6 +26,17 @@ export enum LocationQuestionOption {
   countryStateCity = "countryStateCity",
 }
 
+export enum ActivityPreference {
+  all = "all",
+  featured = "featured",
+  none = "none",
+}
+
+export enum OrganizationActivityPreference {
+  featured = "featured",
+  none = "none",
+}
+
 export type MarkType = "bold" | "italic" | "underline" | "strike";
 
 export interface IntegrationDetails {
@@ -468,6 +479,7 @@ export interface Event extends BaseEvent {
     speakers: number;
     sponsorshipLevels: number;
     media: number;
+    roomTypes: number;
   };
 }
 
@@ -1364,13 +1376,13 @@ export interface BaseGroupMembership {
   accountId: string;
   group: BaseGroup;
   role: GroupMembershipRole;
+  activityNotificationPreference: ActivityPreference;
+  announcementEmailNotification: boolean;
+  announcementPushNotification: boolean;
 }
 
 export interface GroupMembership extends BaseGroupMembership {
   account: BaseAccount;
-  activityPushNotification: boolean;
-  announcementEmailNotification: boolean;
-  announcementPushNotification: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -1390,10 +1402,10 @@ export interface BaseChannel {
   name: string;
   description: string | null;
   image: BaseImage;
-  subscriberCount: number;
   private: boolean;
   creatorId: string | null;
   _count: {
+    subscribers: number;
     contents: number;
   };
 }
@@ -1422,6 +1434,7 @@ export interface BaseChannelSubscriber {
   accountId: string;
   contentEmailNotification: boolean;
   contentPushNotification: boolean;
+  activityNotificationPreference: ActivityPreference;
   updatedAt: string;
   createdAt: string;
 }
@@ -1523,6 +1536,9 @@ interface BaseRegistration {
   alternateId: number;
   accountId: string;
   eventId: string;
+  activityNotificationPreference: ActivityPreference;
+  announcementEmailNotification: boolean;
+  announcementPushNotification: boolean;
 }
 
 export interface Registration extends BaseRegistration {
@@ -1695,12 +1711,9 @@ export interface NotificationPreferences {
   chatPush: boolean;
   chatUnreadPush: boolean;
   chatUnreadEmail: boolean;
+  activityNotificationPreference: OrganizationActivityPreference;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
-  groupAnnouncementEmail: boolean;
-  groupAnnouncementPush: boolean;
-  eventAnnouncementEmail: boolean;
-  eventAnnouncementPush: boolean;
   groupInvitationEmail: boolean;
   groupInvitationPush: boolean;
   groupRequestAcceptedEmail: boolean;
