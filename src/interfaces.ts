@@ -201,8 +201,6 @@ export interface BaseAccount {
   username: string;
   firstName: string | null;
   lastName: string | null;
-  title: string | null;
-  company: string | null;
   image: BaseImage | null;
   accountTiers: BaseAccountTier[];
   subscriptions: {
@@ -223,7 +221,6 @@ export interface Account extends BaseAccount {
   tikTok: string | null;
   youtube: string | null;
   discord: string | null;
-  video: string | null;
   timezone: string | null;
   blockedByAccounts?: {
     id: string;
@@ -281,7 +278,6 @@ export interface Self extends Omit<Account, "_count"> {
   email: string | null;
   verified: boolean;
   phone: string | null;
-  dietaryRestrictions: string | null;
   shareCode: string;
   chatToken?: string;
   locale: string;

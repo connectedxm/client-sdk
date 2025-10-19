@@ -11,10 +11,7 @@ export interface UpdateSelfParams extends MutationParams {
   firstName?: string | null;
   lastName?: string | null;
   phone?: string | null;
-  title?: string | null;
-  company?: string | null;
   bio?: string | null;
-  dietaryRestrictions?: string | null;
   facebook?: string | null;
   twitter?: string | null;
   instagram?: string | null;
@@ -22,7 +19,6 @@ export interface UpdateSelfParams extends MutationParams {
   linkedIn?: string | null;
   youtube?: string | null;
   discord?: string | null;
-  video?: string | null;
   website?: string | null;
   locale?: string | null;
   termsAccepted?: boolean;
