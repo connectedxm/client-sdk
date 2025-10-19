@@ -15,12 +15,9 @@ export interface CreateLoginAccountAccount {
   bannerId?: string;
   username: string;
   phone?: string;
-  title?: string;
-  company?: string;
   internalRefId?: string;
   bio?: string;
   website?: string;
-  video?: string;
   facebook?: string;
   twitter?: string;
   instagram?: string;
@@ -28,7 +25,6 @@ export interface CreateLoginAccountAccount {
   linkedIn?: string;
   youtube?: string;
   discord?: string;
-  dietaryRestrictions?: string;
   locale?: string;
   termsAccepted?: Date;
   attributes?: Record<string, string>;
