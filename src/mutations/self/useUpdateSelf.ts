@@ -15,12 +15,6 @@ export interface UpdateSelfParams extends MutationParams {
   company?: string | null;
   bio?: string | null;
   dietaryRestrictions?: string | null;
-  address1?: string | null;
-  address2?: string | null;
-  city?: string | null;
-  state?: string | null;
-  zip?: string | null;
-  country?: string | null;
   facebook?: string | null;
   twitter?: string | null;
   instagram?: string | null;
@@ -32,6 +26,7 @@ export interface UpdateSelfParams extends MutationParams {
   website?: string | null;
   locale?: string | null;
   termsAccepted?: boolean;
+  attributes?: Record<string, string>;
 }
 
 export const UpdateSelf = async ({

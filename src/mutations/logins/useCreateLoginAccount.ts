@@ -31,6 +31,7 @@ export interface CreateLoginAccountAccount {
   dietaryRestrictions?: string;
   locale?: string;
   termsAccepted?: Date;
+  attributes?: Record<string, string>;
 }
 
 export interface CreateLoginAccountParams extends MutationParams {
