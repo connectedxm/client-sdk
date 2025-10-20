@@ -328,6 +328,7 @@ export interface BaseActivity {
   contentId: string | null;
   commentedId: string | null;
   createdAt: string;
+  editedAt: string | null;
 }
 
 export interface Activity extends BaseActivity {
