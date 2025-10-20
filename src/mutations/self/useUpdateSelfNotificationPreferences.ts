@@ -13,11 +13,9 @@ import { GetClientAPI } from "@src/ClientAPI";
 export interface UpdateSelfNotificationPreferencesParams
   extends MutationParams {
   newFollowerPush?: boolean;
-  newFollowerEmail?: boolean;
   likePush?: boolean;
   resharePush?: boolean;
   commentPush?: boolean;
-  commentEmail?: boolean;
   transferPush?: boolean;
   transferEmail?: boolean;
   supportTicketConfirmationEmail?: boolean;
