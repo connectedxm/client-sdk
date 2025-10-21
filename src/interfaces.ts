@@ -2416,8 +2416,6 @@ export interface OrganizationConfig {
     CUSTOM: OrganizationOAuth[];
     FIELDS: {
       PHONE: boolean;
-      TITLE: boolean;
-      COMPANY: boolean;
       INTERNAL_REF_ID: boolean;
     };
   };

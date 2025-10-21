@@ -49,22 +49,26 @@ export const useConnectedMutation = <
     AxiosError<TResponseData>,
     Omit<TMutationParams, "queryClient" | "clientApiParams">
   >({
-    mutationFn: (data) =>
-      mutation({
-        queryClient,
-        clientApiParams: {
-          apiUrl,
-          getToken,
-          organizationId,
-          getExecuteAs,
-          locale,
-        },
-        ...data,
-      } as TMutationParams),
+    mutationFn: (data, context) =>
+      mutation(
+        {
+          queryClient,
+          clientApiParams: {
+            apiUrl,
+            getToken,
+            organizationId,
+            getExecuteAs,
+            locale,
+          },
+          ...data,
+        } as TMutationParams,
+        context
+      ),
     ...options,
-    onError: (error, variables, context) => {
+    onError: (error, variables, onMutateResult, context) => {
       if (onMutationError) onMutationError(error, variables, context);
-      if (options?.onError) options.onError(error, variables, context);
+      if (options?.onError)
+        options.onError(error, variables, onMutateResult, context);
     },
   });
 };
