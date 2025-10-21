@@ -1695,8 +1695,6 @@ export interface BaseLead {
   id: string;
   firstName: string | null;
   lastName: string | null;
-  company: string | null;
-  title: string | null;
   shareAccount: {
     id: string;
     image: BaseImage | null;
@@ -1717,6 +1715,7 @@ export interface Lead extends BaseLead {
   note: string | null;
   eventId: string | null;
   event: BaseEvent | null;
+  attributes: { name: string; value: string }[];
   updatedAt: string;
 }
 
