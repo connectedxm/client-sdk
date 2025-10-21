@@ -328,6 +328,7 @@ export interface BaseActivity {
   contentId: string | null;
   commentedId: string | null;
   createdAt: string;
+  editedAt: string | null;
 }
 
 export interface Activity extends BaseActivity {
@@ -1725,11 +1726,9 @@ export const isTypeLead = (lead: BaseLead | Lead): lead is Lead => {
 
 export interface NotificationPreferences {
   newFollowerPush: boolean;
-  newFollowerEmail: boolean;
   likePush: boolean;
   resharePush: boolean;
   commentPush: boolean;
-  commentEmail: boolean;
   transferPush: boolean;
   transferEmail: boolean;
   supportTicketConfirmationEmail: boolean;
