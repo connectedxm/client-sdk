@@ -731,6 +731,8 @@ export interface BasePassType {
   maxCouponQuantity: number | null;
   sortOrder: number;
   overrideStartDate: string | null;
+  requiredPassTypeId: string | null;
+  requiredPassType: BasePassType | null;
   taxCode: string | null;
   taxIncluded: boolean;
 }
