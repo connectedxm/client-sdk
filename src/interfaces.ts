@@ -202,6 +202,7 @@ export interface BaseAccount {
   firstName: string | null;
   lastName: string | null;
   image: BaseImage | null;
+  needsProfileCompletion: boolean;
   accountTiers: BaseAccountTier[];
   subscriptions: {
     subscriptionProduct: {
