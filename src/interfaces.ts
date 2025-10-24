@@ -733,7 +733,6 @@ export interface BasePassType {
   sortOrder: number;
   overrideStartDate: string | null;
   requiredPassTypeId: string | null;
-  requiredPassType: BasePassType | null;
   taxCode: string | null;
   taxIncluded: boolean;
 }
@@ -742,6 +741,7 @@ export interface PassType extends BasePassType {
   visibility: TicketVisibility;
   active: boolean;
   event: BaseEvent;
+  requiredPassType: BasePassType | null;
 }
 
 export interface BasePassTypePriceSchedule {
