@@ -202,6 +202,7 @@ export interface BaseAccount {
   firstName: string | null;
   lastName: string | null;
   image: BaseImage | null;
+  needsProfileCompletion: boolean;
   accountTiers: BaseAccountTier[];
   subscriptions: {
     subscriptionProduct: {
@@ -731,6 +732,7 @@ export interface BasePassType {
   maxCouponQuantity: number | null;
   sortOrder: number;
   overrideStartDate: string | null;
+  requiredPassTypeId: string | null;
   taxCode: string | null;
   taxIncluded: boolean;
 }
@@ -739,6 +741,7 @@ export interface PassType extends BasePassType {
   visibility: TicketVisibility;
   active: boolean;
   event: BaseEvent;
+  requiredPassType: BasePassType | null;
 }
 
 export interface BasePassTypePriceSchedule {
