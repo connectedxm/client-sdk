@@ -22,6 +22,7 @@ export interface UpdateSelfParams extends MutationParams {
   website?: string | null;
   locale?: string | null;
   termsAccepted?: boolean;
+  internalRefId?: string | null;
   attributes?: Record<string, string>;
 }
 
