@@ -2523,6 +2523,18 @@ export interface EventRoomType extends BaseEventRoomType {
   description: string | null;
   createdAt: string;
   updatedAt: string;
+  rooms: BaseRoom[];
+}
+
+export interface BaseRoom {
+  id: string;
+  roomName: string;
+  reservationId: string | null;
+}
+
+export interface Room extends BaseRoom {
+  roomTypes: BaseEventRoomType[];
+  reservation: BaseEventRoomTypeReservation | null;
 }
 
 export interface BaseEventRoomTypeReservation {
@@ -2531,9 +2543,11 @@ export interface BaseEventRoomTypeReservation {
   end: string | null;
   eventRoomTypeId: string;
   eventRoomType: BaseEventRoomType;
+  roomName: string;
 }
 
 export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
+  room: BaseRoom;
   createdAt: string;
   updatedAt: string;
 }
