@@ -2543,11 +2543,11 @@ export interface BaseEventRoomTypeReservation {
   end: string | null;
   eventRoomTypeId: string;
   eventRoomType: BaseEventRoomType;
-  roomId: string;
+  roomId: string | null;
+  room: BaseRoom | null;
 }
 
 export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
-  room: BaseRoom;
   createdAt: string;
   updatedAt: string;
 }
