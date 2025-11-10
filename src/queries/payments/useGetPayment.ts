@@ -39,7 +39,7 @@ export const GetPayment = async ({
   clientApiParams,
 }: GetPaymentProps): Promise<ConnectedXMResponse<Payment>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/payments/${paymentId}`);
+  const { data } = await clientApi.get(`/payments/${paymentId}`);
   return data;
 };
 

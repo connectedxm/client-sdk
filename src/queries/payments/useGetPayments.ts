@@ -22,7 +22,7 @@ export const GetPayments = async ({
   clientApiParams,
 }: GetPaymentsProps): Promise<ConnectedXMResponse<Payment[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/payments`, {
+  const { data } = await clientApi.get(`/payments`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
