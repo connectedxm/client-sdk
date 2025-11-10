@@ -19,7 +19,7 @@ export interface UpdateSelfEventRegistrationReservationsParams
       eventRoomTypeId: string;
       start?: Date | string;
       end?: Date | string;
-      roomName?: string;
+      roomId?: string;
     };
   }[];
 }
