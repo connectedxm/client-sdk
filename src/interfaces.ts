@@ -2529,7 +2529,6 @@ export interface EventRoomType extends BaseEventRoomType {
 export interface BaseRoom {
   id: string;
   roomName: string;
-  reservationId: string | null;
 }
 
 export interface Room extends BaseRoom {
