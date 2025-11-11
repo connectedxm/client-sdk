@@ -423,7 +423,6 @@ export interface Group extends BaseGroup {
   description: string;
   externalUrl: string | null;
   active: boolean;
-  streamInputs: BaseStreamInput[];
   createdAt: string;
   _count: {
     members: number;
@@ -490,7 +489,6 @@ export interface Event extends BaseEvent {
   registrations: BaseRegistration[];
   androidAppLink: string | null;
   pages: BaseEventPage[];
-  streamInputs: BaseStreamInput[];
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
@@ -1039,21 +1037,6 @@ export const isTypeSpeaker = (
   return (speaker as Omit<Speaker, keyof BaseSpeaker>).website !== undefined;
 };
 
-export interface BaseStreamInput {
-  id: string;
-  connected: boolean;
-  name: string;
-  public: boolean;
-  image: BaseImage | null;
-}
-
-export interface StreamInput extends BaseStreamInput {
-  cloudflareId: string;
-  threads: BaseThread[];
-  eventId: string | null;
-  groupId: string | null;
-}
-
 export interface BaseSession {
   id: string;
   slug: string;
@@ -1080,7 +1063,6 @@ export interface Session extends BaseSession {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
-  streamInput: BaseStreamInput | null;
   supply?: number | null;
   _count: {
     sections: number;
