@@ -21,7 +21,6 @@ export * from "./integrations";
 export * from "./surveys";
 export * from "./link-previews";
 export * from "./storage";
-export * from "./streams";
 export * from "./payments";
 
 export * from "./useConnectedInfiniteQuery";
