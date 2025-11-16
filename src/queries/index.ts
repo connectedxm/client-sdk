@@ -7,6 +7,7 @@ export * from "./groups";
 export * from "./channels";
 export * from "./contents";
 export * from "./events";
+export * from "./meetings";
 export * from "./organization";
 export * from "./searchlists";
 export * from "./self";
