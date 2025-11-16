@@ -15,12 +15,15 @@ export const CHANNEL_CONTENTS_QUERY_KEY = (
   channelId: string,
   type?: "video" | "audio" | "article",
   featured?: boolean,
-  past?: boolean
+  past?: boolean,
+  includeDrafts?: boolean
 ): QueryKey => {
   const key = [...CHANNEL_QUERY_KEY(channelId), "CONTENTS"];
   if (featured) key.push("FEATURED");
   if (typeof past !== "undefined") key.push(past ? "PAST" : "UPCOMING");
   if (type) key.push(type);
+  if (typeof includeDrafts !== "undefined")
+    key.push(includeDrafts ? "INCLUDE_DRAFTS" : "EXCLUDE_DRAFTS");
 
   return key;
 };
@@ -45,6 +48,7 @@ export interface GetChannelContentsParams extends InfiniteQueryParams {
   type?: "video" | "audio" | "article";
   featured?: boolean;
   past?: boolean;
+  includeDrafts?: boolean;
 }
 
 export const GetChannelContents = async ({
@@ -52,6 +56,7 @@ export const GetChannelContents = async ({
   type,
   featured,
   past,
+  includeDrafts,
   pageParam,
   pageSize,
   orderBy,
@@ -64,6 +69,12 @@ export const GetChannelContents = async ({
       type: type || undefined,
       featured: featured || undefined,
       past: past,
+      includeDrafts:
+        typeof includeDrafts !== "undefined"
+          ? includeDrafts === true
+            ? "true"
+            : "false"
+          : undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
@@ -78,6 +89,7 @@ export const useGetChannelContents = (
   type?: "video" | "audio" | "article",
   featured?: boolean,
   past?: boolean,
+  includeDrafts?: boolean,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -89,7 +101,7 @@ export const useGetChannelContents = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetChannelContents>>
   >(
-    CHANNEL_CONTENTS_QUERY_KEY(channelId, type, featured, past),
+    CHANNEL_CONTENTS_QUERY_KEY(channelId, type, featured, past, includeDrafts),
     (params: InfiniteQueryParams) =>
       GetChannelContents({
         ...params,
@@ -97,6 +109,7 @@ export const useGetChannelContents = (
         type,
         featured,
         past,
+        includeDrafts,
       }),
     params,
     {

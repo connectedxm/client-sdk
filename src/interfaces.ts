@@ -202,6 +202,7 @@ export interface BaseAccount {
   firstName: string | null;
   lastName: string | null;
   image: BaseImage | null;
+  needsProfileCompletion: boolean;
   accountTiers: BaseAccountTier[];
   subscriptions: {
     subscriptionProduct: {
@@ -422,7 +423,6 @@ export interface Group extends BaseGroup {
   description: string;
   externalUrl: string | null;
   active: boolean;
-  streamInputs: BaseStreamInput[];
   createdAt: string;
   _count: {
     members: number;
@@ -489,7 +489,6 @@ export interface Event extends BaseEvent {
   registrations: BaseRegistration[];
   androidAppLink: string | null;
   pages: BaseEventPage[];
-  streamInputs: BaseStreamInput[];
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
@@ -731,6 +730,7 @@ export interface BasePassType {
   maxCouponQuantity: number | null;
   sortOrder: number;
   overrideStartDate: string | null;
+  requiredPassTypeId: string | null;
   taxCode: string | null;
   taxIncluded: boolean;
 }
@@ -739,6 +739,7 @@ export interface PassType extends BasePassType {
   visibility: TicketVisibility;
   active: boolean;
   event: BaseEvent;
+  requiredPassType: BasePassType | null;
 }
 
 export interface BasePassTypePriceSchedule {
@@ -1036,21 +1037,6 @@ export const isTypeSpeaker = (
   return (speaker as Omit<Speaker, keyof BaseSpeaker>).website !== undefined;
 };
 
-export interface BaseStreamInput {
-  id: string;
-  connected: boolean;
-  name: string;
-  public: boolean;
-  image: BaseImage | null;
-}
-
-export interface StreamInput extends BaseStreamInput {
-  cloudflareId: string;
-  threads: BaseThread[];
-  eventId: string | null;
-  groupId: string | null;
-}
-
 export interface BaseSession {
   id: string;
   slug: string;
@@ -1077,7 +1063,6 @@ export interface Session extends BaseSession {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
-  streamInput: BaseStreamInput | null;
   supply?: number | null;
   _count: {
     sections: number;
@@ -2520,6 +2505,17 @@ export interface EventRoomType extends BaseEventRoomType {
   description: string | null;
   createdAt: string;
   updatedAt: string;
+  rooms: BaseRoom[];
+}
+
+export interface BaseRoom {
+  id: string;
+  roomName: string;
+}
+
+export interface Room extends BaseRoom {
+  roomTypes: BaseEventRoomType[];
+  reservation: BaseEventRoomTypeReservation | null;
 }
 
 export interface BaseEventRoomTypeReservation {
@@ -2528,6 +2524,8 @@ export interface BaseEventRoomTypeReservation {
   end: string | null;
   eventRoomTypeId: string;
   eventRoomType: BaseEventRoomType;
+  roomId: string | null;
+  room: BaseRoom | null;
 }
 
 export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
