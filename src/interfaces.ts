@@ -2926,16 +2926,24 @@ export interface Login extends BaseLogin {
   accounts: Self[];
 }
 
+export enum MeetingType {
+  GROUP_CALL = "GROUP_CALL",
+  WEBINAR = "WEBINAR",
+  AUDIO_ROOM = "AUDIO_ROOM",
+  LIVESTREAM = "LIVESTREAM",
+}
+
 export interface BaseMeeting {
   id: string;
   title?: string;
+  type: MeetingType;
 }
 
 export interface Meeting extends BaseMeeting {
   event?: BaseEvent;
   session?: BaseSession;
   group?: BaseGroup;
-  streams: StreamInput[];
+  streams: BaseStreamInput[];
 }
 
 export interface BaseStreamInput {
@@ -2945,10 +2953,10 @@ export interface BaseStreamInput {
   public: boolean;
   image: BaseImage | null;
   locale: string;
+  cloudflareId: string;
 }
 
 export interface StreamInput extends BaseStreamInput {
-  cloudflareId: string;
   eventId: string | null;
   groupId: string | null;
   sessionId: string | null;
