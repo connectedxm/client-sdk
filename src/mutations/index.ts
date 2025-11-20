@@ -9,6 +9,7 @@ export * from "./supportTicket";
 export * from "./groups";
 export * from "./listings";
 export * from "./logins";
+export * from "./meetings";
 export * from "./storage";
 export * from "./threads";
 export * from "./integrations";
