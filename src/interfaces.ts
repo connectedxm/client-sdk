@@ -2923,7 +2923,7 @@ export interface BaseMeeting {
 
 export interface Meeting extends BaseMeeting {
   event: BaseEvent;
-  session: BaseSession[];
+  session: BaseSession;
   group: BaseGroup;
   streams: StreamInput[];
 }
