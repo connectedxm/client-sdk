@@ -2916,9 +2916,17 @@ export interface Login extends BaseLogin {
   accounts: Self[];
 }
 
+export enum MeetingType {
+  GROUP_CALL = "GROUP_CALL",
+  WEBINAR = "WEBINAR",
+  AUDIO_ROOM = "AUDIO_ROOM",
+  LIVESTREAM = "LIVESTREAM",
+}
+
 export interface BaseMeeting {
   id: string;
   title?: string;
+  type: MeetingType;
 }
 
 export interface Meeting extends BaseMeeting {
