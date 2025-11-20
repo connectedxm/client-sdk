@@ -2933,7 +2933,7 @@ export interface Meeting extends BaseMeeting {
   event?: BaseEvent;
   session?: BaseSession;
   group?: BaseGroup;
-  streams: StreamInput[];
+  streams: BaseStreamInput[];
 }
 
 export interface BaseStreamInput {
@@ -2943,10 +2943,10 @@ export interface BaseStreamInput {
   public: boolean;
   image: BaseImage | null;
   locale: string;
+  cloudflareId: string;
 }
 
 export interface StreamInput extends BaseStreamInput {
-  cloudflareId: string;
   eventId: string | null;
   groupId: string | null;
   sessionId: string | null;
