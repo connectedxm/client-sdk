@@ -10,7 +10,7 @@ import {
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface UpdateListing {
+export interface UpdateListingValues {
   eventType?: keyof typeof EventType;
   visible?: boolean;
   name?: string;
@@ -19,7 +19,6 @@ export interface UpdateListing {
   eventStart?: string;
   eventEnd?: string;
   timezone?: string | null;
-  meetingUrl?: string | null;
   venue?: string | null;
   address1?: string | null;
   address2?: string | null;
@@ -41,7 +40,7 @@ export interface UpdateListing {
 
 export interface UpdateListingParams extends MutationParams {
   eventId: string;
-  event: UpdateListing;
+  event: UpdateListingValues;
   base64?: any;
 }
 

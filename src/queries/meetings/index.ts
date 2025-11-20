@@ -1,1 +1,1 @@
-export * from "./useJoinMeetingLink";
+export * from "./useGetMeeting";

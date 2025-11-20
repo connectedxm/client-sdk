@@ -16,7 +16,7 @@ import {
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export interface CreateListing {
+export interface CreateListingInput {
   eventType: keyof typeof EventType;
   visible: boolean;
   name: string;
@@ -33,14 +33,13 @@ export interface CreateListing {
   zip?: string;
   country?: string;
   externalUrl?: string;
-  meetingUrl?: string;
   registration?: boolean;
   registrationLimit?: number | null;
   groupOnly?: boolean;
 }
 
 export interface CreateListingParams extends MutationParams {
-  event: CreateListing;
+  event: CreateListingInput;
   imageDataUri?: any;
   groupId?: string;
   sponsorIds?: string[];

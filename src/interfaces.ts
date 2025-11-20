@@ -424,6 +424,8 @@ export interface Group extends BaseGroup {
   externalUrl: string | null;
   active: boolean;
   createdAt: string;
+  meeting: BaseMeeting | null;
+  streams: BaseStreamInput[];
   _count: {
     members: number;
   };
@@ -463,7 +465,6 @@ export interface Event extends BaseEvent {
   eventType: EventType;
   longDescription: string | null;
   externalUrl: string | null;
-  meetingUrl: string | null;
   venue: string | null;
   venueMap: BaseImage | null;
   address1: string | null;
@@ -498,6 +499,8 @@ export interface Event extends BaseEvent {
   backgroundImage: BaseImage | null;
   media: EventMediaItem[];
   options: Record<string, any> | null;
+  meeting: BaseMeeting | null;
+  streams: BaseStreamInput[];
   _count: {
     activations: number;
     sessions: number;
@@ -1064,6 +1067,8 @@ export interface Session extends BaseSession {
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
   supply?: number | null;
+  meeting: BaseMeeting | null;
+  streams: BaseStreamInput[];
   _count: {
     sections: number;
   };
@@ -2909,4 +2914,33 @@ export interface BaseLogin {
 
 export interface Login extends BaseLogin {
   accounts: Self[];
+}
+
+export interface BaseMeeting {
+  id: string;
+  title?: string;
+}
+
+export interface Meeting extends BaseMeeting {
+  event: BaseEvent;
+  session: BaseSession[];
+  group: BaseGroup;
+  streams: StreamInput[];
+}
+
+export interface BaseStreamInput {
+  id: string;
+  connected: boolean;
+  name: string;
+  public: boolean;
+  image: BaseImage | null;
+  locale: string;
+}
+
+export interface StreamInput extends BaseStreamInput {
+  cloudflareId: string;
+  eventId: string | null;
+  groupId: string | null;
+  sessionId: string | null;
+  meetingId: string | null;
 }
