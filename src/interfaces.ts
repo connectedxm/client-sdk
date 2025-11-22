@@ -204,11 +204,6 @@ export interface BaseAccount {
   image: BaseImage | null;
   needsProfileCompletion: boolean;
   accountTiers: BaseAccountTier[];
-  subscriptions: {
-    subscriptionProduct: {
-      tiers: BaseAccountTier[];
-    };
-  }[];
 }
 
 export interface Account extends BaseAccount {
@@ -1619,7 +1614,6 @@ export interface Payment extends BasePayment {
   session: BaseSession | null;
   place: BaseBookingPlace | null;
   space: BaseBookingSpace | null;
-  membership: BaseSubscriptionProduct | null;
   coupon: BaseCoupon | null;
   invoice: BaseInvoice | null;
   lineItems: PaymentLineItem[];
@@ -1634,7 +1628,6 @@ export enum PaymentLineItemType {
   invoice = "invoice",
   booking = "booking",
   coupon = "coupon",
-  subscription = "subscription",
 }
 
 export interface BasePaymentLineItem {
@@ -1664,7 +1657,6 @@ export interface BasePaymentLineItem {
   reservationId: string | null;
   accessId: string | null;
   bookingId: string | null;
-  subscriptionId: string | null;
   paymentId: number;
 }
 
@@ -1676,7 +1668,6 @@ export interface PaymentLineItem extends BasePaymentLineItem {
   access: BaseEventSessionAccess | null;
   invoice: BaseInvoice | null;
   booking: BaseBooking | null;
-  subscription: BaseSubscription | null;
   payment: BasePayment | null;
 }
 
@@ -1963,69 +1954,6 @@ export interface BaseVideo {
   readyToStream: boolean;
   hlsUrl: string;
   dashUrl: string;
-}
-
-export enum SubscriptionStatus {
-  active = "active",
-  canceled = "canceled",
-  paused = "paused",
-  trialing = "trialing",
-  past_due = "past_due",
-  unpaid = "unpaid",
-}
-
-export interface BaseSubscription {
-  id: string;
-  status: SubscriptionStatus;
-  expiresAt: string;
-  cancelAtEnd: boolean;
-  subscriptionProduct: BaseSubscriptionProduct;
-}
-
-export interface Subscription extends BaseSubscription {
-  account: BaseAccount;
-  price: BaseSubscriptionProductPrice;
-  paymentMethod?: {
-    brand: "amex" | "discover" | "mastercard" | "visa" | "unknown" | null;
-    last4: string | null;
-    expMonth: number | null;
-    expYear: number | null;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BaseSubscriptionProduct {
-  id: string;
-  active: boolean;
-  name: string;
-  description: string | null;
-  featured: boolean;
-}
-
-export interface SubscriptionProduct extends BaseSubscriptionProduct {
-  prices: SubscriptionProductPrice[];
-  features: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BaseSubscriptionProductPrice {
-  id: string;
-  active: boolean;
-  amount: number;
-  currency: string;
-  interval: "day" | "week" | "month" | "year";
-  intervalCount: number;
-  maxAmount: number;
-  minAmount: number;
-  type: string;
-}
-
-export interface SubscriptionProductPrice extends BaseSubscriptionProductPrice {
-  subscriptionProduct: BaseSubscriptionProduct;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export enum InvoiceStatus {
@@ -2339,7 +2267,6 @@ export enum OrganizationModuleType {
   benefits = "benefits",
   interests = "interests",
   advertisements = "advertisements",
-  subscriptions = "subscriptions",
   invoices = "invoices",
   announcements = "announcements",
   bookings = "bookings",
