@@ -481,6 +481,11 @@ export interface Event extends BaseEvent {
   registration: boolean;
   registrationStart: string;
   registrationEnd: string;
+  registrationHeaderImageId: string | null;
+  registrationHeaderImage: BaseImage | null;
+  registrationFooterImageId: string | null;
+  registrationFooterImage: BaseImage | null;
+  registrationHideTitle: boolean;
   publicRegistrants: boolean;
   activityFeedEnabled: boolean;
   chatBotNumber: string | null;
