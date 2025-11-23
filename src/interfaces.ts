@@ -2365,6 +2365,7 @@ export interface OrganizationConfig {
   PAYMENT: {
     TYPE: PaymentIntegrationType | "none";
     CONNECTION_ID: string | null;
+    PUBLIC_KEY: string | null;
     CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
