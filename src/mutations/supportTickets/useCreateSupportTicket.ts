@@ -8,7 +8,13 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SUPPORT_TICKETS_QUERY_KEY } from "@src/queries/supportTickets";
+import { AppendInfiniteQuery } from "@src/utilities";
 
+/**
+ * @category Params
+ * @group SupportTickets
+ */
 export interface CreateSupportTicketParams extends MutationParams {
   type: keyof typeof SupportTicketType;
   email: string;
@@ -17,6 +23,10 @@ export interface CreateSupportTicketParams extends MutationParams {
   productId?: string;
 }
 
+/**
+ * @category Methods
+ * @group SupportTickets
+ */
 export const CreateSupportTicket = async ({
   type,
   email,
@@ -24,6 +34,7 @@ export const CreateSupportTicket = async ({
   eventId,
   productId,
   clientApiParams,
+  queryClient,
 }: CreateSupportTicketParams): Promise<ConnectedXMResponse<SupportTicket>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<SupportTicket>>(
@@ -37,9 +48,21 @@ export const CreateSupportTicket = async ({
     }
   );
 
+  if (queryClient && data.status === "ok") {
+    AppendInfiniteQuery<SupportTicket>(
+      queryClient,
+      SUPPORT_TICKETS_QUERY_KEY(),
+      data.data
+    );
+  }
+
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group SupportTickets
+ */
 export const useCreateSupportTicket = (
   options: Omit<
     MutationOptions<

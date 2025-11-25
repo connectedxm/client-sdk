@@ -1335,6 +1335,21 @@ export const isTypeSupportTicket = (
   );
 };
 
+export interface BaseSupportTicketMessage {
+  id: string;
+  supportTicketId: string;
+  message: string;
+  accountId: string;
+  userId: string;
+}
+
+export interface SupportTicketMessage extends BaseSupportTicketMessage {
+  account: BaseAccount;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** Do we need notes in client? */
 export interface BaseSupportTicketNote {
   id: string;
   supportTicketId: string;
