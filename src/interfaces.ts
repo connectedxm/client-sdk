@@ -2361,13 +2361,14 @@ export interface OrganizationConfig {
     TYPE: PaymentIntegrationType | "none";
     CONNECTION_ID: string | null;
     PUBLIC_KEY: string | null;
+    CURRENCY: string;
   };
   INTEGRATIONS: Integration[];
   ATTRIBUTES: {
     id: string;
     name: string;
     label: string;
-    description: string | null;
+    description: string;
     type: AccountAttributeType;
     editable: boolean;
     required: boolean;
@@ -2375,6 +2376,7 @@ export interface OrganizationConfig {
   }[];
   OPTIONS: Record<string, any> | null;
 }
+
 export interface OrganizationModule {
   requireAuth: boolean;
   enabled: boolean;
