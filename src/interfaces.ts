@@ -2867,7 +2867,6 @@ export interface Meeting extends BaseMeeting {
 
 export interface BaseStreamInput {
   id: string;
-  connected: boolean;
   name: string;
   public: boolean;
   image: BaseImage | null;
