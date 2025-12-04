@@ -2368,7 +2368,7 @@ export interface OrganizationConfig {
     id: string;
     name: string;
     label: string;
-    description: string;
+    description: string | null;
     type: AccountAttributeType;
     editable: boolean;
     required: boolean;
