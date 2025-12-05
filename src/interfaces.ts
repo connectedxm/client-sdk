@@ -726,6 +726,7 @@ export interface BasePassType {
   enableCoupons: boolean;
   minCouponQuantity: number | null;
   maxCouponQuantity: number | null;
+  groupPassDescription: string | null;
   sortOrder: number;
   overrideStartDate: string | null;
   requiredPassTypeId: string | null;
