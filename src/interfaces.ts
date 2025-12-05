@@ -135,10 +135,6 @@ export interface BaseOrganization {
   locale: string;
 }
 
-export enum Currency {
-  USD = "USD",
-}
-
 export interface Organization extends BaseOrganization {
   phone: string | null;
   website: string | null;
@@ -146,7 +142,6 @@ export interface Organization extends BaseOrganization {
   secondaryColor: string | null;
   userPoolId: string;
   userPoolClientId: string;
-  currency: Currency;
   facebook: string | null;
   twitter: string | null;
   instagram: string | null;
@@ -2381,6 +2376,7 @@ export interface OrganizationConfig {
   }[];
   OPTIONS: Record<string, any> | null;
 }
+
 export interface OrganizationModule {
   requireAuth: boolean;
   enabled: boolean;
