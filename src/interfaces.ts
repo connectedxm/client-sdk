@@ -437,6 +437,12 @@ export interface BaseEvent {
   image: BaseImage | null;
   squareImage: BaseImage | null;
   series: BaseSeries | null;
+  paymentIntegration: BasePaymentIntegration | null;
+}
+
+export interface BasePaymentIntegration {
+  id: number;
+  currencyCode: string;
 }
 
 export enum EventSource {
