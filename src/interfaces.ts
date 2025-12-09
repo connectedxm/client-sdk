@@ -135,10 +135,6 @@ export interface BaseOrganization {
   locale: string;
 }
 
-export enum Currency {
-  USD = "USD",
-}
-
 export interface Organization extends BaseOrganization {
   phone: string | null;
   website: string | null;
@@ -146,7 +142,6 @@ export interface Organization extends BaseOrganization {
   secondaryColor: string | null;
   userPoolId: string;
   userPoolClientId: string;
-  currency: Currency;
   facebook: string | null;
   twitter: string | null;
   instagram: string | null;
@@ -731,6 +726,7 @@ export interface BasePassType {
   enableCoupons: boolean;
   minCouponQuantity: number | null;
   maxCouponQuantity: number | null;
+  groupPassDescription: string | null;
   sortOrder: number;
   overrideStartDate: string | null;
   requiredPassTypeId: string | null;
@@ -2396,6 +2392,7 @@ export interface OrganizationConfig {
   }[];
   OPTIONS: Record<string, any> | null;
 }
+
 export interface OrganizationModule {
   requireAuth: boolean;
   enabled: boolean;
@@ -2479,11 +2476,11 @@ export interface BaseEventRoomTypeReservation {
   eventRoomType: BaseEventRoomType;
   roomId: string | null;
   room: BaseRoom | null;
+  updatedAt: string;
 }
 
 export interface EventRoomTypeReservation extends BaseEventRoomTypeReservation {
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface BaseEventRoomTypePassTypeDetails {
@@ -2886,7 +2883,6 @@ export interface Meeting extends BaseMeeting {
 
 export interface BaseStreamInput {
   id: string;
-  connected: boolean;
   name: string;
   public: boolean;
   image: BaseImage | null;
