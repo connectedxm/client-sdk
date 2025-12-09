@@ -31,9 +31,7 @@ export const CreateSupportTicketMessage = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<
     ConnectedXMResponse<SupportTicketMessage>
-  >(`/supportTickets/${supportTicketId}/messages`, {
-    message,
-  });
+  >(`/supportTickets/${supportTicketId}/messages`, message);
 
   if (queryClient && data.status === "ok") {
     AppendInfiniteQuery<SupportTicketMessage>(

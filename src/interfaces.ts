@@ -1318,6 +1318,8 @@ export interface SupportTicket extends BaseSupportTicket {
   event: BaseEvent | null;
   ticket: BasePassType | null;
   state: SupportTicketState;
+  lastAccountReadAt: string | null;
+  lastMessageAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
