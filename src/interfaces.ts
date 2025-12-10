@@ -1972,6 +1972,7 @@ export interface BaseInvoice {
   sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
+  paymentIntegration: BasePaymentIntegration | null;
 }
 
 export interface Invoice extends BaseInvoice {
@@ -2521,6 +2522,7 @@ export interface BaseBookingPlace {
   timezone: string;
   description: string | null;
   image: BaseImage | null;
+  paymentIntegration: BasePaymentIntegration | null;
 }
 
 export interface BookingPlace extends BaseBookingPlace {
