@@ -5,7 +5,6 @@ permissions:
   checks: none
   contents: read
   deployments: none
-  id-token: none
   issues: none
   discussions: none
   packages: write
@@ -14,7 +13,7 @@ permissions:
   repository-projects: none
   security-events: none
   statuses: none
-  id-token: write  # Required for NPM Publishing
+  id-token: write # Required for NPM Publishing
 
 on:
   push:
