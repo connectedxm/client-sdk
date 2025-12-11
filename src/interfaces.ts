@@ -425,21 +425,6 @@ export const isTypeGroup = (group: BaseGroup | Group): group is Group => {
   return (group as Omit<Group, keyof BaseGroup>)._count !== undefined;
 };
 
-export interface BaseEvent {
-  id: string;
-  slug: string;
-  name: string;
-  shortDescription: string;
-  featured: boolean;
-  timezone: string | null;
-  eventStart: string;
-  eventEnd: string;
-  image: BaseImage | null;
-  squareImage: BaseImage | null;
-  series: BaseSeries | null;
-  paymentIntegration: BasePaymentIntegration | null;
-}
-
 export interface BasePaymentIntegration {
   id: number;
   currencyCode: string;
@@ -455,6 +440,20 @@ export enum EventType {
   physical = "physical",
   virtual = "virtual",
   hybrid = "hybrid",
+}
+
+export interface BaseEvent {
+  id: string;
+  slug: string;
+  name: string;
+  shortDescription: string;
+  featured: boolean;
+  timezone: string | null;
+  eventStart: string;
+  eventEnd: string;
+  image: BaseImage | null;
+  squareImage: BaseImage | null;
+  series: BaseSeries | null;
 }
 
 export interface Event extends BaseEvent {
@@ -502,6 +501,7 @@ export interface Event extends BaseEvent {
   options: Record<string, any> | null;
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
+  paymentIntegration: BasePaymentIntegration | null;
   _count: {
     activations: number;
     sessions: number;
@@ -529,6 +529,7 @@ export interface RegistrationEventDetails extends BaseEvent {
   splitPaymentPercentage: number;
   splitPaymentNetDays: number | null;
   splitPaymentDueDate: string | null;
+  paymentIntegration: BasePaymentIntegration | null;
   tickets: {
     enableCoupons: boolean;
   }[];
