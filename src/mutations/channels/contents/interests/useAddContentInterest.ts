@@ -5,17 +5,22 @@ import useConnectedMutation, {
 } from "../../../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import { ContentInterestCreateInputs } from "@src/params";
 
-export interface AddContentInterestPayload {
-  name: string;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface AddContentInterestParams extends MutationParams {
   channelId: string;
   contentId: string;
-  interest: AddContentInterestPayload;
+  interest: ContentInterestCreateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const AddContentInterest = async ({
   channelId,
   contentId,
@@ -31,6 +36,10 @@ export const AddContentInterest = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useAddContentInterest = (
   options: Omit<
     MutationOptions<

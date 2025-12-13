@@ -14,64 +14,26 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import {
-  Activity,
-  ConnectedXMResponse,
-  ActivityEntityType,
-  MarkType,
-} from "@src/interfaces";
+import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
 
-export interface BaseActivityEntityInput {
-  type: ActivityEntityType;
-  startIndex: number;
-  endIndex: number;
-  marks: MarkType[];
-}
+import { ActivityCreateInputs } from "@src/params";
 
-export interface MentionInput extends BaseActivityEntityInput {
-  type: ActivityEntityType.mention;
-  accountId: string;
-}
-
-export interface LinkInput extends BaseActivityEntityInput {
-  type: ActivityEntityType.link;
-  href: string;
-}
-
-export interface InterestInput extends BaseActivityEntityInput {
-  type: ActivityEntityType.interest;
-  interestId: string;
-}
-
-export interface SegmentInput extends BaseActivityEntityInput {
-  type: ActivityEntityType.segment;
-}
-
-export type ActivityEntityInput =
-  | MentionInput
-  | LinkInput
-  | InterestInput
-  | SegmentInput;
-
-interface ActivityCreateParams {
-  message: string;
-  entities: ActivityEntityInput[];
-  imageId?: string;
-  videoId?: string;
-  eventId?: string;
-  groupId?: string;
-  contentId?: string;
-  commentedId?: string;
-}
-
+/**
+ * @category Params
+ * @group Activities
+ */
 export interface CreateActivityParams extends MutationParams {
-  activity: ActivityCreateParams;
+  activity: ActivityCreateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Activities
+ */
 export const CreateActivity = async ({
   activity,
   clientApiParams,
@@ -149,26 +111,10 @@ export const CreateActivity = async ({
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        iDIDKey,
-        data.data
-      );
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        iDSlugKey,
-        data.data
-      );
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        slugIDKey,
-        data.data
-      );
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        slugSlugKey,
-        data.data
-      );
+      AppendInfiniteQuery<Activity>(queryClient, iDIDKey, data.data);
+      AppendInfiniteQuery<Activity>(queryClient, iDSlugKey, data.data);
+      AppendInfiniteQuery<Activity>(queryClient, slugIDKey, data.data);
+      AppendInfiniteQuery<Activity>(queryClient, slugSlugKey, data.data);
     }
 
     if (activity.eventId) {
@@ -184,16 +130,8 @@ export const CreateActivity = async ({
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        iDKey,
-        data.data,
-      );
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        slugKey,
-        data.data
-      );
+      AppendInfiniteQuery<Activity>(queryClient, iDKey, data.data);
+      AppendInfiniteQuery<Activity>(queryClient, slugKey, data.data);
     }
 
     if (activity.groupId) {
@@ -209,16 +147,8 @@ export const CreateActivity = async ({
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        iDKey,
-        data.data
-      );
-      AppendInfiniteQuery<Activity>(
-        queryClient,
-        slugKey,
-        data.data
-      );
+      AppendInfiniteQuery<Activity>(queryClient, iDKey, data.data);
+      AppendInfiniteQuery<Activity>(queryClient, slugKey, data.data);
     }
 
     if (!nested) {
@@ -236,6 +166,10 @@ export const CreateActivity = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Activities
+ */
 export const useCreateActivity = (
   options: Omit<
     MutationOptions<

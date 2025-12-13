@@ -6,11 +6,19 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface DeleteChannelContentParams extends MutationParams {
   channelId: string;
   contentId: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const DeleteChannelContent = async ({
   channelId,
   contentId,
@@ -24,6 +32,10 @@ export const DeleteChannelContent = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useDeleteChannelContent = (
   options: Omit<
     MutationOptions<

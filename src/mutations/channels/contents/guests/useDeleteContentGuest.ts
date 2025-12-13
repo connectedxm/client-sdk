@@ -8,12 +8,20 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries";
 import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
 
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface DeleteContentGuestParams extends MutationParams {
   channelId: string;
   contentId: string;
   guestId: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const DeleteContentGuest = async ({
   channelId,
   contentId,
@@ -38,6 +46,10 @@ export const DeleteContentGuest = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useDeleteContentGuest = (
   options: Omit<
     MutationOptions<

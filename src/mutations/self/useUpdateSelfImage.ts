@@ -6,10 +6,18 @@ import useConnectedMutation, {
 import { SELF_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Self
+ */
 export interface UpdateSelfImageParams extends MutationParams {
   base64: string;
 }
 
+/**
+ * @category Methods
+ * @group Self
+ */
 export const UpdateSelfImage = async ({
   base64,
   clientApiParams,
@@ -30,6 +38,10 @@ export const UpdateSelfImage = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Self
+ */
 export const useUpdateSelfImage = (
   options: Omit<
     MutationOptions<

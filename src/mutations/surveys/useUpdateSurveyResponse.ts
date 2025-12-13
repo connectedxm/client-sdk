@@ -5,6 +5,10 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Surveys
+ */
 export interface UpdateSurveyResponseParams extends MutationParams {
   surveyId: string;
   submissionId: string;
@@ -12,6 +16,10 @@ export interface UpdateSurveyResponseParams extends MutationParams {
   response: string;
 }
 
+/**
+ * @category Methods
+ * @group Surveys
+ */
 export const UpdateSurveyResponse = async ({
   surveyId,
   submissionId,
@@ -28,6 +36,10 @@ export const UpdateSurveyResponse = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Surveys
+ */
 export const useUpdateSurveyResponse = (
   options: Omit<
     MutationOptions<

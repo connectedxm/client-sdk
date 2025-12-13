@@ -7,10 +7,18 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { LOGIN_QUERY_KEY } from "@src/queries";
 import { SELF_LOGINS_QUERY_KEY } from "@src/queries/self";
 
+/**
+ * @category Params
+ * @group Logins
+ */
 export interface RemoveLoginParams extends MutationParams {
   username: string;
 }
 
+/**
+ * @category Methods
+ * @group Logins
+ */
 export const RemoveLogin = async ({
   username,
   clientApiParams,
@@ -31,6 +39,10 @@ export const RemoveLogin = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Logins
+ */
 export const useRemoveLogin = (
   options: Omit<
     MutationOptions<

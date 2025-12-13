@@ -4,30 +4,38 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { FileUploadInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Storage
+ */
 export interface UploadFileParams extends MutationParams {
-  dataUri: string;
-  name?: string;
+  file: FileUploadInputs;
 }
 
+/**
+ * @category Methods
+ * @group Storage
+ */
 export const UploadFile = async ({
+  file,
   clientApiParams,
-  dataUri,
-  name,
 }: UploadFileParams): Promise<ConnectedXMResponse<File>> => {
   const clientApi = await GetClientAPI(clientApiParams);
 
   const { data } = await clientApi.post<ConnectedXMResponse<File>>(
     `/storage/files`,
-    {
-      dataUri,
-      name,
-    }
+    file
   );
 
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Storage
+ */
 export const useUploadFile = (
   options: Omit<
     MutationOptions<

@@ -5,12 +5,21 @@ import useConnectedMutation, {
 
 import type { ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { MeetingJoinViaGroupInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Meetings
+ */
 export interface JoinMeetingViaGroupParams extends MutationParams {
   meetingId: string;
   groupId: string;
 }
 
+/**
+ * @category Methods
+ * @group Meetings
+ */
 export const JoinMeetingViaGroup = async ({
   meetingId,
   groupId,
@@ -23,6 +32,10 @@ export const JoinMeetingViaGroup = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Meetings
+ */
 export const useJoinMeetingViaGroup = (
   options: Omit<
     MutationOptions<

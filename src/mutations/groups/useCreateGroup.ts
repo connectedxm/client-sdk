@@ -1,4 +1,4 @@
-import { Group, GroupAccess, ConnectedXMResponse } from "@src/interfaces";
+import { Group, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -10,20 +10,21 @@ import {
   SET_GROUP_QUERY_DATA,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { GroupCreateInputs } from "@src/params";
 
-interface CreateGroupData {
-  name: string;
-  description: string;
-  access: keyof typeof GroupAccess;
-  active: boolean;
-  externalUrl?: string;
-}
-
+/**
+ * @category Params
+ * @group Groups
+ */
 export interface CreateGroupParams extends MutationParams {
-  group: CreateGroupData;
+  group: GroupCreateInputs;
   imageDataUri?: string;
 }
 
+/**
+ * @category Methods
+ * @group Groups
+ */
 export const CreateGroup = async ({
   group,
   imageDataUri,
@@ -53,6 +54,10 @@ export const CreateGroup = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Groups
+ */
 export const useCreateGroup = (
   options: Omit<
     MutationOptions<

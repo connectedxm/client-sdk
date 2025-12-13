@@ -7,12 +7,20 @@ import useConnectedMutation, {
 import { GROUPS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Groups
+ */
 export interface DeactivateGroupParams extends MutationParams {
   groupId: string;
   group: Group;
   imageDataUri?: string;
 }
 
+/**
+ * @category Methods
+ * @group Groups
+ */
 export const DeactivateGroup = async ({
   groupId,
   group,
@@ -38,6 +46,10 @@ export const DeactivateGroup = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Groups
+ */
 export const useDeactivateGroup = (
   options: Omit<
     MutationOptions<

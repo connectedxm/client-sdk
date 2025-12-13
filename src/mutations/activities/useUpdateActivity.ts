@@ -5,20 +5,21 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ActivityEntityInput } from "./useCreateActivity";
+import { ActivityUpdateInputs } from "@src/params";
 
-interface UpdateActivityInput {
-  message?: string;
-  entities?: ActivityEntityInput[];
-  imageId?: string;
-  videoId?: string;
-}
-
+/**
+ * @category Params
+ * @group Activities
+ */
 export interface UpdateActivityParams extends MutationParams {
   activityId: string;
-  activity: UpdateActivityInput;
+  activity: ActivityUpdateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Activities
+ */
 export const UpdateActivity = async ({
   activityId,
   activity,
@@ -41,6 +42,10 @@ export const UpdateActivity = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Activities
+ */
 export const useUpdateActivity = (
   options: Omit<
     MutationOptions<

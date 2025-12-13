@@ -1,5 +1,5 @@
 import React from "react";
-import { ConnectedXMClientContextState } from "../ConnectedProvider";
+import { ConnectedXMClientContextState } from "../ConnectedXMProvider";
 import { ReceivedWSMessage, SendWSMessage } from "./interfaces";
 import ChatNewMessage from "./chat/ChatNewMessage";
 import ThreadMessageCreated from "./threads/messages/ThreadMessageCreated";

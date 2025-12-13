@@ -9,18 +9,22 @@ import {
   CHANNEL_COLLECTIONS_QUERY_KEY,
   SET_CHANNEL_COLLECTION_QUERY_DATA,
 } from "@src/queries/channels";
+import { ChannelCollectionUpdateInputs } from "@src/params";
 
-export interface UpdateChannelCollectionPayload {
-  name?: string;
-  description?: string;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface UpdateChannelCollectionParams extends MutationParams {
   channelId: string;
-  collection: UpdateChannelCollectionPayload;
+  collection: ChannelCollectionUpdateInputs;
   collectionId: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const UpdateChannelCollection = async ({
   channelId,
   collection,
@@ -51,6 +55,10 @@ export const UpdateChannelCollection = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useUpdateChannelCollection = (
   options: Omit<
     MutationOptions<

@@ -6,12 +6,20 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import { SURVEY_SUBMISSION_QUERY_KEY } from "@src/queries";
 
+/**
+ * @category Params
+ * @group Surveys
+ */
 export interface SubmitSurveyParams extends MutationParams {
   surveyId: string;
   submissionId: string;
   responses: { questionId: string; value: string }[];
 }
 
+/**
+ * @category Methods
+ * @group Surveys
+ */
 export const SubmitSurvey = async ({
   surveyId,
   submissionId,
@@ -34,6 +42,10 @@ export const SubmitSurvey = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Surveys
+ */
 export const useSubmitSurvey = (
   options: Omit<
     MutationOptions<

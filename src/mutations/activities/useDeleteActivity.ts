@@ -6,10 +6,18 @@ import useConnectedMutation, {
 import { ACTIVITIES_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Activities
+ */
 export interface DeleteActivityParams extends MutationParams {
   activityId: string;
 }
 
+/**
+ * @category Methods
+ * @group Activities
+ */
 export const DeleteActivity = async ({
   activityId,
   clientApiParams,
@@ -27,6 +35,10 @@ export const DeleteActivity = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Activities
+ */
 export const useDeleteActivity = (
   options: Omit<
     MutationOptions<

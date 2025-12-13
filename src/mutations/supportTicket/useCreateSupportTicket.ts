@@ -1,45 +1,49 @@
 import {
   ConnectedXMResponse,
   SupportTicket,
-  SupportTicketType,
 } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SupportTicketCreateInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group SupportTicket
+ */
 export interface CreateSupportTicketParams extends MutationParams {
-  type: keyof typeof SupportTicketType;
-  email: string;
-  request: string;
-  eventId?: string;
-  productId?: string;
+  ticket: SupportTicketCreateInputs;
 }
 
+/**
+ * @category Methods
+ * @group SupportTicket
+ */
 export const CreateSupportTicket = async ({
-  type,
-  email,
-  request,
-  eventId,
-  productId,
+  ticket,
   clientApiParams,
 }: CreateSupportTicketParams): Promise<ConnectedXMResponse<SupportTicket>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<SupportTicket>>(
     "/supportTickets",
     {
-      type,
-      email,
-      request,
-      eventId: eventId || undefined,
-      productId: productId || undefined,
+      type: ticket.type,
+      email: ticket.email,
+      request: ticket.request,
+      eventId: ticket.eventId || undefined,
+      productId: ticket.productId || undefined,
     }
   );
 
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group SupportTicket
+ */
 export const useCreateSupportTicket = (
   options: Omit<
     MutationOptions<

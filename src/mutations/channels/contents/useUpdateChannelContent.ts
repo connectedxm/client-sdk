@@ -10,31 +10,23 @@ import {
   SET_CHANNEL_CONTENT_QUERY_DATA,
 } from "@src/queries";
 import { CONTENTS_QUERY_KEY } from "@src/queries/contents";
+import { ChannelContentUpdateInputs } from "@src/params";
 
-export interface UpdateChannelContentPayload {
-  title?: string;
-  description?: string | null;
-  duration?: string | null;
-  body?: string | null;
-  externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
-  googleUrl?: string | null;
-  youtubeUrl?: string | null;
-  videoId?: string | null;
-  audioId?: number | null;
-  slug?: string;
-  email?: boolean;
-  push?: boolean;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface UpdateChannelContentParams extends MutationParams {
   channelId: string;
   contentId: string;
-  content: UpdateChannelContentPayload;
+  content: ChannelContentUpdateInputs;
   imageDataUri?: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const UpdateChannelContent = async ({
   channelId,
   contentId,
@@ -67,6 +59,10 @@ export const UpdateChannelContent = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useUpdateChannelContent = (
   options: Omit<
     MutationOptions<

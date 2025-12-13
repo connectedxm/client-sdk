@@ -1,2 +1,2 @@
-export * from "./useCreateChannelInterest";
-export * from "./useDeleteChannelInterest";
+export * from "./useAddChannelInterest";
+export * from "./useRemoveChannelInterest";

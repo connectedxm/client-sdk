@@ -6,10 +6,18 @@ import { Account, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ACCOUNTS_QUERY_KEY, SET_ACCOUNT_QUERY_DATA } from "@src/queries";
 
+/**
+ * @category Params
+ * @group Accounts
+ */
 export interface UnblockAccountParams extends MutationParams {
   accountId: string;
 }
 
+/**
+ * @category Methods
+ * @group Accounts
+ */
 export const UnblockAccount = async ({
   accountId,
   queryClient,
@@ -33,6 +41,10 @@ export const UnblockAccount = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Accounts
+ */
 export const useUnblockAccount = (
   options: Omit<
     MutationOptions<

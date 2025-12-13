@@ -13,10 +13,18 @@ import {
 import { GetClientAPI } from "@src/ClientAPI";
 import { REMOVE_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
+/**
+ * @category Params
+ * @group Groups
+ */
 export interface LeaveGroupParams extends MutationParams {
   groupId: string;
 }
 
+/**
+ * @category Methods
+ * @group Groups
+ */
 export const LeaveGroup = async ({
   groupId,
   clientApiParams,
@@ -51,6 +59,10 @@ export const LeaveGroup = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Groups
+ */
 export const useLeaveGroup = (
   options: Omit<
     MutationOptions<

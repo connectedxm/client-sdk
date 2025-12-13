@@ -4,18 +4,20 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
+import { ImageCreateInputs } from "@src/params";
 
-interface ImageCreateParams {
-  type: "activity" | "thread" | "content";
-  dataUri: string;
-  name?: string;
-  description?: string;
-}
-
+/**
+ * @category Params
+ * @group Storage
+ */
 export interface UploadImageParams extends MutationParams {
-  image: ImageCreateParams;
+  image: ImageCreateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Storage
+ */
 export const UploadImage = async ({
   image,
   clientApiParams,
@@ -30,6 +32,10 @@ export const UploadImage = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Storage
+ */
 export const useUploadImage = (
   options: Omit<
     MutationOptions<

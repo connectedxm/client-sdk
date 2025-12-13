@@ -4,8 +4,16 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 
+/**
+ * @category Params
+ * @group Self
+ */
 export interface DeleteSelfParams extends MutationParams {}
 
+/**
+ * @category Methods
+ * @group Self
+ */
 export const DeleteSelf = async ({
   clientApiParams,
   queryClient,
@@ -19,6 +27,10 @@ export const DeleteSelf = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Self
+ */
 export const useDeleteSelf = (
   options: Omit<
     MutationOptions<

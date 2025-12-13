@@ -6,12 +6,20 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface RemoveContentInterestParams extends MutationParams {
   channelId: string;
   contentId: string;
   interestId: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const RemoveContentInterest = async ({
   channelId,
   contentId,
@@ -26,6 +34,10 @@ export const RemoveContentInterest = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useRemoveContentInterest = (
   options: Omit<
     MutationOptions<

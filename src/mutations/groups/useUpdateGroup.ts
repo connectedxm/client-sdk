@@ -6,19 +6,22 @@ import useConnectedMutation, {
 
 import { GROUPS_QUERY_KEY, SET_GROUP_QUERY_DATA } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { GroupUpdateInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Groups
+ */
 export interface UpdateGroupParams extends MutationParams {
   groupId: string;
-  group: {
-    name?: string;
-    active?: boolean;
-    description?: string;
-    externalUrl?: string;
-    access?: "public" | "private";
-  };
+  group: GroupUpdateInputs;
   imageDataUri?: string;
 }
 
+/**
+ * @category Methods
+ * @group Groups
+ */
 export const UpdateGroup = async ({
   groupId,
   group,
@@ -45,6 +48,10 @@ export const UpdateGroup = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Groups
+ */
 export const useUpdateGroup = (
   options: Omit<
     MutationOptions<

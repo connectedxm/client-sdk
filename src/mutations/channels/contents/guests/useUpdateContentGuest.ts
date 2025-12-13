@@ -11,34 +11,24 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries";
 import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
+import { ContentGuestUpdateInputs } from "@src/params";
 
-export interface UpdateContentGuestPayload {
-  accountId?: string | null;
-  type: ContentGuestType;
-  name: string;
-  title: string | null;
-  bio: string | null;
-  company: string | null;
-  companyLink: string | null;
-  companyBio: string | null;
-  website: string | null;
-  facebook: string | null;
-  twitter: string | null;
-  instagram: string | null;
-  linkedIn: string | null;
-  tikTok: string | null;
-  youtube: string | null;
-  discord: string | null;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface UpdateContentGuestParams extends MutationParams {
   channelId: string;
   contentId: string;
-  guest: UpdateContentGuestPayload;
+  guest: ContentGuestUpdateInputs & { type: ContentGuestType };
   guestId: string;
   imageDataUri?: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const UpdateContentGuest = async ({
   channelId,
   contentId,
@@ -66,6 +56,10 @@ export const UpdateContentGuest = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useUpdateContentGuest = (
   options: Omit<
     MutationOptions<

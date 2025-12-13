@@ -6,32 +6,26 @@ import useConnectedMutation, {
 import {
   ConnectedXMResponse,
   NotificationPreferences,
-  OrganizationActivityPreference,
 } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SelfNotificationPreferencesUpdateInputs } from "@src/params";
 
-export interface UpdateSelfNotificationPreferencesParams
-  extends MutationParams {
-  newFollowerPush?: boolean;
-  likePush?: boolean;
-  resharePush?: boolean;
-  commentPush?: boolean;
-  transferPush?: boolean;
-  transferEmail?: boolean;
-  supportTicketConfirmationEmail?: boolean;
-  chatPush?: boolean;
-  chatUnreadPush?: boolean;
-  chatUnreadEmail?: boolean;
-  activityNotificationPreference?: OrganizationActivityPreference;
-  organizationAnnouncementPush?: boolean;
-  organizationAnnouncementEmail?: boolean;
+/**
+ * @category Params
+ * @group Self
+ */
+export interface UpdateSelfNotificationPreferencesParams extends MutationParams {
+  preferences: SelfNotificationPreferencesUpdateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Self
+ */
 export const UpdateSelfNotificationPreferences = async ({
+  preferences,
   clientApiParams,
   queryClient,
-
-  ...params
 }: UpdateSelfNotificationPreferencesParams): Promise<
   ConnectedXMResponse<NotificationPreferences>
 > => {
@@ -40,7 +34,7 @@ export const UpdateSelfNotificationPreferences = async ({
       [...SELF_PREFERENCES_QUERY_KEY(), clientApiParams.locale],
       (oldData: any) => {
         if (oldData?.data) {
-          oldData.data = { ...oldData.data, ...params };
+          oldData.data = { ...oldData.data, ...preferences };
           return oldData;
         } else {
           return oldData;
@@ -52,11 +46,15 @@ export const UpdateSelfNotificationPreferences = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<
     ConnectedXMResponse<NotificationPreferences>
-  >(`/self/notificationPreferences`, params);
+  >(`/self/notificationPreferences`, preferences);
 
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Self
+ */
 export const useUpdateSelfNotificationPreferences = (
   options: Omit<
     MutationOptions<

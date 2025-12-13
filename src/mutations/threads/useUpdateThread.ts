@@ -7,25 +7,29 @@ import {
 import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
 import { Thread } from "@src/interfaces";
 import { SET_THREAD_QUERY_DATA } from "@src/queries/threads/useGetThread";
+import { ThreadUpdateInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Threads
+ */
 export interface UpdateThreadParams extends MutationParams {
   threadId: string;
-  subject?: string;
-  imageId?: string | null;
+  thread: ThreadUpdateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Threads
+ */
 export const UpdateThread = async ({
   threadId,
-  subject,
-  imageId,
+  thread,
   clientApiParams,
   queryClient,
 }: UpdateThreadParams): Promise<ConnectedXMResponse<Thread>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put(`/threads/${threadId}`, {
-    subject,
-    imageId,
-  });
+  const { data } = await clientApi.put(`/threads/${threadId}`, thread);
 
   if (queryClient && data.status === "ok") {
     SET_THREAD_QUERY_DATA(queryClient, [threadId], data, [
@@ -36,6 +40,10 @@ export const UpdateThread = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Threads
+ */
 export const useUpdateThread = (
   options: MutationOptions<
     Awaited<ReturnType<typeof UpdateThread>>,

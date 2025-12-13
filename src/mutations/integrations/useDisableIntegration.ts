@@ -11,10 +11,18 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { INTEGRATIONS_QUERY_KEY } from "@src/queries/integrations/useGetIntegrations";
 import { INTEGRATION_AUTH_QUERY_KEY } from "@src/queries";
 
+/**
+ * @category Params
+ * @group Integrations
+ */
 export interface DisableIntegrationParams extends MutationParams {
   type: keyof typeof IntegrationType;
 }
 
+/**
+ * @category Methods
+ * @group Integrations
+ */
 export const DisableIntegration = async ({
   type,
   clientApiParams,
@@ -37,6 +45,10 @@ export const DisableIntegration = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Integrations
+ */
 export const useDisableIntegration = (
   options: Omit<
     MutationOptions<

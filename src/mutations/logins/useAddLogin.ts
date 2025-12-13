@@ -5,19 +5,28 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SELF_LOGINS_QUERY_KEY, LOGIN_QUERY_KEY } from "@src/queries";
+import { AddLoginInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Logins
+ */
 export interface AddLoginParams extends MutationParams {
-  username: string;
+  login: AddLoginInputs;
 }
 
+/**
+ * @category Methods
+ * @group Logins
+ */
 export const AddLogin = async ({
-  username,
+  login,
   clientApiParams,
   queryClient,
 }: AddLoginParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
-    `/login/account/${username}`
+    `/login/account/${login.username}`
   );
 
   if (queryClient) {
@@ -30,6 +39,10 @@ export const AddLogin = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Logins
+ */
 export const useAddLogin = (
   options: Omit<
     MutationOptions<

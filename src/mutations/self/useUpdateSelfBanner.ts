@@ -5,13 +5,22 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { SELF_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
+import { SelfBannerUpdateInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Self
+ */
 export interface UpdateSelfBannerParams extends MutationParams {
-  base64: string;
+  banner: SelfBannerUpdateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Self
+ */
 export const UpdateSelfBanner = async ({
-  base64,
+  banner,
   clientApiParams,
   queryClient,
 }: UpdateSelfBannerParams): Promise<ConnectedXMResponse<Self>> => {
@@ -19,7 +28,7 @@ export const UpdateSelfBanner = async ({
   const { data } = await clientApi.put<ConnectedXMResponse<Self>>(
     `/self/banner`,
     {
-      buffer: base64,
+      buffer: banner.base64,
     }
   );
 
@@ -30,6 +39,10 @@ export const UpdateSelfBanner = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Self
+ */
 export const useUpdateSelfBanner = (
   options: Omit<
     MutationOptions<

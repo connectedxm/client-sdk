@@ -1,2 +1,2 @@
-export * from "./useGetVideo";
 export * from "./useGetImage";
+export * from "./useGetVideo";

@@ -5,10 +5,18 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 
+/**
+ * @category Params
+ * @group Surveys
+ */
 export interface StartSurveyParams extends MutationParams {
   surveyId: string;
 }
 
+/**
+ * @category Methods
+ * @group Surveys
+ */
 export const StartSurvey = async ({
   surveyId,
   clientApiParams,
@@ -21,6 +29,10 @@ export const StartSurvey = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Surveys
+ */
 export const useStartSurvey = (
   options: Omit<
     MutationOptions<

@@ -5,35 +5,20 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LOGIN_QUERY_KEY } from "@src/queries";
+import { LoginAccountCreateInputs } from "@src/params";
 
-export interface CreateLoginAccountAccount {
-  featured?: boolean;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  imageId?: string;
-  bannerId?: string;
-  username: string;
-  phone?: string;
-  internalRefId?: string;
-  bio?: string;
-  website?: string;
-  facebook?: string;
-  twitter?: string;
-  instagram?: string;
-  tikTok?: string;
-  linkedIn?: string;
-  youtube?: string;
-  discord?: string;
-  locale?: string;
-  termsAccepted?: Date;
-  attributes?: Record<string, string>;
-}
-
+/**
+ * @category Params
+ * @group Logins
+ */
 export interface CreateLoginAccountParams extends MutationParams {
-  account: CreateLoginAccountAccount;
+  account: LoginAccountCreateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Logins
+ */
 export const CreateLoginAccount = async ({
   clientApiParams,
   queryClient,
@@ -52,6 +37,10 @@ export const CreateLoginAccount = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Logins
+ */
 export const useCreateLoginAccount = (
   options: Omit<
     MutationOptions<

@@ -3,7 +3,8 @@ export * from "./interfaces";
 export * from "./utilities";
 export * from "./queries";
 export * from "./mutations";
+export * from "./params";
 
 export * from "./ClientAPI";
 
-export { ConnectedProvider } from "./ConnectedProvider";
+export { ConnectedXMProvider } from "./ConnectedXMProvider";

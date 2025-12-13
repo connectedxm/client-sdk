@@ -5,19 +5,21 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
+import { ChannelCreateInputs } from "@src/params";
 
-export interface CreateChannelPayload {
-  name: string;
-  description?: string;
-  visible: boolean;
-  groupId?: string;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface CreateChannelParams extends MutationParams {
-  channel: CreateChannelPayload;
+  channel: ChannelCreateInputs;
   imageDataUri?: any;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const CreateChannel = async ({
   channel,
   imageDataUri,
@@ -35,6 +37,10 @@ export const CreateChannel = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useCreateChannel = (
   options: Omit<
     MutationOptions<

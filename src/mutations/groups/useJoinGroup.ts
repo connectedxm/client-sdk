@@ -13,10 +13,18 @@ import {
 import { GetClientAPI } from "@src/ClientAPI";
 import { ADD_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 
+/**
+ * @category Params
+ * @group Groups
+ */
 export interface JoinGroupParams extends MutationParams {
   groupId: string;
 }
 
+/**
+ * @category Methods
+ * @group Groups
+ */
 export const JoinGroup = async ({
   groupId,
   clientApiParams,
@@ -52,6 +60,10 @@ export const JoinGroup = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Groups
+ */
 export const useJoinGroup = (
   options: Omit<
     MutationOptions<

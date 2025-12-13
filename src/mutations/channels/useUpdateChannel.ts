@@ -6,26 +6,22 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { SET_CHANNEL_QUERY_DATA } from "@src/queries";
+import { ChannelUpdateInputs } from "@src/params";
 
-export interface UpdateChannelPayload {
-  name?: string;
-  description?: string;
-  visible?: boolean;
-  slug?: string;
-  groupId?: string | null;
-  externalUrl?: string | null;
-  appleUrl?: string | null;
-  spotifyUrl?: string | null;
-  googleUrl?: string | null;
-  youtubeUrl?: string | null;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface UpdateChannelParams extends MutationParams {
   channelId: string;
-  channel: UpdateChannelPayload;
+  channel: ChannelUpdateInputs;
   imageDataUri?: any;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const UpdateChannel = async ({
   channelId,
   channel,
@@ -49,6 +45,10 @@ export const UpdateChannel = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useUpdateChannel = (
   options: Omit<
     MutationOptions<

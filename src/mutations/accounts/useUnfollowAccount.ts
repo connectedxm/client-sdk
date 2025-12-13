@@ -11,10 +11,18 @@ import { GetClientAPI } from "@src/ClientAPI";
 import { REMOVE_SELF_RELATIONSHIP } from "@src/queries/self/useGetSelfRelationships";
 import { produce } from "immer";
 
+/**
+ * @category Params
+ * @group Accounts
+ */
 export interface UnfollowAccountParams extends MutationParams {
   accountId: string;
 }
 
+/**
+ * @category Methods
+ * @group Accounts
+ */
 export const UnfollowAccount = async ({
   accountId,
   clientApiParams,
@@ -61,6 +69,10 @@ export const UnfollowAccount = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Accounts
+ */
 export const useUnfollowAccount = (
   options: Omit<
     MutationOptions<

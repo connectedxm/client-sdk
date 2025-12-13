@@ -1,7 +1,7 @@
 import {
   ConnectedXMClientContext,
   ConnectedXMClientContextState,
-} from "@src/ConnectedProvider";
+} from "@src/ConnectedXMProvider";
 import React from "react";
 
 export const useConnected = () => {

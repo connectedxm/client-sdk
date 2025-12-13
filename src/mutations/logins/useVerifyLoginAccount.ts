@@ -6,8 +6,16 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 import { LOGIN_QUERY_KEY } from "@src/queries";
 
+/**
+ * @category Params
+ * @group Logins
+ */
 export interface VerifyLoginAccountParams extends MutationParams {}
 
+/**
+ * @category Methods
+ * @group Logins
+ */
 export const VerifyLoginAccount = async ({
   clientApiParams,
   queryClient,
@@ -24,6 +32,10 @@ export const VerifyLoginAccount = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Logins
+ */
 export const useVerifyLoginAccount = (
   options: Omit<
     MutationOptions<

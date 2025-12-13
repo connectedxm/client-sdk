@@ -9,15 +9,21 @@ import {
   BOOKINGS_QUERY_KEY,
   INVOICE_QUERY_KEY,
 } from "@src/queries";
+import { PaymentIntentCaptureInputs } from "@src/params";
 
+/**
+ * @category Params
+ * @group Organization
+ */
 export interface CapturePaymentIntentParams extends MutationParams {
   intent: PaymentIntent;
-  paymentDetails?: {
-    nonce: string;
-    deviceData?: string;
-  };
+  paymentDetails: PaymentIntentCaptureInputs;
 }
 
+/**
+ * @category Methods
+ * @group Organization
+ */
 export const CapturePaymentIntent = async ({
   intent,
   paymentDetails,
@@ -80,6 +86,10 @@ export const CapturePaymentIntent = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Organization
+ */
 export const useCapturePaymentIntent = (
   options: Omit<
     MutationOptions<

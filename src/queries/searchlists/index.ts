@@ -1,3 +1,3 @@
 export * from "./useGetSearchList";
-export * from "./useGetSearchLists";
 export * from "./useGetSearchListValues";
+export * from "./useGetSearchLists";

@@ -10,11 +10,19 @@ import {
   CHANNEL_COLLECTIONS_QUERY_KEY,
 } from "@src/queries/channels";
 
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface DeleteChannelCollectionParams extends MutationParams {
   channelId: string;
   collectionId: string;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const DeleteChannelCollection = async ({
   channelId,
   collectionId,
@@ -40,6 +48,10 @@ export const DeleteChannelCollection = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useDeleteChannelCollection = (
   options: Omit<
     MutationOptions<

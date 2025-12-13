@@ -1,5 +1,5 @@
 export * from "./useConnected";
-export * from "./useIsAccountFollowing";
 export * from "./useGroupStatus";
-export * from "./useIsEventRegistered";
+export * from "./useIsAccountFollowing";
 export * from "./useIsChannelSubscribed";
+export * from "./useIsEventRegistered";

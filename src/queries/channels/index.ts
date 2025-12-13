@@ -1,9 +1,9 @@
 export * from "./collections";
-export * from "./content";
-
+export * from "./contents";
+export * from "./interests";
+export * from "./subscribers";
 export * from "./useGetChannel";
-export * from "./useGetChannels";
 export * from "./useGetChannelSubscribers";
-export * from "./useGetSelfChannelSubscriber";
+export * from "./useGetChannelSubscription";
+export * from "./useGetChannels";
 export * from "./useGetSubscribedChannels";
-export * from "./useGetChannelInterests";

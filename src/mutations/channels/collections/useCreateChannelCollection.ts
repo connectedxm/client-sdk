@@ -6,17 +6,21 @@ import useConnectedMutation, {
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { CHANNEL_COLLECTIONS_QUERY_KEY } from "@src/queries/channels";
+import { ChannelCollectionCreateInputs } from "@src/params";
 
-export interface CreateChannelCollectionPayload {
-  name: string;
-  description?: string;
-}
-
+/**
+ * @category Params
+ * @group Channels
+ */
 export interface CreateChannelCollectionParams extends MutationParams {
   channelId: string;
-  collection: CreateChannelCollectionPayload;
+  collection: ChannelCollectionCreateInputs;
 }
 
+/**
+ * @category Methods
+ * @group Channels
+ */
 export const CreateChannelCollection = async ({
   channelId,
   collection,
@@ -40,6 +44,10 @@ export const CreateChannelCollection = async ({
   return data;
 };
 
+/**
+ * @category Mutations
+ * @group Channels
+ */
 export const useCreateChannelCollection = (
   options: Omit<
     MutationOptions<
