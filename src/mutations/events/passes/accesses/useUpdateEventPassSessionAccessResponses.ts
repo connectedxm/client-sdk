@@ -7,7 +7,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import {
   EVENT_PASS_ACCESS_QUERY_KEY,
   EVENT_PASS_ACCESS_QUESTIONS_QUERY_KEY,
-} from "@src/queries/events/passes/accesses";
+} from "@src/queries/events/passes/access";
 
 /**
  * @category Params
@@ -53,11 +53,7 @@ export const UpdateEventSessionAccessResponses = async ({
       ),
     });
     queryClient.invalidateQueries({
-      queryKey: EVENT_PASS_ACCESS_QUERY_KEY(
-        eventId,
-        passId,
-        sessionId
-      ),
+      queryKey: EVENT_PASS_ACCESS_QUERY_KEY(eventId, passId, sessionId),
     });
   }
 

@@ -1,19 +1,19 @@
 import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../../useConnectedSingleQuery";
-import { SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY } from "./useGetSelfEventSessionRegistration";
+} from "@src/queries/useConnectedSingleQuery";
+import { EVENT_SESSION_REGISTRATION_QUERY_KEY } from "./useGetEventSessionRegistration";
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
 
-export const SELF_EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY = (
+export const EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY = (
   eventId: string,
   sessionId: string,
   addressId?: string
 ) => {
   const key = [
-    ...SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY(eventId, sessionId),
+    ...EVENT_SESSION_REGISTRATION_QUERY_KEY(eventId, sessionId),
     "INTENT",
   ];
   if (addressId) {
@@ -22,19 +22,19 @@ export const SELF_EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY = (
   return key;
 };
 
-export interface GetSelfEventSessionRegistrationIntentProps
+export interface GetEventSessionRegistrationIntentProps
   extends SingleQueryParams {
   eventId: string;
   sessionId: string;
   addressId: string;
 }
 
-export const GetSelfEventSessionRegistrationIntent = async ({
+export const GetEventSessionRegistrationIntent = async ({
   eventId,
   sessionId,
   addressId,
   clientApiParams,
-}: GetSelfEventSessionRegistrationIntentProps): Promise<
+}: GetEventSessionRegistrationIntentProps): Promise<
   Awaited<ConnectedXMResponse<PaymentIntent>>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -49,22 +49,22 @@ export const GetSelfEventSessionRegistrationIntent = async ({
   return data;
 };
 
-export const useGetSelfEventSessionRegistrationIntent = (
+export const useGetEventSessionRegistrationIntent = (
   eventId: string = "",
   sessionId: string = "",
   addressId: string = "",
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventSessionRegistrationIntent>
+    ReturnType<typeof GetEventSessionRegistrationIntent>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventSessionRegistrationIntent>
+    ReturnType<typeof GetEventSessionRegistrationIntent>
   >(
-    SELF_EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY(eventId, addressId),
+    EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY(eventId, sessionId, addressId),
     (params) =>
-      GetSelfEventSessionRegistrationIntent({
+      GetEventSessionRegistrationIntent({
         eventId,
         sessionId,
         addressId,

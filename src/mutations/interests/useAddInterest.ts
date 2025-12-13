@@ -3,7 +3,7 @@ import { Account, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
   MutationOptions,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { SELF_INTERESTS_QUERY_KEY } from "@src/queries";
 
 /**

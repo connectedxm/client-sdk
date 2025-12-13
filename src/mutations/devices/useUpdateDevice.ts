@@ -2,7 +2,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { ConnectedXMResponse, PushDevice } from "@src/interfaces";
 import {
   DEVICES_QUERY_KEY,

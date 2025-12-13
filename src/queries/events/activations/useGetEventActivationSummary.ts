@@ -2,7 +2,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import { EVENT_ACTIVATIONS_QUERY_KEY } from "./useGetEventActivations";
 import { QueryKey } from "@tanstack/react-query";

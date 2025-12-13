@@ -2,7 +2,7 @@ import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";

@@ -7,10 +7,10 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { EVENT_ATTENDEE_QUERY_KEY as SELF_EVENT_ATTENDEE_QUERY_KEY } from "../attendee/useGetEventAttendee";
 
-export const SELF_EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY = (
+export const EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY = (
   eventId: string,
   passId: string,
   search: string
@@ -22,34 +22,34 @@ export const SELF_EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY = (
   search,
 ];
 
-export const SET_TRANSFER_ACCOUNTS_QUERY_DATA = (
+export const SET_EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY>,
-  response: ReturnType<typeof GetSelfEventAttendeeTransferAccounts>,
+  keyParams: Parameters<typeof EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY>,
+  response: ReturnType<typeof GetEventAttendeeTransferAccounts>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY(...keyParams),
+      ...EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventAttendeeTransferAccountsProps
+export interface GetEventAttendeeTransferAccountsProps
   extends SingleQueryParams {
   eventId: string;
   passId: string;
   search: string;
 }
 
-export const GetSelfEventAttendeeTransferAccounts = async ({
+export const GetEventAttendeeTransferAccounts = async ({
   eventId,
   passId,
   search,
   clientApiParams,
-}: GetSelfEventAttendeeTransferAccountsProps): Promise<
+}: GetEventAttendeeTransferAccountsProps): Promise<
   ConnectedXMResponse<Account[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -65,22 +65,22 @@ export const GetSelfEventAttendeeTransferAccounts = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeTransferAccounts = (
+export const useGetEventAttendeeTransferAccounts = (
   eventId: string,
   passId: string,
   search: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventAttendeeTransferAccounts>
+    ReturnType<typeof GetEventAttendeeTransferAccounts>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventAttendeeTransferAccounts>
+    ReturnType<typeof GetEventAttendeeTransferAccounts>
   >(
-    SELF_EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY(eventId, passId, search),
+    EVENT_ATTENDEE_TRANSFER_ACCOUNTS_QUERY_KEY(eventId, passId, search),
     (params) =>
-      GetSelfEventAttendeeTransferAccounts({
+      GetEventAttendeeTransferAccounts({
         ...params,
         eventId,
         passId,

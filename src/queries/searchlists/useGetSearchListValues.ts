@@ -3,7 +3,7 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SEARCH_LIST_QUERY_KEY } from "./useGetSearchList";

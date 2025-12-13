@@ -6,28 +6,28 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../../useConnectedInfiniteQuery";
-import { SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY } from "./useGetEventAttendeeCoupon";
+} from "@src/queries/useConnectedInfiniteQuery";
+import { EVENT_ATTENDEE_COUPON_QUERY_KEY } from "./useGetEventAttendeeCoupon";
 
-export const SELF_EVENT_ATTENDEE_COUPON_PASSES_QUERY_KEY = (
+export const EVENT_ATTENDEE_COUPON_PASSES_QUERY_KEY = (
   eventId: string,
   couponId: string
 ): QueryKey => [
-  ...SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(eventId, couponId),
+  ...EVENT_ATTENDEE_COUPON_QUERY_KEY(eventId, couponId),
   "PASSES",
 ];
 
-export interface GetSelfEventAttendeeCouponPassesProps
+export interface GetEventAttendeeCouponPassesProps
   extends InfiniteQueryParams {
   eventId: string;
   couponId: string;
 }
 
-export const GetSelfEventAttendeeCouponPasses = async ({
+export const GetEventAttendeeCouponPasses = async ({
   eventId,
   couponId,
   clientApiParams,
-}: GetSelfEventAttendeeCouponPassesProps): Promise<
+}: GetEventAttendeeCouponPassesProps): Promise<
   ConnectedXMResponse<ManagedCouponPass[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -39,7 +39,7 @@ export const GetSelfEventAttendeeCouponPasses = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeCouponPasses = (
+export const useGetEventAttendeeCouponPasses = (
   eventId: string = "",
   couponId: string = "",
   params: Omit<
@@ -47,17 +47,17 @@ export const useGetSelfEventAttendeeCouponPasses = (
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeCouponPasses>>
+    Awaited<ReturnType<typeof GetEventAttendeeCouponPasses>>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeCouponPasses>>
+    Awaited<ReturnType<typeof GetEventAttendeeCouponPasses>>
   >(
-    SELF_EVENT_ATTENDEE_COUPON_PASSES_QUERY_KEY(eventId, couponId),
+    EVENT_ATTENDEE_COUPON_PASSES_QUERY_KEY(eventId, couponId),
     (params: InfiniteQueryParams) =>
-      GetSelfEventAttendeeCouponPasses({
+      GetEventAttendeeCouponPasses({
         eventId,
         couponId,
         ...params,

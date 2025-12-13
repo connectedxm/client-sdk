@@ -4,9 +4,9 @@ import {
   MutationOptions,
   MutationParams,
   useConnectedMutation,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { ThreadMessage } from "@src/interfaces";
-import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
+import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries";
 import { AppendInfiniteQuery } from "@src/utilities";
 import { ThreadMessageCreateInputs } from "@src/params";
 
@@ -30,7 +30,10 @@ export const CreateThreadMessage = async ({
   queryClient,
 }: CreateThreadMessageParams): Promise<ConnectedXMResponse<ThreadMessage>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post(`/threads/${threadId}/messages`, message);
+  const { data } = await clientApi.post(
+    `/threads/${threadId}/messages`,
+    message
+  );
 
   if (queryClient && data.status === "ok") {
     AppendInfiniteQuery<ThreadMessage>(

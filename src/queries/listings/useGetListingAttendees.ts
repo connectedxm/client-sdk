@@ -7,7 +7,7 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { LISTING_QUERY_KEY } from "./useGetListing";
 import { GetClientAPI } from "@src/ClientAPI";
 

@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SELF_EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY } from "@src/queries/events/registration/sessions";
+import { EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY } from "@src/queries/events/registration/sessions";
 
 /**
  * @category Params
@@ -40,7 +40,7 @@ export const UpdateEventSessionRegistrationPasses = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY(
+      queryKey: EVENT_SESSION_REGISTRATION_INTENT_QUERY_KEY(
         eventId,
         sessionId
       ),

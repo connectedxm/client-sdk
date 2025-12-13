@@ -2,7 +2,7 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { Channel } from "@interfaces";
 import { CHANNELS_QUERY_KEY } from "./useGetChannels";
 import { QueryClient, QueryKey } from "@tanstack/react-query";

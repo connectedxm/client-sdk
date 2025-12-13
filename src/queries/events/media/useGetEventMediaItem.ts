@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { EventMediaItem } from "@interfaces";
 import { EVENT_MEDIA_ITEMS_QUERY_KEY } from "./useGetEventMediaItems";

@@ -2,7 +2,7 @@ import { ACTIVITIES_QUERY_KEY, SET_ACTIVITY_QUERY_DATA } from "@src/queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { ActivityUpdateInputs } from "@src/params";

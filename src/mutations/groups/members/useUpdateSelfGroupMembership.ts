@@ -5,7 +5,7 @@ import {
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { SELF_GROUP_MEMBERSHIP_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SelfGroupMembershipUpdateInputs } from "@src/params";

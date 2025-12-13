@@ -4,8 +4,8 @@ import {
   MutationOptions,
   MutationParams,
   useConnectedMutation,
-} from "../../useConnectedMutation";
-import { THREAD_CIRCLE_ACCOUNTS_QUERY_KEY } from "@src/queries/threads/useGetThreadCircleAccounts";
+} from "@src/mutations/useConnectedMutation";
+import { THREAD_CIRCLE_ACCOUNTS_QUERY_KEY } from "@src/queries";
 
 /**
  * @category Params

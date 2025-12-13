@@ -1,7 +1,7 @@
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { Interest, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { InterestCreateInputs } from "@src/params";

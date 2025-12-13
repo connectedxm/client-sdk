@@ -2,7 +2,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { Interest, ConnectedXMResponse } from "@interfaces";
 import { INTERESTS_QUERY_KEY } from "./useGetInterests";

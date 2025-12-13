@@ -9,8 +9,7 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import type { ConnectedXMResponse, ThreadCircle } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-
-export const THREADS_QUERY_KEY = (): QueryKey => ["THREADS"];
+import { THREADS_QUERY_KEY } from "@src/queries";
 
 export const THREAD_CIRCLES_QUERY_KEY = (): QueryKey => [
   ...THREADS_QUERY_KEY(),

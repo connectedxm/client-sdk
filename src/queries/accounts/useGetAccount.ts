@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { Account, ConnectedXMResponse } from "@interfaces";
 import { ACCOUNTS_QUERY_KEY } from "./useGetAccounts";

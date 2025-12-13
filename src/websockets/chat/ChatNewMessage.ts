@@ -4,7 +4,7 @@ import type { QueryClient } from "@tanstack/react-query";
 
 import {
   GetBaseInfiniteQueryKeys,
-  SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY,
+  CHAT_CHANNEL_MESSAGES_QUERY_KEY,
 } from "@src/queries";
 import { AppendInfiniteQuery, MergeInfinitePages } from "@src/utilities";
 
@@ -23,7 +23,7 @@ const ChatNewMessage = (
   message: WSNewChatMessage
 ) => {
   const QueryKey = [
-    ...SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY(message.body.channelId.toString()),
+    ...CHAT_CHANNEL_MESSAGES_QUERY_KEY(message.body.channelId.toString()),
     ...GetBaseInfiniteQueryKeys(locale || "en"),
   ];
 

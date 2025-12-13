@@ -716,16 +716,8 @@ export interface ThreadUpdateInputs {
 // ============================================================================
 
 export interface PaymentIntentCaptureInputs {
-  intent: {
-    id: string;
-    eventId?: string;
-    invoiceId?: string;
-    bookingId?: string;
-  };
-  paymentDetails?: {
-    nonce: string;
-    deviceData?: string;
-  };
+  nonce?: string;
+  deviceData?: string;
 }
 
 // ============================================================================

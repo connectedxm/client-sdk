@@ -3,12 +3,12 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { ConnectedXMResponse, EventSponsorshipLevel } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
+import { EVENT_QUERY_KEY } from "@src/queries";
 
 export const EVENT_SPONSORSHIP_LEVELS_QUERY_KEY = (
   eventId: string

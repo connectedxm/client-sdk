@@ -5,7 +5,7 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const LEVEL_QUERY_KEY = (levelId: string): QueryKey => [

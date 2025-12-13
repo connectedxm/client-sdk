@@ -6,39 +6,38 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
-export const SELF_EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY = (
+export const EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY = (
   eventId: string,
   passTypeId: string = ""
 ): QueryKey => [...EVENT_QUERY_KEY(eventId), "PASS_TYPES", passTypeId];
 
-export const SET_SELF_EVENT_REGISTRATION_PASS_TYPES_QUERY_DATA = (
+export const SET_EVENT_REGISTRATION_PASS_TYPES_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationPassTypes>>,
+  keyParams: Parameters<typeof EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventRegistrationPassTypes>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY(...keyParams),
+      ...EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationPassTypesProps
-  extends SingleQueryParams {
+export interface GetEventRegistrationPassTypesProps extends SingleQueryParams {
   eventId: string;
   passTypeId?: string;
 }
 
-export const GetSelfEventRegistrationPassTypes = async ({
+export const GetEventRegistrationPassTypes = async ({
   eventId,
   passTypeId,
   clientApiParams,
-}: GetSelfEventRegistrationPassTypesProps): Promise<
+}: GetEventRegistrationPassTypesProps): Promise<
   ConnectedXMResponse<{ passTypes: PassType[]; packages: EventPackage[] }>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -50,19 +49,19 @@ export const GetSelfEventRegistrationPassTypes = async ({
   return data;
 };
 
-export const useGetSelfEventRegistrationPassTypes = (
+export const useGetEventRegistrationPassTypes = (
   eventId: string = "",
   passTypeId: string = "",
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationPassTypes>
+    ReturnType<typeof GetEventRegistrationPassTypes>
   > = {}
 ) => {
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationPassTypes>
+    ReturnType<typeof GetEventRegistrationPassTypes>
   >(
-    SELF_EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY(eventId, passTypeId),
+    EVENT_REGISTRATION_PASS_TYPES_QUERY_KEY(eventId, passTypeId),
     (params) =>
-      GetSelfEventRegistrationPassTypes({ eventId, passTypeId, ...params }),
+      GetEventRegistrationPassTypes({ eventId, passTypeId, ...params }),
     {
       ...options,
       enabled: !!eventId && (options?.enabled ?? true),

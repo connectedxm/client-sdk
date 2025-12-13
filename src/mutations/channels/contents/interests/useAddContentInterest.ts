@@ -2,7 +2,7 @@ import { ConnectedXMResponse, Interest } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { ContentInterestCreateInputs } from "@src/params";

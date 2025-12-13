@@ -5,7 +5,7 @@ import {
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { SERIES_QUERY_KEY } from "./useGetSeries";
 import { GetClientAPI } from "@src/ClientAPI";

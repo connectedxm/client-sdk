@@ -1,13 +1,15 @@
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
   ADD_SELF_RELATIONSHIP,
   BOOKINGS_QUERY_KEY,
   INVOICE_QUERY_KEY,
+  EVENT_REGISTRATION_QUERY_KEY,
+  EVENT_ATTENDEE_QUERY_KEY,
 } from "@src/queries";
 import { PaymentIntentCaptureInputs } from "@src/params";
 
@@ -34,8 +36,8 @@ export const CapturePaymentIntent = async ({
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/organization/intents/${intent.id}/capture`,
     {
-      nonce: paymentDetails?.nonce || undefined,
-      deviceData: paymentDetails?.deviceData || undefined,
+      nonce: paymentDetails.nonce || undefined,
+      deviceData: paymentDetails.deviceData || undefined,
     }
   );
 
@@ -46,12 +48,12 @@ export const CapturePaymentIntent = async ({
 
     if (intent.eventId) {
       queryClient.removeQueries({
-        queryKey: ["SELF", "REGISTRATION"],
+        queryKey: EVENT_REGISTRATION_QUERY_KEY(intent.eventId),
         exact: false,
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["SELF", "ATTENDEE"],
+        queryKey: EVENT_ATTENDEE_QUERY_KEY(intent.eventId),
         exact: false,
       });
 

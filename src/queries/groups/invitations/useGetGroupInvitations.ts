@@ -4,7 +4,7 @@ import {
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "../../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { GroupInvitation, GroupInvitationStatus } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GROUP_QUERY_KEY } from "../useGetGroup";

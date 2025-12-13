@@ -2,11 +2,13 @@ import { ConnectedXMResponse, EventActivation } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
   MutationOptions,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { EVENT_ACTIVATION_QUERY_KEY } from "@src/queries/events/useGetEventActivation";
-import { EVENT_ACTIVATION_SUMMARY_QUERY_KEY } from "@src/queries/events/useGetEventActivationSummary";
-import { EVENT_ACTIVATIONS_QUERY_KEY } from "@src/queries";
+import {
+  EVENT_ACTIVATION_QUERY_KEY,
+  EVENT_ACTIVATION_SUMMARY_QUERY_KEY,
+  EVENT_ACTIVATIONS_QUERY_KEY,
+} from "@src/queries";
 
 /**
  * @category Params

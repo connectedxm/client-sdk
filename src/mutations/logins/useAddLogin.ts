@@ -2,7 +2,7 @@ import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SELF_LOGINS_QUERY_KEY, LOGIN_QUERY_KEY } from "@src/queries";
 import { AddLoginInputs } from "@src/params";

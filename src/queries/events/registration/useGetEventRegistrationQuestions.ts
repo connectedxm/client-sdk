@@ -3,40 +3,39 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+import { EVENT_REGISTRATION_QUERY_KEY } from "./useGetEventRegistration";
 
-export const SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY = (
+export const EVENT_REGISTRATION_QUESTIONS_QUERY_KEY = (
   eventId: string
-): QueryKey => [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), "QUESTIONS"];
+): QueryKey => [...EVENT_REGISTRATION_QUERY_KEY(eventId), "QUESTIONS"];
 
-export const SET_SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_DATA = (
+export const SET_EVENT_REGISTRATION_QUESTIONS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationQuestions>>,
+  keyParams: Parameters<typeof EVENT_REGISTRATION_QUESTIONS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventRegistrationQuestions>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(...keyParams),
+      ...EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationQuestionsProps
-  extends SingleQueryParams {
+export interface GetEventRegistrationQuestionsProps extends SingleQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventRegistrationQuestions = async ({
+export const GetEventRegistrationQuestions = async ({
   eventId,
   clientApiParams,
-}: GetSelfEventRegistrationQuestionsProps): Promise<
+}: GetEventRegistrationQuestionsProps): Promise<
   ConnectedXMResponse<
     {
       passId: string;
@@ -53,20 +52,20 @@ export const GetSelfEventRegistrationQuestions = async ({
   return data;
 };
 
-export const useGetSelfEventRegistrationQuestions = (
+export const useGetEventRegistrationQuestions = (
   eventId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationQuestions>
+    ReturnType<typeof GetEventRegistrationQuestions>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationQuestions>
+    ReturnType<typeof GetEventRegistrationQuestions>
   >(
-    SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(eventId),
+    EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(eventId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationQuestions({
+      GetEventRegistrationQuestions({
         eventId,
         ...params,
       }),

@@ -2,7 +2,7 @@ import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY } from "@src/queries/listings/useGetListingAttendeePassSectionQuestions";
 import {

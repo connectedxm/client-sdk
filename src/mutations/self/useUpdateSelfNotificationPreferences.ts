@@ -2,7 +2,7 @@ import { SELF_PREFERENCES_QUERY_KEY } from "@src/queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import {
   ConnectedXMResponse,
   NotificationPreferences,

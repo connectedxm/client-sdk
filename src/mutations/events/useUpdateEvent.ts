@@ -2,7 +2,7 @@ import { ConnectedXMResponse, EventListing } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import {
   EVENTS_QUERY_KEY,
   EVENT_QUERY_KEY,

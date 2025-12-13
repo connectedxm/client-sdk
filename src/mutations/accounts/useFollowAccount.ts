@@ -1,7 +1,7 @@
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import {
   ACCOUNT_FOLLOW_STATS_QUERY_KEY,
   ACCOUNT_FOLLOWERS_QUERY_KEY,

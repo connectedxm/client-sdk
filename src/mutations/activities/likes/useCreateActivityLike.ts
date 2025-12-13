@@ -2,7 +2,7 @@ import { Activity, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationParams,
   MutationOptions,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import {
   UpdateLikesInfinite,
   UpdateLikesSingle,

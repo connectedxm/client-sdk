@@ -3,10 +3,9 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { Thread } from "@interfaces";
-import { THREADS_QUERY_KEY } from "./useGetThreadCircles";
 import {
   QueryClient,
   SetDataOptions,
@@ -15,6 +14,7 @@ import {
 } from "@tanstack/react-query";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
+import { THREADS_QUERY_KEY } from "@src/queries";
 
 export const THREAD_QUERY_KEY = (
   threadId: string,

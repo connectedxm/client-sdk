@@ -1,7 +1,6 @@
 export * from "./collections";
 export * from "./contents";
 export * from "./interests";
-export * from "./subscribers";
 export * from "./useGetChannel";
 export * from "./useGetChannelSubscribers";
 export * from "./useGetChannelSubscription";

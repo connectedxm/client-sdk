@@ -6,21 +6,21 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { EVENT_ATTENDEE_QUERY_KEY as SELF_EVENT_ATTENDEE_QUERY_KEY } from "../attendee/useGetEventAttendee";
 
-export const SELF_EVENT_ATTENDEE_COUPONS_QUERY_KEY = (
+export const EVENT_ATTENDEE_COUPONS_QUERY_KEY = (
   eventId: string
 ): QueryKey => [...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId), "COUPONS"];
 
-export interface GetSelfEventAttendeeCouponsProps extends InfiniteQueryParams {
+export interface GetEventAttendeeCouponsProps extends InfiniteQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventAttendeeCoupons = async ({
+export const GetEventAttendeeCoupons = async ({
   eventId,
   clientApiParams,
-}: GetSelfEventAttendeeCouponsProps): Promise<
+}: GetEventAttendeeCouponsProps): Promise<
   ConnectedXMResponse<ManagedCoupon[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -32,24 +32,24 @@ export const GetSelfEventAttendeeCoupons = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeCoupons = (
+export const useGetEventAttendeeCoupons = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeCoupons>>
+    Awaited<ReturnType<typeof GetEventAttendeeCoupons>>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeCoupons>>
+    Awaited<ReturnType<typeof GetEventAttendeeCoupons>>
   >(
-    SELF_EVENT_ATTENDEE_COUPONS_QUERY_KEY(eventId),
+    EVENT_ATTENDEE_COUPONS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
-      GetSelfEventAttendeeCoupons({
+      GetEventAttendeeCoupons({
         eventId,
         ...params,
       }),

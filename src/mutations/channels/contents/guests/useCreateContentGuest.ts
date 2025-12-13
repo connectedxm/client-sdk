@@ -6,11 +6,13 @@ import {
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { CHANNEL_CONTENT_QUERY_KEY } from "@src/queries";
-import { CHANNEL_CONTENT_GUESTS_QUERY_KEY } from "@src/queries/channels/content/useGetChannelContentGuests";
+import {
+  CHANNEL_CONTENT_GUESTS_QUERY_KEY,
+  CHANNEL_CONTENT_QUERY_KEY,
+} from "@src/queries";
 import { ContentGuestCreateInputs } from "@src/params";
 
 /**

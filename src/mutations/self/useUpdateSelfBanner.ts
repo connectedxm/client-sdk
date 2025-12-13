@@ -2,7 +2,7 @@ import { ConnectedXMResponse, Self } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { SELF_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SelfBannerUpdateInputs } from "@src/params";

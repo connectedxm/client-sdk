@@ -2,7 +2,7 @@ import { ConnectedXMResponse, File } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { FileUploadInputs } from "@src/params";
 

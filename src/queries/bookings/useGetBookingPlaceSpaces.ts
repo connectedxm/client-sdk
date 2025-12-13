@@ -4,7 +4,7 @@ import {
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { BOOKING_PLACE_QUERY_KEY } from "./useGetBookingPlace";
 import { ConnectedXMResponse, BookingSpace } from "@interfaces";

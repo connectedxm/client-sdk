@@ -3,7 +3,7 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { QueryKey } from "@tanstack/react-query";
 import { SELF_EVENTS_QUERY_KEY } from "./useGetSelfEvents";
 import { GetClientAPI } from "@src/ClientAPI";

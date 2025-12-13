@@ -2,7 +2,7 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { QueryKey } from "@tanstack/react-query";
 import { GROUP_QUERY_KEY } from "../useGetGroup";
 import { ConnectedXMResponse, InvitableAccount } from "@interfaces";

@@ -2,7 +2,7 @@ import { Group, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
 import {
   ADD_SELF_RELATIONSHIP,

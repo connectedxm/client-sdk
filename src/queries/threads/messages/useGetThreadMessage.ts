@@ -6,7 +6,7 @@ import {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   useConnectedSingleQuery,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { THREAD_MESSAGES_QUERY_KEY } from "./useGetThreadMessages";
 
 export const THREAD_MESSAGE_QUERY_KEY = (

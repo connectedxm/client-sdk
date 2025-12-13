@@ -7,7 +7,7 @@ import {
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import {
   GROUP_EVENTS_QUERY_KEY,
   EVENT_QUERY_KEY,

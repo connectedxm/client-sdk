@@ -2,7 +2,7 @@ import { Group, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
 import { GROUPS_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";

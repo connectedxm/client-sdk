@@ -5,7 +5,7 @@ import {
   GetBaseInfiniteQueryKeys,
   useConnectedInfiniteQuery,
   setFirstPageData,
-} from "../../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { EVENT_SPEAKER_QUERY_KEY } from "./useGetEventSpeaker";
 import { GetClientAPI } from "@src/ClientAPI";
 import { QueryClient, QueryKey } from "@tanstack/react-query";

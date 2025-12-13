@@ -2,7 +2,7 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, PushDevice } from "@interfaces";
 import { SELF_QUERY_KEY } from "../self/useGetSelf";

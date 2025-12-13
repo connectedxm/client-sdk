@@ -3,7 +3,7 @@ import {
   MutationOptions,
   MutationParams,
   useConnectedMutation,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { LEAD_QUERY_KEY } from "@src/queries";
 import { LeadCreateInputs } from "@src/params";

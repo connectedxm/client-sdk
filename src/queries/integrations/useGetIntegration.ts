@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { Integration } from "@interfaces";
 import { INTEGRATIONS_QUERY_KEY } from "./useGetIntegrations";

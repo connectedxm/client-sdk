@@ -2,9 +2,9 @@ import { ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY } from "@src/queries";
+import { EVENT_REGISTRATION_INTENT_QUERY_KEY } from "@src/queries/events/registration";
 
 /**
  * @category Params
@@ -40,7 +40,7 @@ export const UpdateSelfEventRegistrationPassResponse = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
+      queryKey: EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
       exact: false,
     });
   }

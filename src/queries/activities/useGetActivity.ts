@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import { ACTIVITIES_QUERY_KEY } from "./useGetActivities";
 import { QueryClient, QueryKey } from "@tanstack/react-query";

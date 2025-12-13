@@ -3,40 +3,39 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+import { EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
-export const SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY = (
+export const EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY = (
   eventId: string
-): QueryKey => [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), "ROOM_TYPES"];
+): QueryKey => [...EVENT_REGISTRATION_QUERY_KEY(eventId), "ROOM_TYPES"];
 
-export const SET_SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_DATA = (
+export const SET_EVENT_REGISTRATION_ROOM_TYPES_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationRoomTypes>>,
+  keyParams: Parameters<typeof EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventRegistrationRoomTypes>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY(...keyParams),
+      ...EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationRoomTypesProps
-  extends SingleQueryParams {
+export interface GetEventRegistrationRoomTypesProps extends SingleQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventRegistrationRoomTypes = async ({
+export const GetEventRegistrationRoomTypes = async ({
   eventId,
   clientApiParams,
-}: GetSelfEventRegistrationRoomTypesProps): Promise<
+}: GetEventRegistrationRoomTypesProps): Promise<
   ConnectedXMResponse<EventRoomType[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -48,20 +47,20 @@ export const GetSelfEventRegistrationRoomTypes = async ({
   return data;
 };
 
-export const useGetSelfEventRegistrationRoomTypes = (
+export const useGetEventRegistrationRoomTypes = (
   eventId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationRoomTypes>
+    ReturnType<typeof GetEventRegistrationRoomTypes>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationRoomTypes>
+    ReturnType<typeof GetEventRegistrationRoomTypes>
   >(
-    SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY(eventId),
+    EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY(eventId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationRoomTypes({
+      GetEventRegistrationRoomTypes({
         eventId,
         ...params,
       }),

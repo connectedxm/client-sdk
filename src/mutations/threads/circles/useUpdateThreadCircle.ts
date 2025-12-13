@@ -4,9 +4,9 @@ import {
   MutationOptions,
   MutationParams,
   useConnectedMutation,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { ThreadCircle } from "@src/interfaces";
-import { SET_THREAD_CIRCLE_QUERY_DATA } from "@src/queries/threads/useGetThreadCircle";
+import { SET_THREAD_CIRCLE_QUERY_DATA } from "@src/queries";
 import { ThreadCircleUpdateInputs } from "@src/params";
 
 /**

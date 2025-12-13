@@ -4,11 +4,8 @@ import { ConnectedXMResponse } from "./interfaces";
 import { MutationParams } from "./mutations";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import type UseWebSocket from "react-use-websocket";
-import {
-  ReceivedWSMessage,
-  SendWSMessage,
-  useConnectedWebsocket,
-} from "./websockets";
+import { ReceivedWSMessage, SendWSMessage } from "./websockets";
+import { useConnectedWebsocket } from "./websockets/useConnectedWebsocket";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;

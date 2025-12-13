@@ -5,10 +5,10 @@ import useConnectedMutation, {
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
 import {
-  SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY,
-  SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY,
-} from "@src/queries";
+  EVENT_REGISTRATION_INTENT_QUERY_KEY,
+  EVENT_REGISTRATION_QUESTIONS_QUERY_KEY,
+  EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY,
+} from "@src/queries/events/registration";
 import { EventRegistrationAddOnsUpdateInputs } from "@src/params";
 
 /**
@@ -40,13 +40,13 @@ export const UpdateSelfEventRegistrationPurchaseAddOn = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY(eventId),
+      queryKey: EVENT_REGISTRATION_ROOM_TYPES_QUERY_KEY(eventId),
     });
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(eventId),
+      queryKey: EVENT_REGISTRATION_QUESTIONS_QUERY_KEY(eventId),
     });
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
+      queryKey: EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
       exact: false,
     });
   }

@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { EventActivation } from "@interfaces";
 import { EVENT_ACTIVATIONS_QUERY_KEY } from "./useGetEventActivations";

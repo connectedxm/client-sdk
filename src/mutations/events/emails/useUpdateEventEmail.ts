@@ -6,7 +6,7 @@ import {
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SET_LISTING_EMAIL_QUERY_DATA } from "@src/queries/listings/useGetListingEmail";
 import { ListingEmailUpdateInputs } from "@src/params";

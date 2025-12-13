@@ -4,9 +4,9 @@ import {
   MutationOptions,
   MutationParams,
   useConnectedMutation,
-} from "../../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { ThreadMessageReaction } from "@src/interfaces";
-import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
+import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries";
 
 /**
  * @category Params

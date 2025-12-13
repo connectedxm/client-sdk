@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import type { BookingSpace, ConnectedXMResponse } from "@interfaces";
 import { BOOKING_PLACES_QUERY_KEY } from "./useGetBookingPlaces";

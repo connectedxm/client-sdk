@@ -1,7 +1,7 @@
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { Booking, ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { BOOKINGS_QUERY_KEY } from "@src/queries/bookings/useGetBookings";

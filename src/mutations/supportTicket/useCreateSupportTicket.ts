@@ -5,7 +5,7 @@ import {
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { SupportTicketCreateInputs } from "@src/params";
 

@@ -6,26 +6,26 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { EVENT_ATTENDEE_QUERY_KEY as SELF_EVENT_ATTENDEE_QUERY_KEY } from "../attendee/useGetEventAttendee";
 
-export const SELF_EVENT_ATTENDEE_TRANSFER_LOGS_QUERY_KEY = (
+export const EVENT_ATTENDEE_TRANSFER_LOGS_QUERY_KEY = (
   eventId: string
 ): QueryKey => [...SELF_EVENT_ATTENDEE_QUERY_KEY(eventId), "TRANSFERS"];
 
-export interface GetSelfEventAttendeeTransfersLogsProps
+export interface GetEventAttendeeTransfersLogsProps
   extends InfiniteQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventAttendeeTransfersLogs = async ({
+export const GetEventAttendeeTransfersLogs = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
   eventId,
   clientApiParams,
-}: GetSelfEventAttendeeTransfersLogsProps): Promise<
+}: GetEventAttendeeTransfersLogsProps): Promise<
   ConnectedXMResponse<TransferLog[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -44,24 +44,24 @@ export const GetSelfEventAttendeeTransfersLogs = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeTransfersLogs = (
+export const useGetEventAttendeeTransfersLogs = (
   eventId: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
+    Awaited<ReturnType<typeof GetEventAttendeeTransfersLogs>>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfEventAttendeeTransfersLogs>>
+    Awaited<ReturnType<typeof GetEventAttendeeTransfersLogs>>
   >(
-    SELF_EVENT_ATTENDEE_TRANSFER_LOGS_QUERY_KEY(eventId),
+    EVENT_ATTENDEE_TRANSFER_LOGS_QUERY_KEY(eventId),
     (params: InfiniteQueryParams) =>
-      GetSelfEventAttendeeTransfersLogs({
+      GetEventAttendeeTransfersLogs({
         ...params,
         eventId,
       }),

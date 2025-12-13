@@ -2,7 +2,7 @@ import { Announcement, ConnectedXMResponse } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { LISTING_ANNOUNCEMENTS_QUERY_KEY } from "@src/queries";

@@ -6,7 +6,7 @@ import {
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { INTEGRATIONS_QUERY_KEY } from "@src/queries/integrations/useGetIntegrations";
 import { INTEGRATION_AUTH_QUERY_KEY } from "@src/queries";

@@ -1,4 +1,4 @@
-export * from "./accesses";
+export * from "./access";
 export * from "./useGetEventPass";
 export * from "./useGetEventPassAddOns";
 export * from "./useGetEventPassAddOnsIntent";

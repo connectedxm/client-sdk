@@ -2,7 +2,7 @@ import { ConnectedXMResponse, Channel } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
 import { SET_CHANNEL_QUERY_DATA } from "@src/queries";

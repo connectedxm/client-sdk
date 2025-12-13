@@ -3,43 +3,43 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "./useGetSelfEventRegistration";
+import { EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
 interface PassTypeWithAddOns extends BasePassType {
   addOns: EventAddOn[];
 }
 
-export const SELF_EVENT_REGISTRATION_ADD_ONS_QUERY_KEY = (
+export const EVENT_REGISTRATION_ADD_ONS_QUERY_KEY = (
   eventId: string
-): QueryKey => [...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId), "ADD_ONS"];
+): QueryKey => [...EVENT_REGISTRATION_QUERY_KEY(eventId), "ADD_ONS"];
 
-export const SET_SELF_EVENT_REGISTRATION_ADD_ONS_QUERY_DATA = (
+export const SET_EVENT_REGISTRATION_ADD_ONS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_ADD_ONS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventRegistrationAddOns>>,
+  keyParams: Parameters<typeof EVENT_REGISTRATION_ADD_ONS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventRegistrationAddOns>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_ADD_ONS_QUERY_KEY(...keyParams),
+      ...EVENT_REGISTRATION_ADD_ONS_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventRegistrationAddOnsProps extends SingleQueryParams {
+export interface GetEventRegistrationAddOnsProps extends SingleQueryParams {
   eventId: string;
 }
 
-export const GetSelfEventRegistrationAddOns = async ({
+export const GetEventRegistrationAddOns = async ({
   eventId,
   clientApiParams,
-}: GetSelfEventRegistrationAddOnsProps): Promise<
+}: GetEventRegistrationAddOnsProps): Promise<
   ConnectedXMResponse<PassTypeWithAddOns[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -51,20 +51,18 @@ export const GetSelfEventRegistrationAddOns = async ({
   return data;
 };
 
-export const useGetSelfEventRegistrationAddOns = (
+export const useGetEventRegistrationAddOns = (
   eventId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventRegistrationAddOns>
+    ReturnType<typeof GetEventRegistrationAddOns>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
-  return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventRegistrationAddOns>
-  >(
-    SELF_EVENT_REGISTRATION_ADD_ONS_QUERY_KEY(eventId),
+  return useConnectedSingleQuery<ReturnType<typeof GetEventRegistrationAddOns>>(
+    EVENT_REGISTRATION_ADD_ONS_QUERY_KEY(eventId),
     (params: SingleQueryParams) =>
-      GetSelfEventRegistrationAddOns({
+      GetEventRegistrationAddOns({
         eventId,
         ...params,
       }),

@@ -2,7 +2,7 @@ import {
   InfiniteQueryOptions,
   InfiniteQueryParams,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "@src/queries/useConnectedInfiniteQuery";
 import { Activity, ConnectedXMResponse } from "@interfaces";
 import { QueryKey } from "@tanstack/react-query";
 import { INTEREST_QUERY_KEY } from "./useGetInterest";

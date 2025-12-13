@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "@src/mutations/useConnectedMutation";
-import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
+import { EVENT_REGISTRATION_QUERY_KEY } from "@src/queries/events/registration";
 
 /**
  * @category Params
@@ -33,7 +33,7 @@ export const RemoveSelfEventRegistrationCoupon = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+      queryKey: EVENT_REGISTRATION_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
       predicate: ({ queryKey }) => {

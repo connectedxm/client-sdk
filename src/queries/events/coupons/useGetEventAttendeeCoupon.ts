@@ -3,42 +3,42 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { SELF_EVENT_ATTENDEE_COUPONS_QUERY_KEY } from "./useGetEventAttendeeCoupons";
+import { EVENT_ATTENDEE_COUPONS_QUERY_KEY } from "./useGetEventAttendeeCoupons";
 
-export const SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY = (
+export const EVENT_ATTENDEE_COUPON_QUERY_KEY = (
   eventId: string,
   couponId: string
-): QueryKey => [SELF_EVENT_ATTENDEE_COUPONS_QUERY_KEY(eventId), couponId];
+): QueryKey => [EVENT_ATTENDEE_COUPONS_QUERY_KEY(eventId), couponId];
 
-export const SET_SELF_EVENT_REGISTRATION_COUPON_QUERY_DATA = (
+export const SET_EVENT_ATTENDEE_COUPON_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfEventAttendeeCoupon>>,
+  keyParams: Parameters<typeof EVENT_ATTENDEE_COUPON_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventAttendeeCoupon>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(...keyParams),
+      ...EVENT_ATTENDEE_COUPON_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventAttendeeCouponProps extends SingleQueryParams {
+export interface GetEventAttendeeCouponProps extends SingleQueryParams {
   eventId: string;
   couponId: string;
 }
 
-export const GetSelfEventAttendeeCoupon = async ({
+export const GetEventAttendeeCoupon = async ({
   eventId,
   couponId,
   clientApiParams,
-}: GetSelfEventAttendeeCouponProps): Promise<
+}: GetEventAttendeeCouponProps): Promise<
   ConnectedXMResponse<ManagedCoupon>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -50,19 +50,19 @@ export const GetSelfEventAttendeeCoupon = async ({
   return data;
 };
 
-export const useGetSelfEventAttendeeCoupon = (
+export const useGetEventAttendeeCoupon = (
   eventId: string = "",
   couponId: string = "",
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventAttendeeCoupon>
+    ReturnType<typeof GetEventAttendeeCoupon>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
-  return useConnectedSingleQuery<ReturnType<typeof GetSelfEventAttendeeCoupon>>(
-    SELF_EVENT_REGISTRATION_COUPON_QUERY_KEY(eventId, couponId),
+  return useConnectedSingleQuery<ReturnType<typeof GetEventAttendeeCoupon>>(
+    EVENT_ATTENDEE_COUPON_QUERY_KEY(eventId, couponId),
     (params: SingleQueryParams) =>
-      GetSelfEventAttendeeCoupon({
+      GetEventAttendeeCoupon({
         eventId,
         couponId,
         ...params,

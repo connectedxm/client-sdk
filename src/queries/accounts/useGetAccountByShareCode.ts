@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import { AccountShare } from "@interfaces";
 import { ACCOUNT_QUERY_KEY } from "./useGetAccount";

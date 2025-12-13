@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "@src/queries/useConnectedSingleQuery";
 
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { ConnectedXMResponse, ListingPass } from "@interfaces";

@@ -2,7 +2,7 @@ import { EVENT_SPEAKERS_QUERY_KEY, SET_LISTING_QUERY_DATA } from "@src/queries";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { ConnectedXMResponse, EventListing } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 

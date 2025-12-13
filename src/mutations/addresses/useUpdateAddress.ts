@@ -2,7 +2,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
-} from "../useConnectedMutation";
+} from "@src/mutations/useConnectedMutation";
 import { AccountAddress, ConnectedXMResponse } from "@src/interfaces";
 import { ADDRESS_QUERY_KEY, ADDRESSES_QUERY_KEY } from "@src/queries";
 import { AddressUpdateInputs } from "@src/params";
