@@ -4,13 +4,13 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_EVENT_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY } from "@src/queries/events/attendee/useGetEventAttendeePassQuestionSections";
 import {
-  SELF_EVENT_ATTENDEE_PASS_QUERY_KEY,
-  SELF_EVENT_ATTENDEE_QUERY_KEY,
-} from "@src/queries/events/attendee";
-import { SELF_EVENT_ATTENDEE_PASS_QUESTION_FOLLOWUPS_QUERY_KEY } from "@src/queries/events/attendee/useGetEventAttendeePassQuestionFollowups";
-import { SELF_EVENT_ATTENDEE_PASS_QUESTION_FOLLOWUP_QUERY_KEY } from "@src/queries/events/attendee/useGetEventAttendeePassQuestionFollowup";
+  EVENT_PASS_QUESTIONS_QUERY_KEY,
+  EVENT_PASS_QUERY_KEY,
+  EVENT_PASS_FOLLOWUPS_QUERY_KEY,
+  EVENT_PASS_FOLLOWUP_QUERY_KEY,
+} from "@src/queries/events/passes";
+import { EVENT_ATTENDEE_QUERY_KEY as SELF_EVENT_ATTENDEE_QUERY_KEY } from "@src/queries/events/attendee";
 
 /**
  * @category Params
@@ -51,7 +51,7 @@ export const UpdateEventPassFollowup = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_ATTENDEE_PASS_QUESTION_SECTIONS_QUERY_KEY(
+      queryKey: EVENT_PASS_QUESTIONS_QUERY_KEY(
         eventId,
         passId
       ),
@@ -60,16 +60,16 @@ export const UpdateEventPassFollowup = async ({
       queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_ATTENDEE_PASS_QUERY_KEY(eventId, passId),
+      queryKey: EVENT_PASS_QUERY_KEY(eventId, passId),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_ATTENDEE_PASS_QUESTION_FOLLOWUPS_QUERY_KEY(
+      queryKey: EVENT_PASS_FOLLOWUPS_QUERY_KEY(
         eventId,
         passId
       ),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_ATTENDEE_PASS_QUESTION_FOLLOWUP_QUERY_KEY(
+      queryKey: EVENT_PASS_FOLLOWUP_QUERY_KEY(
         eventId,
         passId,
         followupId

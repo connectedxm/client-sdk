@@ -5,9 +5,9 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import {
-  SELF_EVENT_ATTENDEE_ACCESS_QUERY_KEY,
-  SELF_EVENT_ATTENDEE_ACCESS_QUESTION_SECTIONS_QUERY_KEY,
-} from "@src/queries/events/attendee/sessions";
+  EVENT_PASS_ACCESS_QUERY_KEY,
+  EVENT_PASS_ACCESS_QUESTIONS_QUERY_KEY,
+} from "@src/queries/events/passes/accesses";
 
 /**
  * @category Params
@@ -46,14 +46,14 @@ export const UpdateEventSessionAccessResponses = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_ATTENDEE_ACCESS_QUESTION_SECTIONS_QUERY_KEY(
+      queryKey: EVENT_PASS_ACCESS_QUESTIONS_QUERY_KEY(
         eventId,
         passId,
         sessionId
       ),
     });
     queryClient.invalidateQueries({
-      queryKey: SELF_EVENT_ATTENDEE_ACCESS_QUERY_KEY(
+      queryKey: EVENT_PASS_ACCESS_QUERY_KEY(
         eventId,
         passId,
         sessionId
