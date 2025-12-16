@@ -1,6 +1,6 @@
 import { GetClientAPI } from "@src/ClientAPI";
 import { ConnectedXMResponse } from "@src/interfaces";
-import { SupportTicketMessage } from "@src/interfaces";
+import { SupportTicketActivityLog } from "@src/interfaces";
 import {
   InfiniteQueryParams,
   InfiniteQueryOptions,
@@ -15,31 +15,30 @@ import { QueryClient } from "@tanstack/react-query";
  * @category Keys
  * @group Support Tickets
  */
-export const SUPPORT_TICKET_MESSAGES_QUERY_KEY = (supportTicketId: string) => [
-  ...SUPPORT_TICKET_QUERY_KEY(supportTicketId),
-  "MESSAGES",
-];
+export const SUPPORT_TICKET_ACTIVITY_LOG_QUERY_KEY = (
+  supportTicketId: string
+) => [...SUPPORT_TICKET_QUERY_KEY(supportTicketId), "ACTIVITY_LOG"];
 
 /**
  * @category Setters
  * @group Support Tickets
  */
-export const SET_SUPPORT_TICKET_MESSAGES_QUERY_DATA = (
+export const SET_SUPPORT_TICKET_ACTIVITY_LOG_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SUPPORT_TICKET_MESSAGES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSupportTicketMessages>>,
+  keyParams: Parameters<typeof SUPPORT_TICKET_ACTIVITY_LOG_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetSupportTicketActivityLog>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SUPPORT_TICKET_MESSAGES_QUERY_KEY(...keyParams),
+      ...SUPPORT_TICKET_ACTIVITY_LOG_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-interface GetSupportTicketMessagesProps extends InfiniteQueryParams {
+interface GetSupportTicketActivityLogProps extends InfiniteQueryParams {
   supportTicketId: string;
 }
 
@@ -47,19 +46,19 @@ interface GetSupportTicketMessagesProps extends InfiniteQueryParams {
  * @category Queries
  * @group Support Tickets
  */
-export const GetSupportTicketMessages = async ({
+export const GetSupportTicketActivityLog = async ({
   supportTicketId,
   pageParam,
   pageSize,
   orderBy,
   search,
   clientApiParams,
-}: GetSupportTicketMessagesProps): Promise<
-  ConnectedXMResponse<SupportTicketMessage[]>
+}: GetSupportTicketActivityLogProps): Promise<
+  ConnectedXMResponse<SupportTicketActivityLog[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/supportTickets/${supportTicketId}/messages`,
+    `/supportTickets/${supportTicketId}/activityLog`,
     {
       params: {
         page: pageParam || undefined,
@@ -75,22 +74,22 @@ export const GetSupportTicketMessages = async ({
  * @category Hooks
  * @group Support Tickets
  */
-export const useGetSupportTicketMessages = (
+export const useGetSupportTicketActivityLog = (
   supportTicketId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSupportTicketMessages>>
+    Awaited<ReturnType<typeof GetSupportTicketActivityLog>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSupportTicketMessages>>
+    Awaited<ReturnType<typeof GetSupportTicketActivityLog>>
   >(
-    SUPPORT_TICKET_MESSAGES_QUERY_KEY(supportTicketId),
+    SUPPORT_TICKET_ACTIVITY_LOG_QUERY_KEY(supportTicketId),
     (params: InfiniteQueryParams) =>
-      GetSupportTicketMessages({
+      GetSupportTicketActivityLog({
         supportTicketId,
         ...params,
       }),

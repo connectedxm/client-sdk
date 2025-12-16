@@ -1,22 +1,23 @@
 import { GetClientAPI } from "@src/ClientAPI";
-import { ConnectedXMResponse } from "@src/interfaces";
-import { SupportTicket } from "@src/interfaces";
+import { ConnectedXMResponse, SupportTicket } from "@src/interfaces";
 import {
   InfiniteQueryParams,
   InfiniteQueryOptions,
   useConnectedInfiniteQuery,
+  GetBaseInfiniteQueryKeys,
+  setFirstPageData,
 } from "../useConnectedInfiniteQuery";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
+import { SELF_QUERY_KEY } from "../self/useGetSelf";
 
 /**
  * @category Keys
  * @group Support Tickets
  */
-export const SUPPORT_TICKETS_QUERY_KEY = (state?: string, type?: string) => [
-  "SUPPORT_TICKETS",
-  type,
-  state,
-];
+export const SUPPORT_TICKETS_QUERY_KEY = (
+  state?: string,
+  type?: string
+): QueryKey => [...SELF_QUERY_KEY(), "SUPPORT_TICKETS", state, type];
 
 /**
  * @category Setters
@@ -25,14 +26,21 @@ export const SUPPORT_TICKETS_QUERY_KEY = (state?: string, type?: string) => [
 export const SET_SUPPORT_TICKETS_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof SUPPORT_TICKETS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSupportTickets>>
+  response: Awaited<ReturnType<typeof GetSupportTickets>>,
+  baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
-  client.setQueryData(SUPPORT_TICKETS_QUERY_KEY(...keyParams), response);
+  client.setQueryData(
+    [
+      ...SUPPORT_TICKETS_QUERY_KEY(...keyParams),
+      ...GetBaseInfiniteQueryKeys(...baseKeys),
+    ],
+    setFirstPageData(response)
+  );
 };
 
 interface GetSupportTicketsProps extends InfiniteQueryParams {
-  state: string;
-  type: string;
+  type?: string;
+  state?: string;
 }
 
 /**
@@ -40,23 +48,23 @@ interface GetSupportTicketsProps extends InfiniteQueryParams {
  * @group Support Tickets
  */
 export const GetSupportTickets = async ({
-  type,
-  state,
   pageParam,
   pageSize,
   orderBy,
   search,
+  type,
+  state,
   clientApiParams,
 }: GetSupportTicketsProps): Promise<ConnectedXMResponse<SupportTicket[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/supportTickets`, {
     params: {
-      state: state || undefined,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
-      type: type || undefined,
       search: search || undefined,
+      type: type || undefined,
+      state: state || undefined,
     },
   });
   return data;
@@ -66,8 +74,8 @@ export const GetSupportTickets = async ({
  * @group Support Tickets
  */
 export const useGetSupportTickets = (
-  type: string,
-  state: string = "",
+  type?: string,
+  state?: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -81,11 +89,7 @@ export const useGetSupportTickets = (
   >(
     SUPPORT_TICKETS_QUERY_KEY(state, type),
     (params: InfiniteQueryParams) =>
-      GetSupportTickets({
-        type,
-        state,
-        ...params,
-      }),
+      GetSupportTickets({ type, state, ...params }),
     params,
     options
   );

@@ -5,7 +5,11 @@ import useConnectedMutation, {
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
 import { AppendInfiniteQuery } from "@src/utilities";
-import { SUPPORT_TICKET_MESSAGES_QUERY_KEY } from "@src/queries/supportTickets";
+import {
+  SUPPORT_TICKET_MESSAGES_QUERY_KEY,
+  SUPPORT_TICKET_QUERY_KEY,
+} from "@src/queries/supportTickets";
+import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 
 /**
  * @category Params
@@ -31,14 +35,20 @@ export const CreateSupportTicketMessage = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<
     ConnectedXMResponse<SupportTicketMessage>
-  >(`/supportTickets/${supportTicketId}/messages`, message);
+  >(`/supportTickets/${supportTicketId}/messages`, { message });
 
   if (queryClient && data.status === "ok") {
     AppendInfiniteQuery<SupportTicketMessage>(
       queryClient,
-      SUPPORT_TICKET_MESSAGES_QUERY_KEY(supportTicketId),
+      [
+        ...SUPPORT_TICKET_MESSAGES_QUERY_KEY(supportTicketId),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ],
       data.data
     );
+    queryClient.invalidateQueries({
+      queryKey: SUPPORT_TICKET_QUERY_KEY(supportTicketId),
+    });
   }
 
   return data;

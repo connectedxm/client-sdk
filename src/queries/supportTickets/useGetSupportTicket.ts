@@ -1,5 +1,6 @@
 import { GetClientAPI } from "@src/ClientAPI";
 import {
+  GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
@@ -24,9 +25,16 @@ export const SUPPORT_TICKET_QUERY_KEY = (supportTicketId: string) => [
 export const SET_SUPPORT_TICKET_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof SUPPORT_TICKET_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSupportTicket>>
+  response: Awaited<ReturnType<typeof GetSupportTicket>>,
+  baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
-  client.setQueryData(SUPPORT_TICKET_QUERY_KEY(...keyParams), response);
+  client.setQueryData(
+    [
+      ...SUPPORT_TICKET_QUERY_KEY(...keyParams),
+      ...GetBaseSingleQueryKeys(...baseKeys),
+    ],
+    response
+  );
 };
 
 interface GetSupportTicketProps extends SingleQueryParams {

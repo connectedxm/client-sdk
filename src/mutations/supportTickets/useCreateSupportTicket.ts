@@ -1,26 +1,28 @@
-import {
-  ConnectedXMResponse,
-  SupportTicket,
-  SupportTicketType,
-} from "@src/interfaces";
+import { ConnectedXMResponse, SupportTicket } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SUPPORT_TICKETS_QUERY_KEY } from "@src/queries/supportTickets";
+import {
+  SET_SUPPORT_TICKET_QUERY_DATA,
+  SUPPORT_TICKETS_QUERY_KEY,
+} from "@src/queries/supportTickets";
 import { AppendInfiniteQuery } from "@src/utilities";
+import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 
 /**
  * @category Params
  * @group SupportTickets
  */
 export interface CreateSupportTicketParams extends MutationParams {
-  type: keyof typeof SupportTicketType;
-  email: string;
+  type: string;
   request: string;
-  eventId?: string;
-  productId?: string;
+  email: string;
+  state: string;
+  accountId: string | null;
+  orgMembershipId: string | null;
+  eventId: string | null;
 }
 
 /**
@@ -29,10 +31,12 @@ export interface CreateSupportTicketParams extends MutationParams {
  */
 export const CreateSupportTicket = async ({
   type,
-  email,
   request,
+  email,
+  state,
+  accountId,
+  orgMembershipId,
   eventId,
-  productId,
   clientApiParams,
   queryClient,
 }: CreateSupportTicketParams): Promise<ConnectedXMResponse<SupportTicket>> => {
@@ -41,17 +45,35 @@ export const CreateSupportTicket = async ({
     "/supportTickets",
     {
       type,
-      email,
       request,
+      email,
+      state,
+      accountId: accountId || undefined,
+      orgMembershipId: orgMembershipId || undefined,
       eventId: eventId || undefined,
-      productId: productId || undefined,
     }
   );
 
   if (queryClient && data.status === "ok") {
+    SET_SUPPORT_TICKET_QUERY_DATA(queryClient, [data.data.id], data, [
+      clientApiParams.locale,
+    ]);
+
     AppendInfiniteQuery<SupportTicket>(
       queryClient,
-      SUPPORT_TICKETS_QUERY_KEY(),
+      [
+        ...SUPPORT_TICKETS_QUERY_KEY(type, state),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ],
+      data.data
+    );
+
+    AppendInfiniteQuery<SupportTicket>(
+      queryClient,
+      [
+        ...SUPPORT_TICKETS_QUERY_KEY(),
+        ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
+      ],
       data.data
     );
   }

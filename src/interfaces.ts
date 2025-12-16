@@ -1220,9 +1220,16 @@ export const isTypeScan = (scan: BaseScan | Scan): scan is Scan => {
   return (scan as Omit<Scan, keyof BaseScan>).createdAt !== undefined;
 };
 
-export interface User {}
+export interface BaseUser {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  imageUrl: BaseImage | null;
+}
 
-export interface OrgMembership {}
+export interface BaseOrgMembership {
+  user: BaseUser;
+}
 
 export interface BaseSponsorshipLevel {
   id: string;
@@ -1292,10 +1299,6 @@ export const isTypeFaqSection = (
   );
 };
 
-export interface BaseSupportTicket {
-  id: string;
-}
-
 export enum SupportTicketType {
   support = "support",
   bug = "bug",
@@ -1304,20 +1307,29 @@ export enum SupportTicketType {
 
 export enum SupportTicketState {
   new = "new",
-  awaitingAdmin = "awaitingAdmin",
-  awaitingClient = "awaitingClient",
+  inProgress = "inProgress",
   resolved = "resolved",
   spam = "spam",
 }
 
-export interface SupportTicket extends BaseSupportTicket {
+export interface BaseSupportTicket {
+  id: string;
   type: SupportTicketType;
-  email: string;
   request: string;
-  account: BaseAccount | null;
-  event: BaseEvent | null;
-  ticket: BasePassType | null;
   state: SupportTicketState;
+}
+
+export interface SupportTicket extends BaseSupportTicket {
+  email: string;
+  accountId: string | null;
+  account: BaseAccount | null;
+  orgMembershipId: string | null;
+  orgMembership: {
+    userId: string;
+    user: BaseUser;
+  } | null;
+  eventId: string | null;
+  event: BaseEvent | null;
   lastAccountReadAt: string | null;
   lastMessageAt: string | null;
   createdAt: string;
@@ -1333,39 +1345,64 @@ export const isTypeSupportTicket = (
   );
 };
 
+export interface BaseSupportTicketNote {}
+
 export interface BaseSupportTicketMessage {
   id: string;
-  supportTicketId: string;
+  supportTicketId: BaseSupportTicket;
+  source: string;
   message: string;
   accountId: string;
-  userId: string;
+  orgMembershipId: string;
 }
 
 export interface SupportTicketMessage extends BaseSupportTicketMessage {
-  account: BaseAccount;
+  account: BaseAccount | null;
+  orgMembership: {
+    userId: string;
+    user: BaseUser;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
 
-/** Do we need notes in client? */
-export interface BaseSupportTicketNote {
+export enum SupportTicketActivityLogType {
+  created = "created",
+  statusChanged = "statusChanged",
+  typeChanged = "typeChanged",
+  eventLinked = "eventLinked",
+}
+
+export enum SupportTicketActivityLogSource {
+  system = "system",
+  account = "account",
+  org_member = "org_member",
+}
+
+export interface BaseSupportTicketActivityLog {
   id: string;
   supportTicketId: string;
-}
-
-export interface SupportTicketNote extends BaseSupportTicketNote {
+  type: SupportTicketActivityLogType;
+  source: SupportTicketActivityLogSource;
+  accountId: string | null;
+  orgMembership: {
+    userId: string;
+    user: BaseUser;
+  } | null;
+  previousState: SupportTicketState | null;
+  newState: SupportTicketState | null;
+  previousType: SupportTicketType | null;
+  newType: SupportTicketType | null;
+  eventId: string | null;
+  event: BaseEvent | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export const isTypeSupportTicketNote = (
-  supportTicketNote: BaseSupportTicketNote | SupportTicketNote
-): supportTicketNote is SupportTicketNote => {
-  return (
-    (supportTicketNote as Omit<SupportTicketNote, keyof BaseSupportTicketNote>)
-      .createdAt !== undefined
-  );
-};
+export interface SupportTicketActivityLog extends BaseSupportTicketActivityLog {
+  account: BaseAccount | null;
+  event: BaseEvent | null;
+}
 
 export enum AdvertisementType {
   square = "square",
@@ -1725,14 +1762,16 @@ export const isTypeLead = (lead: BaseLead | Lead): lead is Lead => {
 export interface NotificationPreferences {
   newFollowerPush: boolean;
   likePush: boolean;
-  resharePush: boolean;
   commentPush: boolean;
   transferPush: boolean;
   transferEmail: boolean;
-  supportTicketConfirmationEmail: boolean;
+  supportTicketNewMessagePush: boolean;
+  supportTicketNewMessageEmail: boolean;
+  supportTicketStatusChangePush: boolean;
   chatPush: boolean;
   chatUnreadPush: boolean;
   chatUnreadEmail: boolean;
+  eventReminderEmail: boolean;
   activityNotificationPreference: OrganizationActivityPreference;
   organizationAnnouncementEmail: boolean;
   organizationAnnouncementPush: boolean;
