@@ -494,7 +494,7 @@ export interface Event extends BaseEvent {
   streamReplay: BaseVideo | null;
   createdAt: string;
   updatedAt: string;
-  faqSections: BaseFaqSection[];
+  faqSections: BaseEventFaqSection[];
   sponsorshipLevels: EventSponsorshipLevel[];
   reservationDescription: string | null;
   backgroundImage: BaseImage | null;
@@ -666,7 +666,7 @@ export interface RegistrationFollowup extends BaseRegistrationFollowup {
   questions: RegistrationQuestion[];
 }
 
-export interface EventListing extends Event {
+export interface EventEvent extends Event {
   visible: boolean;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
@@ -678,11 +678,11 @@ export interface EventListing extends Event {
   sessions: BaseSession[];
 }
 
-export const isListing = (
-  event: EventListing | BaseEvent | Event
+export const isEvent = (
+  event: EventEvent | BaseEvent | Event
 ): event is Event => {
   return (
-    (event as Omit<EventListing, keyof Event>)
+    (event as Omit<EventEvent, keyof Event>)
       .newActivityCreatorEmailNotification !== undefined
   );
 };
@@ -820,7 +820,7 @@ export interface BasePassAddon {
 
 export interface PassAddOn extends BasePassAddon {}
 
-export interface ListingPass extends BasePass {
+export interface EventPass extends BasePass {
   attendee: BaseRegistration & {
     account: BaseAccount & { email: string | null; phone: string | null };
   };
@@ -1273,28 +1273,29 @@ export interface BaseFaq {
 }
 
 export interface Faq extends BaseFaq {
-  section: BaseFaqSection | null;
+  section: BaseEventFaqSection | null;
 }
 
 export const isTypeFaq = (faq: BaseFaq | Faq): faq is Faq => {
   return (faq as Omit<Faq, keyof BaseFaq>).section !== undefined;
 };
 
-export interface BaseFaqSection {
+export interface BaseEventFaqSection {
   id: string;
   slug: string;
   name: string;
 }
 
-export interface FaqSection extends BaseFaqSection {
+export interface EventFaqSection extends BaseEventFaqSection {
   faqs: BaseFaq[];
 }
 
 export const isTypeFaqSection = (
-  faqSection: BaseFaqSection | FaqSection
-): faqSection is FaqSection => {
+  faqSection: BaseEventFaqSection | EventFaqSection
+): faqSection is EventFaqSection => {
   return (
-    (faqSection as Omit<FaqSection, keyof BaseFaqSection>).faqs !== undefined
+    (faqSection as Omit<EventFaqSection, keyof BaseEventFaqSection>).faqs !==
+    undefined
   );
 };
 
@@ -1572,7 +1573,7 @@ export interface Registration extends BaseRegistration {
   };
 }
 
-export interface ListingRegistration extends BaseRegistration {
+export interface EventRegistration extends BaseRegistration {
   event: RegistrationEventDetails;
   account: BaseAccount & { email: string | null; phone: string | null };
   couponId: string | null;
@@ -1615,7 +1616,7 @@ export interface Payment extends BasePayment {
   pass: BasePass | null;
   session: BaseSession | null;
   place: BaseBookingPlace | null;
-  space: BaseBookingSpace | null;
+  space: BaseBookingPlaceSpace | null;
   coupon: BaseCoupon | null;
   invoice: BaseInvoice | null;
   lineItems: PaymentLineItem[];
@@ -2142,7 +2143,7 @@ export interface PaymentIntent extends BasePaymentIntent {
   pass: BasePass | null;
   passType: BasePassType | null;
   place: BaseBookingPlace | null;
-  space: BaseBookingSpace | null;
+  space: BaseBookingPlaceSpace | null;
 }
 export interface BaseFile {
   id: number;
@@ -2536,7 +2537,7 @@ export interface BookingPlace extends BaseBookingPlace {
   updatedAt: string | null;
 }
 
-export interface BaseBookingSpace {
+export interface BaseBookingPlaceSpace {
   id: string;
   name: string;
   slug: string;
@@ -2547,7 +2548,7 @@ export interface BaseBookingSpace {
   image: BaseImage | null;
 }
 
-export interface BookingSpace extends BaseBookingSpace {
+export interface BookingPlaceSpace extends BaseBookingPlaceSpace {
   start: string | null;
   end: string | null;
   createdAt: string;
@@ -2596,7 +2597,7 @@ export interface BaseBooking {
 }
 
 export interface Booking extends BaseBooking {
-  space: BaseBookingSpace;
+  space: BaseBookingPlaceSpace;
   place: BaseBookingPlace;
   createdAt: string;
   updatedAt: string;

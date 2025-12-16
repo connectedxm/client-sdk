@@ -19,7 +19,7 @@
 
 ### Purpose and Scope
 
-The `@connectedxm/admin` SDK is a TypeScript/JavaScript library that provides a type-safe interface for interacting with the ConnectedXM Admin API. It is designed to be used in React applications and provides both direct function calls and React Query hooks for data fetching and mutations.
+The `@connectedxm/client` SDK is a TypeScript/JavaScript library that provides a type-safe interface for interacting with the ConnectedXM Client API. It is designed to be used in React applications and provides both direct function calls and React Query hooks for data fetching and mutations.
 
 ### Technology Stack
 
@@ -52,12 +52,12 @@ The SDK follows a layered architecture:
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
-│   AdminAPI (Axios Instance)         │
-│   GetAdminAPI()                     │
+│   ClientAPI (Axios Instance)         │
+│   GetClientAPI()                     │
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
-│   ConnectedXM Admin API            │
+│   ConnectedXM Client API            │
 └─────────────────────────────────────┘
 ```
 
@@ -65,7 +65,7 @@ The SDK follows a layered architecture:
 
 ```
 src/
-├── AdminAPI.ts              # Core API client factory
+├── ClientAPI.ts              # Core API client factory
 ├── ConnectedXMProvider.tsx  # React context provider
 ├── interfaces.ts            # All TypeScript interfaces and enums
 ├── params.ts                # Input parameter interfaces for mutations
@@ -172,19 +172,19 @@ export interface AccountUpdateInputs {
 
 **Relationship to API**: These interfaces mirror the backend validation schemas. When the API schema changes, these interfaces must be updated accordingly.
 
-### 2.3 `src/AdminAPI.ts`
+### 2.3 `src/ClientAPI.ts`
 
 **Purpose**: Core API client factory that creates configured Axios instances for making API requests.
 
 **Key Components**:
 
-#### `AdminApiParams` Interface
+#### `ClientApiParams` Interface
 
 ```typescript
-export interface AdminApiParams {
+export interface ClientApiParams {
   apiUrl:
-    | "https://admin-api.connected.dev"
-    | "https://staging-admin-api.connected.dev"
+    | "https://client-api.connected.dev"
+    | "https://staging-client-api.connected.dev"
     | "http://localhost:4001";
   organizationId: string;
   getToken?: () => Promise<string | undefined> | string | undefined;
@@ -199,15 +199,15 @@ export interface AdminApiParams {
 - `organizationId`: Required organization identifier
 - `getToken`: Optional function to retrieve authentication token
 - `apiKey`: Optional API key for server-side usage
-- `getExecuteAs`: Optional function for impersonation (admin feature)
+- `getExecuteAs`: Optional function for impersonation (client feature)
 
-#### `GetAdminAPI()` Function
+#### `GetClientAPI()` Function
 
 Creates a configured Axios instance with proper headers:
 
 ```typescript
-export const GetAdminAPI = async (
-  params: AdminApiParams
+export const GetClientAPI = async (
+  params: ClientApiParams
 ): Promise<AxiosInstance> => {
   const token = !!params.getToken && (await params.getToken());
   const executeAs = params.getExecuteAs
@@ -219,14 +219,13 @@ export const GetAdminAPI = async (
     headers: {
       organization: params.organizationId,
       authorization: token,
-      "api-key": params.apiKey,
       executeAs: executeAs,
     },
   });
 };
 ```
 
-**Usage**: All query and mutation functions call `GetAdminAPI()` to get a configured client before making requests.
+**Usage**: All query and mutation functions call `GetClientAPI()` to get a configured client before making requests.
 
 ### 2.4 `src/ConnectedXMProvider.tsx`
 
@@ -238,7 +237,7 @@ export const GetAdminAPI = async (
 interface ConnectedXMProviderProps {
   queryClient: QueryClient;           // React Query client instance
   organizationId: string;              // Organization ID
-  apiUrl: "https://admin-api.connected.dev" | ...;
+  apiUrl: "https://client-api.connected.dev" | ...;
   getToken: () => Promise<string | undefined>;
   children: React.ReactNode;
 }
@@ -267,7 +266,7 @@ onNotFound?: (
 
 onMutationError?: (
   error: AxiosError<ConnectedXMResponse<null>>,
-  variables: Omit<MutationParams, "queryClient" | "adminApiParams">,
+  variables: Omit<MutationParams, "queryClient" | "clientApiParams">,
   context: unknown
 ) => void;
 ```
@@ -281,7 +280,7 @@ onMutationError?: (
   <ConnectedXMProvider
     queryClient={queryClient}
     organizationId={ORGANIZATION_ID}
-    apiUrl="https://admin-api.connected.dev"
+    apiUrl="https://client-api.connected.dev"
     getToken={getToken}
     onNotAuthorized={(error) => {
       // Handle 401 errors
@@ -461,10 +460,10 @@ The actual API call function (can be used standalone).
  */
 export const GetAccount = async ({
   accountId = "",
-  adminApiParams,
+  clientApiParams,
 }: GetAccountProps): Promise<ConnectedXMResponse<Account>> => {
-  const adminApi = await GetAdminAPI(adminApiParams);
-  const { data } = await adminApi.get(`/accounts/${accountId}`);
+  const clientApi = await GetClientAPI(clientApiParams);
+  const { data } = await clientApi.get(`/accounts/${accountId}`);
   return data;
 };
 ```
@@ -472,7 +471,7 @@ export const GetAccount = async ({
 **Conventions**:
 
 - Named: `Get*` (PascalCase)
-- Accepts `adminApiParams` (and other params)
+- Accepts `clientApiParams` (and other params)
 - Returns `Promise<ConnectedXMResponse<T>>`
 - Can be used outside React (direct function calls)
 
@@ -606,7 +605,7 @@ export interface CreateAccountParams extends MutationParams {
 
 **Conventions**:
 
-- Extends `MutationParams` (includes `adminApiParams` and `queryClient`)
+- Extends `MutationParams` (includes `clientApiParams` and `queryClient`)
 - Named: `*Params` (e.g., `CreateAccountParams`, `UpdateAccountParams`)
 - Includes domain-specific parameters
 
@@ -621,10 +620,10 @@ The actual API call function (can be used standalone).
  */
 export const CreateAccount = async ({
   account,
-  adminApiParams,
+  clientApiParams,
   queryClient,
 }: CreateAccountParams): Promise<ConnectedXMResponse<Account>> => {
-  const connectedXM = await GetAdminAPI(adminApiParams);
+  const connectedXM = await GetClientAPI(clientApiParams);
   const { data } = await connectedXM.post<ConnectedXMResponse<Account>>(
     `/accounts`,
     account
@@ -642,7 +641,7 @@ export const CreateAccount = async ({
 **Conventions**:
 
 - Named: `Create*`, `Update*`, `Delete*` (PascalCase)
-- Accepts params including `adminApiParams` and `queryClient`
+- Accepts params including `clientApiParams` and `queryClient`
 - Returns `Promise<ConnectedXMResponse<T>>`
 - Handles cache updates on success
 
@@ -659,7 +658,7 @@ export const useCreateAccount = (
   options: Omit<
     ConnectedXMMutationOptions<
       Awaited<ReturnType<typeof CreateAccount>>,
-      Omit<CreateAccountParams, "queryClient" | "adminApiParams">
+      Omit<CreateAccountParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
@@ -675,7 +674,7 @@ export const useCreateAccount = (
 
 - Named: `useCreate*`, `useUpdate*`, `useDelete*`
 - Wraps mutation function with `useConnectedMutation`
-- Options exclude `queryClient` and `adminApiParams` (injected automatically)
+- Options exclude `queryClient` and `clientApiParams` (injected automatically)
 - Can accept React Query mutation options (onSuccess, onError, etc.)
 
 ### 4.2 Cache Invalidation Patterns
@@ -917,7 +916,7 @@ Similar to queries:
 
 `useConnectedMutation.ts` provides:
 
-- Automatic `adminApiParams` injection
+- Automatic `clientApiParams` injection
 - Error handling integration
 - QueryClient access
 - Standardized mutation options
@@ -954,7 +953,10 @@ Utility functions used across queries and mutations.
 Utilities are imported from the main index:
 
 ```typescript
-import { MergeInfinitePages, CacheIndividualQueries } from "@connectedxm/admin";
+import {
+  MergeInfinitePages,
+  CacheIndividualQueries,
+} from "@connectedxm/client";
 ```
 
 ---
@@ -1179,7 +1181,7 @@ export const CacheIndividualQueries = <TData extends ItemWithId>(
 **Usage Example**:
 
 ```typescript
-const { data } = await adminApi.get("/accounts");
+const { data } = await clientApi.get("/accounts");
 CacheIndividualQueries(data, queryClient, (id) => ACCOUNT_QUERY_KEY(id));
 ```
 
@@ -1324,10 +1326,10 @@ export const SET_[RESOURCE]_QUERY_DATA = (
  */
 export const Get[Resource] = async ({
   id,
-  adminApiParams,
+  clientApiParams,
 }: Get[Resource]Props): Promise<ConnectedXMResponse<[Resource]>> => {
-  const adminApi = await GetAdminAPI(adminApiParams);
-  const { data } = await adminApi.get(`/[endpoint]/${id}`);
+  const clientApi = await GetClientAPI(clientApiParams);
+  const { data } = await clientApi.get(`/[endpoint]/${id}`);
   return data;
 };
 ```
@@ -1366,7 +1368,7 @@ export * from "./useGet[Resource]";
 #### Complete Example: `useGetGroup`
 
 ```typescript
-import { GetAdminAPI } from "@src/AdminAPI";
+import { GetClientAPI } from "@src/ClientAPI";
 import {
   SingleQueryOptions,
   SingleQueryParams,
@@ -1408,10 +1410,10 @@ interface GetGroupProps extends SingleQueryParams {
  */
 export const GetGroup = async ({
   groupId = "",
-  adminApiParams,
+  clientApiParams,
 }: GetGroupProps): Promise<ConnectedXMResponse<Group>> => {
-  const adminApi = await GetAdminAPI(adminApiParams);
-  const { data } = await adminApi.get(`/groups/${groupId}`);
+  const clientApi = await GetClientAPI(clientApiParams);
+  const { data } = await clientApi.get(`/groups/${groupId}`);
   return data;
 };
 
@@ -1464,10 +1466,10 @@ export interface Create[Resource]Params extends MutationParams {
  */
 export const Create[Resource] = async ({
   [resource],
-  adminApiParams,
+  clientApiParams,
   queryClient,
 }: Create[Resource]Params): Promise<ConnectedXMResponse<[Resource]>> => {
-  const connectedXM = await GetAdminAPI(adminApiParams);
+  const connectedXM = await GetClientAPI(clientApiParams);
   const { data } = await connectedXM.post<ConnectedXMResponse<[Resource]>>(
     `/[endpoint]`,
     [resource]
@@ -1493,7 +1495,7 @@ export const useCreate[Resource] = (
   options: Omit<
     ConnectedXMMutationOptions<
       Awaited<ReturnType<typeof Create[Resource]>>,
-      Omit<Create[Resource]Params, "queryClient" | "adminApiParams">
+      Omit<Create[Resource]Params, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
@@ -1523,7 +1525,7 @@ import {
   useConnectedMutation,
 } from "../useConnectedMutation";
 import { GROUPS_QUERY_KEY, SET_GROUP_QUERY_DATA } from "@src/queries";
-import { GetAdminAPI } from "@src/AdminAPI";
+import { GetClientAPI } from "@src/ClientAPI";
 import { GroupCreateInputs } from "@src/params";
 
 /**
@@ -1540,11 +1542,11 @@ export interface CreateGroupParams extends MutationParams {
  */
 export const CreateGroup = async ({
   group,
-  adminApiParams,
+  clientApiParams,
   queryClient,
 }: CreateGroupParams): Promise<ConnectedXMResponse<Group>> => {
-  const connectedXM = await GetAdminAPI(adminApiParams);
-  const { data } = await connectedXM.post<ConnectedXMResponse<Group>>(
+  const clientApi = await GetClientAPI(clientApiParams);
+  const { data } = await clientApi.post<ConnectedXMResponse<Group>>(
     `/groups`,
     group
   );
@@ -1563,7 +1565,7 @@ export const useCreateGroup = (
   options: Omit<
     ConnectedXMMutationOptions<
       Awaited<ReturnType<typeof CreateGroup>>,
-      Omit<CreateGroupParams, "queryClient" | "adminApiParams">
+      Omit<CreateGroupParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
@@ -1686,14 +1688,14 @@ SET_ACCOUNT_QUERY_DATA(queryClient, [accountId], updatedData);
 
 ### 9.1 Query Testing
 
-#### Mocking AdminAPI
+#### Mocking ClientAPI
 
 ```typescript
 import { vi } from "vitest";
-import { GetAdminAPI } from "@src/AdminAPI";
+import { GetClientAPI } from "@src/ClientAPI";
 
-vi.mock("@src/AdminAPI", () => ({
-  GetAdminAPI: vi.fn(),
+vi.mock("@src/ClientAPI", () => ({
+  GetClientAPI: vi.fn(),
 }));
 ```
 
@@ -1753,7 +1755,7 @@ const mockAccountResponse = {
   },
 };
 
-(GetAdminAPI as any).mockResolvedValue({
+(GetClientAPI as any).mockResolvedValue({
   get: vi.fn().mockResolvedValue({ data: mockAccountResponse }),
 });
 ```
@@ -1825,7 +1827,7 @@ dist/
 - `src/queries/accounts/useGetAccounts.ts` - Infinite query example
 - `src/mutations/account/useCreateAccount.ts` - Mutation example
 - `src/mutations/account/useUpdateAccount.ts` - Update mutation example
-- `src/AdminAPI.ts` - API client setup
+- `src/ClientAPI.ts` - API client setup
 - `src/ConnectedXMProvider.tsx` - Provider setup
 - `src/utilities/CacheIndividualQueries.ts` - Cache utility example
 

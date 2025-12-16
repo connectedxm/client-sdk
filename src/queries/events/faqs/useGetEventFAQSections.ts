@@ -1,4 +1,4 @@
-import type { FaqSection } from "@interfaces";
+import type { EventFaqSection } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -42,7 +42,9 @@ export const GetEventFaqSections = async ({
   orderBy,
   search,
   clientApiParams,
-}: GetEventFaqSectionsProps): Promise<ConnectedXMResponse<FaqSection[]>> => {
+}: GetEventFaqSectionsProps): Promise<
+  ConnectedXMResponse<EventFaqSection[]>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/faqs`, {
     params: {

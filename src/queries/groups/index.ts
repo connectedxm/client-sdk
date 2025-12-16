@@ -1,6 +1,6 @@
 export * from "./announcements";
 export * from "./invitations";
-export * from "./members";
+export * from "./memberships";
 export * from "./requests";
 export * from "./useGetGroup";
 export * from "./useGetGroupActivities";

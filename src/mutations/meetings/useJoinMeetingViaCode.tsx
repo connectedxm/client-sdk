@@ -5,7 +5,6 @@ import useConnectedMutation, {
 
 import type { ConnectedXMResponse } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { MeetingJoinViaCodeInputs } from "@src/params";
 
 /**
  * @category Params

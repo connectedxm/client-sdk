@@ -17,8 +17,8 @@ import { ChannelCollectionUpdateInputs } from "@src/params";
  */
 export interface UpdateChannelCollectionParams extends MutationParams {
   channelId: string;
-  collection: ChannelCollectionUpdateInputs;
   collectionId: string;
+  collection: ChannelCollectionUpdateInputs;
 }
 
 /**

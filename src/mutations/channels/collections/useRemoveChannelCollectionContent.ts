@@ -15,7 +15,6 @@ export interface RemoveChannelCollectionContentParams extends MutationParams {
   channelId: string;
   collectionId: string;
   contentId: string;
-  imageDataUri?: any;
 }
 
 /**

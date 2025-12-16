@@ -5,7 +5,7 @@ import {
   useConnectedSingleQuery,
 } from "@src/queries/useConnectedSingleQuery";
 
-import type { BookingSpace, ConnectedXMResponse } from "@interfaces";
+import type { BookingPlaceSpace, ConnectedXMResponse } from "@interfaces";
 import { BOOKING_PLACES_QUERY_KEY } from "./useGetBookingPlaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
@@ -39,7 +39,9 @@ export const GetBookingPlaceSpace = async ({
   placeId,
   spaceId,
   clientApiParams,
-}: GetBookingPlaceSpaceProps): Promise<ConnectedXMResponse<BookingSpace>> => {
+}: GetBookingPlaceSpaceProps): Promise<
+  ConnectedXMResponse<BookingPlaceSpace>
+> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/bookings/places/${placeId}/spaces/${spaceId}`

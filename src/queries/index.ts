@@ -15,7 +15,6 @@ export * from "./interests";
 export * from "./invoices";
 export * from "./leads";
 export * from "./link-previews";
-export * from "./listings";
 export * from "./logins";
 export * from "./meetings";
 export * from "./organization";

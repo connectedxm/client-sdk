@@ -1,8 +1,4 @@
-import {
-  ConnectedXMResponse,
-  ContentGuest,
-  ContentGuestType,
-} from "@src/interfaces";
+import { ConnectedXMResponse, ContentGuest } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -22,8 +18,8 @@ import { ContentGuestUpdateInputs } from "@src/params";
 export interface UpdateContentGuestParams extends MutationParams {
   channelId: string;
   contentId: string;
-  guest: ContentGuestUpdateInputs & { type: ContentGuestType };
   guestId: string;
+  guest: ContentGuestUpdateInputs;
   imageDataUri?: string;
 }
 

@@ -1,2 +1,2 @@
-export * from "./useCreateContentLike";
-export * from "./useDeleteContentLike";
+export * from "./useLikeContent";
+export * from "./useUnlikeContent";

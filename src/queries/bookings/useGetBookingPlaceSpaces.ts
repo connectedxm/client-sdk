@@ -7,7 +7,7 @@ import {
 } from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { BOOKING_PLACE_QUERY_KEY } from "./useGetBookingPlace";
-import { ConnectedXMResponse, BookingSpace } from "@interfaces";
+import { ConnectedXMResponse, BookingPlaceSpace } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const BOOKING_PLACE_SPACES_QUERY_KEY = (bookingId: string): QueryKey => [
@@ -18,7 +18,7 @@ export const BOOKING_PLACE_SPACES_QUERY_KEY = (bookingId: string): QueryKey => [
 export const SET_BOOKING_PLACE_SPACES_QUERY_DATA = (
   client: QueryClient,
   keyParams: Parameters<typeof BOOKING_PLACE_SPACES_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetBookingPlacesSpaces>>,
+  response: Awaited<ReturnType<typeof GetBookingPlaceSpaces>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
@@ -30,19 +30,19 @@ export const SET_BOOKING_PLACE_SPACES_QUERY_DATA = (
   );
 };
 
-export interface GetBookingPlacesSpacesProps extends InfiniteQueryParams {
+export interface GetBookingPlaceSpacesProps extends InfiniteQueryParams {
   bookingId: string;
 }
 
-export const GetBookingPlacesSpaces = async ({
+export const GetBookingPlaceSpaces = async ({
   bookingId,
   pageParam,
   pageSize,
   orderBy,
   search,
   clientApiParams,
-}: GetBookingPlacesSpacesProps): Promise<
-  ConnectedXMResponse<BookingSpace[]>
+}: GetBookingPlaceSpacesProps): Promise<
+  ConnectedXMResponse<BookingPlaceSpace[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/bookings/places/${bookingId}/spaces`, {
@@ -56,22 +56,22 @@ export const GetBookingPlacesSpaces = async ({
   return data;
 };
 
-export const useGetBookingPlacesSpaces = (
+export const useGetBookingPlaceSpaces = (
   bookingId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
   options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetBookingPlacesSpaces>>
+    Awaited<ReturnType<typeof GetBookingPlaceSpaces>>
   > = {}
 ) => {
   return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetBookingPlacesSpaces>>
+    Awaited<ReturnType<typeof GetBookingPlaceSpaces>>
   >(
     BOOKING_PLACE_SPACES_QUERY_KEY(bookingId),
     (params: InfiniteQueryParams) =>
-      GetBookingPlacesSpaces({ bookingId, ...params }),
+      GetBookingPlaceSpaces({ bookingId, ...params }),
     params,
     {
       ...options,

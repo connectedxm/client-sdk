@@ -13,6 +13,7 @@ import {
   SupportTicketType,
   ActivityEntityType,
   MarkType,
+  ContentGuestType,
 } from "./interfaces";
 
 // ============================================================================
@@ -148,7 +149,7 @@ export interface LeadUpdateInputs {
 // Event Registration Inputs
 // ============================================================================
 
-export interface EventAttendeeUpdateInputs {
+export interface EventPreferencesUpdateInputs {
   activityNotificationPreference?: ActivityPreference;
   announcementPushNotification?: boolean;
   announcementEmailNotification?: boolean;
@@ -245,40 +246,10 @@ export interface EventSessionRegistrationSearchListResponseUpdateInputs {
 }
 
 // ============================================================================
-// Event Attendee Inputs
+// Event Inputs
 // ============================================================================
 
-export interface EventAttendeePassFollowupUpdateInputs {
-  eventId: string;
-  passId: string;
-  followupId: string;
-  response: string | null;
-}
-
-export interface EventAttendeePassResponsesUpdateInputs {
-  eventId: string;
-  passId: string;
-  responses: Array<{
-    questionId: string;
-    response: string | null;
-  }>;
-}
-
-export interface EventAttendeeAccessResponsesUpdateInputs {
-  eventId: string;
-  sessionId: string;
-  passId: string;
-  responses: Array<{
-    questionId: string;
-    response: string | null;
-  }>;
-}
-
-// ============================================================================
-// Listing Inputs
-// ============================================================================
-
-export interface ListingCreateInputs {
+export interface EventCreateInputs {
   eventType: keyof typeof EventType;
   visible: boolean;
   name: string;
@@ -299,7 +270,7 @@ export interface ListingCreateInputs {
   groupOnly?: boolean;
 }
 
-export interface ListingUpdateInputs {
+export interface EventUpdateInputs {
   eventType?: keyof typeof EventType;
   visible?: boolean;
   name?: string;
@@ -327,7 +298,7 @@ export interface ListingUpdateInputs {
   location?: string | null;
 }
 
-export interface ListingSpeakerCreateInputs {
+export interface EventListingSpeakerCreateInputs {
   firstName: string | null;
   lastName: string | null;
   title: string | null;
@@ -335,7 +306,7 @@ export interface ListingSpeakerCreateInputs {
   bio: string | null;
 }
 
-export interface ListingSpeakerUpdateInputs {
+export interface EventListingSpeakerUpdateInputs {
   firstName: string | null;
   lastName: string | null;
   title: string | null;
@@ -343,35 +314,33 @@ export interface ListingSpeakerUpdateInputs {
   bio: string | null;
 }
 
-export interface ListingSessionCreateInputs {
+export interface EventListingSessionCreateInputs {
   name: string;
   description: string;
   startTime: Date;
   endTime: Date;
 }
 
-export interface ListingSessionUpdateInputs {
+export interface EventListingSessionUpdateInputs {
   name: string;
   description: string;
   startTime: Date;
   endTime: Date;
 }
 
-export interface ListingEmailUpdateInputs {
-  email: {
-    body?: string;
-    replyTo?: string;
-  };
+export interface EventListingEmailUpdateInputs {
+  body?: string;
+  replyTo?: string;
 }
 
-export interface ListingAttendeePassResponsesUpdateInputs {
+export interface AttendeePassResponsesUpdateInputs {
   responses: Array<{
     questionId: string;
     response: string | null;
   }>;
 }
 
-export interface ListingQuestionCreateInputs {
+export interface EventListingQuestionCreateInputs {
   name: string;
   type: string;
   required: boolean;
@@ -382,7 +351,7 @@ export interface ListingQuestionCreateInputs {
   }[];
 }
 
-export interface ListingQuestionUpdateInputs {
+export interface EventQuestionUpdateInputs {
   name: string;
   required: boolean;
   mutable: boolean;
@@ -393,7 +362,7 @@ export interface ListingQuestionUpdateInputs {
   }[];
 }
 
-export interface ListingAnnouncementCreateInputs {
+export interface EventListingAnnouncementCreateInputs {
   title: string;
   html: string;
   email: boolean;
@@ -519,10 +488,6 @@ export interface ChannelSubscriberUpdateInputs {
   activityNotificationPreference?: ActivityPreference;
 }
 
-export interface ChannelInterestCreateInputs {
-  name: string;
-}
-
 // ============================================================================
 // Channel Content Inputs
 // ============================================================================
@@ -563,6 +528,7 @@ export interface ContentPublishScheduleSetInputs {
 }
 
 export interface ContentGuestCreateInputs {
+  type: ContentGuestType;
   accountId?: string | null;
   name: string;
   title: string | null;
@@ -581,25 +547,22 @@ export interface ContentGuestCreateInputs {
 }
 
 export interface ContentGuestUpdateInputs {
+  type?: ContentGuestType;
   accountId?: string | null;
-  name: string;
-  title: string | null;
-  bio: string | null;
-  company: string | null;
-  companyLink: string | null;
-  companyBio: string | null;
-  website: string | null;
-  facebook: string | null;
-  twitter: string | null;
-  instagram: string | null;
-  linkedIn: string | null;
-  tikTok: string | null;
-  youtube: string | null;
-  discord: string | null;
-}
-
-export interface ContentInterestCreateInputs {
-  name: string;
+  name?: string;
+  title?: string | null;
+  bio?: string | null;
+  company?: string | null;
+  companyLink?: string | null;
+  companyBio?: string | null;
+  website?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  linkedIn?: string | null;
+  tikTok?: string | null;
+  youtube?: string | null;
+  discord?: string | null;
 }
 
 // ============================================================================

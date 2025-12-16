@@ -6,8 +6,9 @@ import useConnectedMutation, {
 import {
   EVENTS_QUERY_KEY,
   EVENT_QUERY_KEY,
-  LISTINGS_QUERY_KEY,
-  LISTING_QUERY_KEY,
+  EVENT_LISTING_QUERY_KEY,
+  EVENT_LISTINGS_QUERY_KEY,
+  GROUP_EVENTS_QUERY_KEY,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
@@ -17,6 +18,7 @@ import { GetClientAPI } from "@src/ClientAPI";
  */
 export interface DeleteEventParams extends MutationParams {
   eventId: string;
+  groupId?: string;
 }
 
 /**
@@ -25,6 +27,7 @@ export interface DeleteEventParams extends MutationParams {
  */
 export const DeleteEvent = async ({
   eventId,
+  groupId,
   clientApiParams,
   queryClient,
 }: DeleteEventParams): Promise<ConnectedXMResponse<null>> => {
@@ -37,18 +40,20 @@ export const DeleteEvent = async ({
     queryClient.invalidateQueries({
       queryKey: EVENTS_QUERY_KEY(),
     });
-    queryClient.removeQueries({
+    queryClient.invalidateQueries({
       queryKey: EVENT_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: LISTINGS_QUERY_KEY(true),
+      queryKey: EVENT_LISTING_QUERY_KEY(eventId),
     });
     queryClient.invalidateQueries({
-      queryKey: LISTINGS_QUERY_KEY(false),
+      queryKey: EVENT_LISTINGS_QUERY_KEY(false),
     });
-    queryClient.removeQueries({
-      queryKey: LISTING_QUERY_KEY(eventId),
-    });
+    if (groupId) {
+      queryClient.invalidateQueries({
+        queryKey: GROUP_EVENTS_QUERY_KEY(groupId),
+      });
+    }
   }
 
   return data;

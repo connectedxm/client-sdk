@@ -5,7 +5,7 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { GROUP_MEMBERS_QUERY_KEY } from "@src/queries";
+import { GROUP_MEMBERSHIPS_QUERY_KEY } from "@src/queries";
 
 /**
  * @category Params
@@ -35,7 +35,7 @@ export const DemoteGroupModerator = async ({
 
   if (queryClient && data.status === "ok") {
     queryClient.invalidateQueries({
-      queryKey: GROUP_MEMBERS_QUERY_KEY(groupId),
+      queryKey: GROUP_MEMBERSHIPS_QUERY_KEY(groupId),
     });
   }
 

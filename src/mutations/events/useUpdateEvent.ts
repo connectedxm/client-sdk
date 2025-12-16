@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, EventListing } from "@src/interfaces";
+import { ConnectedXMResponse, EventEvent } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -6,10 +6,10 @@ import useConnectedMutation, {
 import {
   EVENTS_QUERY_KEY,
   EVENT_QUERY_KEY,
-  SET_LISTING_QUERY_DATA,
+  SET_EVENT_QUERY_DATA,
 } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
-import { ListingUpdateInputs } from "@src/params";
+import { EventUpdateInputs } from "@src/params";
 
 /**
  * @category Params
@@ -17,7 +17,7 @@ import { ListingUpdateInputs } from "@src/params";
  */
 export interface UpdateEventParams extends MutationParams {
   eventId: string;
-  event: ListingUpdateInputs;
+  event: EventUpdateInputs;
   base64?: any;
 }
 
@@ -31,9 +31,10 @@ export const UpdateEvent = async ({
   base64,
   clientApiParams,
   queryClient,
-}: UpdateEventParams): Promise<ConnectedXMResponse<EventListing>> => {
+}: UpdateEventParams): Promise<ConnectedXMResponse<EventEvent>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.put<ConnectedXMResponse<EventListing>>(
+
+  const { data } = await clientApi.put<ConnectedXMResponse<EventEvent>>(
     `/listings/${eventId}`,
     {
       event,
@@ -42,7 +43,7 @@ export const UpdateEvent = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    SET_LISTING_QUERY_DATA(queryClient, [eventId], data, [
+    SET_EVENT_QUERY_DATA(queryClient, [eventId], data, [
       clientApiParams.locale,
     ]);
     queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY() });
@@ -67,6 +68,6 @@ export const useUpdateEvent = (
 ) => {
   return useConnectedMutation<
     UpdateEventParams,
-    Awaited<ConnectedXMResponse<EventListing>>
+    Awaited<ConnectedXMResponse<EventEvent>>
   >(UpdateEvent, options);
 };

@@ -5,7 +5,6 @@ import useConnectedMutation, {
 } from "@src/mutations/useConnectedMutation";
 
 import { GetClientAPI } from "@src/ClientAPI";
-import { ContentInterestCreateInputs } from "@src/params";
 
 /**
  * @category Params
@@ -14,7 +13,7 @@ import { ContentInterestCreateInputs } from "@src/params";
 export interface AddContentInterestParams extends MutationParams {
   channelId: string;
   contentId: string;
-  interest: ContentInterestCreateInputs;
+  interestId: string;
 }
 
 /**
@@ -24,13 +23,12 @@ export interface AddContentInterestParams extends MutationParams {
 export const AddContentInterest = async ({
   channelId,
   contentId,
-  interest,
+  interestId,
   clientApiParams,
 }: AddContentInterestParams): Promise<ConnectedXMResponse<Interest>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<Interest>>(
-    `/channels/${channelId}/contents/${contentId}/interests`,
-    interest
+    `/channels/${channelId}/contents/${contentId}/interests/${interestId}`
   );
 
   return data;

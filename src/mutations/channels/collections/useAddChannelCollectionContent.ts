@@ -15,7 +15,6 @@ export interface AddChannelCollectionContentParams extends MutationParams {
   channelId: string;
   collectionId: string;
   contentId: string;
-  imageDataUri?: any;
 }
 
 /**
@@ -28,9 +27,7 @@ export const AddChannelCollectionContent = async ({
   contentId,
   clientApiParams,
   queryClient,
-}: AddChannelCollectionContentParams): Promise<
-  ConnectedXMResponse<null>
-> => {
+}: AddChannelCollectionContentParams): Promise<ConnectedXMResponse<null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.post<ConnectedXMResponse<null>>(
     `/channels/${channelId}/collections/${collectionId}/contents/${contentId}`
@@ -53,10 +50,7 @@ export const useAddChannelCollectionContent = (
   options: Omit<
     MutationOptions<
       Awaited<ReturnType<typeof AddChannelCollectionContent>>,
-      Omit<
-        AddChannelCollectionContentParams,
-        "queryClient" | "clientApiParams"
-      >
+      Omit<AddChannelCollectionContentParams, "queryClient" | "clientApiParams">
     >,
     "mutationFn"
   > = {}
