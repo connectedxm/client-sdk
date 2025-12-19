@@ -1223,7 +1223,6 @@ export const isTypeScan = (scan: BaseScan | Scan): scan is Scan => {
 export interface BaseUser {
   id: string;
   firstName: string | null;
-  lastName: string | null;
   imageUrl: BaseImage | null;
 }
 
@@ -1377,6 +1376,12 @@ export enum SupportTicketActivityLogSource {
   system = "system",
   account = "account",
   org_member = "org_member",
+}
+
+export enum SupportTicketMessageSource {
+  account = "account",
+  org_member = "org_member",
+  system = "system",
 }
 
 export interface BaseSupportTicketActivityLog {
