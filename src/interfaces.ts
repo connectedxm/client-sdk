@@ -866,12 +866,14 @@ export interface BaseNotification {
 
 export interface Notification extends BaseNotification {
   like: BaseLike | null;
-  activity: BaseActivity | null;
   event: BaseEvent | null;
   announcement: BaseAnnouncement | null;
+  activity: BaseActivity | null;
   group: BaseGroup | null;
   invitation: BaseGroupInvitation | null;
   content: BaseContent | null;
+  orgMembership: BaseOrgMembership | null;
+  supportTicket: BaseSupportTicket | null;
   createdAt: string;
   updatedAt: string;
 }
