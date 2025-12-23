@@ -13,8 +13,9 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_MEDIA_ITEM_QUERY_KEY = (
   eventId: string,
-  mediaItemId: string
-): QueryKey => [...EVENT_MEDIA_ITEMS_QUERY_KEY(eventId), mediaItemId];
+  mediaItemId: string,
+  passId?: string
+): QueryKey => [...EVENT_MEDIA_ITEMS_QUERY_KEY(eventId, passId), mediaItemId];
 
 export const SET_EVENT_IMAGE_QUERY_DATA = (
   client: QueryClient,
@@ -34,16 +35,23 @@ export const SET_EVENT_IMAGE_QUERY_DATA = (
 export interface GetEventMediaItemProps extends SingleQueryParams {
   eventId: string;
   mediaItemId: string;
+  passId?: string;
 }
 
 export const GetEventMediaItem = async ({
   eventId,
   mediaItemId,
+  passId,
   clientApiParams,
 }: GetEventMediaItemProps): Promise<ConnectedXMResponse<EventMediaItem>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/events/${eventId}/media/${mediaItemId}`
+    `/events/${eventId}/media/${mediaItemId}`,
+    {
+      params: {
+        passId: passId || undefined,
+      },
+    }
   );
   return data;
 };
@@ -51,10 +59,11 @@ export const GetEventMediaItem = async ({
 export const useGetEventMediaItem = (
   eventId: string = "",
   mediaItemId: string,
+  passId?: string,
   options: SingleQueryOptions<ReturnType<typeof GetEventMediaItem>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventMediaItem>>(
-    EVENT_MEDIA_ITEM_QUERY_KEY(eventId, mediaItemId),
+    EVENT_MEDIA_ITEM_QUERY_KEY(eventId, mediaItemId, passId),
     (params) => GetEventMediaItem({ eventId, mediaItemId, ...params }),
     {
       ...options,

@@ -13,9 +13,13 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_MEDIA_ITEMS_QUERY_KEY = (
   eventId: string,
+  passId?: string,
   type?: string
 ): QueryKey => {
   const key = [...EVENT_QUERY_KEY(eventId), "MEDIA_ITEMS"];
+  if (passId) {
+    key.push(passId);
+  }
   if (type) {
     key.push(type);
   }
@@ -39,11 +43,13 @@ export const SET_EVENT_MEDIA_ITEMS_QUERY_DATA = (
 
 export interface GetEventMediaItemsProps extends InfiniteQueryParams {
   eventId: string;
+  passId?: string;
   type?: "image" | "video" | "file";
 }
 
 export const GetEventMediaItems = async ({
   eventId,
+  passId,
   type,
   pageParam,
   orderBy,
@@ -56,6 +62,7 @@ export const GetEventMediaItems = async ({
       page: pageParam || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
+      passId: passId || undefined,
       type: type || undefined,
     },
   });
@@ -64,6 +71,7 @@ export const GetEventMediaItems = async ({
 
 export const useGetEventMediaItems = (
   eventId: string = "",
+  passId?: string,
   type?: "image" | "video" | "file",
   params: Omit<
     InfiniteQueryParams,
@@ -76,9 +84,9 @@ export const useGetEventMediaItems = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetEventMediaItems>>
   >(
-    EVENT_MEDIA_ITEMS_QUERY_KEY(eventId, type),
+    EVENT_MEDIA_ITEMS_QUERY_KEY(eventId, passId, type),
     (params: InfiniteQueryParams) =>
-      GetEventMediaItems({ eventId, type, ...params }),
+      GetEventMediaItems({ eventId, type, passId, ...params }),
     params,
     {
       ...options,
