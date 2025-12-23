@@ -5,7 +5,7 @@ export * from "./channels";
 export * from "./events";
 export * from "./organization";
 export * from "./self";
-export * from "./supportTicket";
+export * from "./supportTickets";
 export * from "./groups";
 export * from "./listings";
 export * from "./logins";
