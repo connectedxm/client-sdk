@@ -64,7 +64,7 @@ export const useGetEventMediaItem = (
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventMediaItem>>(
     EVENT_MEDIA_ITEM_QUERY_KEY(eventId, mediaItemId, passId),
-    (params) => GetEventMediaItem({ eventId, mediaItemId, ...params }),
+    (params) => GetEventMediaItem({ eventId, mediaItemId, passId, ...params }),
     {
       ...options,
       enabled: !!eventId && !!mediaItemId && (options?.enabled ?? true),
