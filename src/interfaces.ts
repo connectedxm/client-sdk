@@ -1319,6 +1319,7 @@ export interface BaseSupportTicket {
   type: SupportTicketType;
   request: string;
   state: SupportTicketState;
+  message: BaseSupportTicketMessage | null;
 }
 
 export interface SupportTicket extends BaseSupportTicket {
@@ -1354,16 +1355,16 @@ export interface BaseSupportTicketMessage {
   supportTicketId: BaseSupportTicket;
   source: string;
   message: string;
-  accountId: string;
-  orgMembershipId: string;
-}
-
-export interface SupportTicketMessage extends BaseSupportTicketMessage {
+  accountId: string | null;
   account: BaseAccount | null;
+  orgMembershipId: string | null;
   orgMembership: {
     userId: string;
     user: BaseUser;
   } | null;
+}
+
+export interface SupportTicketMessage extends BaseSupportTicketMessage {
   createdAt: string;
   updatedAt: string;
 }
