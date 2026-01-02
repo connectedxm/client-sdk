@@ -15,9 +15,9 @@ import { SELF_QUERY_KEY } from "../self/useGetSelf";
  * @group Support Tickets
  */
 export const SUPPORT_TICKETS_QUERY_KEY = (
-  state?: string,
-  type?: string
-): QueryKey => [...SELF_QUERY_KEY(), "SUPPORT_TICKETS", state, type];
+  type?: string,
+  state?: string
+): QueryKey => [...SELF_QUERY_KEY(), "SUPPORT_TICKETS", type, state];
 
 /**
  * @category Setters
@@ -74,8 +74,8 @@ export const GetSupportTickets = async ({
  * @group Support Tickets
  */
 export const useGetSupportTickets = (
-  state?: string,
   type?: string,
+  state?: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
@@ -87,7 +87,7 @@ export const useGetSupportTickets = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSupportTickets>>
   >(
-    SUPPORT_TICKETS_QUERY_KEY(state, type),
+    SUPPORT_TICKETS_QUERY_KEY(type, state),
     (params: InfiniteQueryParams) =>
       GetSupportTickets({ type, state, ...params }),
     params,
