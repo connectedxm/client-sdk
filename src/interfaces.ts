@@ -1774,9 +1774,6 @@ export interface NotificationPreferences {
   commentPush: boolean;
   transferPush: boolean;
   transferEmail: boolean;
-  supportTicketNewMessagePush: boolean;
-  supportTicketNewMessageEmail: boolean;
-  supportTicketStatusChangePush: boolean;
   chatPush: boolean;
   chatUnreadPush: boolean;
   chatUnreadEmail: boolean;

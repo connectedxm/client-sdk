@@ -18,7 +18,6 @@ export interface UpdateSelfNotificationPreferencesParams
   commentPush?: boolean;
   transferPush?: boolean;
   transferEmail?: boolean;
-  supportTicketConfirmationEmail?: boolean;
   chatPush?: boolean;
   chatUnreadPush?: boolean;
   chatUnreadEmail?: boolean;
