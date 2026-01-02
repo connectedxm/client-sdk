@@ -74,8 +74,8 @@ export const GetSupportTickets = async ({
  * @group Support Tickets
  */
 export const useGetSupportTickets = (
-  type?: string,
   state?: string,
+  type?: string,
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
