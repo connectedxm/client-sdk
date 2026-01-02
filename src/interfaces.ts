@@ -1359,7 +1359,7 @@ export interface BaseSupportTicketNote {}
 
 export interface BaseSupportTicketMessage {
   id: string;
-  supportTicketId: BaseSupportTicket;
+  supportTicketId: string;
   source: string;
   message: string;
   accountId: string | null;

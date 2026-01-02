@@ -62,7 +62,7 @@ export const CreateSupportTicket = async ({
     AppendInfiniteQuery<SupportTicket>(
       queryClient,
       [
-        ...SUPPORT_TICKETS_QUERY_KEY(type, state),
+        ...SUPPORT_TICKETS_QUERY_KEY(state, type),
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ],
       data.data
