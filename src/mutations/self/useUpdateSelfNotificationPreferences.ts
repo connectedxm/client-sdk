@@ -14,13 +14,13 @@ export interface UpdateSelfNotificationPreferencesParams
   extends MutationParams {
   newFollowerPush?: boolean;
   likePush?: boolean;
-  resharePush?: boolean;
   commentPush?: boolean;
   transferPush?: boolean;
   transferEmail?: boolean;
   chatPush?: boolean;
   chatUnreadPush?: boolean;
   chatUnreadEmail?: boolean;
+  eventReminderEmail?: boolean;
   activityNotificationPreference?: OrganizationActivityPreference;
   organizationAnnouncementPush?: boolean;
   organizationAnnouncementEmail?: boolean;
