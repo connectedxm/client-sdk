@@ -425,18 +425,9 @@ export const isTypeGroup = (group: BaseGroup | Group): group is Group => {
   return (group as Omit<Group, keyof BaseGroup>)._count !== undefined;
 };
 
-export interface BaseEvent {
-  id: string;
-  slug: string;
-  name: string;
-  shortDescription: string;
-  featured: boolean;
-  timezone: string | null;
-  eventStart: string;
-  eventEnd: string;
-  image: BaseImage | null;
-  squareImage: BaseImage | null;
-  series: BaseSeries | null;
+export interface BasePaymentIntegration {
+  id: number;
+  currencyCode: string;
 }
 
 export enum EventSource {
@@ -449,6 +440,20 @@ export enum EventType {
   physical = "physical",
   virtual = "virtual",
   hybrid = "hybrid",
+}
+
+export interface BaseEvent {
+  id: string;
+  slug: string;
+  name: string;
+  shortDescription: string;
+  featured: boolean;
+  timezone: string | null;
+  eventStart: string;
+  eventEnd: string;
+  image: BaseImage | null;
+  squareImage: BaseImage | null;
+  series: BaseSeries | null;
 }
 
 export interface Event extends BaseEvent {
@@ -496,6 +501,7 @@ export interface Event extends BaseEvent {
   options: Record<string, any> | null;
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
+  paymentIntegration: BasePaymentIntegration | null;
   _count: {
     activations: number;
     sessions: number;
@@ -523,6 +529,7 @@ export interface RegistrationEventDetails extends BaseEvent {
   splitPaymentPercentage: number;
   splitPaymentNetDays: number | null;
   splitPaymentDueDate: string | null;
+  paymentIntegration: BasePaymentIntegration | null;
   tickets: {
     enableCoupons: boolean;
   }[];
@@ -2028,6 +2035,7 @@ export interface BaseInvoice {
   sentDate: string | null;
   dueDate: string;
   status: InvoiceStatus;
+  paymentIntegration: BasePaymentIntegration | null;
 }
 
 export interface Invoice extends BaseInvoice {
@@ -2577,6 +2585,7 @@ export interface BaseBookingPlace {
   timezone: string;
   description: string | null;
   image: BaseImage | null;
+  paymentIntegration: BasePaymentIntegration | null;
 }
 
 export interface BookingPlace extends BaseBookingPlace {

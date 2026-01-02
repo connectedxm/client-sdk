@@ -1,12 +1,12 @@
 {
   "name": "@connectedxm/client",
-  "version": "7.0.7",
+  "version": "7.0.13",
   "description": "Client API javascript SDK",
   "author": "ConnectedXM Inc.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/connectedxm/client-sdk.git"
+    "url": "git+https://github.com/connectedxm/client-sdk.git"
   },
   "license": "MIT",
   "private": false,

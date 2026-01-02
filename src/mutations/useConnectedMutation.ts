@@ -66,7 +66,9 @@ export const useConnectedMutation = <
       ),
     ...options,
     onError: (error, variables, onMutateResult, context) => {
-      if (onMutationError) onMutationError(error, variables, context);
+      if (onMutationError && options?.throwOnError !== false) {
+        onMutationError(error, variables, context);
+      }
       if (options?.onError)
         options.onError(error, variables, onMutateResult, context);
     },
