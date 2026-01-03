@@ -82,7 +82,11 @@ export const useGetStreamChatMessages = (
     params,
     {
       ...options,
-      enabled: !!authenticated && !!streamId && (options?.enabled ?? true),
+      enabled:
+        !!authenticated &&
+        !!streamId &&
+        !!sessionId &&
+        (options?.enabled ?? true),
     }
   );
 };
