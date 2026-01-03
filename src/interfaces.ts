@@ -2245,6 +2245,17 @@ export interface ThreadMessageReaction extends BaseThreadMessageReaction {
   createdAt: string;
 }
 
+export interface StreamChatMessage {
+  messageId: string;
+  streamId: string;
+  sessionId: string;
+  accountId: string;
+  name: string;
+  connectionId: string;
+  message: string;
+  timestamp: number;
+}
+
 export enum DefaultAuthAction {
   signIn = "signIn",
   signUp = "signUp",

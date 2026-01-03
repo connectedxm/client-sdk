@@ -13,6 +13,7 @@ export * from "./searchlists";
 export * from "./self";
 export * from "./series";
 export * from "./sponsors";
+export * from "./streams";
 export * from "./invoices";
 export * from "./listings";
 export * from "./interests";
