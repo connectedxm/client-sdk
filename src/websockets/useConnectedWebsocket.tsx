@@ -5,6 +5,12 @@ import ChatNewMessage from "./chat/ChatNewMessage";
 import ThreadMessageCreated from "./threads/messages/ThreadMessageCreated";
 import ThreadMessageDeleted from "./threads/messages/ThreadMessageDeleted";
 import ThreadMessageUpdated from "./threads/messages/ThreadMessageUpdated";
+import StreamChatCreated from "./stream/StreamChatCreated";
+import StreamChatDeleted from "./stream/StreamChatDeleted";
+import StreamChatUpdated from "./stream/StreamChatUpdated";
+import StreamConnected from "./stream/StreamConnected";
+import StreamDisconnected from "./stream/StreamDisconnected";
+import PulseMessage from "./PulseMessage";
 import { useQueryClient } from "@tanstack/react-query";
 import type UseWebSocket from "react-use-websocket";
 
@@ -20,6 +26,7 @@ export const useConnectedWebsocket = (
     authenticated,
     locale,
     getToken,
+    getExecuteAs,
     websocketUrl,
     organizationId,
   }: ConnectedWebsocketProps
@@ -37,9 +44,15 @@ export const useConnectedWebsocket = (
     const getSocketUrl = async () => {
       const token = await getToken();
       if (!token) return null;
+      const executeAs = getExecuteAs ? await getExecuteAs() : undefined;
+      if (!executeAs) return null;
 
       setSocketUrl(
-        `${websocketUrl}?organization=${organizationId}&authorization=${token}`
+        `${websocketUrl}?organization=${encodeURIComponent(
+          organizationId
+        )}&authorization=${encodeURIComponent(
+          token
+        )}&executeas=${encodeURIComponent(executeAs)}`
       );
     };
 
@@ -48,7 +61,7 @@ export const useConnectedWebsocket = (
     } else {
       setSocketUrl(null);
     }
-  }, [authenticated, getToken, websocketUrl, organizationId]);
+  }, [authenticated, getToken, getExecuteAs, websocketUrl, organizationId]);
 
   const { sendJsonMessage, lastMessage } = useWebSocket(
     socketUrl,
@@ -99,6 +112,18 @@ export const useConnectedWebsocket = (
       ThreadMessageUpdated(queryClient, locale, lastWSMessage);
     } else if (lastWSMessage.type === "thread.message.deleted") {
       ThreadMessageDeleted(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "stream.chat.created") {
+      StreamChatCreated(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "stream.chat.deleted") {
+      StreamChatDeleted(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "stream.chat.updated") {
+      StreamChatUpdated(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "stream.connected") {
+      StreamConnected(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "stream.disconnected") {
+      StreamDisconnected(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "pulse") {
+      PulseMessage(queryClient, locale, lastWSMessage);
     }
   });
 

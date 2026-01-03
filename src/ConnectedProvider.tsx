@@ -20,7 +20,7 @@ export interface ConnectedXMClientContextState {
   websocketUrl:
     | "wss://websocket.connected.dev"
     | "wss://staging-websocket.connected.dev"
-    | "http://0.0.0.0:3005";
+    | "ws://0.0.0.0:3005";
   authenticated: boolean;
   getToken: () => Promise<string | undefined>;
   getExecuteAs?: () => Promise<string | undefined> | string | undefined;
