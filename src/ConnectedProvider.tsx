@@ -9,6 +9,7 @@ import {
   SendWSMessage,
   useConnectedWebsocket,
 } from "./websockets";
+import { ReadyState } from "react-use-websocket";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -27,6 +28,7 @@ export interface ConnectedXMClientContextState {
   locale: string;
   sendWSMessage: (message: SendWSMessage) => void;
   lastWSMessage: ReceivedWSMessage | null;
+  websocketState: ReadyState;
   onNotAuthorized?: (
     error: AxiosError<ConnectedXMResponse<any>>,
     key: QueryKey,
@@ -68,13 +70,18 @@ export const ConnectedProvider = ({
   useWebSocket,
   ...state
 }: ConnectedProviderProps) => {
-  const { sendWSMessage, lastWSMessage } = useConnectedWebsocket(
+  const { sendWSMessage, lastWSMessage, readyState } = useConnectedWebsocket(
     useWebSocket,
     state
   );
   return (
     <ConnectedXMClientContext.Provider
-      value={{ ...state, sendWSMessage, lastWSMessage }}
+      value={{
+        ...state,
+        sendWSMessage,
+        lastWSMessage,
+        websocketState: readyState,
+      }}
     >
       {children}
     </ConnectedXMClientContext.Provider>
