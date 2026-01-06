@@ -63,7 +63,7 @@ export const useConnectedWebsocket = (
     }
   }, [authenticated, getToken, getExecuteAs, websocketUrl, organizationId]);
 
-  const { sendJsonMessage, lastMessage } = useWebSocket(
+  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
     socketUrl,
     {
       shouldReconnect: () => true,
@@ -71,10 +71,10 @@ export const useConnectedWebsocket = (
         Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
       reconnectAttempts: 5, // Max reconnect attempts
       heartbeat: {
-        interval: 25000,
+        interval: 15000,
         message: JSON.stringify({ type: "heartbeat" }),
         returnMessage: JSON.stringify({ type: "pulse" }),
-        timeout: 60000,
+        timeout: 20000,
       },
     },
     !!authenticated
@@ -127,5 +127,5 @@ export const useConnectedWebsocket = (
     }
   });
 
-  return { sendWSMessage, lastWSMessage };
+  return { sendWSMessage, lastWSMessage, readyState };
 };
