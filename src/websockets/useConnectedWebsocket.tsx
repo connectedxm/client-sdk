@@ -17,7 +17,7 @@ import type UseWebSocket from "react-use-websocket";
 interface ConnectedWebsocketProps
   extends Omit<
     ConnectedXMClientContextState,
-    "sendWSMessage" | "lastWSMessage"
+    "sendWSMessage" | "lastWSMessage" | "websocketState"
   > {}
 
 export const useConnectedWebsocket = (

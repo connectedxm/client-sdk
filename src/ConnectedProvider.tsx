@@ -59,7 +59,7 @@ export const ConnectedXMClientContext =
 export interface ConnectedProviderProps
   extends Omit<
     ConnectedXMClientContextState,
-    "sendWSMessage" | "lastWSMessage"
+    "sendWSMessage" | "lastWSMessage" | "websocketState"
   > {
   useWebSocket: typeof UseWebSocket;
   children: React.ReactNode;
