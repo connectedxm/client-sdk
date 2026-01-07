@@ -18,11 +18,7 @@ import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery
 export interface CreateSupportTicketParams extends MutationParams {
   type: string;
   request: string;
-  email: string;
-  state: string;
-  accountId: string | null;
-  orgMembershipId: string | null;
-  eventId: string | null;
+  eventId?: string | null;
 }
 
 /**
@@ -32,10 +28,6 @@ export interface CreateSupportTicketParams extends MutationParams {
 export const CreateSupportTicket = async ({
   type,
   request,
-  email,
-  state,
-  accountId,
-  orgMembershipId,
   eventId,
   clientApiParams,
   queryClient,
@@ -46,11 +38,7 @@ export const CreateSupportTicket = async ({
     {
       type,
       request,
-      email,
-      state,
-      accountId: accountId || undefined,
-      orgMembershipId: orgMembershipId || undefined,
-      eventId: eventId || undefined,
+      ...(eventId !== undefined && eventId !== null && { eventId }),
     }
   );
 
@@ -62,7 +50,7 @@ export const CreateSupportTicket = async ({
     AppendInfiniteQuery<SupportTicket>(
       queryClient,
       [
-        ...SUPPORT_TICKETS_QUERY_KEY(type, state),
+        ...SUPPORT_TICKETS_QUERY_KEY(type, data.data.state),
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ],
       data.data
