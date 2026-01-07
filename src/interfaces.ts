@@ -273,6 +273,8 @@ export interface BaseSelf {
   lastName: string | null;
   email: string | null;
   verified: boolean;
+  needsProfileCompletion: boolean;
+  internalRefId: string | null;
   locale: string;
 }
 
@@ -2926,7 +2928,7 @@ export interface BaseLogin {
 }
 
 export interface Login extends BaseLogin {
-  accounts: Self[];
+  accounts: BaseSelf[];
 }
 
 export enum MeetingType {
