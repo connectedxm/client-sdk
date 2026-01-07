@@ -1,4 +1,5 @@
 export * from "./useGetSelfEventAttendeePayment";
+export * from "./useGetSelfEventAttendeePayments";
 export * from "./useGetSelfEventAttendeePass";
 export * from "./useGetSelfEventAttendeePassAddOnsIntent";
 export * from "./useGetSelfEventAttendeeCoupon";

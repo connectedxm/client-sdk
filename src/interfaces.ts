@@ -1631,10 +1631,10 @@ export interface Registration extends BaseRegistration {
   account: BaseAccount;
   passes: BasePass[];
   packages: BaseAttendeePackage[];
-  payments: Payment[];
-  coupons: ManagedCoupon[];
   createdAt: string;
   _count: {
+    payments: number;
+    coupons: number;
     fromTransferLogs: number;
   };
 }
