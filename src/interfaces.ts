@@ -273,7 +273,6 @@ export interface BaseSelf {
   lastName: string | null;
   email: string | null;
   verified: boolean;
-  chatConnected?: boolean;
   locale: string;
 }
 
