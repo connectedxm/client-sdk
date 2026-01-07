@@ -1330,7 +1330,6 @@ export interface BaseSupportTicket {
 }
 
 export interface SupportTicket extends BaseSupportTicket {
-  email: string;
   accountId: string | null;
   account: BaseAccount | null;
   orgMembershipId: string | null;
@@ -1350,8 +1349,8 @@ export const isTypeSupportTicket = (
   supportTicket: BaseSupportTicket | SupportTicket
 ): supportTicket is SupportTicket => {
   return (
-    (supportTicket as Omit<SupportTicket, keyof BaseSupportTicket>).email !==
-    undefined
+    (supportTicket as Omit<SupportTicket, keyof BaseSupportTicket>)
+      .accountId !== undefined
   );
 };
 
@@ -1376,18 +1375,9 @@ export interface SupportTicketMessage extends BaseSupportTicketMessage {
   updatedAt: string;
 }
 
-export enum SupportTicketActivityLogType {
-  created = "created",
-  statusChanged = "statusChanged",
-  typeChanged = "typeChanged",
-  eventLinked = "eventLinked",
-}
+export enum SupportTicketActivityLogType {}
 
-export enum SupportTicketActivityLogSource {
-  system = "system",
-  account = "account",
-  org_member = "org_member",
-}
+export enum SupportTicketActivityLogSource {}
 
 export enum SupportTicketMessageSource {
   account = "account",
