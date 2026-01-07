@@ -265,6 +265,17 @@ export interface SelfRelationships {
   threads: Record<string, boolean>;
 }
 
+export interface BaseSelf {
+  id: string;
+  image: BaseImage | null;
+  username: string;
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  verified: boolean;
+  locale: string;
+}
+
 export interface Self extends Omit<Account, "_count"> {
   email: string | null;
   verified: boolean;

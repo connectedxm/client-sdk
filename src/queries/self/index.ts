@@ -5,6 +5,7 @@ export * from "./registration";
 export * from "./attendee";
 
 export * from "./useGetSelf";
+export * from "./useGetSelfProfile";
 export * from "./useGetSelfRelationships";
 export * from "./useGetSelfActivities";
 export * from "./useGetSelfAnnouncement";

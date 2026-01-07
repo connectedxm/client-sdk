@@ -5,7 +5,7 @@ import {
   useConnectedSingleQuery,
 } from "../useConnectedSingleQuery";
 
-import type { ConnectedXMResponse, Self } from "@interfaces";
+import type { BaseSelf, ConnectedXMResponse } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
@@ -35,7 +35,7 @@ export interface GetSelfProps extends SingleQueryParams {
 export const GetSelf = async ({
   ignoreExecuteAs,
   clientApiParams,
-}: GetSelfProps): Promise<ConnectedXMResponse<Self>> => {
+}: GetSelfProps): Promise<ConnectedXMResponse<BaseSelf>> => {
   const clientApi = await GetClientAPI({
     ...clientApiParams,
     getExecuteAs: ignoreExecuteAs ? undefined : clientApiParams.getExecuteAs,
