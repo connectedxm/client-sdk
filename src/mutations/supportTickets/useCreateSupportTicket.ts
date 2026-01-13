@@ -19,6 +19,7 @@ export interface CreateSupportTicketParams extends MutationParams {
   type: string;
   request: string;
   eventId?: string | null;
+  firstMessage?: string | null;
 }
 
 /**
@@ -29,6 +30,7 @@ export const CreateSupportTicket = async ({
   type,
   request,
   eventId,
+  firstMessage,
   clientApiParams,
   queryClient,
 }: CreateSupportTicketParams): Promise<ConnectedXMResponse<SupportTicket>> => {
@@ -39,6 +41,8 @@ export const CreateSupportTicket = async ({
       type,
       request,
       ...(eventId !== undefined && eventId !== null && { eventId }),
+      ...(firstMessage !== undefined &&
+        firstMessage !== null && { firstMessage }),
     }
   );
 
