@@ -276,6 +276,7 @@ export interface BaseSelf {
   needsProfileCompletion: boolean;
   internalRefId: string | null;
   locale: string;
+  tierIds: string[];
 }
 
 export interface Self extends Omit<Account, "_count"> {
