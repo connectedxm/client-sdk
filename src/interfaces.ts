@@ -2352,6 +2352,7 @@ export enum OrganizationModuleType {
   announcements = "announcements",
   bookings = "bookings",
   surveys = "surveys",
+  meetings = "meetings",
 }
 
 export enum PaymentIntegrationType {
