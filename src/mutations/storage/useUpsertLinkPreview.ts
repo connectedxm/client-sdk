@@ -15,7 +15,7 @@ export const UpsertLinkPreview = async ({
 }: UpsertLinkPreviewParams): Promise<ConnectedXMResponse<LinkPreview | null>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<LinkPreview | null>>(
-    `/storage/link-preview`,
+    `/organization/link-preview`,
     {
       href,
     }
