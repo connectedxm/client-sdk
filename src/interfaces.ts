@@ -329,6 +329,7 @@ export interface BaseActivity {
   account: BaseAccount;
   groupId: string | null;
   eventId: string | null;
+  meetingId: string | null;
   pinned: boolean;
   contentId: string | null;
   commentedId: string | null;
@@ -337,6 +338,7 @@ export interface BaseActivity {
 }
 
 export interface Activity extends BaseActivity {
+  meeting: BaseMeeting | null;
   group: BaseGroup | null;
   event: BaseEvent | null;
   content: BaseContent | null;
@@ -2947,9 +2949,10 @@ export interface BaseMeeting {
 }
 
 export interface Meeting extends BaseMeeting {
-  event?: BaseEvent;
-  session?: BaseSession;
-  group?: BaseGroup;
+  event: BaseEvent | null;
+  session: BaseSession | null;
+  group: BaseGroup | null;
+  activity: BaseActivity | null;
   streams: BaseStreamInput[];
 }
 
