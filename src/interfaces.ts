@@ -2966,6 +2966,7 @@ export interface BaseStreamInput {
   locale: string;
   cloudflareId: string;
   webRTC: boolean;
+  webRTCPlaybackUrl: string | null;
 }
 
 export interface StreamInput extends BaseStreamInput {
@@ -2973,4 +2974,5 @@ export interface StreamInput extends BaseStreamInput {
   groupId: string | null;
   sessionId: string | null;
   meetingId: string | null;
+  activityId: string | null;
 }
