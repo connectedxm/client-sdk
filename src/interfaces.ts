@@ -2966,6 +2966,7 @@ export interface BaseStreamInput {
   locale: string;
   cloudflareId: string;
   webRTC: boolean;
+  webRTCPlaybackUrl: string | null;
 }
 
 export interface StreamInput extends BaseStreamInput {
