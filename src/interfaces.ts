@@ -2973,4 +2973,5 @@ export interface StreamInput extends BaseStreamInput {
   groupId: string | null;
   sessionId: string | null;
   meetingId: string | null;
+  activityId: string | null;
 }
