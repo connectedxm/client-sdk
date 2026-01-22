@@ -344,6 +344,7 @@ export interface Activity extends BaseActivity {
   content: BaseContent | null;
   commented: BaseActivity | null;
   entities: BaseActivityEntity[] | null;
+  streams: BaseStreamInput[];
   updatedAt: string;
   likes?: {
     createdAt: string;
@@ -2964,6 +2965,7 @@ export interface BaseStreamInput {
   image: BaseImage | null;
   locale: string;
   cloudflareId: string;
+  webRTC: boolean;
 }
 
 export interface StreamInput extends BaseStreamInput {
