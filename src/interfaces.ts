@@ -344,6 +344,7 @@ export interface Activity extends BaseActivity {
   content: BaseContent | null;
   commented: BaseActivity | null;
   entities: BaseActivityEntity[] | null;
+  streams: BaseStreamInput[];
   updatedAt: string;
   likes?: {
     createdAt: string;
