@@ -1,7 +1,9 @@
 import React from "react";
 import { ConnectedXMClientContextState } from "../ConnectedProvider";
 import { ReceivedWSMessage, SendWSMessage } from "./interfaces";
-import ChatNewMessage from "./chat/ChatNewMessage";
+import ChatMessageCreated from "./chat/ChatMessageCreated";
+import ChatMessageDeleted from "./chat/ChatMessageDeleted";
+import ChatMessageUpdated from "./chat/ChatMessageUpdated";
 import ThreadMessageCreated from "./threads/messages/ThreadMessageCreated";
 import ThreadMessageDeleted from "./threads/messages/ThreadMessageDeleted";
 import ThreadMessageUpdated from "./threads/messages/ThreadMessageUpdated";
@@ -104,8 +106,12 @@ export const useConnectedWebsocket = (
   React.useEffect(() => {
     if (!lastWSMessage) return;
 
-    if (lastWSMessage.type === "new-message") {
-      ChatNewMessage(queryClient, locale, lastWSMessage);
+    if (lastWSMessage.type === "chat.message.created") {
+      ChatMessageCreated(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "chat.message.deleted") {
+      ChatMessageDeleted(queryClient, locale, lastWSMessage);
+    } else if (lastWSMessage.type === "chat.message.updated") {
+      ChatMessageUpdated(queryClient, locale, lastWSMessage);
     } else if (lastWSMessage.type === "thread.message.created") {
       ThreadMessageCreated(queryClient, locale, lastWSMessage);
     } else if (lastWSMessage.type === "thread.message.updated") {

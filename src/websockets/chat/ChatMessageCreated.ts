@@ -8,19 +8,19 @@ import {
 } from "@src/queries";
 import { AppendInfiniteQuery, MergeInfinitePages } from "@src/utilities";
 
-export interface WSNewChatMessage {
+export interface WSChatMessageCreated {
+  type: "chat.message.created";
   timestamp: number;
-  type: "new-message";
   body: {
     channelId: number;
     message: ChatChannelMessage;
   };
 }
 
-const ChatNewMessage = (
+const ChatMessageCreated = (
   queryClient: QueryClient,
   locale: string,
-  message: WSNewChatMessage
+  message: WSChatMessageCreated
 ) => {
   const QueryKey = [
     ...SELF_CHAT_CHANNEL_MESSAGES_QUERY_KEY(message.body.channelId.toString()),
@@ -34,7 +34,7 @@ const ChatNewMessage = (
 
   const exists = existingMessages
     ? MergeInfinitePages(existingMessages).find(
-        (message) => message.id === message.id
+        (msg) => msg.id === message.body.message.id
       )
     : false;
 
@@ -43,4 +43,4 @@ const ChatNewMessage = (
   }
 };
 
-export default ChatNewMessage;
+export default ChatMessageCreated;

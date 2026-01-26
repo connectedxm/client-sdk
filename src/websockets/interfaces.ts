@@ -1,4 +1,6 @@
-import { WSNewChatMessage } from "./chat/ChatNewMessage";
+import { WSChatMessageCreated } from "./chat/ChatMessageCreated";
+import { WSChatMessageDeleted } from "./chat/ChatMessageDeleted";
+import { WSChatMessageUpdated } from "./chat/ChatMessageUpdated";
 import { WSThreadMessageCreated } from "./threads/messages/ThreadMessageCreated";
 import { WSThreadMessageUpdated } from "./threads/messages/ThreadMessageUpdated";
 import { WSThreadMessageDeleted } from "./threads/messages/ThreadMessageDeleted";
@@ -28,7 +30,9 @@ export type SendWSMessage =
   | HeartbeatMessage;
 
 export type ReceivedWSMessage =
-  | WSNewChatMessage
+  | WSChatMessageCreated
+  | WSChatMessageDeleted
+  | WSChatMessageUpdated
   | WSThreadMessageCreated
   | WSThreadMessageUpdated
   | WSThreadMessageDeleted
