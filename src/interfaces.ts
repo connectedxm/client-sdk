@@ -1089,6 +1089,7 @@ export interface Session extends BaseSession {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
+  bookmarks?: {id: string}[]; // if this array is not empty, the session is bookmarked
   supply?: number | null;
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
