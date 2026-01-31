@@ -8,10 +8,16 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 
-export const EVENT_SESSIONS_QUERY_KEY = (eventId: string): QueryKey => [
-  ...EVENT_QUERY_KEY(eventId),
-  "SESSIONS",
-];
+export const EVENT_SESSIONS_QUERY_KEY = (
+  eventId: string,
+  passId?: string
+): QueryKey => {
+  const key = [...EVENT_QUERY_KEY(eventId), "SESSIONS"];
+  if (passId) {
+    key.push(passId);
+  }
+  return key;
+};
 
 export const SET_EVENT_SESSIONS_QUERY_DATA = (
   client: QueryClient,
@@ -58,7 +64,7 @@ export const useGetEventSessions = (
   options: SingleQueryOptions<ReturnType<typeof GetEventSessions>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSessions>>(
-    EVENT_SESSIONS_QUERY_KEY(eventId),
+    EVENT_SESSIONS_QUERY_KEY(eventId, passId),
     (params: SingleQueryParams) =>
       GetEventSessions({ eventId, search, passId, ...params }),
     {
