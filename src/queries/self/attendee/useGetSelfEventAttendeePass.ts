@@ -1,9 +1,4 @@
-import {
-  ConnectedXMResponse,
-  Pass,
-  RegistrationQuestion,
-  RegistrationQuestionResponse,
-} from "@src/interfaces";
+import { ConnectedXMResponse, Pass } from "@src/interfaces";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
@@ -13,14 +8,6 @@ import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
 import { SELF_EVENT_ATTENDEE_QUERY_KEY } from "./useGetSelfEventAttendee";
-
-interface ResponseWithQuestion extends RegistrationQuestionResponse {
-  question: RegistrationQuestion;
-}
-
-interface PassWithResponseQuestions extends Pass {
-  responses: ResponseWithQuestion[];
-}
 
 export const SELF_EVENT_ATTENDEE_PASS_QUERY_KEY = (
   eventId: string,
@@ -51,9 +38,7 @@ export const GetSelfEventAttendeePass = async ({
   eventId,
   passId,
   clientApiParams,
-}: GetSelfEventAttendeePassProps): Promise<
-  ConnectedXMResponse<PassWithResponseQuestions>
-> => {
+}: GetSelfEventAttendeePassProps): Promise<ConnectedXMResponse<Pass>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/self/events/${eventId}/attendee/passes/${passId}`

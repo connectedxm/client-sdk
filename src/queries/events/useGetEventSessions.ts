@@ -8,10 +8,16 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 
-export const EVENT_SESSIONS_QUERY_KEY = (eventId: string): QueryKey => [
-  ...EVENT_QUERY_KEY(eventId),
-  "SESSIONS",
-];
+export const EVENT_SESSIONS_QUERY_KEY = (
+  eventId: string,
+  passId?: string
+): QueryKey => {
+  const key = [...EVENT_QUERY_KEY(eventId), "SESSIONS"];
+  if (passId) {
+    key.push(passId);
+  }
+  return key;
+};
 
 export const SET_EVENT_SESSIONS_QUERY_DATA = (
   client: QueryClient,
@@ -30,17 +36,19 @@ export const SET_EVENT_SESSIONS_QUERY_DATA = (
 
 export interface GetEventSessionsProps extends SingleQueryParams {
   eventId: string;
-  search?: string;
+  passId?: string;
 }
 
 export const GetEventSessions = async ({
   eventId,
-  search,
+  passId,
   clientApiParams,
 }: GetEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/sessions`, {
-    params: { search: search || undefined },
+    params: {
+      passId: passId || undefined,
+    },
   });
 
   return data;
@@ -48,13 +56,13 @@ export const GetEventSessions = async ({
 
 export const useGetEventSessions = (
   eventId: string = "",
-  search?: string,
+  passId?: string,
   options: SingleQueryOptions<ReturnType<typeof GetEventSessions>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventSessions>>(
-    EVENT_SESSIONS_QUERY_KEY(eventId),
+    EVENT_SESSIONS_QUERY_KEY(eventId, passId),
     (params: SingleQueryParams) =>
-      GetEventSessions({ eventId, search, ...params }),
+      GetEventSessions({ eventId, passId, ...params }),
     {
       ...options,
       enabled: !!eventId && (options?.enabled ?? true),
