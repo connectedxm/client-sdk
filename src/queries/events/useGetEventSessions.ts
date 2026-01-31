@@ -65,7 +65,7 @@ export const useGetEventSessions = (
       GetEventSessions({ eventId, passId, ...params }),
     {
       ...options,
-      enabled: !!eventId && !!passId && (options?.enabled ?? true),
+      enabled: !!eventId && (options?.enabled ?? true),
     }
   );
 };
