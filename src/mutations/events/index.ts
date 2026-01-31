@@ -1,2 +1,3 @@
 export * from "./useCompleteEventActivation";
-export * from "./useToggleEventSessionBookmark";
+export * from "./useBookmarkEventAttendeePassSession";
+export * from "./useUnbookmarkEventAttendeePassSession";

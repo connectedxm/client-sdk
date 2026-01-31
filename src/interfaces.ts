@@ -826,8 +826,18 @@ export interface Pass extends BasePass {
   package: BaseAttendeePackage | null;
   matches: BaseMatch[];
   lineItem: PaymentLineItem | null;
+  bookmarks: BaseSessionBookmark[];
   updatedAt: string;
   payerId: string | null;
+}
+
+export interface BaseSessionBookmark {
+  id: string;
+  sessionId: string;
+}
+
+export interface SessionBookmark extends BaseSessionBookmark {
+  session: BaseSession;
 }
 
 export interface BasePassAddon {
@@ -1089,7 +1099,7 @@ export interface Session extends BaseSession {
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
   accounts?: BaseAccount[]; // if you have saved this session = Array > 0
-  bookmarks?: {id: string}[]; // if this array is not empty, the session is bookmarked
+  bookmarks?: { id: string }[]; // if this array is not empty, the session is bookmarked
   supply?: number | null;
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
