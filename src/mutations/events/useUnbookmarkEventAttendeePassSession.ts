@@ -39,7 +39,8 @@ export const UnbookmarkEventAttendeePassSession = async ({
     SET_SELF_EVENT_ATTENDEE_PASS_QUERY_DATA(
       queryClient,
       [eventId, passId],
-      data
+      data,
+      [clientApiParams.locale]
     );
   }
 
