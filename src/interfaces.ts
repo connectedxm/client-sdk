@@ -1453,6 +1453,13 @@ export interface BaseAdvertisement {
 export interface Advertisement extends BaseAdvertisement {
   title: string;
   description: string | null;
+  account: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    image: BaseImage | null;
+  };
 }
 
 export const isTypeAdvertisement = (
