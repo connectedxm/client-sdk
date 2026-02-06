@@ -1455,8 +1455,8 @@ export interface Advertisement extends BaseAdvertisement {
   description: string | null;
   account: {
     id: string;
-    firstName: string;
-    lastName: string;
+    firstName: string | null;
+    lastName: string | null;
     username: string;
     image: BaseImage | null;
   };
