@@ -2464,6 +2464,7 @@ export interface OrganizationConfig {
     CONNECTION_ID: string | null;
     PUBLIC_KEY: string | null;
     CURRENCY: string;
+    CURRENCY_DISPLAY: "symbol" | "code";
   };
   INTEGRATIONS: Integration[];
   ATTRIBUTES: {
