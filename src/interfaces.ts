@@ -1453,6 +1453,13 @@ export interface BaseAdvertisement {
 export interface Advertisement extends BaseAdvertisement {
   title: string;
   description: string | null;
+  account: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    image: BaseImage | null;
+  };
 }
 
 export const isTypeAdvertisement = (
@@ -2464,6 +2471,7 @@ export interface OrganizationConfig {
     CONNECTION_ID: string | null;
     PUBLIC_KEY: string | null;
     CURRENCY: string;
+    CURRENCY_DISPLAY: "symbol" | "code";
   };
   INTEGRATIONS: Integration[];
   ATTRIBUTES: {
