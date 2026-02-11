@@ -526,6 +526,7 @@ export interface Event extends BaseEvent {
     sponsorshipLevels: number;
     media: number;
     roomTypes: number;
+    surveys: number;
   };
 }
 
@@ -1103,6 +1104,7 @@ export interface Session extends BaseSession {
   supply?: number | null;
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
+  surveys: BaseSurvey[];
   _count: {
     sections: number;
   };
@@ -1919,6 +1921,7 @@ export interface EventActivation extends BaseEventActivation {
   event: BaseEvent;
   longDescription: string | null;
   completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
+  surveys: BaseSurvey[];
   createdAt: string;
   updatedAt: string;
 }
@@ -2790,6 +2793,7 @@ export interface BaseSurvey {
   id: string;
   slug: string;
   name: string;
+  active: boolean;
 }
 
 export interface Survey extends BaseSurvey {
@@ -2797,6 +2801,9 @@ export interface Survey extends BaseSurvey {
   image: BaseImage | null;
   requireAuth: boolean;
   submissionsPerAccount: number;
+  event: BaseEvent | null;
+  session: BaseSession | null;
+  activation: BaseEventActivation | null;
 }
 
 export interface BaseSurveySection {
@@ -2873,6 +2880,7 @@ export interface BaseSurveySubmission {
   id: string;
   responses: BaseSurveyQuestionResponse[];
   status: PurchaseStatus;
+  accountId: string;
 }
 
 export interface SurveySubmission extends BaseSurveySubmission {}
