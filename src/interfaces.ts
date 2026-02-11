@@ -1921,7 +1921,7 @@ export interface EventActivation extends BaseEventActivation {
   event: BaseEvent;
   longDescription: string | null;
   completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
-  surveys: BaseSurvey[];
+  survey: BaseSurvey | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -2794,13 +2794,13 @@ export interface BaseSurvey {
   slug: string;
   name: string;
   active: boolean;
+  image: BaseImage | null;
+  submissionsPerAccount: number;
 }
 
 export interface Survey extends BaseSurvey {
   description: string | null;
-  image: BaseImage | null;
   requireAuth: boolean;
-  submissionsPerAccount: number;
   event: BaseEvent | null;
   session: BaseSession | null;
   activation: BaseEventActivation | null;
