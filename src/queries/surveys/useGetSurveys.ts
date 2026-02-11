@@ -1,4 +1,4 @@
-import type { BaseSurvey } from "@interfaces";
+import type { Survey } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -44,7 +44,7 @@ export const GetSurveys = async ({
   search,
   eventId,
   clientApiParams,
-}: GetSurveysProps): Promise<ConnectedXMResponse<BaseSurvey[]>> => {
+}: GetSurveysProps): Promise<ConnectedXMResponse<Survey[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/surveys`, {
     params: {
