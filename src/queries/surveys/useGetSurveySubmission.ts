@@ -11,11 +11,7 @@ import { SURVEY_SUBMISSIONS_QUERY_KEY } from "./useGetSurveySubmissions";
 export const SURVEY_SUBMISSION_QUERY_KEY = (
   surveyId: string,
   submissionId: string
-): QueryKey => [
-  ...SURVEY_SUBMISSIONS_QUERY_KEY(surveyId),
-  "SUBMISSIONS",
-  submissionId,
-];
+): QueryKey => [...SURVEY_SUBMISSIONS_QUERY_KEY(surveyId), submissionId];
 
 export const SET_SELF_SURVEY_SUBMISSION_QUERY_DATA = (
   client: QueryClient,

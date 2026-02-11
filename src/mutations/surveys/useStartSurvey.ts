@@ -7,15 +7,19 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export interface StartSurveyParams extends MutationParams {
   surveyId: string;
+  passId?: string;
 }
 
 export const StartSurvey = async ({
   surveyId,
+  passId,
   clientApiParams,
 }: StartSurveyParams): Promise<ConnectedXMResponse<{ id: string }>> => {
   const clientApi = await GetClientAPI(clientApiParams);
+
   const { data } = await clientApi.post<ConnectedXMResponse<{ id: string }>>(
-    `/surveys/${surveyId}/submissions`
+    `/surveys/${surveyId}/submissions`,
+    { passId }
   );
 
   return data;
