@@ -526,6 +526,7 @@ export interface Event extends BaseEvent {
     sponsorshipLevels: number;
     media: number;
     roomTypes: number;
+    surveys: number;
   };
 }
 
@@ -1091,6 +1092,7 @@ export interface BaseSession {
   eventId: string;
   taxCode: string | null;
   taxIncluded: boolean;
+  blocks: BaseBlock[];
 }
 
 export interface Session extends BaseSession {
@@ -1103,9 +1105,21 @@ export interface Session extends BaseSession {
   supply?: number | null;
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
+  surveys: BaseSurvey[];
   _count: {
     sections: number;
   };
+}
+
+export interface BaseBlock {
+  id: string;
+  name: string;
+  limit: number;
+  grouped: boolean;
+}
+
+export interface Block extends BaseBlock {
+  sessions: BaseSession[];
 }
 
 export const isTypeSession = (
@@ -1919,6 +1933,7 @@ export interface EventActivation extends BaseEventActivation {
   event: BaseEvent;
   longDescription: string | null;
   completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
+  survey: BaseSurvey | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -2790,13 +2805,17 @@ export interface BaseSurvey {
   id: string;
   slug: string;
   name: string;
+  active: boolean;
+  image: BaseImage | null;
+  submissionsPerAccount: number;
 }
 
 export interface Survey extends BaseSurvey {
   description: string | null;
-  image: BaseImage | null;
   requireAuth: boolean;
-  submissionsPerAccount: number;
+  event: BaseEvent | null;
+  session: BaseSession | null;
+  activation: BaseEventActivation | null;
 }
 
 export interface BaseSurveySection {
@@ -2873,6 +2892,7 @@ export interface BaseSurveySubmission {
   id: string;
   responses: BaseSurveyQuestionResponse[];
   status: PurchaseStatus;
+  accountId: string;
 }
 
 export interface SurveySubmission extends BaseSurveySubmission {}
