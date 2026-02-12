@@ -1092,9 +1092,10 @@ export interface BaseSession {
   eventId: string;
   taxCode: string | null;
   taxIncluded: boolean;
+  blocks: BaseBlock[];
 }
 
-export interface Session extends BaseSession {
+export interface Session extends Omit<BaseSession, "blocks"> {
   longDescription: string | null;
   tracks: BaseTrack[];
   speakers: BaseSpeaker[];
@@ -1105,10 +1106,6 @@ export interface Session extends BaseSession {
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
   surveys: BaseSurvey[];
-  blocks: BaseBlock[];
-  _count: {
-    sections: number;
-  };
 }
 
 export interface BaseBlock {
