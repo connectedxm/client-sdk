@@ -3,78 +3,80 @@ import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../../../useConnectedSingleQuery";
+} from "../useConnectedSingleQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY } from "./useGetSelfEventSessionRegistration";
+import { EVENT_SESSION_QUERY_KEY } from "@src/index";
 
-export const SELF_EVENT_SESSION_REGISTRATION_QUESTIONS_QUERY_KEY = (
+export const EVENT_SESSION_PASS_SECTIONS_QUERY_KEY = (
   eventId: string,
-  sessionId: string
+  sessionId: string,
+  passId: string
 ): QueryKey => [
-  ...SELF_EVENT_SESSION_REGISTRATION_QUERY_KEY(eventId, sessionId),
+  ...EVENT_SESSION_QUERY_KEY(eventId, sessionId),
+  "PASSES",
+  passId,
   "QUESTIONS",
 ];
 
-export const SET_SELF_EVENT_SESSION_REGISTRATION_QUESTIONS_QUERY_DATA = (
+export const SET_EVENT_SESSION_PASS_SECTIONS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<
-    typeof SELF_EVENT_SESSION_REGISTRATION_QUESTIONS_QUERY_KEY
-  >,
-  response: Awaited<
-    ReturnType<typeof GetSelfEventSessionRegistrationQuestions>
-  >,
+  keyParams: Parameters<typeof EVENT_SESSION_PASS_SECTIONS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventSessionPassSections>>,
   baseKeys: Parameters<typeof GetBaseSingleQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_EVENT_SESSION_REGISTRATION_QUESTIONS_QUERY_KEY(...keyParams),
+      ...EVENT_SESSION_PASS_SECTIONS_QUERY_KEY(...keyParams),
       ...GetBaseSingleQueryKeys(...baseKeys),
     ],
     response
   );
 };
 
-export interface GetSelfEventSessionRegistrationQuestionsProps
-  extends SingleQueryParams {
+export interface GetEventSessionPassSectionsProps extends SingleQueryParams {
   eventId: string;
   sessionId: string;
+  passId: string;
 }
 
-export const GetSelfEventSessionRegistrationQuestions = async ({
+export const GetEventSessionPassSections = async ({
   eventId,
   sessionId,
+  passId,
   clientApiParams,
-}: GetSelfEventSessionRegistrationQuestionsProps): Promise<
+}: GetEventSessionPassSectionsProps): Promise<
   ConnectedXMResponse<EventSessionSection[]>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
-    `/self/events/${eventId}/sessions/${sessionId}/registration/questions`,
+    `/events/${eventId}/sessions/${sessionId}/passes/${passId}/questions`,
     {}
   );
 
   return data;
 };
 
-export const useGetSelfEventSessionRegistrationQuestions = (
+export const useGetEventSessionPassSections = (
   eventId: string,
   sessionId: string,
+  passId: string,
   options: SingleQueryOptions<
-    ReturnType<typeof GetSelfEventSessionRegistrationQuestions>
+    ReturnType<typeof GetEventSessionPassSections>
   > = {}
 ) => {
   const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<
-    ReturnType<typeof GetSelfEventSessionRegistrationQuestions>
+    ReturnType<typeof GetEventSessionPassSections>
   >(
-    SELF_EVENT_SESSION_REGISTRATION_QUESTIONS_QUERY_KEY(eventId, sessionId),
+    EVENT_SESSION_PASS_SECTIONS_QUERY_KEY(eventId, sessionId, passId),
     (params: SingleQueryParams) =>
-      GetSelfEventSessionRegistrationQuestions({
+      GetEventSessionPassSections({
         eventId,
         sessionId,
+        passId,
         ...params,
       }),
     {
@@ -83,6 +85,7 @@ export const useGetSelfEventSessionRegistrationQuestions = (
         !!authenticated &&
         !!eventId &&
         !!sessionId &&
+        !!passId &&
         (options?.enabled ?? true),
     }
   );
