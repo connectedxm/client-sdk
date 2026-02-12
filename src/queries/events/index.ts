@@ -21,3 +21,5 @@ export * from "./useGetEventSponsorshipLevels";
 export * from "./useGetEventSponsorship";
 export * from "./useGetEventMediaItems";
 export * from "./useGetEventMediaItem";
+export * from "./useGetEventSessionPassSections";
+export * from "./useGetEventSessionPassIntent";
