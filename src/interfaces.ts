@@ -1106,6 +1106,9 @@ export interface Session extends Omit<BaseSession, "blocks"> {
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
   surveys: BaseSurvey[];
+  _count: {
+    sections: number;
+  };
 }
 
 export interface BaseBlock {
