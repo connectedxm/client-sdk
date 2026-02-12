@@ -1105,9 +1105,21 @@ export interface Session extends BaseSession {
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
   surveys: BaseSurvey[];
+  blocks: BaseBlock[];
   _count: {
     sections: number;
   };
+}
+
+export interface BaseBlock {
+  id: string;
+  name: string;
+  limit: number;
+  grouped: boolean;
+}
+
+export interface Block extends BaseBlock {
+  sessions: BaseSession[];
 }
 
 export const isTypeSession = (
