@@ -1095,7 +1095,7 @@ export interface BaseSession {
   blocks: BaseBlock[];
 }
 
-export interface Session extends Omit<BaseSession, "blocks"> {
+export interface Session extends BaseSession {
   longDescription: string | null;
   tracks: BaseTrack[];
   speakers: BaseSpeaker[];
