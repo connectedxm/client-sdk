@@ -1092,6 +1092,7 @@ export interface BaseSession {
   eventId: string;
   taxCode: string | null;
   taxIncluded: boolean;
+  blocks: BaseBlock[];
 }
 
 export interface Session extends BaseSession {
@@ -1108,6 +1109,17 @@ export interface Session extends BaseSession {
   _count: {
     sections: number;
   };
+}
+
+export interface BaseBlock {
+  id: string;
+  name: string;
+  limit: number;
+  grouped: boolean;
+}
+
+export interface Block extends BaseBlock {
+  sessions: BaseSession[];
 }
 
 export const isTypeSession = (
