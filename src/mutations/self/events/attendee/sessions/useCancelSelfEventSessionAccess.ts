@@ -13,6 +13,7 @@ export interface CancelSelfEventSessionAccessParams extends MutationParams {
   eventId: string;
   passId: string;
   sessionId: string;
+  accountId: string;
   sendEmail?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const CancelSelfEventSessionAccess = async ({
   eventId,
   passId,
   sessionId,
+  accountId,
   sendEmail = true,
   clientApiParams,
   queryClient,
@@ -29,7 +31,7 @@ export const CancelSelfEventSessionAccess = async ({
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.put<ConnectedXMResponse<EventSessionAccess>>(
     `/self/events/${eventId}/attendee/passes/${passId}/sessions/${sessionId}/cancel`,
-    { sendEmail }
+    { sendEmail, accountId }
   );
 
   if (queryClient && data.status === "ok") {
