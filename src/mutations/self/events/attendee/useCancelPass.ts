@@ -14,14 +14,12 @@ export interface CancelPassParams extends MutationParams {
   eventId: string;
   registrationId: string;
   issueRefund?: boolean;
-  accountId: string;
 }
 
 export const CancelPass = async ({
   passId,
   eventId,
   issueRefund,
-  accountId,
   clientApiParams,
   queryClient,
 }: CancelPassParams): Promise<ConnectedXMResponse<Pass>> => {
@@ -30,7 +28,6 @@ export const CancelPass = async ({
     `/self/events/${eventId}/attendee/passes/${passId}/cancel`,
     {
       issueRefund,
-      accountId,
     }
   );
 
