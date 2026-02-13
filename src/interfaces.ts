@@ -1114,6 +1114,7 @@ export interface Session extends BaseSession {
 export interface BaseBlock {
   id: string;
   name: string;
+  description: string | null;
   limit: number;
   grouped: boolean;
 }
