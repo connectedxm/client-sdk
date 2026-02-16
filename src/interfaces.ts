@@ -2043,6 +2043,11 @@ export interface BaseSeries {
   slug: string;
   description: string | null;
   longDescription: string | null;
+  registration: boolean;
+  price: number;
+  taxCode: string | null;
+  taxIncluded: boolean;
+  taxLocation: string | null;
   startDate: string | null;
   endDate: string | null;
   image: BaseImage | null;
@@ -3016,4 +3021,20 @@ export interface StreamInput extends BaseStreamInput {
   sessionId: string | null;
   meetingId: string | null;
   activityId: string | null;
+}
+
+export interface BaseSeriesRegistration {
+  id: string;
+  organizationId: string;
+  seriesId: string;
+  series: BaseSeries;
+  accountId: string;
+  account: BaseAccount;
+  status: string;
+}
+
+export interface SeriesRegistration extends BaseSeriesRegistration {
+  createdAt: string;
+  updatedAt: string;
+  passes: BasePass[];
 }
