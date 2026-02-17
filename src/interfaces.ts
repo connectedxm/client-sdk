@@ -2229,15 +2229,27 @@ export interface BasePaymentIntent {
   currency: string;
   metadata: Record<string, any>;
   eventId: string | null;
+  placeId: string | null;
+  spaceId: string | null;
   registrationId: string | null;
   invoiceId: string | null;
-  bookingId: string | null;
-  country: string;
+  seriesId: string | null;
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
   state: string;
+  country: string;
   zip: string;
+  locationAddress1: string | null;
+  locationAddress2: string | null;
+  locationCity: string | null;
+  locationState: string | null;
+  locationCountry: string | null;
+  locationZip: string | null;
+  deferredAmount: number | null;
+  deferredDueDate: string | null;
   coupon: BaseCoupon | null;
   lineItems: BasePaymentLineItem[];
-  createdAt: string;
   integration: {
     connectionId: string;
     type: string;
@@ -2247,6 +2259,7 @@ export interface BasePaymentIntent {
     type: string;
   } | null;
 }
+
 export interface PaymentIntent extends BasePaymentIntent {
   account: BaseAccount;
   event: BaseEvent | null;
@@ -2254,9 +2267,12 @@ export interface PaymentIntent extends BasePaymentIntent {
   registration: BaseRegistration | null;
   pass: BasePass | null;
   passType: BasePassType | null;
+  invoice: BaseInvoice | null;
   place: BaseBookingPlace | null;
   space: BaseBookingSpace | null;
+  series: BaseSeries | null;
 }
+
 export interface BaseFile {
   id: number;
   name: string;
