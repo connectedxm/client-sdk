@@ -1758,6 +1758,7 @@ export interface BasePaymentLineItem {
   sessionId: string | null;
   placeId: string | null;
   spaceId: string | null;
+  seriesId: string | null;
   // ITEM IDS
   passId: string | null;
   packageId: string | null;
