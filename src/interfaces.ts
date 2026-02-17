@@ -1735,6 +1735,7 @@ export enum PaymentLineItemType {
   invoice = "invoice",
   booking = "booking",
   coupon = "coupon",
+  series = "series",
 }
 
 export interface BasePaymentLineItem {
@@ -1775,6 +1776,7 @@ export interface PaymentLineItem extends BasePaymentLineItem {
   access: BaseEventSessionAccess | null;
   invoice: BaseInvoice | null;
   booking: BaseBooking | null;
+  seriesRegistration: BaseSeriesRegistration | null;
   payment: BasePayment | null;
 }
 
