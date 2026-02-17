@@ -8,6 +8,7 @@ import {
   ADD_SELF_RELATIONSHIP,
   BOOKINGS_QUERY_KEY,
   INVOICE_QUERY_KEY,
+  SERIES_REGISTRATION_QUERY_KEY,
 } from "@src/queries";
 
 export interface CapturePaymentIntentParams extends MutationParams {
@@ -67,12 +68,18 @@ export const CapturePaymentIntent = async ({
       });
     }
 
-    if (intent.bookingId) {
+    if (intent.spaceId) {
       queryClient.invalidateQueries({
         queryKey: BOOKINGS_QUERY_KEY(),
       });
       queryClient.invalidateQueries({
         predicate: ({ queryKey }) => queryKey.includes("SLOTS"),
+      });
+    }
+
+    if (intent.seriesId) {
+      queryClient.invalidateQueries({
+        queryKey: SERIES_REGISTRATION_QUERY_KEY(intent.seriesId),
       });
     }
   }
