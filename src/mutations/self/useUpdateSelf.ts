@@ -3,7 +3,7 @@ import useConnectedMutation, {
   MutationOptions,
   MutationParams,
 } from "../useConnectedMutation";
-import { SELF_QUERY_KEY } from "@src/queries";
+import { SELF_PROFILE_QUERY_KEY, SELF_QUERY_KEY } from "@src/queries";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export interface UpdateSelfParams extends MutationParams {
@@ -38,8 +38,9 @@ export const UpdateSelf = async ({
     params
   );
 
-  if (queryClient && data.status !== "ok") {
-    queryClient.refetchQueries({ queryKey: SELF_QUERY_KEY() });
+  if (queryClient && data.status === "ok") {
+    queryClient.invalidateQueries({ queryKey: SELF_QUERY_KEY() });
+    queryClient.invalidateQueries({ queryKey: SELF_PROFILE_QUERY_KEY() });
   }
 
   return data;
