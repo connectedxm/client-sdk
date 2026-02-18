@@ -232,6 +232,9 @@ export enum AccountAttributeType {
   number = "number",
   date = "date",
   boolean = "boolean",
+  select = "select",
+  search = "search",
+  location = "location",
 }
 
 export interface BaseAccountAttribute {
@@ -2523,6 +2526,9 @@ export interface OrganizationConfig {
     editable: boolean;
     required: boolean;
     public: boolean;
+    options: string[];
+    locationOption: LocationQuestionOption;
+    searchListId: string | null;
   }[];
   OPTIONS: Record<string, any> | null;
 }
