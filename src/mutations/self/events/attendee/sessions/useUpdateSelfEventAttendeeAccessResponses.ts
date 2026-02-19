@@ -7,6 +7,8 @@ import { GetClientAPI } from "@src/ClientAPI";
 import {
   SELF_EVENT_ATTENDEE_ACCESS_QUERY_KEY,
   SELF_EVENT_ATTENDEE_ACCESS_QUESTION_SECTIONS_QUERY_KEY,
+  SELF_EVENT_ATTENDEE_QUERY_KEY,
+  SELF_EVENT_ATTENDEE_PASS_QUERY_KEY,
 } from "@src/queries";
 
 export interface UpdateSelfEventAttendeeAccessResponsesParams
@@ -50,6 +52,12 @@ export const UpdateSelfEventAttendeeAccessResponses = async ({
         passId,
         sessionId
       ),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_ATTENDEE_QUERY_KEY(eventId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: SELF_EVENT_ATTENDEE_PASS_QUERY_KEY(eventId, passId),
     });
   }
 

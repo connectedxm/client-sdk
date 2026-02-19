@@ -1115,6 +1115,7 @@ export interface Session extends BaseSession {
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
   surveys: BaseSurvey[];
+  activation: BaseEventActivation | null;
   _count: {
     sections: number;
   };
@@ -1948,6 +1949,7 @@ export interface EventActivation extends BaseEventActivation {
   longDescription: string | null;
   completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
   survey: BaseSurvey | null;
+  session: BaseSession | null;
   createdAt: string;
   updatedAt: string;
 }
