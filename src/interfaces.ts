@@ -689,7 +689,6 @@ export interface RegistrationFollowup extends BaseRegistrationFollowup {
 }
 
 export interface EventListing extends Event {
-  visible: boolean;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   registrationLimit: number;
@@ -1077,6 +1076,13 @@ export const isTypeSpeaker = (
   return (speaker as Omit<Speaker, keyof BaseSpeaker>).website !== undefined;
 };
 
+export enum SessionVisibility {
+  PUBLIC = "PUBLIC",
+  RESTRICTED = "RESTRICTED",
+  REGISTERED = "REGISTERED",
+  HIDDEN = "HIDDEN",
+}
+
 export interface BaseSession {
   id: string;
   slug: string;
@@ -1091,7 +1097,7 @@ export interface BaseSession {
   registrationEnabled: boolean;
   registrationEnd: string | null;
   price: number | null;
-  access: SessionAccess;
+  visibility: SessionVisibility;
   eventId: string;
   taxCode: string | null;
   taxIncluded: boolean;
@@ -1545,7 +1551,7 @@ export interface Channel extends BaseChannel {
   spotifyUrl: string | null;
   googleUrl: string | null;
   youtubeUrl: string | null;
-  visilble: boolean;
+  visible: boolean;
   group: BaseGroup | null;
   creator: BaseAccount | null;
 }
