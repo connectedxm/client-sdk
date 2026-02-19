@@ -1120,6 +1120,7 @@ export interface BaseBlock {
   description: string | null;
   limit: number;
   grouped: boolean;
+  collapsed: boolean;
 }
 
 export interface Block extends BaseBlock {
