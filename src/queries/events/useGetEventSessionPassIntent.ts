@@ -5,8 +5,8 @@ import useConnectedSingleQuery, {
 import { ConnectedXMResponse, PaymentIntent } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { EVENT_SESSION_QUERY_KEY } from "./useGetEventSession";
 import { QueryKey } from "@tanstack/react-query";
+import { EVENT_SESSIONS_QUERY_KEY } from "./useGetEventSessions";
 
 export const EVENT_SESSION_PASS_INTENT_QUERY_KEY = (
   eventId: string,
@@ -15,7 +15,8 @@ export const EVENT_SESSION_PASS_INTENT_QUERY_KEY = (
   addressId?: string
 ): QueryKey => {
   const key = [
-    ...EVENT_SESSION_QUERY_KEY(eventId, sessionId),
+    ...EVENT_SESSIONS_QUERY_KEY(eventId),
+    sessionId,
     "PASSES",
     passId,
     "INTENT",

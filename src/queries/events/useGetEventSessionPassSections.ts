@@ -7,14 +7,15 @@ import useConnectedSingleQuery, {
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { EVENT_SESSION_QUERY_KEY } from "@src/index";
+import { EVENT_SESSIONS_QUERY_KEY } from "./useGetEventSessions";
 
 export const EVENT_SESSION_PASS_SECTIONS_QUERY_KEY = (
   eventId: string,
   sessionId: string,
   passId: string
 ): QueryKey => [
-  ...EVENT_SESSION_QUERY_KEY(eventId, sessionId),
+  ...EVENT_SESSIONS_QUERY_KEY(eventId),
+  sessionId,
   "PASSES",
   passId,
   "QUESTIONS",

@@ -8,7 +8,6 @@ export * from "./useGetEventPage";
 export * from "./useGetEventPages";
 export * from "./useGetEventRegistrants";
 export * from "./useGetEvents";
-export * from "./useGetEventSession";
 export * from "./useGetEventSessions";
 export * from "./useGetEventSpeaker";
 export * from "./useGetEventSpeakers";

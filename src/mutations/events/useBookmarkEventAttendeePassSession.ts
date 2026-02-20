@@ -4,8 +4,6 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { EVENT_SESSIONS_QUERY_KEY } from "@src/queries/events/useGetEventSessions";
-import { EVENT_SESSION_QUERY_KEY } from "@src/queries/events/useGetEventSession";
 import { SET_SELF_EVENT_ATTENDEE_PASS_QUERY_DATA } from "@src/queries";
 
 export interface BookmarkEventAttendeePassSessionParams extends MutationParams {
@@ -29,12 +27,6 @@ export const BookmarkEventAttendeePassSession = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.invalidateQueries({
-      queryKey: EVENT_SESSIONS_QUERY_KEY(eventId),
-    });
-    queryClient.invalidateQueries({
-      queryKey: EVENT_SESSION_QUERY_KEY(eventId, sessionId),
-    });
     SET_SELF_EVENT_ATTENDEE_PASS_QUERY_DATA(
       queryClient,
       [eventId, passId],
