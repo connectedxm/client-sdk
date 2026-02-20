@@ -10,6 +10,10 @@ import { EVENT_SESSIONS_QUERY_KEY } from "./useGetEventSessions";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { GetClientAPI } from "@src/ClientAPI";
 
+interface SessionWithSupply extends Session {
+  supply?: number | null;
+}
+
 export const EVENT_SESSION_QUERY_KEY = (
   eventId: string,
   sessionId: string
@@ -39,7 +43,7 @@ export const GetEventSession = async ({
   eventId,
   sessionId,
   clientApiParams,
-}: GetEventSessionProps): Promise<ConnectedXMResponse<Session>> => {
+}: GetEventSessionProps): Promise<ConnectedXMResponse<SessionWithSupply>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(
     `/events/${eventId}/sessions/${sessionId}`
