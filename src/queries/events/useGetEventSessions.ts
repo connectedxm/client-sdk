@@ -8,6 +8,11 @@ import useConnectedSingleQuery, {
   SingleQueryParams,
 } from "../useConnectedSingleQuery";
 
+interface SessionWithSupplyAndCanRegister extends Session {
+  supply?: number | null;
+  canRegister: boolean;
+}
+
 export const EVENT_SESSIONS_QUERY_KEY = (
   eventId: string,
   passId?: string
@@ -43,7 +48,7 @@ export const GetEventSessions = async ({
   eventId,
   passId,
   clientApiParams,
-}: GetEventSessionsProps): Promise<ConnectedXMResponse<Session[]>> => {
+}: GetEventSessionsProps): Promise<ConnectedXMResponse<SessionWithSupplyAndCanRegister[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/events/${eventId}/sessions`, {
     params: {
