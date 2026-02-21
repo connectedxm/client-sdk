@@ -2052,6 +2052,64 @@ export interface ChatChannelMember extends BaseChatChannelMember {
   channelId: number;
   channel: ChatChannel;
 }
+
+export enum SeriesQuestionType {
+  text = "text",
+  textarea = "textarea",
+  number = "number",
+  time = "time",
+  date = "date",
+  toggle = "toggle",
+  select = "select",
+  radio = "radio",
+  checkbox = "checkbox",
+  search = "search",
+  file = "file",
+  location = "location",
+}
+
+export interface BaseSeriesQuestionChoice {
+  id: string;
+  value: string;
+  text: string | null;
+  description: string | null;
+  supply: number | null;
+  sortOrder: number;
+}
+
+export interface BaseSeriesQuestion {
+  id: string;
+  seriesId?: string;
+  type: SeriesQuestionType;
+  name: string;
+  required: boolean;
+  description: string | null;
+  label: string | null;
+  placeholder: string | null;
+  default: string | null;
+  searchListId: string | null;
+  searchList: BaseSearchList | null;
+  mutable: boolean;
+  min: string | null;
+  max: string | null;
+  masked: boolean;
+  validation: string | null;
+  validationMessage: string | null;
+  locationOption: LocationQuestionOption | null;
+  sortOrder: number;
+  featured: boolean;
+  choices: BaseSeriesQuestionChoice[];
+}
+
+export interface SeriesQuestion extends BaseSeriesQuestion {}
+
+export interface BaseSeriesRegistrationQuestionResponse {
+  id: string;
+  value: string;
+  questionId: string;
+  question: BaseSeriesQuestion;
+}
+
 export interface BaseSeries {
   id: string;
   name: string;
@@ -2068,6 +2126,9 @@ export interface BaseSeries {
   image: BaseImage | null;
   createdAt: string;
   updatedAt: string;
+  _count?: {
+    questions: number;
+  };
 }
 
 export interface Series extends BaseSeries {}
@@ -3065,6 +3126,7 @@ export interface BaseSeriesRegistration {
   accountId: string;
   account: BaseAccount;
   status: string;
+  responses?: BaseSeriesRegistrationQuestionResponse[];
 }
 
 export interface SeriesRegistration extends BaseSeriesRegistration {
