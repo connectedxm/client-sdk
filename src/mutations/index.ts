@@ -15,6 +15,7 @@ export * from "./streams";
 export * from "./threads";
 export * from "./integrations";
 export * from "./surveys";
+export * from "./series";
 export * from "./insterests";
 
 export * from "./useConnectedMutation";
