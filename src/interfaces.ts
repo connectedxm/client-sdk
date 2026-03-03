@@ -1949,7 +1949,7 @@ export interface EventActivation extends BaseEventActivation {
   longDescription: string | null;
   completions?: BaseEventActivationCompletion[]; // if you have completed = Array > 0
   survey: BaseSurvey | null;
-  session: BaseSession | null;
+  sessions: BaseSession[] | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -2915,7 +2915,7 @@ export interface Survey extends BaseSurvey {
   description: string | null;
   requireAuth: boolean;
   event: BaseEvent | null;
-  session: BaseSession | null;
+  sessions: BaseSession[] | null;
   activation: BaseEventActivation | null;
 }
 
