@@ -503,7 +503,7 @@ export interface Event extends BaseEvent {
   registrationHideTitle: boolean;
   publicRegistrants: boolean;
   activityFeedEnabled: boolean;
-  activationsEnabled: boolean | null;
+  activationsDescription: string | null;
   chatBotNumber: string | null;
   sessionsVisibility: EventAgendaVisibility;
   speakersVisibility: EventAgendaVisibility;
