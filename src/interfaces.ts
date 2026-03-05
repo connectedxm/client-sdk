@@ -1939,6 +1939,7 @@ export interface BaseEventActivation {
   image: BaseImage | null;
   type: EventActivationType;
   accessLevel: TicketEventAccessLevel;
+  sortOrder: number;
 }
 
 export interface EventActivation extends BaseEventActivation {
