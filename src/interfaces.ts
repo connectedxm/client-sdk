@@ -1939,6 +1939,7 @@ export interface BaseEventActivation {
   image: BaseImage | null;
   type: EventActivationType;
   accessLevel: TicketEventAccessLevel;
+  sortOrder: number;
 }
 
 export interface EventActivation extends BaseEventActivation {
@@ -2909,6 +2910,7 @@ export interface Survey extends BaseSurvey {
   description: string | null;
   requireAuth: boolean;
   event: BaseEvent | null;
+  requireCheckIn: boolean;
   sessions: BaseSession[] | null;
   activation: BaseEventActivation | null;
 }
