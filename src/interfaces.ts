@@ -622,8 +622,7 @@ export interface BaseRegistrationQuestionChoice {
   subQuestions: RegistrationQuestion[] | { questionId: string }[];
 }
 
-export interface RegistrationQuestionChoice
-  extends BaseRegistrationQuestionChoice {}
+export interface RegistrationQuestionChoice extends BaseRegistrationQuestionChoice {}
 
 export interface BaseSearchListValue {
   id: string;
@@ -651,8 +650,7 @@ export interface BaseRegistrationQuestionResponse {
   value: string;
 }
 
-export interface RegistrationQuestionResponse
-  extends BaseRegistrationQuestionResponse {
+export interface RegistrationQuestionResponse extends BaseRegistrationQuestionResponse {
   question: RegistrationQuestion;
   // changeLogs: RegistrationQuestionResponseChangeLog[];
   createdAt: string;
@@ -1240,8 +1238,7 @@ export interface BaseEventSessionQuestionChoice {
   subQuestions: EventSessionQuestion[] | { questionId: string }[];
 }
 
-export interface EventSessionQuestionChoice
-  extends BaseEventSessionQuestionChoice {}
+export interface EventSessionQuestionChoice extends BaseEventSessionQuestionChoice {}
 
 export interface BaseEventSessionQuestionResponse {
   questionId: string;
@@ -1249,8 +1246,7 @@ export interface BaseEventSessionQuestionResponse {
   value: string;
 }
 
-export interface EventSessionQuestionResponse
-  extends BaseEventSessionQuestionResponse {}
+export interface EventSessionQuestionResponse extends BaseEventSessionQuestionResponse {}
 
 export interface BaseEventPage {
   id: string;
@@ -1971,8 +1967,7 @@ export interface BaseEventActivationCompletion {
   createdAt: string;
 }
 
-export interface EventActivationCompletion
-  extends BaseEventActivationCompletion {
+export interface EventActivationCompletion extends BaseEventActivationCompletion {
   eventId: string;
   eventActivationId: string;
   eventActivation: BaseEventActivation;
@@ -2712,8 +2707,7 @@ export interface BaseEventRoomTypePassTypeDetails {
   maxEnd: string | null;
 }
 
-export interface EventRoomTypePassTypeDetails
-  extends BaseEventRoomTypePassTypeDetails {
+export interface EventRoomTypePassTypeDetails extends BaseEventRoomTypePassTypeDetails {
   createdAt: string;
   updatedAt: string;
 }
@@ -2729,8 +2723,7 @@ export interface BaseEventRoomTypeAddOnDetails {
   maxEnd: string | null;
 }
 
-export interface EventRoomTypeAddOnDetails
-  extends BaseEventRoomTypeAddOnDetails {
+export interface EventRoomTypeAddOnDetails extends BaseEventRoomTypeAddOnDetails {
   createdAt: string;
   updatedAt: string;
 }
