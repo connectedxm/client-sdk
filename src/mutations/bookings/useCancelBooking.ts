@@ -17,8 +17,8 @@ export const CancelBooking = async ({
   queryClient,
 }: CancelBookingParams): Promise<ConnectedXMResponse<Booking>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.delete<ConnectedXMResponse<Booking>>(
-    `/bookings/${bookingId}`
+  const { data } = await clientApi.post<ConnectedXMResponse<Booking>>(
+    `/bookings/${bookingId}/cancel`
   );
 
   if (queryClient && data.status === "ok") {
