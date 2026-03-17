@@ -690,6 +690,7 @@ export interface RegistrationFollowup extends BaseRegistrationFollowup {
 
 export interface EventListing extends Event {
   visible: boolean;
+  externalMeetingUrl: string | null;
   newActivityCreatorEmailNotification: boolean;
   newActivityCreatorPushNotification: boolean;
   registrationLimit: number;
