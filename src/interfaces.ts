@@ -539,6 +539,7 @@ export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
 };
 
 export interface RegistrationEventDetails extends BaseEvent {
+  externalMeetingUrl: string | null;
   reservationDescription: string | null;
   externalUrl: string | null;
   registration: boolean;
