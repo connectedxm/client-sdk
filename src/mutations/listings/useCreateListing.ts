@@ -33,6 +33,7 @@ export interface CreateListingInput {
   zip?: string;
   country?: string;
   externalUrl?: string;
+  externalMeetingUrl?: string;
   registration?: boolean;
   registrationLimit?: number | null;
   groupOnly?: boolean;
