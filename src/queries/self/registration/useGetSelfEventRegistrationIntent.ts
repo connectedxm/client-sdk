@@ -70,11 +70,7 @@ export const useGetSelfEventRegistrationIntent = (
       retry: false,
       retryOnMount: false,
       ...options,
-      enabled:
-        !!authenticated &&
-        !!eventId &&
-        !!addressId &&
-        (options?.enabled ?? true),
+      enabled: !!authenticated && !!eventId && (options?.enabled ?? true),
     }
   );
 };
