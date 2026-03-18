@@ -29,8 +29,7 @@ export const SELF_EVENT_REGISTRATION_PURCHASE_ADD_ONS_INTENT_QUERY_KEY = (
   return key;
 };
 
-export interface GetSelfEventAttendeePassAddOnsIntentProps
-  extends SingleQueryParams {
+export interface GetSelfEventAttendeePassAddOnsIntentProps extends SingleQueryParams {
   eventId: string;
   passId: string;
   addOnIds: string[];
@@ -61,9 +60,9 @@ export const GetSelfEventAttendeePassAddOnsIntent = async ({
 };
 
 export const useGetSelfEventAttendeePassAddOnsIntent = (
-  eventId: string,
-  passId: string,
-  addressId: string,
+  eventId: string = "",
+  passId: string = "",
+  addressId: string = "",
   addOnIds: string[],
   options: SingleQueryOptions<
     ReturnType<typeof GetSelfEventAttendeePassAddOnsIntent>
@@ -97,7 +96,6 @@ export const useGetSelfEventAttendeePassAddOnsIntent = (
         !!authenticated &&
         !!eventId &&
         !!passId &&
-        !!addressId &&
         !!addOnIds &&
         (options?.enabled ?? true),
     }

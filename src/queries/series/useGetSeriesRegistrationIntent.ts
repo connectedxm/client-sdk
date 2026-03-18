@@ -56,18 +56,13 @@ export const useGetSeriesRegistrationIntent = (
     ReturnType<typeof GetSeriesRegistrationIntent>
   >(
     SERIES_REGISTRATION_INTENT_QUERY_KEY(seriesId, addressId),
-    (params) =>
-      GetSeriesRegistrationIntent({ seriesId, addressId, ...params }),
+    (params) => GetSeriesRegistrationIntent({ seriesId, addressId, ...params }),
     {
       staleTime: Infinity,
       retry: false,
       retryOnMount: false,
       ...options,
-      enabled:
-        !!authenticated &&
-        !!seriesId &&
-        !!addressId &&
-        (options?.enabled ?? true),
+      enabled: !!authenticated && !!seriesId && (options?.enabled ?? true),
     }
   );
 };

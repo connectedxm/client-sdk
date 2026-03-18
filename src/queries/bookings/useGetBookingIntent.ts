@@ -48,11 +48,7 @@ export const useGetBookingIntent = (
       retry: false,
       retryOnMount: false,
       ...options,
-      enabled:
-        !!authenticated &&
-        !!bookingId &&
-        !!addressId &&
-        (options?.enabled ?? true),
+      enabled: !!authenticated && !!bookingId && (options?.enabled ?? true),
     }
   );
 };
