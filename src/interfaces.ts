@@ -2899,11 +2899,17 @@ export interface EventSponsorship extends BaseEventSponsorship {
   updatedAt: string;
 }
 
+export enum SurveyStatus {
+  draft = "draft",
+  published = "published",
+  archived = "archived",
+}
+
 export interface BaseSurvey {
   id: string;
   slug: string;
   name: string;
-  active: boolean;
+  status: SurveyStatus;
   image: BaseImage | null;
   submissionsPerAccount: number;
 }
