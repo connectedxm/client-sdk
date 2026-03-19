@@ -88,7 +88,6 @@ export const useGetSelfEventTicketCouponIntent = (
         !!eventId &&
         !!ticketId &&
         !!quantity &&
-        !!addressId &&
         (options?.enabled ?? true),
     }
   );

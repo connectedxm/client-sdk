@@ -48,11 +48,7 @@ export const useGetInvoiceIntent = (
       retry: false,
       retryOnMount: false,
       ...options,
-      enabled:
-        !!authenticated &&
-        !!invoiceId &&
-        !!addressId &&
-        (options?.enabled ?? true),
+      enabled: !!authenticated && !!invoiceId && (options?.enabled ?? true),
     }
   );
 };

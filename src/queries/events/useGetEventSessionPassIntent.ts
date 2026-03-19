@@ -84,7 +84,6 @@ export const useGetEventSessionPassIntent = (
         !!eventId &&
         !!sessionId &&
         !!passId &&
-        !!addressId &&
         (options?.enabled ?? true),
     }
   );

@@ -27,6 +27,7 @@ export interface UpdateListingValues {
   zip?: string | null;
   country?: string | null;
   externalUrl?: string | null;
+  externalMeetingUrl?: string | null;
   registration?: boolean;
   publicRegistrants?: boolean;
   registrationLimit?: number | null;
