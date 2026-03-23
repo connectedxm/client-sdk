@@ -2765,6 +2765,8 @@ export interface BaseBookingSpace {
 export interface BookingSpace extends BaseBookingSpace {
   start: string | null;
   end: string | null;
+  meetingId: string | null;
+  meeting: BaseMeeting | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -2811,7 +2813,9 @@ export interface BaseBooking {
 }
 
 export interface Booking extends BaseBooking {
-  space: BaseBookingSpace;
+  space: BaseBookingSpace & {
+    meeting?: BaseMeeting | null;
+  };
   place: BaseBookingPlace;
   createdAt: string;
   updatedAt: string;
@@ -3099,6 +3103,7 @@ export interface Meeting extends BaseMeeting {
   session: BaseSession | null;
   group: BaseGroup | null;
   activity: BaseActivity | null;
+  bookingSpace: BaseBookingSpace | null;
   streams: BaseStreamInput[];
 }
 
