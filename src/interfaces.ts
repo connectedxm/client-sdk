@@ -3079,6 +3079,7 @@ export interface BaseLogin {
   status: string;
   enabled: boolean;
   verified: boolean;
+  lastLoginAt: string | null;
 }
 
 export interface Login extends BaseLogin {
