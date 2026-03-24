@@ -623,7 +623,8 @@ export interface BaseRegistrationQuestionChoice {
   subQuestions: RegistrationQuestion[] | { questionId: string }[];
 }
 
-export interface RegistrationQuestionChoice extends BaseRegistrationQuestionChoice {}
+export interface RegistrationQuestionChoice
+  extends BaseRegistrationQuestionChoice {}
 
 export interface BaseSearchListValue {
   id: string;
@@ -651,7 +652,8 @@ export interface BaseRegistrationQuestionResponse {
   value: string;
 }
 
-export interface RegistrationQuestionResponse extends BaseRegistrationQuestionResponse {
+export interface RegistrationQuestionResponse
+  extends BaseRegistrationQuestionResponse {
   question: RegistrationQuestion;
   // changeLogs: RegistrationQuestionResponseChangeLog[];
   createdAt: string;
@@ -1240,7 +1242,8 @@ export interface BaseEventSessionQuestionChoice {
   subQuestions: EventSessionQuestion[] | { questionId: string }[];
 }
 
-export interface EventSessionQuestionChoice extends BaseEventSessionQuestionChoice {}
+export interface EventSessionQuestionChoice
+  extends BaseEventSessionQuestionChoice {}
 
 export interface BaseEventSessionQuestionResponse {
   questionId: string;
@@ -1248,7 +1251,8 @@ export interface BaseEventSessionQuestionResponse {
   value: string;
 }
 
-export interface EventSessionQuestionResponse extends BaseEventSessionQuestionResponse {}
+export interface EventSessionQuestionResponse
+  extends BaseEventSessionQuestionResponse {}
 
 export interface BaseEventPage {
   id: string;
@@ -1969,7 +1973,8 @@ export interface BaseEventActivationCompletion {
   createdAt: string;
 }
 
-export interface EventActivationCompletion extends BaseEventActivationCompletion {
+export interface EventActivationCompletion
+  extends BaseEventActivationCompletion {
   eventId: string;
   eventActivationId: string;
   eventActivation: BaseEventActivation;
@@ -2709,7 +2714,8 @@ export interface BaseEventRoomTypePassTypeDetails {
   maxEnd: string | null;
 }
 
-export interface EventRoomTypePassTypeDetails extends BaseEventRoomTypePassTypeDetails {
+export interface EventRoomTypePassTypeDetails
+  extends BaseEventRoomTypePassTypeDetails {
   createdAt: string;
   updatedAt: string;
 }
@@ -2725,7 +2731,8 @@ export interface BaseEventRoomTypeAddOnDetails {
   maxEnd: string | null;
 }
 
-export interface EventRoomTypeAddOnDetails extends BaseEventRoomTypeAddOnDetails {
+export interface EventRoomTypeAddOnDetails
+  extends BaseEventRoomTypeAddOnDetails {
   createdAt: string;
   updatedAt: string;
 }
@@ -2803,6 +2810,97 @@ export interface BookingSpaceBlackout extends BaseBookingSpaceBlackout {
   updatedAt: string;
 }
 
+export enum BookingSpaceQuestionType {
+  text = "text",
+  textarea = "textarea",
+  number = "number",
+  time = "time",
+  date = "date",
+  toggle = "toggle",
+  select = "select",
+  radio = "radio",
+  checkbox = "checkbox",
+  search = "search",
+  file = "file",
+  location = "location",
+}
+
+export interface BaseBookingSpaceQuestionTranslation {
+  id: string;
+  locale: string;
+  label: string | null;
+  placeholder: string | null;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookingSpaceQuestionTranslation
+  extends BaseBookingSpaceQuestionTranslation {}
+
+export interface BaseBookingSpaceQuestionChoiceTranslation {
+  id: string;
+  locale: string;
+  value: string | null;
+  text: string | null;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookingSpaceQuestionChoiceTranslation
+  extends BaseBookingSpaceQuestionChoiceTranslation {}
+
+export interface BaseBookingSpaceQuestionChoice {
+  id: string;
+  value: string;
+  text: string | null;
+  description: string | null;
+  supply: number | null;
+  sortOrder: number;
+  translations?: BaseBookingSpaceQuestionChoiceTranslation[];
+}
+
+export interface BookingSpaceQuestionChoice
+  extends BaseBookingSpaceQuestionChoice {}
+
+export interface BaseBookingSpaceQuestion {
+  id: string;
+  type: BookingSpaceQuestionType;
+  name: string;
+  required: boolean;
+  description: string | null;
+  label: string | null;
+  placeholder: string | null;
+  default: string | null;
+  searchListId: string | null;
+  searchList: BaseSearchList | null;
+  mutable: boolean;
+  min: string | null;
+  max: string | null;
+  masked: boolean;
+  validation: string | null;
+  validationMessage: string | null;
+  locationOption: LocationQuestionOption | null;
+  sortOrder: number;
+  featured: boolean;
+  choices: BaseBookingSpaceQuestionChoice[];
+  translations?: BaseBookingSpaceQuestionTranslation[];
+}
+
+export interface BookingSpaceQuestion extends BaseBookingSpaceQuestion {}
+
+export interface BaseBookingQuestionResponse {
+  id: string;
+  value: string;
+  questionId: string;
+  question: BaseBookingSpaceQuestion;
+  fileId: number | null;
+  file: BaseFile | null;
+}
+
+export interface BookingQuestionResponse extends BaseBookingQuestionResponse {}
+
 export interface BaseBooking {
   id: string;
   alternateId: number;
@@ -2810,6 +2908,7 @@ export interface BaseBooking {
   time: string;
   duration: number;
   status: string;
+  responses?: BaseBookingQuestionResponse[];
 }
 
 export interface Booking extends BaseBooking {
