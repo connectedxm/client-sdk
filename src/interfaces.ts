@@ -2600,7 +2600,7 @@ export interface OrganizationConfig {
     editable: boolean;
     required: boolean;
     public: boolean;
-    options: string[];
+    options?: string[];
     locationOption: LocationQuestionOption;
     searchListId: string | null;
   }[];
