@@ -2766,6 +2766,7 @@ export interface BaseBookingSpace {
   slotDuration: number;
   price: number;
   description: string | null;
+  confirmationBody: string | null;
   image: BaseImage | null;
 }
 
