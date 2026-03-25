@@ -12,9 +12,9 @@ export interface CheckLoginParams extends MutationParams {
 export const CheckLogin = async ({
   email,
   clientApiParams,
-}: CheckLoginParams): Promise<ConnectedXMResponse<boolean>> => {
+}: CheckLoginParams): Promise<ConnectedXMResponse<string>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.post<ConnectedXMResponse<boolean>>(
+  const { data } = await clientApi.post<ConnectedXMResponse<string>>(
     `/login/check`,
     { email }
   );
