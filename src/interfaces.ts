@@ -623,7 +623,8 @@ export interface BaseRegistrationQuestionChoice {
   subQuestions: RegistrationQuestion[] | { questionId: string }[];
 }
 
-export interface RegistrationQuestionChoice extends BaseRegistrationQuestionChoice {}
+export interface RegistrationQuestionChoice
+  extends BaseRegistrationQuestionChoice {}
 
 export interface BaseSearchListValue {
   id: string;
@@ -651,7 +652,8 @@ export interface BaseRegistrationQuestionResponse {
   value: string;
 }
 
-export interface RegistrationQuestionResponse extends BaseRegistrationQuestionResponse {
+export interface RegistrationQuestionResponse
+  extends BaseRegistrationQuestionResponse {
   question: RegistrationQuestion;
   // changeLogs: RegistrationQuestionResponseChangeLog[];
   createdAt: string;
@@ -761,6 +763,7 @@ export interface BasePassType {
   requiredPassTypeId: string | null;
   taxCode: string | null;
   taxIncluded: boolean;
+  requiresApproval: boolean;
 }
 
 export interface PassType extends BasePassType {
@@ -804,6 +807,7 @@ export enum PurchaseStatus {
   canceled = "canceled",
   needsInfo = "needsInfo",
   ready = "ready",
+  pending = "pending",
 }
 
 export interface BasePass {
@@ -1251,7 +1255,8 @@ export interface BaseEventSessionQuestionChoice {
   subQuestions: EventSessionQuestion[] | { questionId: string }[];
 }
 
-export interface EventSessionQuestionChoice extends BaseEventSessionQuestionChoice {}
+export interface EventSessionQuestionChoice
+  extends BaseEventSessionQuestionChoice {}
 
 export interface BaseEventSessionQuestionResponse {
   questionId: string;
@@ -1259,7 +1264,8 @@ export interface BaseEventSessionQuestionResponse {
   value: string;
 }
 
-export interface EventSessionQuestionResponse extends BaseEventSessionQuestionResponse {}
+export interface EventSessionQuestionResponse
+  extends BaseEventSessionQuestionResponse {}
 
 export interface BaseEventPage {
   id: string;
@@ -1980,7 +1986,8 @@ export interface BaseEventActivationCompletion {
   createdAt: string;
 }
 
-export interface EventActivationCompletion extends BaseEventActivationCompletion {
+export interface EventActivationCompletion
+  extends BaseEventActivationCompletion {
   eventId: string;
   eventActivationId: string;
   eventActivation: BaseEventActivation;
@@ -2720,7 +2727,8 @@ export interface BaseEventRoomTypePassTypeDetails {
   maxEnd: string | null;
 }
 
-export interface EventRoomTypePassTypeDetails extends BaseEventRoomTypePassTypeDetails {
+export interface EventRoomTypePassTypeDetails
+  extends BaseEventRoomTypePassTypeDetails {
   createdAt: string;
   updatedAt: string;
 }
@@ -2736,7 +2744,8 @@ export interface BaseEventRoomTypeAddOnDetails {
   maxEnd: string | null;
 }
 
-export interface EventRoomTypeAddOnDetails extends BaseEventRoomTypeAddOnDetails {
+export interface EventRoomTypeAddOnDetails
+  extends BaseEventRoomTypeAddOnDetails {
   createdAt: string;
   updatedAt: string;
 }
@@ -2840,7 +2849,8 @@ export interface BaseBookingSpaceQuestionTranslation {
   updatedAt: string;
 }
 
-export interface BookingSpaceQuestionTranslation extends BaseBookingSpaceQuestionTranslation {}
+export interface BookingSpaceQuestionTranslation
+  extends BaseBookingSpaceQuestionTranslation {}
 
 export interface BaseBookingSpaceQuestionChoiceTranslation {
   id: string;
@@ -2852,7 +2862,8 @@ export interface BaseBookingSpaceQuestionChoiceTranslation {
   updatedAt: string;
 }
 
-export interface BookingSpaceQuestionChoiceTranslation extends BaseBookingSpaceQuestionChoiceTranslation {}
+export interface BookingSpaceQuestionChoiceTranslation
+  extends BaseBookingSpaceQuestionChoiceTranslation {}
 
 export interface BaseBookingSpaceQuestionChoice {
   id: string;
@@ -2864,7 +2875,8 @@ export interface BaseBookingSpaceQuestionChoice {
   translations?: BaseBookingSpaceQuestionChoiceTranslation[];
 }
 
-export interface BookingSpaceQuestionChoice extends BaseBookingSpaceQuestionChoice {}
+export interface BookingSpaceQuestionChoice
+  extends BaseBookingSpaceQuestionChoice {}
 
 export interface BaseBookingSpaceQuestion {
   id: string;
