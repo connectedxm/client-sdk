@@ -8,7 +8,7 @@ export const useIsChannelSubscribed = (channelId?: string) => {
     throw new Error("Invalid channelId. Did you pass in the slug?");
   }
 
-  return relationships?.data.channels[channelId] || false;
+  return relationships?.data?.channels?.[channelId] || false;
 };
 
 export default useIsChannelSubscribed;

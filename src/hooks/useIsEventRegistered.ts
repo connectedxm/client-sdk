@@ -8,7 +8,7 @@ export const useIsEventRegistered = (eventId: string) => {
     throw new Error("Invalid eventId. Did you pass in the slug?");
   }
 
-  return relationships?.data.events[eventId] || false;
+  return relationships?.data?.events?.[eventId] || false;
 };
 
 export default useIsEventRegistered;
