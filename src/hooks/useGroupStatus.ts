@@ -10,7 +10,7 @@ export const useGroupStatus = (
     throw new Error("Invalid groupId. Did you pass in the slug?");
   }
 
-  return relationships?.data.groups[groupId] || false;
+  return relationships?.data?.groups?.[groupId] || false;
 };
 
 export default useGroupStatus;
