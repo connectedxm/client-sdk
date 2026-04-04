@@ -13,13 +13,10 @@ import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_MEDIA_ITEMS_QUERY_KEY = (
   eventId: string,
-  passId?: string,
+  passId: string,
   type?: string
 ): QueryKey => {
-  const key = [...EVENT_QUERY_KEY(eventId), "MEDIA_ITEMS"];
-  if (passId) {
-    key.push(passId);
-  }
+  const key = [...EVENT_QUERY_KEY(eventId), "MEDIA_ITEMS", passId];
   if (type) {
     key.push(type);
   }
@@ -43,7 +40,7 @@ export const SET_EVENT_MEDIA_ITEMS_QUERY_DATA = (
 
 export interface GetEventMediaItemsProps extends InfiniteQueryParams {
   eventId: string;
-  passId?: string;
+  passId: string;
   type?: "image" | "video" | "file";
 }
 
@@ -71,7 +68,7 @@ export const GetEventMediaItems = async ({
 
 export const useGetEventMediaItems = (
   eventId: string = "",
-  passId?: string,
+  passId: string = "",
   type?: "image" | "video" | "file",
   params: Omit<
     InfiniteQueryParams,
@@ -90,7 +87,7 @@ export const useGetEventMediaItems = (
     params,
     {
       ...options,
-      enabled: !!eventId && (options?.enabled ?? true),
+      enabled: !!eventId && !!passId && (options?.enabled ?? true),
     }
   );
 };
