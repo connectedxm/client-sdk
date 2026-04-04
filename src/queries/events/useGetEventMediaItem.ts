@@ -14,7 +14,7 @@ import { GetClientAPI } from "@src/ClientAPI";
 export const EVENT_MEDIA_ITEM_QUERY_KEY = (
   eventId: string,
   mediaItemId: string,
-  passId?: string
+  passId: string
 ): QueryKey => [...EVENT_MEDIA_ITEMS_QUERY_KEY(eventId, passId), mediaItemId];
 
 export const SET_EVENT_IMAGE_QUERY_DATA = (
@@ -35,7 +35,7 @@ export const SET_EVENT_IMAGE_QUERY_DATA = (
 export interface GetEventMediaItemProps extends SingleQueryParams {
   eventId: string;
   mediaItemId: string;
-  passId?: string;
+  passId: string;
 }
 
 export const GetEventMediaItem = async ({
@@ -58,8 +58,8 @@ export const GetEventMediaItem = async ({
 
 export const useGetEventMediaItem = (
   eventId: string = "",
-  mediaItemId: string,
-  passId?: string,
+  mediaItemId: string = "",
+  passId: string = "",
   options: SingleQueryOptions<ReturnType<typeof GetEventMediaItem>> = {}
 ) => {
   return useConnectedSingleQuery<ReturnType<typeof GetEventMediaItem>>(
@@ -67,7 +67,8 @@ export const useGetEventMediaItem = (
     (params) => GetEventMediaItem({ eventId, mediaItemId, passId, ...params }),
     {
       ...options,
-      enabled: !!eventId && !!mediaItemId && (options?.enabled ?? true),
+      enabled:
+        !!eventId && !!mediaItemId && !!passId && (options?.enabled ?? true),
     }
   );
 };

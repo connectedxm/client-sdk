@@ -5,3 +5,5 @@ tests
 .eslintignore
 .eslintrc.json
 tsconfig.json
+.cursor
+.vscode
