@@ -28,11 +28,11 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "22.x"
+          node-version: "22.22.1"
           registry-url: https://registry.npmjs.org/
 
       - name: Update npm
-        run: npm install -g npm@22.22.1
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm ci
