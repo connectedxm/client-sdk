@@ -2134,6 +2134,7 @@ export interface BaseSeries {
   description: string | null;
   longDescription: string | null;
   registration: boolean;
+  featured: boolean;
   price: number;
   taxCode: string | null;
   taxIncluded: boolean;
