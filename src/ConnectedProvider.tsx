@@ -45,7 +45,7 @@ export interface ConnectedXMClientContextState {
     shouldRedirect: boolean
   ) => void;
   onMutationError?: (
-    error: AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
+    error: AxiosError<ConnectedXMResponse<ConnectedXMError>>,
     variables: Omit<MutationParams, "queryClient" | "clientApiParams">,
     context: unknown
   ) => void;
