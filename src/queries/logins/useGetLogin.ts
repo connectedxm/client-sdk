@@ -33,7 +33,7 @@ export const GetLogin = async ({
 }: GetLoginProps): Promise<ConnectedXMResponse<Login>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const { data } = await clientApi.get(`/login`, {
-    headers: { executeAs: undefined },
+    headers: { executeAs: null },
   });
   return data;
 };
