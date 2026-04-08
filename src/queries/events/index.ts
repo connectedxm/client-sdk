@@ -21,3 +21,4 @@ export * from "./useGetEventMediaItems";
 export * from "./useGetEventMediaItem";
 export * from "./useGetEventSessionPassSections";
 export * from "./useGetEventSessionPassIntent";
+export * from "./useGetEventsExplore";
