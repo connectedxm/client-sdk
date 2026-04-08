@@ -19,7 +19,7 @@ export interface MutationOptions<
   TMutationParams,
 > extends UseMutationOptions<
   TResponseData,
-  AxiosError<ConnectedXMResponse<ConnectedXMError>>,
+  AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
   TMutationParams
 > {}
 
@@ -48,7 +48,7 @@ export const useConnectedMutation = <
 
   return useMutation<
     TResponseData,
-    AxiosError<ConnectedXMResponse<ConnectedXMError>>,
+    AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
     Omit<TMutationParams, "queryClient" | "clientApiParams">
   >({
     mutationFn: (data, context) =>
