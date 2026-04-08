@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import React from "react";
-import { ConnectedXMResponse } from "./interfaces";
+import { ConnectedXMError, ConnectedXMResponse } from "./interfaces";
 import { MutationParams } from "./mutations";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import type UseWebSocket from "react-use-websocket";
@@ -30,22 +30,22 @@ export interface ConnectedXMClientContextState {
   lastWSMessage: ReceivedWSMessage | null;
   websocketState: ReadyState;
   onNotAuthorized?: (
-    error: AxiosError<ConnectedXMResponse<any>>,
+    error: AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
     key: QueryKey,
     shouldRedirect: boolean
   ) => void;
   onModuleForbidden?: (
-    error: AxiosError<ConnectedXMResponse<any>>,
+    error: AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
     key: QueryKey,
     shouldRedirect: boolean
   ) => void;
   onNotFound?: (
-    error: AxiosError<ConnectedXMResponse<any>>,
+    error: AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
     key: QueryKey,
     shouldRedirect: boolean
   ) => void;
   onMutationError?: (
-    error: AxiosError<ConnectedXMResponse<null>>,
+    error: AxiosError<ConnectedXMResponse<ConnectedXMError | null>>,
     variables: Omit<MutationParams, "queryClient" | "clientApiParams">,
     context: unknown
   ) => void;
@@ -56,11 +56,10 @@ export const ConnectedXMClientContext =
     {} as ConnectedXMClientContextState
   );
 
-export interface ConnectedProviderProps
-  extends Omit<
-    ConnectedXMClientContextState,
-    "sendWSMessage" | "lastWSMessage" | "websocketState"
-  > {
+export interface ConnectedProviderProps extends Omit<
+  ConnectedXMClientContextState,
+  "sendWSMessage" | "lastWSMessage" | "websocketState"
+> {
   useWebSocket: typeof UseWebSocket;
   children: React.ReactNode;
 }

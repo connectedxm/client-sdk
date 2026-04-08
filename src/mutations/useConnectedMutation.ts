@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { ConnectedXMResponse, useConnected } from "..";
+import { ConnectedXMError, ConnectedXMResponse, useConnected } from "..";
 import { ClientApiParams } from "@src/ClientAPI";
 
 export interface MutationParams {
@@ -14,16 +14,18 @@ export interface MutationParams {
   queryClient?: QueryClient;
 }
 
-export interface MutationOptions<TResponseData, TMutationParams>
-  extends UseMutationOptions<
-    TResponseData,
-    AxiosError<TResponseData>,
-    TMutationParams
-  > {}
+export interface MutationOptions<
+  TResponseData,
+  TMutationParams,
+> extends UseMutationOptions<
+  TResponseData,
+  AxiosError<ConnectedXMResponse<ConnectedXMError>>,
+  TMutationParams
+> {}
 
 export const useConnectedMutation = <
   TMutationParams extends MutationParams,
-  TResponseData extends ConnectedXMResponse<any>
+  TResponseData extends ConnectedXMResponse<any>,
 >(
   mutation: MutationFunction<TResponseData, TMutationParams>,
   options?: Omit<
@@ -46,7 +48,7 @@ export const useConnectedMutation = <
 
   return useMutation<
     TResponseData,
-    AxiosError<TResponseData>,
+    AxiosError<ConnectedXMResponse<ConnectedXMError>>,
     Omit<TMutationParams, "queryClient" | "clientApiParams">
   >({
     mutationFn: (data, context) =>
