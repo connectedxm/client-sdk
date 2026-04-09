@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "axios": "^1.13.6",
-    "immer": "^11.1.4"
+    "immer": "^11.1.4",
+    "uuid": "^13.0.0"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.0.0",
@@ -50,6 +51,7 @@
     "@swc/core": "^1.15.18",
     "@tanstack/react-query": "^5.90.21",
     "@types/react": "^19.2.14",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "eslint": "^9.39.2",
