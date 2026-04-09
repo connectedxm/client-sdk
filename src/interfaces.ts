@@ -205,6 +205,7 @@ export interface BaseAccount {
   image: BaseImage | null;
   needsProfileCompletion: boolean;
   accountTiers: BaseAccountTier[];
+  attributes: AccountAttributeValue[]; // includes subline attributes
 }
 
 export interface Account extends BaseAccount {
