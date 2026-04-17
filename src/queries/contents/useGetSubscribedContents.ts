@@ -61,9 +61,9 @@ export const useGetSubscribedContents = (
   return useConnectedInfiniteQuery<
     Awaited<ReturnType<typeof GetSubscribedContents>>
   >(
-    SUBSCRIBED_CONTENTS_QUERY_KEY(interest),
+    SUBSCRIBED_CONTENTS_QUERY_KEY(type, interest),
     (params: InfiniteQueryParams) =>
-      GetSubscribedContents({ interest, ...params }),
+      GetSubscribedContents({ type, interest, ...params }),
     params,
     options
   );
