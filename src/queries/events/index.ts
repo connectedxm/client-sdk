@@ -1,4 +1,5 @@
 export * from "./useGetEvent";
+export * from "./useGetEventConfig";
 export * from "./useGetEventActivities";
 export * from "./useGetEventFAQSection";
 export * from "./useGetEventFAQSectionQuestion";
