@@ -1649,8 +1649,14 @@ export interface Registration extends BaseRegistration {
 export interface RegistrationDraftPass {
   id: string;
   passTypeId: string;
-  addOns: string[];
-  coupon: string | null;
+  addOnIds: string[];
+  coupon: {
+    id: string;
+    code: string;
+    discountPercent: number | null;
+    discountAmount: number | null;
+  } | null;
+  packageId: string | null;
   responses: {
     questionId: string;
     value: string;
@@ -1658,14 +1664,24 @@ export interface RegistrationDraftPass {
 }
 
 export interface RegistrationDraftReservation {
+  id: string;
   roomTypeId: string;
+  room: {
+    id: string;
+    roomName: string;
+  } | null;
   start: string | null;
   end: string | null;
 }
 
-export interface RegistrationDraft {
+export interface RegistrationDraftPackage {
   id: string;
+  packageTypeId: string;
+}
+
+export interface RegistrationDraft {
   passTypes: RegistrationDraftPass[];
+  packages: RegistrationDraftPackage[];
   reservation: RegistrationDraftReservation | null;
 }
 
@@ -3295,6 +3311,7 @@ export interface EventConfig {
   } | null;
   RESERVATION_DESCRIPTION: string | null;
   CURRENCY: string;
+  CURRENCY_DISPLAY: "symbol" | "code";
   ALLOW_SPLIT_PAYMENT: boolean;
   SPLIT_PAYMENT_PERCENTAGE: number;
   SPLIT_PAYMENT_NET_DAYS: number;
@@ -3303,8 +3320,8 @@ export interface EventConfig {
     id: string;
     name: string;
     price: number;
-    description: string;
     shortDescription: string;
+    longDescription: string | null;
     image: {
       id: string;
       uri: string;
@@ -3319,6 +3336,7 @@ export interface EventConfig {
     maxQuantityPerSale: number;
     requiresApproval: boolean;
     requireCoupon: boolean;
+    requiredPassTypeId: string | null;
     priceSchedules: {
       name: string | null;
       price: number;
@@ -3341,6 +3359,10 @@ export interface EventConfig {
       width: number;
       height: number;
     } | null;
+    passes: {
+      passTypeId: string;
+      quantity: number;
+    }[];
   }[];
   ADD_ONS: {
     id: string;
@@ -3369,6 +3391,8 @@ export interface EventConfig {
       width: number;
       height: number;
     } | null;
+    minPasses: number | null;
+    maxPasses: number | null;
     minStart: string | null;
     defaultStart: string | null;
     maxStart: string | null;
@@ -3378,8 +3402,28 @@ export interface EventConfig {
     price: number;
     pricePerNight: boolean;
     rooms: { id: string; roomName: string }[];
-    passTypesIds: string[];
-    addOnsIds: string[];
+    passTypes: {
+      id: string;
+      defaultEnd: string | null;
+      defaultStart: string | null;
+      maxEnd: string | null;
+      maxStart: string | null;
+      minEnd: string | null;
+      minStart: string | null;
+      includedNights: number;
+      maxPasses: number | null;
+      minPasses: number | null;
+      premium: number;
+    }[];
+    addOns: {
+      id: string;
+      defaultEnd: string | null;
+      defaultStart: string | null;
+      maxEnd: string | null;
+      maxStart: string | null;
+      minEnd: string | null;
+      minStart: string | null;
+    }[];
     allowedTiersIds: string[];
     disallowedTiersIds: string[];
     soldout: boolean;
