@@ -1635,7 +1635,7 @@ export interface Registration extends BaseRegistration {
   packages: BaseAttendeePackage[];
   createdAt: string;
   event: {
-    externalMeetingUrl: string;
+    externalMeetingUrl: string | null;
     meeting: BaseMeeting | null;
     streams: BaseStreamInput[];
   };

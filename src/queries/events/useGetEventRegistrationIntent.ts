@@ -13,10 +13,11 @@ import { EVENT_REGISTRATION_QUERY_KEY } from "./useGetEventRegistration";
 
 export const EVENT_REGISTRATION_INTENT_QUERY_KEY = (
   eventId: string,
+  draftHash: string,
   addressId?: string,
   split?: boolean
 ) => {
-  const key = [...EVENT_REGISTRATION_QUERY_KEY(eventId), "INTENT"];
+  const key = [...EVENT_REGISTRATION_QUERY_KEY(eventId), "INTENT", draftHash];
   if (addressId) {
     key.push(addressId);
   }
@@ -57,6 +58,7 @@ export const GetEventRegistrationIntent = async ({
 export const useGetEventRegistrationIntent = (
   eventId: string = "",
   draft: RegistrationDraft,
+  draftHash: string,
   addressId: string = "",
   split: boolean = false,
   options: SingleQueryOptions<
@@ -66,7 +68,7 @@ export const useGetEventRegistrationIntent = (
   const { authenticated } = useConnected();
 
   return useConnectedSingleQuery<ReturnType<typeof GetEventRegistrationIntent>>(
-    EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, addressId, split),
+    EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId, draftHash, addressId, split),
     (params) =>
       GetEventRegistrationIntent({
         eventId,
