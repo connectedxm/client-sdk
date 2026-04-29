@@ -1648,6 +1648,7 @@ export interface Registration extends BaseRegistration {
 
 export interface RegistrationDraftPass {
   id: string;
+  alternateId?: number;
   passTypeId: string;
   addOnIds: string[];
   coupon: {
@@ -1661,6 +1662,7 @@ export interface RegistrationDraftPass {
     questionId: string;
     value: string;
   }[];
+  createdAt: string;
 }
 
 export interface RegistrationDraftReservation {
@@ -1680,7 +1682,7 @@ export interface RegistrationDraftPackage {
 }
 
 export interface RegistrationDraft {
-  passTypes: RegistrationDraftPass[];
+  passes: RegistrationDraftPass[];
   packages: RegistrationDraftPackage[];
   reservation: RegistrationDraftReservation | null;
 }
