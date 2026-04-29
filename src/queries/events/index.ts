@@ -1,4 +1,5 @@
 export * from "./useGetEvent";
+export * from "./useGetEventConfig";
 export * from "./useGetEventActivities";
 export * from "./useGetEventFAQSection";
 export * from "./useGetEventFAQSectionQuestion";
@@ -22,3 +23,5 @@ export * from "./useGetEventMediaItem";
 export * from "./useGetEventSessionPassSections";
 export * from "./useGetEventSessionPassIntent";
 export * from "./useGetEventsExplore";
+export * from "./useGetEventRegistration";
+export * from "./useGetEventRegistrationIntent";
