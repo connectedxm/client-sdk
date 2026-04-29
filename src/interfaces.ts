@@ -495,82 +495,13 @@ export interface Event extends BaseEvent {
   state: string | null;
   country: string | null;
   zip: string | null;
-  groupId: string | null;
-  group: Group | null;
-  groupOnly: boolean;
   creatorId: string | null;
   creator: BaseAccount;
-  registration: boolean;
-  registrationStart: string;
-  registrationEnd: string;
-  registrationHeaderImageId: string | null;
-  registrationHeaderImage: BaseImage | null;
-  registrationFooterImageId: string | null;
-  registrationFooterImage: BaseImage | null;
-  registrationHideTitle: boolean;
-  publicRegistrants: boolean;
-  activityFeedEnabled: boolean;
-  activationsDescription: string | null;
-  chatBotNumber: string | null;
-  sessionsVisibility: EventAgendaVisibility;
-  speakersVisibility: EventAgendaVisibility;
-  iosAppLink: string | null;
-  registrations: BaseRegistration[];
-  androidAppLink: string | null;
-  pages: BaseEventPage[];
-  streamReplay: BaseVideo | null;
-  createdAt: string;
-  updatedAt: string;
-  faqSections: BaseFaqSection[];
-  sponsorshipLevels: EventSponsorshipLevel[];
-  reservationDescription: string | null;
-  backgroundImage: BaseImage | null;
-  media: EventMediaItem[];
-  options: Record<string, any> | null;
-  meeting: BaseMeeting | null;
-  streams: BaseStreamInput[];
-  paymentIntegration: BasePaymentIntegration | null;
-  _count: {
-    activations: number;
-    sessions: number;
-    speakers: number;
-    sponsorshipLevels: number;
-    media: number;
-    roomTypes: number;
-    surveys: number;
-  };
 }
 
 export const isTypeEvent = (event: BaseEvent | Event): event is Event => {
   return (event as Omit<Event, keyof BaseEvent>).eventType !== undefined;
 };
-
-export interface RegistrationEventDetails extends BaseEvent {
-  externalMeetingUrl: string | null;
-  reservationDescription: string | null;
-  externalUrl: string | null;
-  registration: boolean;
-  registrationCount: number;
-  registrationLimit: number;
-  registrationStart: string;
-  registrationEnd: string;
-  allowMultipleRegistrations: boolean;
-  allowSplitPayment: boolean;
-  splitPaymentPercentage: number;
-  splitPaymentNetDays: number | null;
-  splitPaymentDueDate: string | null;
-  paymentIntegration: BasePaymentIntegration | null;
-  tickets: {
-    enableCoupons: boolean;
-  }[];
-  _count: {
-    sections: number;
-    followups: number;
-    coupons: number;
-    addOns: number;
-    roomTypes: number;
-  };
-}
 
 export enum RegistrationQuestionType {
   text = "text",
@@ -696,6 +627,10 @@ export interface RegistrationFollowup extends BaseRegistrationFollowup {
 }
 
 export interface EventListing extends Event {
+  registration: boolean;
+  publicRegistrants: boolean;
+  groupOnly: boolean;
+  group: BaseGroup | null;
   visible: boolean;
   externalMeetingUrl: string | null;
   newActivityCreatorEmailNotification: boolean;
@@ -703,6 +638,7 @@ export interface EventListing extends Event {
   registrationLimit: number;
   registrationStart: string;
   registrationEnd: string;
+
   sponsors: BaseAccount[];
   speakers: BaseSpeaker[];
   sessions: BaseSession[];
@@ -1695,11 +1631,14 @@ interface BaseRegistration {
 }
 
 export interface Registration extends BaseRegistration {
-  event: RegistrationEventDetails;
-  account: BaseAccount;
   passes: BasePass[];
   packages: BaseAttendeePackage[];
   createdAt: string;
+  event: {
+    externalMeetingUrl: string | null;
+    meeting: BaseMeeting | null;
+    streams: BaseStreamInput[];
+  };
   _count: {
     payments: number;
     coupons: number;
@@ -1707,8 +1646,48 @@ export interface Registration extends BaseRegistration {
   };
 }
 
+export interface RegistrationDraftPass {
+  id: string;
+  alternateId?: number;
+  passTypeId: string;
+  addOnIds: string[];
+  coupon: {
+    id: string;
+    code: string;
+    discountPercent: number | null;
+    discountAmount: number | null;
+  } | null;
+  packageId: string | null;
+  responses: {
+    questionId: string;
+    value: string;
+  }[];
+  createdAt: string;
+}
+
+export interface RegistrationDraftReservation {
+  id: string;
+  roomTypeId: string;
+  room: {
+    id: string;
+    roomName: string;
+  } | null;
+  start: string | null;
+  end: string | null;
+}
+
+export interface RegistrationDraftPackage {
+  id: string;
+  packageTypeId: string;
+}
+
+export interface RegistrationDraft {
+  passes: RegistrationDraftPass[];
+  packages: RegistrationDraftPackage[];
+  reservation: RegistrationDraftReservation | null;
+}
+
 export interface ListingRegistration extends BaseRegistration {
-  event: RegistrationEventDetails;
   account: BaseAccount & { email: string | null; phone: string | null };
   couponId: string | null;
   coupon: BaseCoupon | null;
@@ -3254,4 +3233,270 @@ export interface SeriesRegistration extends BaseSeriesRegistration {
   createdAt: string;
   updatedAt: string;
   passes: BasePass[];
+}
+
+export interface EventConfig {
+  // BASIC DETAILS
+  EVENT_ID: string;
+  SLUG: string;
+  NAME: string;
+  SHORT_DESCRIPTION: string;
+  LONG_DESCRIPTION: string | null;
+  EVENT_START: string;
+  EVENT_END: string;
+  TIMEZONE: string | null;
+  VENUE: string | null;
+  LOCATION: string | null;
+  ADDRESS1: string | null;
+  ADDRESS2: string | null;
+  CITY: string | null;
+  STATE: string | null;
+  COUNTRY: string | null;
+  ZIP: string | null;
+  IMAGE: {
+    id: string;
+    uri: string;
+    width: number;
+    height: number;
+  } | null;
+  SQUARE_IMAGE: {
+    id: string;
+    uri: string;
+    width: number;
+    height: number;
+  } | null;
+  CREATOR_ID: string | null;
+  // REGISTRATION DETAILS
+  EXTERNAL_URL: string | null;
+  REGISTRATION_HEADER_IMAGE: {
+    id: string;
+    uri: string;
+    width: number;
+    height: number;
+  } | null;
+  REGISTRATION_FOOTER_IMAGE: {
+    id: string;
+    uri: string;
+    width: number;
+    height: number;
+  } | null;
+  REGISTRATION: boolean;
+  REGISTRATION_START: string | null;
+  REGISTRATION_END: string | null;
+  REGISTRATION_HIDE_TITLE: boolean;
+  REGISTRATION_LIMIT: number | null;
+  ALLOW_MULTIPLE_REGISTRATIONS: boolean;
+  PUBLIC_REGISTRANTS: boolean;
+  SERIES: {
+    id: string;
+    registration: boolean;
+    name: string;
+    slug: string;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
+  } | null;
+  GROUP_ONLY: boolean;
+  GROUP: {
+    id: string;
+    name: string;
+    slug: string;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
+  } | null;
+  RESERVATION_DESCRIPTION: string | null;
+  CURRENCY: string;
+  CURRENCY_DISPLAY: "symbol" | "code";
+  ALLOW_SPLIT_PAYMENT: boolean;
+  SPLIT_PAYMENT_PERCENTAGE: number;
+  SPLIT_PAYMENT_NET_DAYS: number;
+  SPLIT_PAYMENT_DUE_DATE: string | null;
+  PASS_TYPES: {
+    id: string;
+    name: string;
+    price: number;
+    shortDescription: string;
+    longDescription: string | null;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
+    visibility: TicketVisibility;
+    limitPerAccount: number | null;
+    countryCodes: string | null;
+    groupPassDescription: string | null;
+    minQuantityPerSale: number;
+    maxQuantityPerSale: number;
+    requiresApproval: boolean;
+    requireCoupon: boolean;
+    requiredPassTypeId: string | null;
+    priceSchedules: {
+      name: string | null;
+      price: number;
+      startDate: string;
+      endDate: string;
+    }[];
+    allowedGroupPassTiersIds: string[];
+    allowedTiersIds: string[];
+    disallowedTiersIds: string[];
+    soldout: boolean;
+  }[];
+  PACKAGES: {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
+    passes: {
+      passTypeId: string;
+      quantity: number;
+    }[];
+  }[];
+  ADD_ONS: {
+    id: string;
+    name: string;
+    shortDescription: string;
+    price: number;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
+    pricePerNight: boolean;
+    allowedPassTypesIds: string[];
+    allowedTiersIds: string[];
+    disallowedTiersIds: string[];
+    soldout: boolean;
+  }[];
+  ROOM_TYPES: {
+    id: string;
+    name: string;
+    description: string | null;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
+    minPasses: number | null;
+    maxPasses: number | null;
+    minStart: string | null;
+    defaultStart: string | null;
+    maxStart: string | null;
+    minEnd: string | null;
+    defaultEnd: string | null;
+    maxEnd: string | null;
+    price: number;
+    pricePerNight: boolean;
+    rooms: { id: string; roomName: string }[];
+    passTypes: {
+      id: string;
+      defaultEnd: string | null;
+      defaultStart: string | null;
+      maxEnd: string | null;
+      maxStart: string | null;
+      minEnd: string | null;
+      minStart: string | null;
+      includedNights: number;
+      maxPasses: number | null;
+      minPasses: number | null;
+      premium: number;
+    }[];
+    addOns: {
+      id: string;
+      defaultEnd: string | null;
+      defaultStart: string | null;
+      maxEnd: string | null;
+      maxStart: string | null;
+      minEnd: string | null;
+      minStart: string | null;
+    }[];
+    allowedTiersIds: string[];
+    disallowedTiersIds: string[];
+    soldout: boolean;
+  }[];
+  SECTIONS: {
+    id: string;
+    name: string;
+    description: string | null;
+    passTypeIds: string[];
+    accountTiersIds: string[];
+    disallowedTiersIds: string[];
+    eventAddOnsIds: string[];
+    questionIds: string[];
+  }[];
+  QUESTIONS: {
+    id: string;
+    name: string;
+    type: RegistrationQuestionType;
+    label?: string;
+    placeholder?: string;
+    description?: string;
+    masked?: boolean;
+    mutable?: boolean;
+    default: string | null;
+    min?: string;
+    max?: string;
+    sortOrder: number;
+    featured: boolean;
+    required: boolean;
+    validation?: string;
+    validationMessage?: string;
+    choices?: {
+      id: string;
+      text?: string;
+      value: string;
+      description?: string;
+      subQuestionIds?: string[];
+      soldout: boolean;
+    }[];
+  }[];
+  HAS_ADD_ONS_STEP: boolean;
+  HAS_RESERVATIONS_STEP: boolean;
+  HAS_QUESTIONS_STEP: boolean;
+  HAS_COUPONS: boolean;
+  // MENU ITEMS
+  ACTIVATIONS_DESCRIPTION: string | null;
+  SHOW_ACTIVITIES: boolean;
+  SHOW_ACTIVATIONS: boolean;
+  SHOW_SESSIONS: boolean;
+  SESSION_VISIBILITY: EventAgendaVisibility;
+  SHOW_SPEAKERS: boolean;
+  SPEAKER_VISIBILITY: EventAgendaVisibility;
+  SHOW_FAQS: boolean;
+  SHOW_MEDIA: boolean;
+  SHOW_SPONSORS: boolean;
+  SHOW_SURVEYS: boolean;
+  SHOW_ATTENDEES: boolean;
+  SHOW_PAGES: boolean;
+  SHOW_FOLLOWUPS: boolean;
+  SHOW_STREAMS: boolean;
+  PAGES: { slug: string; title: string; content: string }[];
+  FAQ_SECTIONS: {
+    id: string;
+    name: string;
+    questions: {
+      id: string;
+      slug: string;
+      question: string;
+      answer: string;
+    }[];
+  }[];
+  // MISC
+  OPTIONS: Record<string, any> | null;
 }
