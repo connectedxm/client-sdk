@@ -1651,6 +1651,7 @@ export interface RegistrationDraftPass {
   alternateId?: number;
   passTypeId: string;
   addOnIds: string[];
+  sessionIds: string[];
   coupon: {
     id: string;
     code: string;
