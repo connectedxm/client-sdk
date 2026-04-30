@@ -3477,6 +3477,7 @@ export interface EventConfig {
     required: boolean;
     validation?: string;
     validationMessage?: string;
+    searchListId: string | null;
     choices?: {
       id: string;
       text?: string;
