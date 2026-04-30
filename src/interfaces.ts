@@ -891,6 +891,7 @@ export interface BaseCoupon {
   applyToPassType: boolean;
   applyToAddOns: boolean;
   applyToReservation: boolean;
+  applyToSessions: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -1651,11 +1652,16 @@ export interface RegistrationDraftPass {
   alternateId?: number;
   passTypeId: string;
   addOnIds: string[];
+  sessionIds: string[];
   coupon: {
     id: string;
     code: string;
     discountPercent: number | null;
     discountAmount: number | null;
+    applyToPassType: boolean;
+    applyToAddOns: boolean;
+    applyToReservation: boolean;
+    applyToSessions: boolean;
   } | null;
   packageId: string | null;
   responses: {
@@ -3333,7 +3339,6 @@ export interface EventConfig {
     visibility: TicketVisibility;
     limitPerAccount: number | null;
     countryCodes: string | null;
-    groupPassDescription: string | null;
     minQuantityPerSale: number;
     maxQuantityPerSale: number;
     requiresApproval: boolean;
@@ -3345,6 +3350,10 @@ export interface EventConfig {
       startDate: string;
       endDate: string;
     }[];
+    enableCoupons: boolean;
+    maxCouponQuantity: number | null;
+    minCouponQuantity: number;
+    groupPassDescription: string | null;
     allowedGroupPassTiersIds: string[];
     allowedTiersIds: string[];
     disallowedTiersIds: string[];
@@ -3429,6 +3438,17 @@ export interface EventConfig {
     allowedTiersIds: string[];
     disallowedTiersIds: string[];
     soldout: boolean;
+  }[];
+  HAS_SESSIONS_STEP: boolean;
+  SESSIONS: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    startTime: string;
+    soldout: boolean;
+    allowedPassTypes: string[];
+    allowedTiers: string[];
   }[];
   SECTIONS: {
     id: string;
