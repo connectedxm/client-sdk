@@ -1657,6 +1657,10 @@ export interface RegistrationDraftPass {
     code: string;
     discountPercent: number | null;
     discountAmount: number | null;
+    applyToPassType: boolean;
+    applyToAddOns: boolean;
+    applyToReservation: boolean;
+    applyToSessions: boolean;
   } | null;
   packageId: string | null;
   responses: {
