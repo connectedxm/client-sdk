@@ -3344,16 +3344,16 @@ export interface EventConfig {
     requiresApproval: boolean;
     requireCoupon: boolean;
     requiredPassTypeId: string | null;
-    enableCoupons: boolean;
-    minCouponQuantity: number;
-    maxCouponQuantity: number | null;
-    groupPassDescription: string | null;
     priceSchedules: {
       name: string | null;
       price: number;
       startDate: string;
       endDate: string;
     }[];
+    enableCoupons: boolean;
+    maxCouponQuantity: number | null;
+    minCouponQuantity: number;
+    groupPassDescription: string | null;
     allowedGroupPassTiersIds: string[];
     allowedTiersIds: string[];
     disallowedTiersIds: string[];
