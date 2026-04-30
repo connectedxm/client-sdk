@@ -3478,6 +3478,7 @@ export interface EventConfig {
     validation?: string;
     validationMessage?: string;
     searchListId: string | null;
+    locationOption: LocationQuestionOption | null;
     choices?: {
       id: string;
       text?: string;
