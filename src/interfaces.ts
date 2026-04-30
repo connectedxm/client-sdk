@@ -3338,12 +3338,15 @@ export interface EventConfig {
     visibility: TicketVisibility;
     limitPerAccount: number | null;
     countryCodes: string | null;
-    groupPassDescription: string | null;
     minQuantityPerSale: number;
     maxQuantityPerSale: number;
     requiresApproval: boolean;
     requireCoupon: boolean;
     requiredPassTypeId: string | null;
+    enableCoupons: boolean;
+    minCouponQuantity: number;
+    maxCouponQuantity: number | null;
+    groupPassDescription: string | null;
     priceSchedules: {
       name: string | null;
       price: number;
