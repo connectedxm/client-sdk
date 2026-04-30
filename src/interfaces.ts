@@ -3430,6 +3430,17 @@ export interface EventConfig {
     disallowedTiersIds: string[];
     soldout: boolean;
   }[];
+  HAS_SESSIONS_STEP: boolean;
+  SESSIONS: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    startTime: string;
+    soldout: boolean;
+    allowedPassTypes: string[];
+    allowedTiers: string[];
+  }[];
   SECTIONS: {
     id: string;
     name: string;
