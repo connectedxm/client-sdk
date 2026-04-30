@@ -891,6 +891,7 @@ export interface BaseCoupon {
   applyToPassType: boolean;
   applyToAddOns: boolean;
   applyToReservation: boolean;
+  applyToSessions: boolean;
   createdAt: string;
   updatedAt: string;
 }
