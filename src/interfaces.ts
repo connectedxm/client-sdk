@@ -1651,13 +1651,18 @@ export interface RegistrationDraftPass {
   id: string;
   alternateId?: number;
   passTypeId: string;
-  addOnIds: string[];
-  sessionIds: string[];
+  addOns: {
+    id: string;
+    price?: number;
+    discount?: number;
+    total?: number;
+  }[];
+  sessions: { id: string; price?: number; discount?: number; total?: number }[];
   coupon: {
     id: string;
     code: string;
-    discountPercent: number | null;
-    discountAmount: number | null;
+    discountAmount: number;
+    discountPercent: number;
     applyToPassType: boolean;
     applyToAddOns: boolean;
     applyToReservation: boolean;
@@ -1669,6 +1674,9 @@ export interface RegistrationDraftPass {
     value: string;
   }[];
   createdAt: string;
+  price?: number;
+  discount?: number;
+  total?: number;
 }
 
 export interface RegistrationDraftReservation {
@@ -1678,19 +1686,31 @@ export interface RegistrationDraftReservation {
     id: string;
     roomName: string;
   } | null;
-  start: string | null;
-  end: string | null;
+  start: Date | null;
+  end: Date | null;
+  pricePerNight?: number;
+  numberOfNights?: number;
+  includedNights?: number;
+  price?: number;
+  discount?: number;
+  total?: number;
 }
 
 export interface RegistrationDraftPackage {
   id: string;
   packageTypeId: string;
+  price?: number;
+  discount?: number;
+  total?: number;
 }
 
 export interface RegistrationDraft {
   passes: RegistrationDraftPass[];
   packages: RegistrationDraftPackage[];
   reservation: RegistrationDraftReservation | null;
+  price?: number;
+  discount?: number;
+  total?: number;
 }
 
 export interface ListingRegistration extends BaseRegistration {
