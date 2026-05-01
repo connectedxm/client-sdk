@@ -1691,6 +1691,8 @@ export interface RegistrationDraftReservation {
   pricePerNight?: number;
   numberOfNights?: number;
   includedNights?: number;
+  // Key is the pass type id, value is the premium
+  premiums?: Record<string, number>;
   price?: number;
   discount?: number;
   total?: number;
