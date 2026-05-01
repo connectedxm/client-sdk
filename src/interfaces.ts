@@ -3483,11 +3483,11 @@ export interface EventConfig {
     name: string;
     description: string;
     price: number;
-    prices: SessionPrice[];
     startTime: string;
     soldout: boolean;
     allowedPassTypes: string[];
     allowedTiers: string[];
+    prices: { passTypeId: string; price: number }[];
     image: {
       id: string;
       uri: string;
@@ -3530,7 +3530,7 @@ export interface EventConfig {
       value: string;
       description?: string;
       subQuestionIds?: string[];
-      soldout: boolean;
+      supply: number | null;
     }[];
   }[];
   HAS_ADD_ONS_STEP: boolean;
