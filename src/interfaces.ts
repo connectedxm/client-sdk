@@ -3442,7 +3442,8 @@ export interface EventConfig {
     maxEnd: string | null;
     price: number;
     pricePerNight: boolean;
-    rooms: { id: string; roomName: string }[];
+    requiresRoom: boolean;
+    availableRooms: { id: string; roomName: string }[];
     passTypes: {
       id: string;
       defaultEnd: string | null;
@@ -3477,14 +3478,14 @@ export interface EventConfig {
     price: number;
     startTime: string;
     soldout: boolean;
+    allowedPassTypes: string[];
+    allowedTiers: string[];
     image: {
       id: string;
       uri: string;
       width: number;
       height: number;
     } | null;
-    allowedPassTypes: string[];
-    allowedTiers: string[];
   }[];
   SECTIONS: {
     id: string;
