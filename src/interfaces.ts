@@ -3443,7 +3443,7 @@ export interface EventConfig {
     price: number;
     pricePerNight: boolean;
     requiresRoom: boolean;
-    availableRooms: { id: string; roomName: string }[];
+    rooms: { id: string; roomName: string; available: boolean }[];
     passTypes: {
       id: string;
       defaultEnd: string | null;
