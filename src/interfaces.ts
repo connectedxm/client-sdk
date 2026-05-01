@@ -1653,11 +1653,18 @@ export interface RegistrationDraftPass {
   passTypeId: string;
   addOns: {
     id: string;
+    addOnId: string;
     price?: number;
     discount?: number;
     total?: number;
   }[];
-  sessions: { id: string; price?: number; discount?: number; total?: number }[];
+  accesses: {
+    id: string;
+    sessionId: string;
+    price?: number;
+    discount?: number;
+    total?: number;
+  }[];
   coupon: {
     id: string;
     code: string;
