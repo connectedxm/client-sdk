@@ -3483,7 +3483,7 @@ export interface EventConfig {
     name: string;
     description: string;
     price: number;
-    prices: { passTypeId: string; price: number }[];
+    prices: SessionPrice[];
     startTime: string;
     soldout: boolean;
     allowedPassTypes: string[];
