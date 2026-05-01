@@ -3352,6 +3352,7 @@ export interface EventConfig {
     price: number;
     shortDescription: string;
     longDescription: string | null;
+    featured: boolean;
     image: {
       id: string;
       uri: string;
