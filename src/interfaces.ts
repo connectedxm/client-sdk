@@ -3469,6 +3469,12 @@ export interface EventConfig {
     price: number;
     startTime: string;
     soldout: boolean;
+    image: {
+      id: string;
+      uri: string;
+      width: number;
+      height: number;
+    } | null;
     allowedPassTypes: string[];
     allowedTiers: string[];
   }[];
