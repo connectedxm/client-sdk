@@ -1686,8 +1686,8 @@ export interface RegistrationDraftReservation {
     id: string;
     roomName: string;
   } | null;
-  start: Date | null;
-  end: Date | null;
+  start: string | null;
+  end: string | null;
   pricePerNight?: number;
   numberOfNights?: number;
   includedNights?: number;
