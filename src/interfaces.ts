@@ -1062,8 +1062,15 @@ export interface BaseEventSessionTime {
 
 export interface EventSessionTime extends BaseEventSessionTime {}
 
+export interface SessionPrice {
+  id: string;
+  passTypeId: string;
+  price: number;
+}
+
 export interface Session extends BaseSession {
   longDescription: string | null;
+  prices?: SessionPrice[];
   tracks: BaseTrack[];
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
@@ -3476,6 +3483,7 @@ export interface EventConfig {
     name: string;
     description: string;
     price: number;
+    prices: { passTypeId: string; price: number }[];
     startTime: string;
     soldout: boolean;
     allowedPassTypes: string[];
