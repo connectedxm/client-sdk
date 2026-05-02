@@ -21,7 +21,7 @@ export const ApplyEventRegistrationCoupon = async ({
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
 
-  const { data } = await clientApi.post<ConnectedXMResponse<RegistrationDraft>>(
+  const { data } = await clientApi.put<ConnectedXMResponse<RegistrationDraft>>(
     `/events/${eventId}/registration/coupon`,
     { draft, code }
   );
