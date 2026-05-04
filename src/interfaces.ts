@@ -1038,6 +1038,7 @@ export interface BaseSession {
   description: string | null;
   location: BaseSessionLocation | null;
   image: BaseImage | null;
+  prices?: SessionPrice[];
   startTime: string;
   endTime: string;
   sortOrder: number | null;
@@ -1070,7 +1071,6 @@ export interface SessionPrice {
 
 export interface Session extends BaseSession {
   longDescription: string | null;
-  prices?: SessionPrice[];
   tracks: BaseTrack[];
   speakers: BaseSpeaker[];
   sponsors: BaseAccount[];
