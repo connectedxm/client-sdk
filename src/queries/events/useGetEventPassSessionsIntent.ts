@@ -94,7 +94,7 @@ export const useGetEventPassSessionsIntent = (
         !!authenticated &&
         !!eventId &&
         !!passId &&
-        !!sessionIds &&
+        sessionIds.length > 0 &&
         (options?.enabled ?? true),
     }
   );
