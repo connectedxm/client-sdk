@@ -46,13 +46,11 @@ export const GetEventPassSessionsIntent = async ({
   ConnectedXMResponse<PaymentIntent>
 > => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(
+  const { data } = await clientApi.post(
     `/self/events/${eventId}/attendee/passes/${passId}/sessions/intent`,
     {
-      params: {
-        sessionIds: sessionIds ? sessionIds.join(",") : "",
-        addressId,
-      },
+      sessionIds,
+      addressId,
     }
   );
 
