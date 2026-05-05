@@ -1079,7 +1079,7 @@ export interface Session extends BaseSession {
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
   autoRefundEnabled: boolean;
-  autRefundPercent: number;
+  autoRefundPercentage: number;
   surveys: BaseSurvey[];
   activation: BaseEventActivation | null;
   times: BaseEventSessionTime[];
