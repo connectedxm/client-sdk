@@ -1049,7 +1049,27 @@ export interface BaseSession {
   eventId: string;
   taxCode: string | null;
   taxIncluded: boolean;
+  autoRefundEnabled: boolean;
+  autoRefundPercentage: number;
   blocks: BaseBlock[];
+}
+
+export interface Session extends BaseSession {
+  longDescription: string | null;
+  prices?: SessionPrice[];
+  tracks: BaseTrack[];
+  speakers: BaseSpeaker[];
+  sponsors: BaseAccount[];
+  accounts?: BaseAccount[]; // if you have saved this session = Array > 0
+  bookmarks?: { id: string }[]; // if this array is not empty, the session is bookmarked
+  meeting: BaseMeeting | null;
+  streams: BaseStreamInput[];
+  surveys: BaseSurvey[];
+  activation: BaseEventActivation | null;
+  times: BaseEventSessionTime[];
+  _count: {
+    sections: number;
+  };
 }
 
 export interface BaseEventSessionTime {
@@ -1066,26 +1086,6 @@ export interface SessionPrice {
   id: string;
   passTypeId: string;
   price: number;
-}
-
-export interface Session extends BaseSession {
-  longDescription: string | null;
-  prices?: SessionPrice[];
-  tracks: BaseTrack[];
-  speakers: BaseSpeaker[];
-  sponsors: BaseAccount[];
-  accounts?: BaseAccount[]; // if you have saved this session = Array > 0
-  bookmarks?: { id: string }[]; // if this array is not empty, the session is bookmarked
-  meeting: BaseMeeting | null;
-  streams: BaseStreamInput[];
-  autoRefundEnabled: boolean;
-  autoRefundPercentage: number;
-  surveys: BaseSurvey[];
-  activation: BaseEventActivation | null;
-  times: BaseEventSessionTime[];
-  _count: {
-    sections: number;
-  };
 }
 
 export interface BaseBlock {
