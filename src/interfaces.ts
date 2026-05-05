@@ -1078,6 +1078,8 @@ export interface Session extends BaseSession {
   bookmarks?: { id: string }[]; // if this array is not empty, the session is bookmarked
   meeting: BaseMeeting | null;
   streams: BaseStreamInput[];
+  autoRefundEnabled: boolean;
+  autRefundPercent: number;
   surveys: BaseSurvey[];
   activation: BaseEventActivation | null;
   times: BaseEventSessionTime[];
