@@ -273,6 +273,7 @@ export interface SelfRelationships {
   events: Record<string, boolean>;
   channels: Record<string, boolean>;
   threads: Record<string, boolean>;
+  tiers: Record<string, boolean>;
 }
 
 export interface BaseSelf {
