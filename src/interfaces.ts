@@ -3426,6 +3426,7 @@ export interface EventConfig {
       height: number;
     } | null;
     pricePerNight: boolean;
+    includedNights: number;
     allowedPassTypesIds: string[];
     allowedTiersIds: string[];
     disallowedTiersIds: string[];
@@ -3482,6 +3483,7 @@ export interface EventConfig {
   HAS_SESSIONS_STEP: boolean;
   SESSIONS: {
     id: string;
+    slug: string;
     name: string;
     description: string;
     price: number;
