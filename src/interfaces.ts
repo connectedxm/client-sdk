@@ -83,9 +83,6 @@ export interface BaseImage {
 }
 
 export enum ImageType {
-  people = "people", // deprecated
-  banner = "banner", // deprecated
-  admin = "admin",
   account = "account",
   thread = "thread",
   content = "content",
