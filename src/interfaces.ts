@@ -83,10 +83,15 @@ export interface BaseImage {
 }
 
 export enum ImageType {
+  people = "people", // deprecated
+  banner = "banner", // deprecated
   admin = "admin",
-  people = "people",
+  account = "account",
+  thread = "thread",
+  content = "content",
   activity = "activity",
-  banner = "banner",
+  event = "event",
+  activation = "activation",
 }
 
 export interface Image extends BaseImage {
@@ -1986,6 +1991,7 @@ export interface BaseEventActivation {
   type: EventActivationType;
   accessLevel: TicketEventAccessLevel;
   sortOrder: number;
+  imageUpload: boolean;
 }
 
 export interface EventActivation extends BaseEventActivation {
@@ -2011,6 +2017,8 @@ export interface BaseEventActivationCompletion {
   id: string;
   earnedPoints: number;
   createdAt: string;
+  imageId: string | null;
+  image: BaseImage | null;
 }
 
 export interface EventActivationCompletion extends BaseEventActivationCompletion {

@@ -13,6 +13,7 @@ export interface CompleteEventActivationParams extends MutationParams {
   passId: string;
   activationId: string;
   code?: string;
+  imageId?: string;
 }
 
 export const CompleteEventActivation = async ({
@@ -20,6 +21,7 @@ export const CompleteEventActivation = async ({
   passId,
   activationId,
   code,
+  imageId,
   clientApiParams,
   queryClient,
 }: CompleteEventActivationParams): Promise<
@@ -30,6 +32,7 @@ export const CompleteEventActivation = async ({
     `/events/${eventId}/activations/${passId}/${activationId}`,
     {
       code: code || undefined,
+      imageId: imageId || undefined,
     }
   );
 

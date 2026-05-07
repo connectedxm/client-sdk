@@ -1,4 +1,4 @@
-import { ConnectedXMResponse, BaseImage } from "@src/interfaces";
+import { ConnectedXMResponse, BaseImage, ImageType } from "@src/interfaces";
 import useConnectedMutation, {
   MutationOptions,
   MutationParams,
@@ -6,7 +6,7 @@ import useConnectedMutation, {
 import { GetClientAPI } from "@src/ClientAPI";
 
 interface ImageCreateParams {
-  type: "activity" | "thread" | "content";
+  type: ImageType;
   dataUri: string;
   name?: string;
   description?: string;
