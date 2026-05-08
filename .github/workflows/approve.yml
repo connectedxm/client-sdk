@@ -10,7 +10,9 @@ on:
 
 jobs:
   auto-approve:
-    if: github.event.label.name == 'approved'
+    if: |
+      github.event.label.name == 'approved' &&
+      contains(fromJSON(vars.AUTO_APPROVE_USERS || '[]'), github.event.sender.login)
     runs-on: ubuntu-latest
     steps:
       - name: Auto approve PR
