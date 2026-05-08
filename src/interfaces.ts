@@ -3571,4 +3571,5 @@ export interface EventConfig {
   }[];
   // MISC
   OPTIONS: Record<string, any> | null;
+  BUILD_MODE: boolean;
 }
