@@ -344,6 +344,7 @@ export interface BaseActivity {
   eventId: string | null;
   meetingId: string | null;
   pinned: boolean;
+  pinnedExplore: boolean;
   contentId: string | null;
   commentedId: string | null;
   createdAt: string;
