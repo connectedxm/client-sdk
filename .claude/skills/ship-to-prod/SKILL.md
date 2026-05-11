@@ -1,35 +1,50 @@
 ---
 name: ship-to-prod
-description: Open a release PR from `staging` to `main` in this repo. Handles the full flow — gathers commits, pulls Linear ticket references from commit messages and the PRs that merged into staging, drafts a title and body that match the repo's PR template, picks reviewers, and (after the user confirms) creates the PR with `gh pr create`. Use this whenever the user says anything along the lines of "open a staging PR", "release staging", "ship staging to prod", "cut a release", "PR staging", "promote staging", "merge staging into main", or any variant of opening/preparing a PR between the staging and main branches. Prefer this skill over running `gh pr create` directly — the manual flow misses Linear references, the version-bump check, and reviewer conventions.
+description: Open a release PR into `main` in this repo. Handles the full flow — resolves the source branch from the user's prompt or the current checkout (never assumes `staging`), gathers commits, pulls Linear ticket references from commit messages and the PRs that merged in, drafts a title and body that match the repo's PR template, picks reviewers, and (after the user confirms) creates the PR with `gh pr create`. Use this whenever the user says anything along the lines of "open a release PR", "ship to prod", "cut a release", "PR into main", "promote this branch", "ship this branch", "release this", or any variant of opening/preparing a PR that targets `main`. Prefer this skill over running `gh pr create` directly — the manual flow misses Linear references, the version-bump check, and reviewer conventions.
 ---
 
-# Staging → Main release PR
+# Release PR into main
 
-Use this when the user wants to open a release PR from `staging` into `main` in the `connectedxm/client-sdk` repo (npm package `@connectedxm/client`). Production is `main` here — pushing to `main` triggers `publish.yml`, which publishes `@connectedxm/client` to npm. The backend repo uses `prod`, but this SDK ships from `main`.
+Use this when the user wants to open a release PR into `main` in the `connectedxm/client-sdk` repo (npm package `@connectedxm/client`). The head branch is whatever the user names in their prompt; if they don't name one, fall back to the currently checked-out branch — never assume `staging`. (Production is `main` here — the backend repo uses `prod`, but this SDK ships from `main`.)
+
+Pushing to `main` triggers `publish.yml`, which publishes `@connectedxm/client` to npm. There is no manual gate — merging this PR auto-publishes the package, which then lands in `client-web`, `client-mobile`, and any other consumer on next install.
 
 ## What you're producing
 
 A draft PR (or, on confirmation, an actual PR via `gh pr create`) with:
 
-1. **Base/head**: base `main`, head `staging` — never invent a feature branch
+1. **Base/head**: base `main`, head = the source branch resolved in step 1 — never invent a branch that the user didn't name and isn't the current checkout
 2. **Title** that reflects what's in the diff (see "Writing the title")
 3. **Body** matching `.github/pull_request_template.md`, with Linear refs harvested from commits AND from any sub-PRs they reference, plus the Semantic Versioning section ticked
 4. **Reviewers** drawn from the repo's collaborators (excluding the PR author)
 
-The user has asked to **always confirm before creating** the PR. Show the draft, wait for the go-ahead, then call `gh pr create`.
+The user has asked to **always confirm before creating** the PR. Show the draft, wait for the go-ahead, then push (if needed) and call `gh pr create`.
 
 ## Workflow
 
-### 1. Sync and check there's something to ship
+### 1. Resolve the branch and sync
+
+Pick the head branch for the release PR:
+
+- If the user named a branch in their prompt, use that.
+- Otherwise, use the currently checked-out branch (`git rev-parse --abbrev-ref HEAD`).
+
+If the resolved branch is `main`, stop and ask the user which branch to ship — you can't PR `main` into `main`. Treat the resolved name as `<source>` everywhere below.
+
+Then sync and check there's something to ship:
 
 ```bash
-git fetch origin main staging
-git log --oneline origin/main..origin/staging
+git fetch origin main <source>
+git log --oneline origin/main..origin/<source>
 ```
 
-If the log is empty, tell the user `staging` has nothing ahead of `main` — there's no PR to open. Stop.
+If the log is empty, tell the user `<source>` has nothing ahead of `main` — there's no PR to open. Stop.
 
-If `staging` is behind `origin/staging` locally, that's fine — the PR is opened against the remote refs, not your working copy. But mention it so the user knows.
+If `<source>` is behind `origin/<source>` locally, that's fine — the PR is opened against the remote refs, not your working copy. But mention it so the user knows.
+
+If `<source>` exists only locally (not on `origin`), you'll need to push it before `gh pr create` will work. Note that for step 10; don't push yet.
+
+If the branch already has an open PR against `main`, mention it (`gh pr list --head <source> --base main --state open`) and ask whether to add commits to that one or close it first. Don't open a duplicate.
 
 ### 2. Check the version bump (hard gate)
 
@@ -37,24 +52,24 @@ If `staging` is behind `origin/staging` locally, that's fine — the PR is opene
 
 ```bash
 git show origin/main:package.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version"
-git show origin/staging:package.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version"
+git show origin/<source>:package.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version"
 ```
 
-Compare the two. If staging's version is **not** strictly greater than main's, stop and tell the user — they need to land a version bump on staging first (recent precedent: `chore: Bump package version to X.Y.Z` PRs into staging) before this release PR can pass CI. Don't open the PR; don't bump for them.
+Compare the two. If `<source>`'s version is **not** strictly greater than main's, stop and tell the user — they need to land a version bump on `<source>` first (recent precedent: `chore: Bump package version to X.Y.Z` commits) before this release PR can pass CI. Don't open the PR; don't bump for them.
 
-**Watch for pre-release tags.** Staging sometimes carries something like `8.1.7-beta.2` mid-cycle. That string is rejected by `version-check.yml` outright (it's not plain `x.y.z`), so even if it's numerically greater than main, the workflow will fail. Flag this to the user — they need a plain `x.y.z` bump on staging first.
+**Watch for pre-release tags.** A branch sometimes carries something like `8.1.7-beta.2` mid-cycle. That string is rejected by `version-check.yml` outright (it's not plain `x.y.z`), so even if it's numerically greater than main, the workflow will fail. Flag this to the user — they need a plain `x.y.z` bump first.
 
 If the bump looks right, note which kind it is (major/minor/patch) — you'll tick the matching box in the body's Semantic Versioning section.
 
 ### 3. Gather the commits
 
 ```bash
-git log origin/main..origin/staging --pretty=format:'%H%x09%s%x09%b%x1e'
+git log origin/main..origin/<source> --pretty=format:'%H%x09%s%x09%b%x1e'
 ```
 
 The `%x1e` (ASCII record separator) lets you split multi-line commit bodies cleanly. You want the subject AND the body — Linear references like `closes ENG-1901` usually live in the body, not the subject.
 
-Skip merge commits whose subject starts with `Merge branch 'staging'` — they're noise from local merges, not a unit of work.
+Skip merge commits whose subject starts with `Merge branch` (e.g. `Merge branch 'staging'`, `Merge branch 'main'`) — they're noise from local merges, not a unit of work.
 
 ### 4. Resolve sub-PRs referenced in commit subjects
 
@@ -83,7 +98,7 @@ Collect refs from:
 - the body of every commit in step 3
 - the title and body of every sub-PR resolved in step 4
 
-**Only include refs you actually saw in those sources for this PR.** Don't carry refs over from prior staging→main PRs, recent conversation context, or memory of past releases — even if a ticket "feels relevant," it doesn't go in the list unless it's literally present in the commits/PRs you just gathered. Re-listing a ticket that was already shipped in a previous release is a real failure mode and confuses Linear's auto-close on merge.
+**Only include refs you actually saw in those sources for this PR.** Don't carry refs over from prior release PRs, recent conversation context, or memory of past releases — even if a ticket "feels relevant," it doesn't go in the list unless it's literally present in the commits/PRs you just gathered. Re-listing a ticket that was already shipped in a previous release is a real failure mode and confuses Linear's auto-close on merge.
 
 Dedupe. Preserve the verb the user wrote when possible — if a sub-PR said `closes ENG-1901`, your output should say `closes ENG-1901`, not `ref`. Only fall back to `ref` if the original said `ref` or no verb at all.
 
@@ -109,7 +124,7 @@ Look at what's actually in the diff before reaching for a template. The right ti
 
 **One dominant change:** copy the conventional-commit subject from the main commit/PR. Example: `feat(EventConfig): add BUILD_MODE flag`.
 
-**Several unrelated changes:** use a short generic title like `Staging Fixes` or a noun phrase that captures the theme. Look at recent staging→main PRs (`gh pr list --base main --head staging --state merged --limit 10`) to match the house style — they oscillate between conventional-commit subjects (`feat(EventConfig): add BUILD_MODE flag`) and short noun phrases (`Image upload on activation`), both are fine.
+**Several unrelated changes:** use a short generic title like `Release fixes` or a noun phrase that captures the theme. Look at recent release PRs (`gh pr list --base main --state merged --limit 10`) to match the house style — they oscillate between conventional-commit subjects (`feat(EventConfig): add BUILD_MODE flag`) and short noun phrases (`Image upload on activation`), both are fine.
 
 **Version-bump-only releases.** When the only thing in the diff is `chore: Bump package version to X.Y.Z`, a short title like `Release X.Y.Z` is fine.
 
@@ -147,7 +162,7 @@ Indicate the appropriate version bump for this PR:
 
 **Writing the testing plan.** Replace the template's default Testing checkboxes with a per-PR plan derived from what actually changed. The reviewer should be able to read the plan and know exactly what to verify before merging triggers the npm publish. Aim for 3–7 concrete checkbox items.
 
-Walk the file diff (`git diff --name-only origin/main..origin/staging`) and turn it into specific verification steps. This is a TypeScript React-hooks SDK consumed by other apps (notably `client-web` and `client-mobile`), so most verification happens via type-check + a smoke pass from a consumer mounting `ConnectedProvider`.
+Walk the file diff (`git diff --name-only origin/main..origin/<source>`) and turn it into specific verification steps. This is a TypeScript React-hooks SDK consumed by other apps (notably `client-web` and `client-mobile`), so most verification happens via type-check + a smoke pass from a consumer mounting `ConnectedProvider`.
 
 - **Query files** (`src/queries/<resource>/use*.ts`) → "Confirm `useGet*` returns the new field/shape; spot-check the `*_QUERY_KEY` helper and that 401/403/404 plus custom codes 453–467 route through `onNotAuthorized` / `onNotFound` / `onModuleForbidden` as expected (the custom codes must be in `CUSTOM_ERROR_CODES` in `utilities/GetErrorMessage.ts` or they'll silently retry 3×)."
 - **Mutation files** (`src/mutations/<resource>/use*.ts`) → "Run the mutation from a consumer app and confirm the listed query keys invalidate / `SET_*_QUERY_DATA` updates as expected; on failure confirm `onMutationError` fires."
@@ -180,18 +195,24 @@ If there are zero Linear references, omit the bullet list and write `- (none)` u
 
 ### 9. Show the draft and wait
 
-Print the title, body, reviewer list, AND the version delta from step 2 back to the user, clearly labelled. Ask whether to create the PR as drafted, modify, or cancel. Don't run `gh pr create` until they've said yes.
+Print the title, body, reviewer list, the version delta from step 2, AND the push state from step 1 back to the user, clearly labelled. If a push is needed (`<source>` not on origin or local commits ahead of `origin/<source>`), state explicitly that creating the PR will push first. Ask whether to proceed, modify, or cancel. Don't run `git push` or `gh pr create` until they've said yes.
 
 The reason for confirming: the title and body are interpretive — you're summarizing several commits' worth of work. The user knows things you don't (which change is the headline feature, which is incidental cleanup, whether the Semantic Versioning box is right, whether something is already covered by another ticket). Five seconds of their attention up front beats editing the PR after the fact — especially since merging this PR triggers an npm publish.
 
-### 10. Create the PR
+### 10. Push the branch (if needed) and create the PR
 
-After confirmation, use a HEREDOC for the body so newlines and markdown survive:
+After confirmation:
 
 ```bash
+# Only if step 1 said the branch needed pushing:
+git push -u origin <source>   # first push
+# OR
+git push                      # subsequent push
+
+# Then:
 gh pr create \
   --base main \
-  --head staging \
+  --head <source> \
   --title "<title>" \
   --reviewer "<comma,separated,logins>" \
   --body "$(cat <<'EOF'
@@ -205,8 +226,9 @@ Return the PR URL from the command output so the user can click straight to it.
 ## Things to watch out for
 
 - **`main`, not `prod`.** This repo's production branch is `main` (the backend repo uses `prod`). Don't paste backend instincts here — `gh pr create --base prod` will fail.
+- **Don't assume `staging`.** Most feature work now branches off `main` and PRs directly back into `main`. Resolve the head branch from the user's prompt or the current checkout — never default to `staging`.
 - **Merging this PR publishes `@connectedxm/client` to npm.** `publish.yml` runs on push to `main` and publishes the package directly. There is no manual gate. Take the testing plan seriously — the change lands in `client-web`, `client-mobile`, and any other consumer on next install.
-- **The version bump is a hard gate.** If staging's `package.json` version isn't strictly greater than main's in plain `x.y.z` semver, `version-check.yml` will fail. Pre-release tags like `8.1.7-beta.2` are explicitly rejected. Don't open the PR until the bump is on staging in plain semver.
+- **The version bump is a hard gate.** If `<source>`'s `package.json` version isn't strictly greater than main's in plain `x.y.z` semver, `version-check.yml` will fail. Pre-release tags like `8.1.7-beta.2` are explicitly rejected. Don't open the PR until the bump is on the source branch in plain semver.
 - **`linear-check.yml` requires `ENG-####` in the body.** A `CXM-####`-only body will fail CI — and the repo's PR template defaults to `closes CXM-[Linear Ticket Number]`, which is a known footgun. If you only found `CXM` refs in the source commits/PRs, surface that to the user before opening.
 - **Don't paste `<!-- CURSOR_SUMMARY -->` blocks** from sub-PR bodies into the new PR body. Those are auto-generated by the Cursor Bugbot reviewer and re-including them looks weird.
 - **Don't include the HTML comment placeholders** from the PR template (`<!-- A brief description -->`) in your output — replace them with real content.
@@ -214,6 +236,7 @@ Return the PR URL from the command output so the user can click straight to it.
 - **`closes` vs `ref`**: `closes` auto-closes the Linear ticket on merge to `main`. `ref` just links it. Preserve whichever the source commit/PR used. When in doubt, `ref` is the safer default — it doesn't change ticket state.
 - **Bot reviews are not human reviews.** Don't infer reviewer preferences from `github-actions` or `cursor` reviews on past PRs — those are automated. Look at human reviewers (`authorAssociation: MEMBER`) only.
 - **The author isn't a reviewer.** GitHub will reject `--reviewer <self>`. Always exclude `gh api user --jq '.login'` from the list.
+- **Don't push without confirmation.** Pushing exposes work to the team and triggers CI. Bundle it with PR creation behind the user's go-ahead.
 - **No second SDK to publish.** Unlike `admin-sdk`, this repo publishes exactly one package (`@connectedxm/client`). There is no generated `openapi.json` and no `sdks/typescript/` output — don't mention them in the body or testing plan.
 
 ## Why this exists
