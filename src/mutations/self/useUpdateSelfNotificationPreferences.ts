@@ -20,6 +20,7 @@ export interface UpdateSelfNotificationPreferencesParams
   chatPush?: boolean;
   chatUnreadPush?: boolean;
   chatUnreadEmail?: boolean;
+  activityMentionPush?: boolean;
   eventReminderEmail?: boolean;
   activityNotificationPreference?: OrganizationActivityPreference;
   organizationAnnouncementPush?: boolean;

@@ -843,6 +843,7 @@ export enum NotificationType {
   GROUP_REQUEST_ACCEPTED = "GROUP_REQUEST_ACCEPTED",
   CONTENT = "CONTENT",
   SUPPORT_TICKET_MESSAGE = "SUPPORT_TICKET_MESSAGE",
+  MENTION = "MENTION",
 }
 
 export interface BaseNotification {
@@ -1885,6 +1886,7 @@ export interface NotificationPreferences {
   chatPush: boolean;
   chatUnreadPush: boolean;
   chatUnreadEmail: boolean;
+  activityMentionPush: boolean;
   eventReminderEmail: boolean;
   activityNotificationPreference: OrganizationActivityPreference;
   organizationAnnouncementEmail: boolean;
