@@ -3550,6 +3550,7 @@ export interface EventConfig {
   HAS_COUPONS: boolean;
   // MENU ITEMS
   ACTIVATIONS_DESCRIPTION: string | null;
+  ACTIVATIONS_LABEL: string;
   SHOW_ACTIVITIES: boolean;
   SHOW_ACTIVATIONS: boolean;
   SHOW_SESSIONS: boolean;
