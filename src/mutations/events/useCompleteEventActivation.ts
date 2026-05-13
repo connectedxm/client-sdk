@@ -35,7 +35,7 @@ export const CompleteEventActivation = async ({
     {
       code: code || undefined,
       imageId: imageId || undefined,
-      earnedPoints: earnedPoints || undefined,
+      earnedPoints: earnedPoints ?? undefined,
     }
   );
 
