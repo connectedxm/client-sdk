@@ -14,6 +14,7 @@ export interface CompleteEventActivationParams extends MutationParams {
   activationId: string;
   code?: string;
   imageId?: string;
+  earnedPoints?: number;
 }
 
 export const CompleteEventActivation = async ({
@@ -22,6 +23,7 @@ export const CompleteEventActivation = async ({
   activationId,
   code,
   imageId,
+  earnedPoints,
   clientApiParams,
   queryClient,
 }: CompleteEventActivationParams): Promise<
@@ -33,6 +35,7 @@ export const CompleteEventActivation = async ({
     {
       code: code || undefined,
       imageId: imageId || undefined,
+      earnedPoints: earnedPoints || undefined,
     }
   );
 

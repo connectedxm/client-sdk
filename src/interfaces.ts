@@ -1978,6 +1978,11 @@ export enum EventActivationType {
   protected = "protected",
 }
 
+export enum EventActivationRewardType {
+  max = "max",
+  input = "input",
+}
+
 export interface BaseEventActivation {
   id: string;
   slug: string;
@@ -1987,6 +1992,7 @@ export interface BaseEventActivation {
   startAfter: string;
   image: BaseImage | null;
   type: EventActivationType;
+  rewardType: EventActivationRewardType;
   accessLevel: TicketEventAccessLevel;
   sortOrder: number;
   imageUpload: boolean;
