@@ -1,11 +1,11 @@
 import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
-} from "../useConnectedSingleQuery";
+} from "../../useConnectedSingleQuery";
 import { ConnectedXMResponse, RegistrationDraft } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
+import { EVENT_QUERY_KEY } from "../useGetEvent";
 
 export const EVENT_REGISTRATION_QUERY_KEY = (eventId: string) => {
   const key = [...EVENT_QUERY_KEY(eventId), "REGISTRATION"];

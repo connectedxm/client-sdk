@@ -1,7 +1,7 @@
 import useConnectedSingleQuery, {
   SingleQueryOptions,
   SingleQueryParams,
-} from "../useConnectedSingleQuery";
+} from "../../useConnectedSingleQuery";
 import {
   ConnectedXMResponse,
   PaymentIntent,

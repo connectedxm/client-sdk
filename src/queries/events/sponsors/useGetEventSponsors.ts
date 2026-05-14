@@ -5,9 +5,9 @@ import {
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "../../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
+import { EVENT_QUERY_KEY } from "../useGetEvent";
 import { GetClientAPI } from "@src/ClientAPI";
 
 export const EVENT_SPONSORS_QUERY_KEY = (eventId: string): QueryKey => [

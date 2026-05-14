@@ -5,9 +5,9 @@ import {
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "../../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
+import { EVENT_QUERY_KEY } from "../useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 

@@ -3,7 +3,7 @@ import {
   SingleQueryOptions,
   SingleQueryParams,
   useConnectedSingleQuery,
-} from "../useConnectedSingleQuery";
+} from "../../useConnectedSingleQuery";
 
 import type { ConnectedXMResponse, Speaker } from "@interfaces";
 import { EVENT_SPEAKERS_QUERY_KEY } from "./useGetEventSpeakers";

@@ -8,7 +8,7 @@ import {
 } from "../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { GetEventSessions } from "./useGetEventSessions";
+import { GetEventSessions } from "./sessions/useGetEventSessions";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 

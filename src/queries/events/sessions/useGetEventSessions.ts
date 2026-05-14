@@ -1,12 +1,12 @@
 import type { ConnectedXMResponse, Session } from "@interfaces";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
+import { EVENT_QUERY_KEY } from "../useGetEvent";
 import { GetClientAPI } from "@src/ClientAPI";
 import useConnectedSingleQuery, {
   GetBaseSingleQueryKeys,
   SingleQueryOptions,
   SingleQueryParams,
-} from "../useConnectedSingleQuery";
+} from "../../useConnectedSingleQuery";
 
 interface SessionWithSupplyAndCanRegister extends Session {
   supply?: number | null;
