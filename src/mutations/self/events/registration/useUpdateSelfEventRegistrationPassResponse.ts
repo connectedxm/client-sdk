@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../../../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY } from "@src/queries";
+import { SELF_EVENT_REGISTRATION_QUERY_KEY } from "@src/queries";
 
 export interface UpdateSelfEventRegistrationPassResponseParams
   extends MutationParams {
@@ -31,9 +31,11 @@ export const UpdateSelfEventRegistrationPassResponse = async ({
   );
 
   if (queryClient && data.status === "ok") {
-    queryClient.removeQueries({
-      queryKey: SELF_EVENT_REGISTRATION_INTENT_QUERY_KEY(eventId),
-      exact: false,
+    queryClient.invalidateQueries({
+      queryKey: [
+        ...SELF_EVENT_REGISTRATION_QUERY_KEY(eventId),
+        clientApiParams.locale,
+      ],
     });
   }
 
