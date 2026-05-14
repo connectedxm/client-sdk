@@ -1,6 +1,5 @@
-export * from "./useCompleteEventActivation";
-export * from "./useBookmarkEventAttendeePassSession";
-export * from "./useUnbookmarkEventAttendeePassSession";
-export * from "./useUpdateEventSessionPassResponses";
-export * from "./useUpdateEventRegistration";
+export * from "./attendee";
+export * from "./sessions";
+
 export * from "./useApplyEventRegistrationCoupon";
+export * from "./useUpdateEventRegistration";

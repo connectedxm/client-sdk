@@ -1,51 +1,50 @@
-import type { Account } from "@interfaces";
+import type { BaseEventPage } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
   InfiniteQueryParams,
   setFirstPageData,
   useConnectedInfiniteQuery,
-} from "../useConnectedInfiniteQuery";
+} from "../../useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
-import { EVENT_QUERY_KEY } from "./useGetEvent";
-import { GetEventSessions } from "./sessions/useGetEventSessions";
+import { EVENT_QUERY_KEY } from "../useGetEvent";
 import { ConnectedXMResponse } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 
-export const EVENT_REGISTRANTS_QUERY_KEY = (eventId: string): QueryKey => [
+export const EVENT_PAGES_QUERY_KEY = (eventId: string): QueryKey => [
   ...EVENT_QUERY_KEY(eventId),
-  "REGISTRANTS",
+  "PAGES",
 ];
 
-export const SET_EVENT_REGISTRANTS_QUERY_DATA = (
+export const SET_EVENT_PAGES_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof EVENT_REGISTRANTS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetEventSessions>>,
+  keyParams: Parameters<typeof EVENT_PAGES_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetEventPages>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...EVENT_REGISTRANTS_QUERY_KEY(...keyParams),
+      ...EVENT_PAGES_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetEventRegistrantsProps extends InfiniteQueryParams {
+export interface GetEventPagesProps extends InfiniteQueryParams {
   eventId: string;
 }
 
-export const GetEventRegistrants = async ({
+export const GetEventPages = async ({
   eventId,
   pageParam,
   pageSize,
   orderBy,
   search,
   clientApiParams,
-}: GetEventRegistrantsProps): Promise<ConnectedXMResponse<Account[]>> => {
+}: GetEventPagesProps): Promise<ConnectedXMResponse<BaseEventPage[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/events/${eventId}/registrants`, {
+  const { data } = await clientApi.get(`/events/${eventId}/pages`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -56,22 +55,17 @@ export const GetEventRegistrants = async ({
   return data;
 };
 
-export const useGetEventRegistrants = (
+export const useGetEventPages = (
   eventId: string = "",
   params: Omit<
     InfiniteQueryParams,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
-  options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetEventRegistrants>>
-  > = {}
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetEventPages>>> = {}
 ) => {
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetEventRegistrants>>
-  >(
-    EVENT_REGISTRANTS_QUERY_KEY(eventId),
-    (params: InfiniteQueryParams) =>
-      GetEventRegistrants({ eventId, ...params }),
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetEventPages>>>(
+    EVENT_PAGES_QUERY_KEY(eventId),
+    (params: InfiniteQueryParams) => GetEventPages({ eventId, ...params }),
     params,
     {
       ...options,
