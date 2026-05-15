@@ -2391,6 +2391,10 @@ export interface BaseThreadAccount {
   threadId: string;
   accountId: string;
   account: BaseAccount;
+  lastReadAt: string | null;
+  typingAt: string | null;
+  notifications: boolean;
+  blocked: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -2403,17 +2407,6 @@ export interface Thread extends BaseThread {
   _count?: {
     messages?: number;
   };
-}
-
-export interface BaseThreadViewer {
-  lastReadAt: string | null;
-  notifications: boolean;
-  account: BaseAccount;
-  typingAt?: string | null;
-}
-
-export interface ThreadViewer extends BaseThreadViewer {
-  status: string;
 }
 
 export interface BaseThreadMessageRead {
@@ -2434,7 +2427,7 @@ export interface BaseThreadMessage {
   body: string;
   sentAt: string;
   accountId: string;
-  viewer: BaseThreadViewer;
+  threadAccount: BaseThreadAccount | null;
 }
 
 export interface ThreadMessage extends BaseThreadMessage {
