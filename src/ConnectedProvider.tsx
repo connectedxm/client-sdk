@@ -10,6 +10,7 @@ import {
   useConnectedWebsocket,
 } from "./websockets";
 import { ReadyState } from "react-use-websocket";
+import { WSMessageBus, WSMessageBusProvider } from "./socket/WSMessageBus";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -64,14 +65,15 @@ export interface ConnectedProviderProps extends Omit<
   children: React.ReactNode;
 }
 
-export const ConnectedProvider = ({
+const ConnectedProviderInner = ({
   children,
   useWebSocket,
+  bus,
   ...state
-}: ConnectedProviderProps) => {
+}: ConnectedProviderProps & { bus: WSMessageBus }) => {
   const { sendWSMessage, lastWSMessage, readyState } = useConnectedWebsocket(
     useWebSocket,
-    state
+    { ...state, bus }
   );
   return (
     <ConnectedXMClientContext.Provider
@@ -84,5 +86,18 @@ export const ConnectedProvider = ({
     >
       {children}
     </ConnectedXMClientContext.Provider>
+  );
+};
+
+export const ConnectedProvider = (props: ConnectedProviderProps) => {
+  const busRef = React.useRef<WSMessageBus | null>(null);
+  if (!busRef.current) {
+    busRef.current = new WSMessageBus();
+  }
+
+  return (
+    <WSMessageBusProvider bus={busRef.current}>
+      <ConnectedProviderInner {...props} bus={busRef.current} />
+    </WSMessageBusProvider>
   );
 };
