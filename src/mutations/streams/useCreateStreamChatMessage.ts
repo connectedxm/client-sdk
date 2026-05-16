@@ -6,7 +6,7 @@ import {
 } from "@src/mutations/useConnectedMutation";
 import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
 import { STREAM_CHAT_MESSAGES_QUERY_KEY } from "@src/queries/streams/useGetStreamChatMessages";
-import { AppendInfiniteQuery } from "@src/utilities";
+import { InfiniteQueryHelpers } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries";
 
 export interface CreateStreamChatMessageParams extends MutationParams {
@@ -37,7 +37,7 @@ export const CreateStreamChatMessage = async ({
       ...STREAM_CHAT_MESSAGES_QUERY_KEY(streamId, sessionId),
       ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
     ];
-    AppendInfiniteQuery<StreamChatMessage>(queryClient, QueryKey, data.data);
+    InfiniteQueryHelpers.prepend<StreamChatMessage>(queryClient, QueryKey, data.data);
   }
 
   return data;

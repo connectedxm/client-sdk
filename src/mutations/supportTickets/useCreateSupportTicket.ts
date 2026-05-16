@@ -8,7 +8,7 @@ import {
   SET_SUPPORT_TICKET_QUERY_DATA,
   SUPPORT_TICKETS_QUERY_KEY,
 } from "@src/queries/supportTickets";
-import { AppendInfiniteQuery } from "@src/utilities";
+import { InfiniteQueryHelpers } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 
 /**
@@ -51,7 +51,7 @@ export const CreateSupportTicket = async ({
       clientApiParams.locale,
     ]);
 
-    AppendInfiniteQuery<SupportTicket>(
+    InfiniteQueryHelpers.prepend<SupportTicket>(
       queryClient,
       [
         ...SUPPORT_TICKETS_QUERY_KEY(type, data.data.state),
@@ -60,7 +60,7 @@ export const CreateSupportTicket = async ({
       data.data
     );
 
-    AppendInfiniteQuery<SupportTicket>(
+    InfiniteQueryHelpers.prepend<SupportTicket>(
       queryClient,
       [
         ...SUPPORT_TICKETS_QUERY_KEY(),

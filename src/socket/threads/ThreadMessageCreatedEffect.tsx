@@ -4,7 +4,7 @@ import { useConnected } from "@src/hooks";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
 import { THREADS_QUERY_KEY } from "@src/queries/threads/useGetThreads";
-import { AppendInfiniteQuery } from "@src/utilities/AppendInfiniteQuery";
+import { prepend } from "@src/utilities/InfiniteQueryHelpers";
 import { useWSEvent } from "../WSMessageBus";
 import type { ThreadMessage, Thread, ConnectedXMResponse } from "@src/interfaces";
 import { produce } from "immer";
@@ -27,11 +27,7 @@ export const ThreadMessageCreatedEffect = (): null => {
         ...GetBaseInfiniteQueryKeys(locale || "en"),
       ];
 
-      AppendInfiniteQuery<ThreadMessage>(
-        queryClient,
-        messagesKey,
-        payload.message
-      );
+      prepend<ThreadMessage>(queryClient, messagesKey, payload.message);
 
       const threadsKey = [
         ...THREADS_QUERY_KEY(),
