@@ -2,45 +2,11 @@ import { InfiniteData, QueryClient, QueryKey } from "@tanstack/react-query";
 import { produce } from "immer";
 import { ConnectedXMResponse } from "@src/interfaces";
 
+// For prepending an item to the first page of an infinite list, use the
+// existing `AppendInfiniteQuery` helper — its name is a misnomer but its
+// behaviour (`unshift` onto the first page) is what we want.
+
 type Identified = { id: string | number };
-
-export const prepend = <TData>(
-  queryClient: QueryClient,
-  key: QueryKey,
-  item: TData
-) => {
-  queryClient.setQueryData(
-    key,
-    (oldData: InfiniteData<ConnectedXMResponse<TData[]>> | undefined) => {
-      if (!oldData) return oldData;
-      return produce(oldData, (draft) => {
-        if (draft?.pages?.[0]?.data) {
-          draft.pages[0].data.unshift(item as any);
-        }
-      });
-    }
-  );
-};
-
-export const append = <TData>(
-  queryClient: QueryClient,
-  key: QueryKey,
-  item: TData
-) => {
-  queryClient.setQueryData(
-    key,
-    (oldData: InfiniteData<ConnectedXMResponse<TData[]>> | undefined) => {
-      if (!oldData) return oldData;
-      return produce(oldData, (draft) => {
-        const lastPageIndex = draft.pages.length - 1;
-        const lastPage = draft.pages[lastPageIndex];
-        if (lastPage && Array.isArray(lastPage.data)) {
-          lastPage.data.push(item as any);
-        }
-      });
-    }
-  );
-};
 
 export const update = <TData extends Identified>(
   queryClient: QueryClient,
