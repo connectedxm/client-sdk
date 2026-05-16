@@ -101,8 +101,14 @@ export const useConnectedWebsocket = (
     sendJsonMessage(message);
   };
 
+  const lastDispatchedRef = React.useRef<ReceivedWSMessage | null>(null);
+
   React.useEffect(() => {
     if (!lastWSMessage) return;
+    // Guard against re-dispatch when locale/bus/queryClient deps churn while
+    // lastWSMessage is unchanged.
+    if (lastDispatchedRef.current === lastWSMessage) return;
+    lastDispatchedRef.current = lastWSMessage;
 
     // Forward every payload to the typed message bus so socket-driven effect
     // components can react. Legacy handlers below remain for non-bus events.

@@ -5,6 +5,7 @@ import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery
 import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
 import { THREADS_QUERY_KEY } from "@src/queries/threads/useGetThreads";
 import { prepend } from "@src/utilities/InfiniteQueryHelpers";
+import { MergeInfinitePages } from "@src/utilities";
 import { useWSEvent } from "../WSMessageBus";
 import type { ThreadMessage, Thread, ConnectedXMResponse } from "@src/interfaces";
 import { produce } from "immer";
@@ -27,7 +28,21 @@ export const ThreadMessageCreatedEffect = (): null => {
         ...GetBaseInfiniteQueryKeys(locale || "en"),
       ];
 
-      prepend<ThreadMessage>(queryClient, messagesKey, payload.message);
+      // Dedup: skip if the message is already in the cache (e.g. the sender
+      // optimistically inserted it, or we briefly disconnected and refetched).
+      const existing =
+        queryClient.getQueryData<
+          InfiniteData<ConnectedXMResponse<ThreadMessage[]>>
+        >(messagesKey);
+      const alreadyCached = existing
+        ? MergeInfinitePages(existing).some(
+            (msg: ThreadMessage) => msg.id === payload.message.id
+          )
+        : false;
+
+      if (!alreadyCached) {
+        prepend<ThreadMessage>(queryClient, messagesKey, payload.message);
+      }
 
       const threadsKey = [
         ...THREADS_QUERY_KEY(),
