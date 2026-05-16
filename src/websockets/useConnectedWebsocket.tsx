@@ -123,7 +123,7 @@ export const useConnectedWebsocket = (
     } else if (lastWSMessage.type === "pulse") {
       PulseMessage(queryClient, locale, lastWSMessage);
     }
-  });
+  }, [lastWSMessage, bus, queryClient, locale]);
 
   return { sendWSMessage, lastWSMessage, readyState };
 };

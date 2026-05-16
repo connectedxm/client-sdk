@@ -64,7 +64,7 @@ export const ThreadMessageCreatedEffect = (): null => {
                 sourcePage.data.splice(foundIdx, 1);
               }
               found.lastMessageAt = payload.message.sentAt;
-              (found as any).lastMessage = payload.message;
+              found.lastMessage = payload.message.body;
               const firstPage = draft.pages[0];
               if (firstPage?.data) {
                 firstPage.data.unshift(found);

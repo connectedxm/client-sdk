@@ -93,7 +93,15 @@ export class WSMessageBus {
     const handlers = this.handlers.get(eventName);
     if (!handlers || handlers.size === 0) return;
 
-    const payload = envelope.body ?? envelope.payload ?? envelope;
+    const payload = envelope.body ?? envelope.payload;
+    if (payload === undefined) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[WSMessageBus] envelope for "${eventName}" had no body/payload; skipping`
+      );
+      return;
+    }
+
     handlers.forEach((handler) => {
       try {
         handler(payload);

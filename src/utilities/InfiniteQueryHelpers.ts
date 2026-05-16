@@ -15,11 +15,7 @@ export const prepend = <TData>(
       if (!oldData) return oldData;
       return produce(oldData, (draft) => {
         if (draft?.pages?.[0]?.data) {
-          if (draft.pages[0].data.length > 0 && item) {
-            draft.pages[0].data.unshift(item as any);
-          } else {
-            draft.pages[0].data = [item as any];
-          }
+          draft.pages[0].data.unshift(item as any);
         }
       });
     }
@@ -58,7 +54,9 @@ export const update = <TData extends Identified>(
       return produce(oldData, (draft) => {
         for (const page of draft.pages) {
           if (page?.data) {
-            const idx = page.data.findIndex((entry: any) => entry.id === item.id);
+            const idx = page.data.findIndex(
+              (entry: TData) => entry.id === item.id
+            );
             if (idx !== -1) {
               page.data[idx] = item as any;
               return;
@@ -82,7 +80,9 @@ export const remove = <TData extends Identified>(
       return produce(oldData, (draft) => {
         for (const page of draft.pages) {
           if (page?.data) {
-            const idx = page.data.findIndex((entry: any) => entry.id === itemId);
+            const idx = page.data.findIndex(
+              (entry: TData) => entry.id === itemId
+            );
             if (idx !== -1) {
               page.data.splice(idx, 1);
               return;
