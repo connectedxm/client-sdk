@@ -27,16 +27,13 @@ export const SET_THREADS_QUERY_DATA = (
   );
 };
 
-export interface GetThreadsProps extends InfiniteQueryParams {
-  type?: string;
-}
+export interface GetThreadsProps extends InfiniteQueryParams {}
 
 export const GetThreads = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
-  type,
   clientApiParams,
 }: GetThreadsProps): Promise<ConnectedXMResponse<Thread[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
@@ -46,7 +43,6 @@ export const GetThreads = async ({
       pageSize: pageSize || undefined,
       orderBy: orderBy || undefined,
       search: search || undefined,
-      type: type || undefined,
     },
   });
   return data;
