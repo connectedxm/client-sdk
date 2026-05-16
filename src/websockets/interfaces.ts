@@ -19,22 +19,10 @@ export interface HeartbeatMessage {
   type: "heartbeat";
 }
 
-export interface ThreadSubscribeMessage {
-  type: "thread.subscribe";
-  threadId: string;
-}
-
-export interface ThreadUnsubscribeMessage {
-  type: "thread.unsubscribe";
-  threadId: string;
-}
-
 export type SendWSMessage =
   | StreamConnectMessage
   | StreamDisconnectMessage
-  | HeartbeatMessage
-  | ThreadSubscribeMessage
-  | ThreadUnsubscribeMessage;
+  | HeartbeatMessage;
 
 export interface WSThreadMessageCreated {
   timestamp: number;
