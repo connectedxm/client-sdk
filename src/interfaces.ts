@@ -2378,6 +2378,7 @@ export interface BaseThread {
   subject: string;
   image: BaseImage | null;
   lastMessageAt: string | null;
+  lastMessage: string | null;
 }
 
 export enum ThreadMessageType {
@@ -2403,7 +2404,6 @@ export interface ThreadAccount extends BaseThreadAccount {}
 
 export interface Thread extends BaseThread {
   accounts: ThreadAccount[];
-  lastMessage: BaseThreadMessage | null;
   _count?: {
     messages?: number;
   };
