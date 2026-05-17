@@ -11,6 +11,10 @@ import {
 } from "./websockets";
 import { ReadyState } from "react-use-websocket";
 import { WSMessageBus, WSMessageBusProvider } from "./socket/WSMessageBus";
+import {
+  ThreadTypingStore,
+  ThreadTypingStoreProvider,
+} from "./socket/threads/ThreadTypingEffect";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -95,9 +99,16 @@ export const ConnectedProvider = (props: ConnectedProviderProps) => {
     busRef.current = new WSMessageBus();
   }
 
+  const typingStoreRef = React.useRef<ThreadTypingStore | null>(null);
+  if (!typingStoreRef.current) {
+    typingStoreRef.current = new ThreadTypingStore();
+  }
+
   return (
     <WSMessageBusProvider bus={busRef.current}>
-      <ConnectedProviderInner {...props} bus={busRef.current} />
+      <ThreadTypingStoreProvider store={typingStoreRef.current}>
+        <ConnectedProviderInner {...props} bus={busRef.current} />
+      </ThreadTypingStoreProvider>
     </WSMessageBusProvider>
   );
 };

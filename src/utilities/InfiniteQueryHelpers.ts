@@ -37,7 +37,7 @@ export const update = <TData extends Identified>(
         for (const page of draft.pages) {
           if (page?.data) {
             const idx = page.data.findIndex(
-              (entry: TData) => entry.id === item.id
+              (entry: Identified) => entry.id === item.id
             );
             if (idx !== -1) {
               page.data[idx] = item as any;
@@ -64,7 +64,7 @@ export const remove = <TData extends Identified>(
         for (const page of draft.pages) {
           if (page?.data) {
             const idx = page.data.findIndex(
-              (entry: TData) => entry.id === itemId
+              (entry: Identified) => entry.id === itemId
             );
             if (idx !== -1) {
               page.data.splice(idx, 1);

@@ -80,9 +80,12 @@ export const ThreadReadEffect = (): null => {
               const idx = page.data.findIndex(
                 (t) => t.id === payload.threadId
               );
-              if (idx !== -1 && page.data[idx]._count) {
-                page.data[idx]._count!.messages = 0;
-                return;
+              if (idx !== -1) {
+                const row = page.data[idx];
+                if (row?._count) {
+                  row._count.messages = 0;
+                  return;
+                }
               }
             }
           });
