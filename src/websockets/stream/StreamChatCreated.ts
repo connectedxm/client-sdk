@@ -4,7 +4,7 @@ import type { QueryClient } from "@tanstack/react-query";
 
 import { GetBaseInfiniteQueryKeys } from "@src/queries";
 import { STREAM_CHAT_MESSAGES_QUERY_KEY } from "@src/queries/streams/useGetStreamChatMessages";
-import { AppendInfiniteQuery, MergeInfinitePages } from "@src/utilities";
+import { InfiniteQueryHelpers, MergeInfinitePages } from "@src/utilities";
 
 export interface WSStreamChatCreated {
   timestamp: number;
@@ -41,7 +41,7 @@ const StreamChatCreated = (
     : false;
 
   if (!exists) {
-    AppendInfiniteQuery(queryClient, QueryKey, message.body.message);
+    InfiniteQueryHelpers.prepend(queryClient, QueryKey, message.body.message);
   }
 };
 

@@ -4,7 +4,7 @@ import useConnectedMutation, {
   MutationParams,
 } from "../useConnectedMutation";
 import { GetClientAPI } from "@src/ClientAPI";
-import { AppendInfiniteQuery } from "@src/utilities";
+import { InfiniteQueryHelpers } from "@src/utilities";
 import {
   SUPPORT_TICKET_MESSAGES_QUERY_KEY,
   SUPPORT_TICKET_QUERY_KEY,
@@ -38,7 +38,7 @@ export const CreateSupportTicketMessage = async ({
   >(`/supportTickets/${supportTicketId}/messages`, { message });
 
   if (queryClient && data.status === "ok") {
-    AppendInfiniteQuery<SupportTicketMessage>(
+    InfiniteQueryHelpers.prepend<SupportTicketMessage>(
       queryClient,
       [
         ...SUPPORT_TICKET_MESSAGES_QUERY_KEY(supportTicketId),

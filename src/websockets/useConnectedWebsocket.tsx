@@ -1,18 +1,13 @@
 import React from "react";
 import { ConnectedXMClientContextState } from "../ConnectedProvider";
 import { ReceivedWSMessage, SendWSMessage } from "./interfaces";
-import ChatMessageCreated from "./chat/ChatMessageCreated";
-import ChatMessageDeleted from "./chat/ChatMessageDeleted";
-import ChatMessageUpdated from "./chat/ChatMessageUpdated";
-import ThreadMessageCreated from "./threads/messages/ThreadMessageCreated";
-import ThreadMessageDeleted from "./threads/messages/ThreadMessageDeleted";
-import ThreadMessageUpdated from "./threads/messages/ThreadMessageUpdated";
 import StreamChatCreated from "./stream/StreamChatCreated";
 import StreamChatDeleted from "./stream/StreamChatDeleted";
 import StreamChatUpdated from "./stream/StreamChatUpdated";
 import StreamConnected from "./stream/StreamConnected";
 import StreamDisconnected from "./stream/StreamDisconnected";
 import PulseMessage from "./PulseMessage";
+import { WSMessageBus } from "../socket/WSMessageBus";
 import { useQueryClient } from "@tanstack/react-query";
 import type UseWebSocket from "react-use-websocket";
 
@@ -20,7 +15,9 @@ interface ConnectedWebsocketProps
   extends Omit<
     ConnectedXMClientContextState,
     "sendWSMessage" | "lastWSMessage" | "websocketState"
-  > {}
+  > {
+  bus?: WSMessageBus;
+}
 
 export const useConnectedWebsocket = (
   useWebSocket: typeof UseWebSocket,
@@ -31,6 +28,7 @@ export const useConnectedWebsocket = (
     getExecuteAs,
     websocketUrl,
     organizationId,
+    bus,
   }: ConnectedWebsocketProps
 ) => {
   const queryClient = useQueryClient();
@@ -103,22 +101,22 @@ export const useConnectedWebsocket = (
     sendJsonMessage(message);
   };
 
+  const lastDispatchedRef = React.useRef<ReceivedWSMessage | null>(null);
+
   React.useEffect(() => {
     if (!lastWSMessage) return;
+    // Guard against re-dispatch when locale/bus/queryClient deps churn while
+    // lastWSMessage is unchanged.
+    if (lastDispatchedRef.current === lastWSMessage) return;
+    lastDispatchedRef.current = lastWSMessage;
 
-    if (lastWSMessage.type === "chat.message.created") {
-      ChatMessageCreated(queryClient, locale, lastWSMessage);
-    } else if (lastWSMessage.type === "chat.message.deleted") {
-      ChatMessageDeleted(queryClient, locale, lastWSMessage);
-    } else if (lastWSMessage.type === "chat.message.updated") {
-      ChatMessageUpdated(queryClient, locale, lastWSMessage);
-    } else if (lastWSMessage.type === "thread.message.created") {
-      ThreadMessageCreated(queryClient, locale, lastWSMessage);
-    } else if (lastWSMessage.type === "thread.message.updated") {
-      ThreadMessageUpdated(queryClient, locale, lastWSMessage);
-    } else if (lastWSMessage.type === "thread.message.deleted") {
-      ThreadMessageDeleted(queryClient, locale, lastWSMessage);
-    } else if (lastWSMessage.type === "stream.chat.created") {
+    // Forward every payload to the typed message bus so socket-driven effect
+    // components can react. Legacy handlers below remain for non-bus events.
+    if (bus) {
+      bus.dispatch(lastWSMessage as any);
+    }
+
+    if (lastWSMessage.type === "stream.chat.created") {
       StreamChatCreated(queryClient, locale, lastWSMessage);
     } else if (lastWSMessage.type === "stream.chat.deleted") {
       StreamChatDeleted(queryClient, locale, lastWSMessage);
@@ -131,7 +129,7 @@ export const useConnectedWebsocket = (
     } else if (lastWSMessage.type === "pulse") {
       PulseMessage(queryClient, locale, lastWSMessage);
     }
-  });
+  }, [lastWSMessage, bus, queryClient, locale]);
 
   return { sendWSMessage, lastWSMessage, readyState };
 };

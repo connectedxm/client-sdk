@@ -2068,48 +2068,6 @@ export interface BaseLinkPreview {
 
 export interface LinkPreview extends BaseLinkPreview {}
 
-export interface BaseChatChannel {
-  id: number;
-  name: string | null;
-  image: BaseImage | null;
-  lastMessageAt: string | null;
-}
-export interface ChatChannel extends BaseChatChannel {
-  messages: BaseChatChannelMessage[]; // MOST RECENT 1 MESSAGES
-  members: BaseChatChannelMember[]; // Up to 5 members will be returned
-  _count: {
-    members: number;
-  };
-}
-
-export interface BaseChatChannelMessage {
-  id: number;
-  text: string;
-  html: string;
-  type: "user" | "system";
-  accountId: string;
-  account: BaseAccount | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ChatChannelMessage extends BaseChatChannelMessage {}
-
-export interface BaseChatChannelMember {
-  accountId: string;
-  account: BaseAccount;
-  role: "moderator" | "member";
-  read: boolean;
-  notifications: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ChatChannelMember extends BaseChatChannelMember {
-  channelId: number;
-  channel: ChatChannel;
-}
-
 export enum SeriesQuestionType {
   text = "text",
   textarea = "textarea",
@@ -2415,34 +2373,12 @@ export interface BaseFile {
 
 export interface File extends BaseFile {}
 
-export enum ThreadCircleAccountRole {
-  member = "member",
-  manager = "manager",
-  invited = "invited",
-}
-
-export interface BaseThreadCircle {
-  id: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ThreadCircle extends BaseThreadCircle {}
-
-export interface BaseThreadCircleAccount {
-  accountId: string;
-  role: ThreadCircleAccountRole;
-  account: BaseAccount;
-}
-
-export interface ThreadCircleAccount extends BaseThreadCircleAccount {}
-
 export interface BaseThread {
   id: string;
   subject: string;
   image: BaseImage | null;
   lastMessageAt: string | null;
+  lastMessage: string | null;
 }
 
 export enum ThreadMessageType {
@@ -2451,35 +2387,52 @@ export enum ThreadMessageType {
   system = "system",
 }
 
-export interface Thread extends BaseThread {
-  viewers: {
-    accountId: string;
-    lastReadAt: string | null;
-  }[];
-}
-
-export interface BaseThreadViewer {
-  lastReadAt: string | null;
-  notifications: boolean;
+export interface BaseThreadAccount {
+  id: string;
+  threadId: string;
+  accountId: string;
   account: BaseAccount;
+  lastReadAt: string | null;
+  typingAt: string | null;
+  notifications: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface ThreadViewer extends BaseThreadViewer {
-  status: string;
+export interface ThreadAccount extends BaseThreadAccount {}
+
+export interface Thread extends BaseThread {
+  accounts: ThreadAccount[];
+  _count?: {
+    messages?: number;
+  };
 }
+
+export interface BaseThreadMessageRead {
+  id: string;
+  threadId: string;
+  messageId: string;
+  accountId: string;
+  readAt: string;
+}
+
+export interface ThreadMessageRead extends BaseThreadMessageRead {}
 
 export interface BaseThreadMessage {
   id: string;
   type: ThreadMessageType;
   editedAt: string | null;
+  deletedAt?: string | null;
   body: string;
   sentAt: string;
   accountId: string;
-  viewer: BaseThreadViewer;
+  threadAccount: BaseThreadAccount | null;
 }
 
 export interface ThreadMessage extends BaseThreadMessage {
   reactions: BaseThreadMessageReaction[];
+  reads?: ThreadMessageRead[];
 }
 
 export interface BaseThreadMessageEntity {

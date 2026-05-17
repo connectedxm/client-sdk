@@ -7,7 +7,7 @@ import {
 import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
 import { ThreadMessage } from "@src/interfaces";
 import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessages";
-import { AppendInfiniteQuery } from "@src/utilities";
+import { InfiniteQueryHelpers } from "@src/utilities";
 
 export interface CreateThreadMessageParams extends MutationParams {
   threadId: string;
@@ -29,7 +29,7 @@ export const CreateThreadMessage = async ({
   });
 
   if (queryClient && data.status === "ok") {
-    AppendInfiniteQuery<ThreadMessage>(
+    InfiniteQueryHelpers.prepend<ThreadMessage>(
       queryClient,
       THREAD_MESSAGES_QUERY_KEY(threadId),
       data.data

@@ -21,7 +21,7 @@ import {
   MarkType,
 } from "@src/interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { AppendInfiniteQuery } from "@src/utilities";
+import { InfiniteQueryHelpers } from "@src/utilities";
 import { GetBaseInfiniteQueryKeys } from "@src/queries/useConnectedInfiniteQuery";
 import { CHANNEL_CONTENT_ACTIVITIES_QUERY_KEY } from "@src/queries/channels";
 
@@ -104,7 +104,7 @@ export const CreateActivity = async ({
     if (activity.commentedId) {
       nested = true;
 
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         [
           ...ACTIVITY_COMMENTS_QUERY_KEY(activity.commentedId),
@@ -149,22 +149,22 @@ export const CreateActivity = async ({
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         iDIDKey,
         data.data
       );
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         iDSlugKey,
         data.data
       );
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         slugIDKey,
         data.data
       );
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         slugSlugKey,
         data.data
@@ -184,12 +184,12 @@ export const CreateActivity = async ({
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         iDKey,
         data.data,
       );
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         slugKey,
         data.data
@@ -209,12 +209,12 @@ export const CreateActivity = async ({
         ...GetBaseInfiniteQueryKeys(clientApiParams.locale),
       ];
 
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         iDKey,
         data.data
       );
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         slugKey,
         data.data
@@ -222,7 +222,7 @@ export const CreateActivity = async ({
     }
 
     if (!nested) {
-      AppendInfiniteQuery<Activity>(
+      InfiniteQueryHelpers.prepend<Activity>(
         queryClient,
         [
           ...ACTIVITIES_QUERY_KEY(),

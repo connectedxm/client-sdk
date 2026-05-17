@@ -10,6 +10,11 @@ import {
   useConnectedWebsocket,
 } from "./websockets";
 import { ReadyState } from "react-use-websocket";
+import { WSMessageBus, WSMessageBusProvider } from "./socket/WSMessageBus";
+import {
+  ThreadTypingStore,
+  ThreadTypingStoreProvider,
+} from "./socket/threads/ThreadTypingEffect";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -64,14 +69,15 @@ export interface ConnectedProviderProps extends Omit<
   children: React.ReactNode;
 }
 
-export const ConnectedProvider = ({
+const ConnectedProviderInner = ({
   children,
   useWebSocket,
+  bus,
   ...state
-}: ConnectedProviderProps) => {
+}: ConnectedProviderProps & { bus: WSMessageBus }) => {
   const { sendWSMessage, lastWSMessage, readyState } = useConnectedWebsocket(
     useWebSocket,
-    state
+    { ...state, bus }
   );
   return (
     <ConnectedXMClientContext.Provider
@@ -84,5 +90,25 @@ export const ConnectedProvider = ({
     >
       {children}
     </ConnectedXMClientContext.Provider>
+  );
+};
+
+export const ConnectedProvider = (props: ConnectedProviderProps) => {
+  const busRef = React.useRef<WSMessageBus | null>(null);
+  if (!busRef.current) {
+    busRef.current = new WSMessageBus();
+  }
+
+  const typingStoreRef = React.useRef<ThreadTypingStore | null>(null);
+  if (!typingStoreRef.current) {
+    typingStoreRef.current = new ThreadTypingStore();
+  }
+
+  return (
+    <WSMessageBusProvider bus={busRef.current}>
+      <ThreadTypingStoreProvider store={typingStoreRef.current}>
+        <ConnectedProviderInner {...props} bus={busRef.current} />
+      </ThreadTypingStoreProvider>
+    </WSMessageBusProvider>
   );
 };

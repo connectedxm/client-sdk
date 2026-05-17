@@ -1,4 +1,3 @@
-import { ConnectedXMResponse, ChatChannelMember } from "@interfaces";
 import {
   GetBaseInfiniteQueryKeys,
   InfiniteQueryOptions,
@@ -7,43 +6,38 @@ import {
   useConnectedInfiniteQuery,
 } from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
+import type { ConnectedXMResponse, Thread } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
-import { SELF_QUERY_KEY } from "../useGetSelf";
 import { useConnected } from "@src/hooks";
 
-export const SELF_CHAT_CHANNELS_QUERY_KEY = (): QueryKey => [
-  ...SELF_QUERY_KEY(),
-  "CHANNELS",
-];
+export const THREADS_QUERY_KEY = (): QueryKey => ["THREADS"];
 
-export const SET_SELF_CHAT_CHANNELS_QUERY_DATA = (
+export const SET_THREADS_QUERY_DATA = (
   client: QueryClient,
-  keyParams: Parameters<typeof SELF_CHAT_CHANNELS_QUERY_KEY>,
-  response: Awaited<ReturnType<typeof GetSelfChatChannels>>,
+  keyParams: Parameters<typeof THREADS_QUERY_KEY>,
+  response: Awaited<ReturnType<typeof GetThreads>>,
   baseKeys: Parameters<typeof GetBaseInfiniteQueryKeys> = ["en"]
 ) => {
   client.setQueryData(
     [
-      ...SELF_CHAT_CHANNELS_QUERY_KEY(...keyParams),
+      ...THREADS_QUERY_KEY(...keyParams),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
   );
 };
 
-export interface GetSelfChatChannelsProps extends InfiniteQueryParams {}
+export interface GetThreadsProps extends InfiniteQueryParams {}
 
-export const GetSelfChatChannels = async ({
+export const GetThreads = async ({
   pageParam,
   pageSize,
   orderBy,
   search,
   clientApiParams,
-}: GetSelfChatChannelsProps): Promise<
-  ConnectedXMResponse<ChatChannelMember[]>
-> => {
+}: GetThreadsProps): Promise<ConnectedXMResponse<Thread[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/self/chat/channels`, {
+  const { data } = await clientApi.get(`/threads`, {
     params: {
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
@@ -51,26 +45,21 @@ export const GetSelfChatChannels = async ({
       search: search || undefined,
     },
   });
-
   return data;
 };
 
-export const useGetSelfChatChannels = (
+export const useGetThreads = (
   params: Omit<
-    InfiniteQueryParams,
+    GetThreadsProps,
     "pageParam" | "queryClient" | "clientApiParams"
   > = {},
-  options: InfiniteQueryOptions<
-    Awaited<ReturnType<typeof GetSelfChatChannels>>
-  > = {}
+  options: InfiniteQueryOptions<Awaited<ReturnType<typeof GetThreads>>> = {}
 ) => {
   const { authenticated } = useConnected();
 
-  return useConnectedInfiniteQuery<
-    Awaited<ReturnType<typeof GetSelfChatChannels>>
-  >(
-    SELF_CHAT_CHANNELS_QUERY_KEY(),
-    (params: InfiniteQueryParams) => GetSelfChatChannels(params),
+  return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreads>>>(
+    THREADS_QUERY_KEY(),
+    (params: GetThreadsProps) => GetThreads(params),
     params,
     {
       ...options,

@@ -3,6 +3,7 @@ export * from "./interfaces";
 export * from "./utilities";
 export * from "./queries";
 export * from "./mutations";
+export * from "./socket";
 
 export * from "./ClientAPI";
 

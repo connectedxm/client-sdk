@@ -6,7 +6,7 @@ import {
 } from "../useConnectedSingleQuery";
 
 import type { Thread } from "@interfaces";
-import { THREADS_QUERY_KEY } from "./useGetThreadCircles";
+import { THREADS_QUERY_KEY } from "./useGetThreads";
 import {
   QueryClient,
   SetDataOptions,
