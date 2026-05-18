@@ -4,5 +4,7 @@ export * from "./useGetThreadAccounts";
 export * from "./useGetThreadMessages";
 export * from "./useGetThreadMessage";
 export * from "./useGetThreadMessageReplies";
-export * from "./useGetThreadStorage";
+export * from "./useGetThreadImages";
+export * from "./useGetThreadVideos";
+export * from "./useGetThreadFiles";
 export * from "./useSearchThreadMessages";
