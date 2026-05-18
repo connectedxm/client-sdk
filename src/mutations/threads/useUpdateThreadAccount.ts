@@ -12,27 +12,26 @@ import { THREADS_QUERY_KEY } from "@src/queries/threads/useGetThreads";
 export interface UpdateThreadAccountParams extends MutationParams {
   threadId: string;
   accountId: string;
+  /** Toggle "mute" — when false, suppresses push for this thread. */
   notifications?: boolean;
-  blocked?: boolean;
 }
 
 /**
- * Update a participant's metadata on a thread (notifications / blocked).
- * On the client surface, only self-update is permitted — passing any
- * other accountId returns 403.
+ * Update a participant's metadata on a thread. Self-only on the client
+ * surface — passing any other accountId returns 403. Currently only the
+ * `notifications` flag is settable from the client; the `blocked` flag
+ * is admin-only moderation silencing and lives on the admin SDK.
  */
 export const UpdateThreadAccount = async ({
   threadId,
   accountId,
   notifications,
-  blocked,
   clientApiParams,
   queryClient,
 }: UpdateThreadAccountParams): Promise<ConnectedXMResponse<ThreadAccount>> => {
   const clientApi = await GetClientAPI(clientApiParams);
   const body: Record<string, unknown> = {};
   if (notifications !== undefined) body.notifications = notifications;
-  if (blocked !== undefined) body.blocked = blocked;
 
   const { data } = await clientApi.put(
     `/threads/${threadId}/accounts/${accountId}`,
