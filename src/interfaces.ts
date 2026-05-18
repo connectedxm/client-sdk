@@ -2435,6 +2435,15 @@ export interface ThreadMessage extends BaseThreadMessage {
   reads?: ThreadMessageRead[];
 }
 
+/**
+ * Row shape returned by `GET /threads/search`. Inlines the parent thread
+ * (subject + accounts) so result lists can group by thread without N+1.
+ */
+export interface ThreadMessageSearchResult extends BaseThreadMessage {
+  threadId: string;
+  thread: Thread;
+}
+
 export interface BaseThreadMessageEntity {
   type: ActivityEntityType;
   startIndex: number;
