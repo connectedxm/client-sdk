@@ -2427,7 +2427,13 @@ export interface BaseThreadMessage {
   body: string;
   sentAt: string;
   accountId: string;
+  /** When this message is itself a reply, the id of the parent message. */
+  replyToId: string | null;
   threadAccount: BaseThreadAccount | null;
+  /** Sub-thread reply count. UI surfaces "N replies" when > 0. */
+  _count: {
+    replies: number;
+  };
 }
 
 export interface ThreadMessage extends BaseThreadMessage {
