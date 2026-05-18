@@ -15,9 +15,9 @@ export interface RemoveThreadAccountParams extends MutationParams {
 }
 
 /**
- * Remove a participant from a thread. On the client surface, the backend
- * only allows self-removal (i.e. "leave thread") — passing any other
- * accountId returns 403. Admin-side removal of others is on adminV3.
+ * Remove a participant from a thread. Any member of the thread may remove
+ * any other participant (same trust model as adding). Passing one's own
+ * accountId is the "leave thread" path.
  */
 export const RemoveThreadAccount = async ({
   threadId,
