@@ -3,3 +3,4 @@ export * from "./useGetThread";
 export * from "./useGetThreadAccounts";
 export * from "./useGetThreadMessages";
 export * from "./useGetThreadMessage";
+export * from "./useSearchThreadMessages";
