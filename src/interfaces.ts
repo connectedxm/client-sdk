@@ -2442,6 +2442,41 @@ export interface ThreadMessage extends BaseThreadMessage {
 }
 
 /**
+ * Source-message context inlined on each thread-storage row so the UI
+ * can show "from {sender} · {when}" and deep-link to the message.
+ */
+export interface ThreadStorageMessageContext {
+  id: string;
+  sentAt: string;
+  accountId: string | null;
+  threadAccount: BaseThreadAccount | null;
+}
+
+/** Image row returned by `GET /threads/:id/storage?type=image`. */
+export interface ThreadStorageImage extends BaseImage {
+  name: string | null;
+  description: string | null;
+  createdAt: string;
+  threadMessages: ThreadStorageMessageContext[];
+}
+
+/** Video row returned by `GET /threads/:id/storage?type=video`. */
+export interface ThreadStorageVideo extends BaseVideo {
+  readyToStream: boolean;
+  status: string;
+  duration: number | null;
+  thumbnailUrl: string;
+  threadMessage: ThreadStorageMessageContext[];
+}
+
+/** File row returned by `GET /threads/:id/storage?type=file`. */
+export interface ThreadStorageFile extends BaseFile {
+  kilobytes: number;
+  source: string;
+  threadMessages: ThreadStorageMessageContext[];
+}
+
+/**
  * Row shape returned by `GET /threads/search`. Inlines the parent thread
  * (subject + accounts) so result lists can group by thread without N+1.
  */
