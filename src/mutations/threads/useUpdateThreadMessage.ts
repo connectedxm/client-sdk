@@ -12,12 +12,24 @@ export interface UpdateThreadMessageParams extends MutationParams {
   threadId: string;
   messageId: string;
   body?: string;
+  /**
+   * Replace the message's image attachments. Omit to leave existing
+   * attachments untouched; pass `[]` to clear all.
+   */
+  imageIds?: string[];
+  /** Replace video attachments. Omit = leave alone, `[]` = clear. */
+  videoIds?: string[];
+  /** Replace file attachments. Omit = leave alone, `[]` = clear. */
+  fileIds?: number[];
 }
 
 export const UpdateThreadMessage = async ({
   threadId,
   messageId,
   body,
+  imageIds,
+  videoIds,
+  fileIds,
   clientApiParams,
   queryClient,
 }: UpdateThreadMessageParams): Promise<ConnectedXMResponse<ThreadMessage>> => {
@@ -25,7 +37,10 @@ export const UpdateThreadMessage = async ({
   const { data } = await clientApi.put(
     `/threads/${threadId}/messages/${messageId}`,
     {
-      body,
+      ...(body !== undefined ? { body } : {}),
+      ...(imageIds !== undefined ? { imageIds } : {}),
+      ...(videoIds !== undefined ? { videoIds } : {}),
+      ...(fileIds !== undefined ? { fileIds } : {}),
     }
   );
 
