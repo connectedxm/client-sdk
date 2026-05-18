@@ -7,55 +7,58 @@ import {
 } from "@src/queries/useConnectedInfiniteQuery";
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 import type {
+  BaseVideo,
   ConnectedXMResponse,
-  ThreadStorageFile,
-  ThreadStorageImage,
-  ThreadStorageVideo,
+  File,
+  Image,
 } from "@interfaces";
 import { GetClientAPI } from "@src/ClientAPI";
 import { useConnected } from "@src/hooks";
 import { THREAD_QUERY_KEY } from "./useGetThread";
 
-type ThreadStorageType = "image" | "video" | "file";
+const THREAD_STORAGE_BASE_KEY = (threadId: string): QueryKey => [
+  ...THREAD_QUERY_KEY(threadId),
+  "STORAGE",
+];
 
-export const THREAD_STORAGE_QUERY_KEY = (
-  threadId: string,
-  type: ThreadStorageType
-): QueryKey => [...THREAD_QUERY_KEY(threadId), "STORAGE", type];
+export const THREAD_IMAGES_QUERY_KEY = (threadId: string): QueryKey => [
+  ...THREAD_STORAGE_BASE_KEY(threadId),
+  "IMAGES",
+];
 
-interface GetThreadStorageProps<T> extends InfiniteQueryParams {
+export const THREAD_VIDEOS_QUERY_KEY = (threadId: string): QueryKey => [
+  ...THREAD_STORAGE_BASE_KEY(threadId),
+  "VIDEOS",
+];
+
+export const THREAD_FILES_QUERY_KEY = (threadId: string): QueryKey => [
+  ...THREAD_STORAGE_BASE_KEY(threadId),
+  "FILES",
+];
+
+interface GetThreadStorageProps extends InfiniteQueryParams {
   threadId: string;
-  type: ThreadStorageType;
-  /** Marker only — narrows the response generic in callers. */
-  _phantom?: T;
 }
 
-/** Low-level fetcher. Use the typed wrappers below. */
-const getThreadStorage = async <T>({
+// ---------------------------------------------------------------------------
+// Images
+// ---------------------------------------------------------------------------
+
+export const GetThreadImages = async ({
   threadId,
-  type,
   pageParam,
   pageSize,
   clientApiParams,
-}: GetThreadStorageProps<T>): Promise<ConnectedXMResponse<T[]>> => {
+}: GetThreadStorageProps): Promise<ConnectedXMResponse<Image[]>> => {
   const clientApi = await GetClientAPI(clientApiParams);
-  const { data } = await clientApi.get(`/threads/${threadId}/storage`, {
+  const { data } = await clientApi.get(`/threads/${threadId}/storage/images`, {
     params: {
-      type,
       page: pageParam || undefined,
       pageSize: pageSize || undefined,
     },
   });
   return data;
 };
-
-// ---------------------------------------------------------------------------
-// Images
-// ---------------------------------------------------------------------------
-
-export const GetThreadImages = (
-  args: Omit<GetThreadStorageProps<ThreadStorageImage>, "type" | "_phantom">
-) => getThreadStorage<ThreadStorageImage>({ ...args, type: "image" });
 
 export const SET_THREAD_IMAGES_QUERY_DATA = (
   client: QueryClient,
@@ -65,7 +68,7 @@ export const SET_THREAD_IMAGES_QUERY_DATA = (
 ) => {
   client.setQueryData(
     [
-      ...THREAD_STORAGE_QUERY_KEY(threadId, "image"),
+      ...THREAD_IMAGES_QUERY_KEY(threadId),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
@@ -84,7 +87,7 @@ export const useGetThreadImages = (
 ) => {
   const { authenticated } = useConnected();
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreadImages>>>(
-    THREAD_STORAGE_QUERY_KEY(threadId, "image"),
+    THREAD_IMAGES_QUERY_KEY(threadId),
     (inner: InfiniteQueryParams) => GetThreadImages({ ...inner, threadId }),
     params,
     {
@@ -98,9 +101,21 @@ export const useGetThreadImages = (
 // Videos
 // ---------------------------------------------------------------------------
 
-export const GetThreadVideos = (
-  args: Omit<GetThreadStorageProps<ThreadStorageVideo>, "type" | "_phantom">
-) => getThreadStorage<ThreadStorageVideo>({ ...args, type: "video" });
+export const GetThreadVideos = async ({
+  threadId,
+  pageParam,
+  pageSize,
+  clientApiParams,
+}: GetThreadStorageProps): Promise<ConnectedXMResponse<BaseVideo[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
+  const { data } = await clientApi.get(`/threads/${threadId}/storage/videos`, {
+    params: {
+      page: pageParam || undefined,
+      pageSize: pageSize || undefined,
+    },
+  });
+  return data;
+};
 
 export const SET_THREAD_VIDEOS_QUERY_DATA = (
   client: QueryClient,
@@ -110,7 +125,7 @@ export const SET_THREAD_VIDEOS_QUERY_DATA = (
 ) => {
   client.setQueryData(
     [
-      ...THREAD_STORAGE_QUERY_KEY(threadId, "video"),
+      ...THREAD_VIDEOS_QUERY_KEY(threadId),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
@@ -129,7 +144,7 @@ export const useGetThreadVideos = (
 ) => {
   const { authenticated } = useConnected();
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreadVideos>>>(
-    THREAD_STORAGE_QUERY_KEY(threadId, "video"),
+    THREAD_VIDEOS_QUERY_KEY(threadId),
     (inner: InfiniteQueryParams) => GetThreadVideos({ ...inner, threadId }),
     params,
     {
@@ -143,9 +158,21 @@ export const useGetThreadVideos = (
 // Files
 // ---------------------------------------------------------------------------
 
-export const GetThreadFiles = (
-  args: Omit<GetThreadStorageProps<ThreadStorageFile>, "type" | "_phantom">
-) => getThreadStorage<ThreadStorageFile>({ ...args, type: "file" });
+export const GetThreadFiles = async ({
+  threadId,
+  pageParam,
+  pageSize,
+  clientApiParams,
+}: GetThreadStorageProps): Promise<ConnectedXMResponse<File[]>> => {
+  const clientApi = await GetClientAPI(clientApiParams);
+  const { data } = await clientApi.get(`/threads/${threadId}/storage/files`, {
+    params: {
+      page: pageParam || undefined,
+      pageSize: pageSize || undefined,
+    },
+  });
+  return data;
+};
 
 export const SET_THREAD_FILES_QUERY_DATA = (
   client: QueryClient,
@@ -155,7 +182,7 @@ export const SET_THREAD_FILES_QUERY_DATA = (
 ) => {
   client.setQueryData(
     [
-      ...THREAD_STORAGE_QUERY_KEY(threadId, "file"),
+      ...THREAD_FILES_QUERY_KEY(threadId),
       ...GetBaseInfiniteQueryKeys(...baseKeys),
     ],
     setFirstPageData(response)
@@ -174,7 +201,7 @@ export const useGetThreadFiles = (
 ) => {
   const { authenticated } = useConnected();
   return useConnectedInfiniteQuery<Awaited<ReturnType<typeof GetThreadFiles>>>(
-    THREAD_STORAGE_QUERY_KEY(threadId, "file"),
+    THREAD_FILES_QUERY_KEY(threadId),
     (inner: InfiniteQueryParams) => GetThreadFiles({ ...inner, threadId }),
     params,
     {
