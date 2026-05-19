@@ -146,6 +146,7 @@ export interface BaseOrganization {
 export interface Organization extends BaseOrganization {
   phone: string | null;
   website: string | null;
+  privacyPolicyLink: string | null;
   primaryColor: string | null;
   secondaryColor: string | null;
   userPoolId: string;
@@ -2534,6 +2535,7 @@ export interface OrganizationConfig {
   ORGANIZATION_ID: string;
   SLUG: string;
   WEBSITE_URL: string;
+  PRIVACY_POLICY_LINK: string | null;
   COGNITO_USERPOOL_ID: string;
   COGNITO_CLIENT_ID: string;
   COGNITO_HOSTED_URL: string;
