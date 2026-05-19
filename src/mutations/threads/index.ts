@@ -9,5 +9,8 @@ export * from "./useUpdateThreadAccount";
 export * from "./useCreateThreadMessage";
 export * from "./useUpdateThreadMessage";
 export * from "./useDeleteThreadMessage";
+export * from "./useRemoveThreadMessageImage";
+export * from "./useRemoveThreadMessageVideo";
+export * from "./useRemoveThreadMessageFile";
 export * from "./useAddThreadMessageReaction";
 export * from "./useRemoveThreadMessageReaction";
