@@ -14,7 +14,7 @@ import { WSMessageBus, WSMessageBusProvider } from "./socket/WSMessageBus";
 import {
   ThreadTypingStore,
   ThreadTypingStoreProvider,
-} from "./socket/threads/ThreadTypingEffect";
+} from "./socket/threads/ThreadTypingStore";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
