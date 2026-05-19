@@ -1,5 +1,5 @@
 import React from "react";
-import type { ThreadMessage } from "@src/interfaces";
+import type { Thread, ThreadMessage } from "@src/interfaces";
 
 /**
  * Typed event payload map for socket events broadcast by the backend.
@@ -7,6 +7,10 @@ import type { ThreadMessage } from "@src/interfaces";
  * Add new entries here (NOT via `any`) when introducing new event types.
  */
 export interface WSEventPayloadMap {
+  "thread.created": {
+    threadId: string;
+    thread: Thread;
+  };
   "thread.message.created": {
     threadId: string;
     message: ThreadMessage;

@@ -4,7 +4,7 @@ import { WSStreamChatUpdated } from "./stream/StreamChatUpdated";
 import { WSStreamConnected } from "./stream/StreamConnected";
 import { WSStreamDisconnected } from "./stream/StreamDisconnected";
 import { WSPulseMessage } from "./PulseMessage";
-import type { ThreadMessage } from "@src/interfaces";
+import type { Thread, ThreadMessage } from "@src/interfaces";
 
 export interface StreamConnectMessage {
   type: "stream.connect";
@@ -23,6 +23,12 @@ export type SendWSMessage =
   | StreamConnectMessage
   | StreamDisconnectMessage
   | HeartbeatMessage;
+
+export interface WSThreadCreated {
+  timestamp: number;
+  type: "thread.created";
+  body: { threadId: string; thread: Thread };
+}
 
 export interface WSThreadMessageCreated {
   timestamp: number;
@@ -60,6 +66,7 @@ export interface WSThreadTyping {
 }
 
 export type ReceivedWSMessage =
+  | WSThreadCreated
   | WSThreadMessageCreated
   | WSThreadMessageUpdated
   | WSThreadMessageDeleted
