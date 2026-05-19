@@ -19,6 +19,12 @@ export interface CreateThreadMessageParams extends MutationParams {
    * an existing message. Must belong to the same thread (server-enforced).
    */
   replyToId?: string;
+  /** Attach previously uploaded images by id. */
+  imageIds?: string[];
+  /** Attach Cloudflare Stream video ids. */
+  videoIds?: string[];
+  /** Attach previously uploaded files by id. */
+  fileIds?: number[];
 }
 
 export const CreateThreadMessage = async ({
@@ -26,6 +32,9 @@ export const CreateThreadMessage = async ({
   body,
   entities,
   replyToId,
+  imageIds,
+  videoIds,
+  fileIds,
   clientApiParams,
   queryClient,
 }: CreateThreadMessageParams): Promise<ConnectedXMResponse<ThreadMessage>> => {
@@ -34,6 +43,9 @@ export const CreateThreadMessage = async ({
     body,
     entities,
     ...(replyToId ? { replyToId } : {}),
+    ...(imageIds?.length ? { imageIds } : {}),
+    ...(videoIds?.length ? { videoIds } : {}),
+    ...(fileIds?.length ? { fileIds } : {}),
   });
 
   if (queryClient && data.status === "ok") {
