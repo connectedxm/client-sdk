@@ -1,5 +1,5 @@
 import { GetClientAPI } from "@src/ClientAPI";
-import { ConnectedXMResponse } from "@src/interfaces";
+import { ConnectedXMResponse, MarkType } from "@src/interfaces";
 import {
   MutationOptions,
   MutationParams,
@@ -10,10 +10,43 @@ import { THREAD_MESSAGES_QUERY_KEY } from "@src/queries/threads/useGetThreadMess
 import { THREAD_MESSAGE_REPLIES_QUERY_KEY } from "@src/queries/threads/useGetThreadMessageReplies";
 import { InfiniteQueryHelpers } from "@src/utilities";
 
+interface BaseThreadMessageEntityInput {
+  startIndex: number;
+  endIndex: number;
+  marks?: MarkType[];
+}
+
+export interface ThreadMessageMentionInput
+  extends BaseThreadMessageEntityInput {
+  type: "mention";
+  /** Server resolves username → accountId before write. */
+  username: string;
+}
+
+export interface ThreadMessageLinkInput extends BaseThreadMessageEntityInput {
+  type: "link";
+  /** Must be the id of a LinkPreview already upserted via the storage SDK. */
+  href: string;
+}
+
+export interface ThreadMessageSegmentInput
+  extends BaseThreadMessageEntityInput {
+  type: "segment";
+}
+
+/**
+ * Wire shape for an entity sent to the server. `interest` is intentionally
+ * omitted — ThreadMessageEntityType only supports mention/link/segment.
+ */
+export type ThreadMessageEntityInput =
+  | ThreadMessageMentionInput
+  | ThreadMessageLinkInput
+  | ThreadMessageSegmentInput;
+
 export interface CreateThreadMessageParams extends MutationParams {
   threadId: string;
   body: string;
-  entities: any[];
+  entities: ThreadMessageEntityInput[];
   /**
    * Optional parent message id — set when posting into a sub-thread under
    * an existing message. Must belong to the same thread (server-enforced).

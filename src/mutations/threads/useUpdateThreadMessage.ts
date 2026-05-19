@@ -7,11 +7,17 @@ import {
 import { useConnectedMutation } from "@src/mutations/useConnectedMutation";
 import { ThreadMessage } from "@src/interfaces";
 import { SET_THREAD_MESSAGE_QUERY_DATA } from "@src/queries/threads/useGetThreadMessage";
+import { ThreadMessageEntityInput } from "./useCreateThreadMessage";
 
 export interface UpdateThreadMessageParams extends MutationParams {
   threadId: string;
   messageId: string;
   body?: string;
+  /**
+   * Replace the message's entity list (mentions / links / styled segments).
+   * Omit to leave existing entities untouched; pass `[]` to clear all.
+   */
+  entities?: ThreadMessageEntityInput[];
   /**
    * Replace the message's image attachments. Omit to leave existing
    * attachments untouched; pass `[]` to clear all.
@@ -27,6 +33,7 @@ export const UpdateThreadMessage = async ({
   threadId,
   messageId,
   body,
+  entities,
   imageIds,
   videoIds,
   fileIds,
@@ -38,6 +45,7 @@ export const UpdateThreadMessage = async ({
     `/threads/${threadId}/messages/${messageId}`,
     {
       ...(body !== undefined ? { body } : {}),
+      ...(entities !== undefined ? { entities } : {}),
       ...(imageIds !== undefined ? { imageIds } : {}),
       ...(videoIds !== undefined ? { videoIds } : {}),
       ...(fileIds !== undefined ? { fileIds } : {}),
