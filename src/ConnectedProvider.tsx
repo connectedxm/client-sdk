@@ -15,6 +15,12 @@ import {
   ThreadTypingStore,
   ThreadTypingStoreProvider,
 } from "./socket/threads/ThreadTypingStore";
+import { ThreadCreatedEffect } from "./socket/threads/ThreadCreatedEffect";
+import { ThreadMessageCreatedEffect } from "./socket/threads/ThreadMessageCreatedEffect";
+import { ThreadMessageUpdatedEffect } from "./socket/threads/ThreadMessageUpdatedEffect";
+import { ThreadMessageDeletedEffect } from "./socket/threads/ThreadMessageDeletedEffect";
+import { ThreadReadEffect } from "./socket/threads/ThreadReadEffect";
+import { ThreadTypingEffect } from "./socket/threads/ThreadTypingEffect";
 
 export interface ConnectedXMClientContextState {
   queryClient: QueryClient;
@@ -88,6 +94,12 @@ const ConnectedProviderInner = ({
         websocketState: readyState,
       }}
     >
+      <ThreadCreatedEffect />
+      <ThreadMessageCreatedEffect />
+      <ThreadMessageUpdatedEffect />
+      <ThreadMessageDeletedEffect />
+      <ThreadReadEffect />
+      <ThreadTypingEffect />
       {children}
     </ConnectedXMClientContext.Provider>
   );
