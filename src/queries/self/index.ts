@@ -17,5 +17,6 @@ export * from "./useGetSelfNotifications";
 export * from "./useGetSelfPushDevice";
 export * from "./useGetSelfPushDevices";
 export * from "./useGetSelfGroupActivities";
+export * from "./useGetSelfEventActivities";
 export * from "./useGetSelfLogins";
 export * from "./useGetUsernameAvailability";
