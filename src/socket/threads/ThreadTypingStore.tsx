@@ -1,13 +1,11 @@
 import React from "react";
-import { useWSEvent } from "../WSMessageBus";
 
 /**
  * Per-thread typing state, keyed by threadId → (accountId → typingAt ISO).
  *
  * `ThreadTypingStore` is instantiated once per `ConnectedProvider` and made
- * available via context. `ThreadTypingEffect` mounts somewhere in the tree
- * and feeds the store from the WS message bus; consumers read via
- * `useThreadTyping(threadId)`.
+ * available via context. Consumers wire `thread.typing` socket events into
+ * the store via `useWSEvent` and read state with `useThreadTyping(threadId)`.
  *
  * The store keeps state in instance fields (not module-scoped) so multiple
  * provider trees — tests, micro-frontends, dual-org embeds — don't bleed
@@ -98,7 +96,11 @@ export const ThreadTypingStoreProvider = ({
   );
 };
 
-const useThreadTypingStore = (): ThreadTypingStore => {
+/**
+ * Returns the `ThreadTypingStore` instance from context. Consumers typically
+ * use this to wire a `thread.typing` socket handler that calls `store.record`.
+ */
+export const useThreadTypingStore = (): ThreadTypingStore => {
   const store = React.useContext(ThreadTypingStoreContext);
   if (!store) {
     throw new Error(
@@ -124,22 +126,3 @@ export const useThreadTyping = (
   );
   return fullState[threadId] ?? EMPTY_THREAD_TYPING;
 };
-
-/**
- * Mount once at the provider level to wire `thread.typing` → the typing store.
- */
-export const ThreadTypingEffect = (): null => {
-  const store = useThreadTypingStore();
-  const handler = React.useCallback(
-    (payload: { threadId: string; accountId: string; typingAt: string }) => {
-      store.record(payload.threadId, payload.accountId, payload.typingAt);
-    },
-    [store]
-  );
-
-  useWSEvent("thread.typing", handler);
-
-  return null;
-};
-
-export default ThreadTypingEffect;
