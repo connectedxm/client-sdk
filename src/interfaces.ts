@@ -2434,6 +2434,7 @@ export interface BaseThreadMessage {
   _count: {
     replies: number;
   };
+  entities: BaseThreadMessageEntity[];
   images: BaseImage[];
   videos: BaseVideo[];
   files: BaseFile[];
